@@ -22,14 +22,31 @@ class UserRepository {
   }
 
   /// Updates the user data.
-  void update(User user){
-
+  Future<User> update(String userId, User user) async {
+    try {
+      Response response = await GetIt.I
+          .get<DioService>()
+          .dio
+          .put("${apiUrl['users']}/$userId", data: user.toJson());
+      return User.fromJson(response.data['Data']);
+    } on DioError catch(e){
+      print(e.response.data);
+    }
   }
 
   /// Deletes the user permanently.
   ///
   /// CAUTION: This is permanent and cannot be undone.
-  void delete(String userId){
+  Future<bool> delete(String userId) async {
+    try {
+      Response response = await GetIt.I
+          .get<DioService>()
+          .dio
+          .delete("${apiUrl['users']}/$userId");
+      return true;
+    } on DioError catch(e){
+      return false;
+    }
 
   }
 }

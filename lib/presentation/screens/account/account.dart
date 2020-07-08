@@ -4,8 +4,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/user.dart';
+import 'package:hopaut/data/repositories/user_repository.dart';
+import 'package:hopaut/presentation/forms/blocs/edit_accout.dart';
 import 'package:hopaut/presentation/screens/account/upload_picture.dart';
-import 'package:hopaut/presentation/screens/settings/delete_account.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
 import 'package:provider/provider.dart';
@@ -15,28 +16,49 @@ class Account extends StatefulWidget {
   _AccountState createState() => _AccountState();
 }
 
-class _AccountState extends State<Account> {
+class _AccountState extends State<Account>{
+  bool _editMode = false;
+  EditAccountBloc _accountBloc = EditAccountBloc();
+
+  TextEditingController fnController = TextEditingController(
+      text: GetIt.I.get<AuthService>().user.getFirstName
+  );
+
+  TextEditingController lnController = TextEditingController(
+      text: GetIt.I.get<AuthService>().user.getLastName
+  );
+
+  TextEditingController descriptionController = TextEditingController(
+      text: GetIt.I.get<AuthService>().user.description
+  );
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFed2f65),
         resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
             child: Stack(
               children: <Widget>[
-                Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                    gradient: RadialGradient(
-                      center: const Alignment(-0.5, -2.1), // near the top right
-                      radius: 1.75,
-                      colors: [
-                        const Color(0xFFffbe6a), // yellow sun
-                        const Color(0xFFed2f65), // blue sky
-                      ],
-                      stops: [0.55, 1],
+                Wrap(
+                  children: [Container(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      gradient: RadialGradient(
+                        center: const Alignment(-0.5, -2.1), // near the top right
+                        radius: 1.75,
+                        colors: [
+                          const Color(0xFFffbe6a), // yellow sun
+                          const Color(0xFFed2f65), // blue sky
+                        ],
+                        stops: [0.55, 1],
+                      ),
                     ),
                   ),
+          ],
                 ),
                 Row(
                   children: <Widget>[
@@ -50,88 +72,7 @@ class _AccountState extends State<Account> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(30),
                           ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Provider<AuthService>(
-                                create: (context) => GetIt.I.get<AuthService>(),
-                                child: Text(
-                                    context.watch<AuthService>().user.fullName,
-                                    style: TextStyle(fontSize: 24,
-                                    fontWeight: FontWeight.bold),
-                                  ),
-                              ),
-                              FlatButton(
-                                padding: EdgeInsets.zero,
-                                child: RichText(
-                                  text: TextSpan(
-                                      text: 'Edit Profile',
-                                      style: TextStyle(color: Colors.pink)),
-
-                                ),
-                                onPressed: () { Fluttertoast.showToast(msg: 'HELLO');},
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              ListTile(
-                                title: Text(
-                                  'Description',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                subtitle: Provider<AuthService>(
-                                  create: (context) => GetIt.I.get<AuthService>(),
-                                  child: Text(
-                                    context.watch<AuthService>().user.getDescription,
-                                    style: TextStyle(fontSize: 16,
-                                        color: Colors.black87),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
-                                  child: Divider(
-                                    color: Colors.grey,
-                                  )),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              ListTile(
-                                title: Text('Email',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                    ),
-                                ),
-                                subtitle: Provider<AuthService>(
-                                  create: (context) => GetIt.I
-                                      .get<AuthService>(),
-                                  child: Text(
-                                    context.watch<AuthService>().user.email,
-                                    style: TextStyle(fontSize: 16,),
-                                  ),
-                                ),
-                              ),
-                              ListTile(
-                                title: Text('Member since',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                    ),
-                                ),
-                                subtitle: Provider<AuthService>(
-                                  create: (context) => GetIt.I.
-                                  get<AuthService>(),
-                                  child: Text(context.watch<AuthService>().user
-                                      .dateRegistered,
-                                    style: TextStyle(fontSize: 16,),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          child: _editMode ? editAccountData() : buildAccountData()
                         )),
                   ],
                 ),
@@ -155,7 +96,7 @@ class _AccountState extends State<Account> {
                       ),
                     ),
                   ),
-                Positioned(
+                if (_editMode) Positioned(
                   right: MediaQuery.of(context).size.width/3,
                   child: Center(
                     heightFactor: 7.5,
@@ -203,6 +144,232 @@ class _AccountState extends State<Account> {
               ],
             )
         )
+    );
+  }
+
+  Column editAccountData() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        ListTile(
+          title: Text(
+              'First Name',
+          style: TextStyle(
+            color: Colors.grey,
+            ),
+          ),
+          subtitle: StreamBuilder<String>(
+            stream: _accountBloc.fnValid,
+            builder: (ctx, snapshot) {
+              return TextField(
+                onChanged: _accountBloc.fnChanged,
+                decoration: InputDecoration(
+                  errorText: snapshot.error,
+                ),
+                controller: fnController,
+              );
+            })
+              ),
+              ListTile(
+              title: Text(
+              'Last Name',
+              style: TextStyle(
+              color: Colors.grey,
+              )
+              ),
+              subtitle: StreamBuilder<String>(
+                  stream: _accountBloc.lnValid,
+                  builder: (ctx, snapshot) {
+                    return TextField(
+                      onChanged: _accountBloc.lnChanged,
+                      decoration: InputDecoration(
+                        errorText: snapshot.error,
+                      ),
+                      controller: lnController,
+                    );
+                  })
+              ),
+              ListTile(
+          title: Text(
+            'Description',
+            style: TextStyle(
+              color: Colors.grey,
+            ),
+          ),
+          subtitle: TextField(
+            controller: descriptionController,
+            maxLength: 255,
+            maxLines: 3,
+          ),
+        ),
+        SizedBox(height: 30,),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            children: <Widget>[
+              InkWell(
+                onTap: (){
+                  setState(() {
+                    _editMode = false;
+                  });
+                },
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.cancel, size: 16,),
+                    SizedBox(width: 5,),
+                    Text('Cancel'),
+                  ],
+                ),
+              ),
+              Spacer(),
+              StreamBuilder<bool>(
+                stream: _accountBloc.dataValid,
+                builder: (ctx, snapshot) => InkWell(
+                  onTap: snapshot.hasData ? () async {
+                    updateProfileData();
+                  } : () { setState(() {
+                    _editMode = false;
+                  });},
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.check, size: 16,),
+                      SizedBox(width: 5,),
+                      Text('Save Changes'),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    descriptionController.dispose();
+    fnController.dispose();
+    lnController.dispose();
+    _accountBloc.dispose();
+    super.dispose();
+  }
+
+  void updateProfileData() async {
+    final oldData = GetIt.I.get<AuthService>().user;
+    if(
+      // Shitty workaround but shows that nothing has changed
+      oldData.firstName.compareTo(_accountBloc.firstName) != 0 ||
+      oldData.lastName.compareTo(_accountBloc.lastName) != 0 ||
+      oldData.description.compareTo(descriptionController.text.trim()) != 0
+    ){
+      final User temp = User(
+        firstName: _accountBloc.firstName,
+        lastName: _accountBloc.lastName,
+        description: descriptionController.text.trim(),
+      );
+      User updateRes = await UserRepository().update(
+          GetIt.I.get<AuthService>().user.id,
+          temp);
+      if (updateRes != null) {
+        GetIt.I.get<AuthService>().setUser(updateRes);
+      }else{
+        Fluttertoast.showToast(msg: "Unable to update profile data");
+      }
+    }
+    setState(() {
+      _editMode = false;
+    });
+  }
+
+  Column buildAccountData() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Provider<AuthService>(
+          create: (context) => GetIt.I.get<AuthService>(),
+          child: Text(
+            context.watch<AuthService>().user.fullName,
+            style: TextStyle(fontSize: 24,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        FlatButton(
+          padding: EdgeInsets.zero,
+          child: RichText(
+            text: TextSpan(
+                text: 'Edit Profile',
+                style: TextStyle(color: Colors.pink)),
+
+          ),
+          onPressed: () { setState(() {
+            _editMode = !_editMode;
+          }); },
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        ListTile(
+          title: Text(
+            'Description',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Provider<AuthService>(
+            create: (context) => GetIt.I.get<AuthService>(),
+            child: Text(
+              context.watch<AuthService>().user.description == null ?
+              "You have not set a description as yet"
+              : context.watch<AuthService>().user.description,
+              style: TextStyle(fontSize: 16,
+                  color: Colors.black87),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Divider(
+              color: Colors.grey,
+            )),
+        SizedBox(
+          height: 5,
+        ),
+        ListTile(
+          title: Text('Email',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          subtitle: Provider<AuthService>(
+            create: (context) => GetIt.I
+                .get<AuthService>(),
+            child: Text(
+              context.watch<AuthService>().user.email,
+              style: TextStyle(fontSize: 16,),
+            ),
+          ),
+        ),
+        ListTile(
+          title: Text('Member since',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          subtitle: Provider<AuthService>(
+            create: (context) => GetIt.I.
+            get<AuthService>(),
+            child: Text(context.watch<AuthService>().user
+                .dateRegistered,
+              style: TextStyle(fontSize: 16,),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

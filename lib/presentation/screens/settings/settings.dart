@@ -1,3 +1,4 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -233,7 +234,7 @@ class _SettingsState extends State<Settings> {
 
   void changePage(String path) {
     _pageChange = true;
-    Application.router.navigateTo(context, path);
+    Application.router.navigateTo(context, path, transition: TransitionType.cupertino);
     Future.delayed(Duration(seconds: 1)).then((value) => _pageChange = false);
   }
 }

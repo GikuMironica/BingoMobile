@@ -26,13 +26,13 @@ class RegistrationBloc extends Object with Validator implements BaseBloc {
       _confirmPassController.stream.transform(StreamTransformer<String, String>
           .fromHandlers(
         handleData: (_password, sink) =>
-            0 != _passwordController.value.compareTo(_password)
+            0 == _passwordController.value.compareTo(_password)
             ? sink.add(_password) : sink.addError("Passwords do not match")
           )
       );
 
   Stream<bool> get dataValid =>
-      Rx.combineLatest3(emailValid, passwordValid, confirmPassValid, (a, b, c) => null);
+      Rx.combineLatest3(emailValid, passwordValid, confirmPassValid, (a, b, c) => true);
 
 
 

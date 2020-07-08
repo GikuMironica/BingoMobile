@@ -3,13 +3,18 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/data/repositories/identity_repository.dart';
 import 'package:hopaut/presentation/forms/blocs/login.dart';
+import 'package:hopaut/presentation/widgets/buttons/authentication_button.dart';
+import 'package:hopaut/presentation/widgets/buttons/basic_button.dart';
 import 'package:hopaut/presentation/widgets/buttons/gradient_box_decoration.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
+import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
+import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
 import 'package:hopaut/presentation/widgets/loadingPopup.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
 import '../../widgets/widgets.dart';
-import '../../widgets/facebook_login_button.dart';
+import '../../widgets/buttons/facebook_login_button.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -40,60 +45,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     setState(() => _obscureText = !_obscureText);
   }
 
-  Widget displayPasswordInput() {
-    return StreamBuilder<String>(
-        stream: _loginBloc.passwordValid,
-        builder: (ctx, snapshot) =>
-        TextField(
-          onChanged: _loginBloc.passwordChanged,
-          obscureText: _obscureText,
-          decoration: InputDecoration(
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              alignLabelWithHint: true,
-              suffixIcon: GestureDetector(
-                onTap: () {
-                  togglePasswordVisibility();
-                  Future<void>.delayed(
-                      const Duration(seconds: 3), () => togglePasswordVisibility());
-                },
-                child: Icon(
-                  _obscureText ? Icons.lock_outline : Icons.lock_open,
-                  color: Colors.black,
-                ),
-              ),
-              isDense: true,
-              labelText: 'Password',
-              errorText: snapshot.error,
-              hintText: 'Enter your password',
-              hintStyle: TextStyle(color: Colors.grey[400]),
-              contentPadding:
-              const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400]),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              labelStyle:
-              TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
-              border: const OutlineInputBorder()),
-        ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: EdgeInsets.zero,
-        child: SingleChildScrollView(
-          child: Container(
+      body: SingleChildScrollView(
+
+          child: Padding(
+            padding: EdgeInsets.zero,
+            child: Container(
             height: MediaQuery.of(context).size.height,
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: ListView(
               children: <Widget>[
                 Column(
                   children: <Widget>[
@@ -121,11 +85,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           padding: EdgeInsets.symmetric(horizontal: 50),
                           child: Column(
                             children: <Widget>[
-                              emailInput(),
+                              emailInput(_loginBloc),
                               const SizedBox(
                                 height: 20,
                               ),
-                              if (_loginMode) displayPasswordInput(),
+                              if (_loginMode) displayPasswordInput(
+                                  _loginBloc,
+                                  _obscureText,
+                                  togglePasswordVisibility),
                               if (_loginMode)
                                 const SizedBox(
                                   height: 20,
@@ -135,7 +102,16 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               const SizedBox(
                                 height: 20,
                               ),
-                              submitLogin(),
+                              _loginMode ? authentication_button(
+                                bloc: _loginBloc,
+                                onPressedSuccess:() async {attemptLogin(_loginBloc.email.trimRight(), _loginBloc.password); },
+                                onPressedError: () {},
+                                label: 'Login',
+                              )
+                                  : BasicButton(
+                                label: 'Send Email',
+                                onPressed: () => attemptPasswordRecovery(_loginBloc.email),
+                              )
                             ],
                           ),
                         ),
@@ -159,6 +135,18 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     );
   }
 
+  void attemptPasswordRecovery(String email) async {
+    bool res = await IdentityRepository().forgotPassword(email);
+    if(res){
+      Fluttertoast.showToast(msg: "If an email exists in the system, you will receive an email.");
+      setState(() {
+        _loginMode = true;
+      });
+    }else{
+      Fluttertoast.showToast(msg: "Unable process your request, please try again later.");
+    }
+  }
+
   void attemptFacebookLogin() async {
     showDialog(
         context: context,
@@ -172,39 +160,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         context,
         '/account',
         clearStack: true)).catchError((e)=>Fluttertoast.showToast(msg: 'Something wrong happened'));
-  }
-
-  StreamBuilder<bool> submitLogin() {
-    return StreamBuilder<bool>(
-      stream: _loginBloc.dataValid,
-      builder: (ctx, snapshot) => Container(
-        width: 200,
-        height: 50.0,
-        decoration: gradientBoxDecoration(),
-        child: MaterialButton(
-          onPressed: snapshot.hasData ? () async {
-            attemptLogin(_loginBloc.email.trimRight(), _loginBloc.password); } : () {},
-          elevation: 100,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(80),
-          ),
-          padding: EdgeInsets.all(0),
-          child: Ink(
-            child: Container(
-              alignment: Alignment.center,
-              child: Text(
-                'Login',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          )
-        )
-      ),
-    );
   }
 
   void showLoadingDialog() async {
@@ -228,37 +183,4 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       Fluttertoast.showToast(msg: "Unable to login");
     }
   }
-
-  StreamBuilder<String> emailInput() {
-    return StreamBuilder<String>(
-      stream: _loginBloc.emailValid,
-      builder: (ctx, snapshot) => TextField(
-        onChanged: _loginBloc.emailChanged,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey[400]),
-          ),
-          errorText: snapshot.error,
-          border: const OutlineInputBorder(),
-          isDense: true,
-          labelText: 'Email',
-          hintText: 'Enter your email',
-          hintStyle: TextStyle(color: Colors.grey[400]),
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          alignLabelWithHint: true,
-          suffixIcon: Icon(
-            Icons.mail_outline,
-            color: Colors.black,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey)
-          ),
-          labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
-        ),
-      ),
-    );
-  }
-
-
 }

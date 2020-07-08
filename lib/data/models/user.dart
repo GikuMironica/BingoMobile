@@ -34,17 +34,15 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['FirstName'] = this.firstName;
-    data['LastName'] = this.lastName;
-    data['ProfilePicture'] = this.profilePicture;
-    data['PhoneNumber'] = this.phoneNumber;
-    data['Description'] = this.description;
+    if (this.firstName != null && this.firstName.trim().length != 0) data['FirstName'] = this.firstName.trim();
+    if (this.lastName != null && this.lastName.trim().length != 0) data['LastName'] = this.lastName.trim();
+    if (this.phoneNumber != null && this.phoneNumber.trim().length != 0) data['PhoneNumber'] = this.phoneNumber.trim();
+    if (this.description != null && this.description.trim().length != 0) data['Description'] = this.description.trim();
     return data;
   }
 
   String get getFirstName => firstName ??= '';
   String get getLastName => lastName ??= '';
-  String get getDescription => description ??= 'You have not set your description as yet';
   String get fullName => "$getFirstName $getLastName".trim();
 
   String get getProfilePicture {

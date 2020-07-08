@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/data/repositories/user_repository.dart';
+import 'package:hopaut/presentation/forms/blocs/delete_account.dart';
+import 'package:hopaut/services/auth_service/auth_service.dart';
 
 class DeleteAccountPopup extends StatefulWidget {
   @override
@@ -7,14 +13,13 @@ class DeleteAccountPopup extends StatefulWidget {
 
 class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
   bool _loading = false;
-
+  DeleteAccountBloc _deleteAccountBloc = DeleteAccountBloc(GetIt.I.get<AuthService>().user.email);
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 280,
+      height: 285,
       child: ListView(
-          physics: NeverScrollableScrollPhysics(),
           children: !_loading
               ? <Widget>[
             Text(
@@ -57,7 +62,10 @@ class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
             SizedBox(
               height: 20,
             ),
-            TextField(
+            StreamBuilder<String>(
+              stream: _deleteAccountBloc.emailValid,
+            builder: (context, snapshot) =>  TextField(
+              onChanged: _deleteAccountBloc.emailChanged,
               decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   alignLabelWithHint: true,
@@ -78,24 +86,40 @@ class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
                       color: Colors.black, fontWeight: FontWeight.w500),
                   border: const OutlineInputBorder()),
             ),
+            ),
             SizedBox(
               height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                StreamBuilder<bool>(
+                  stream: _deleteAccountBloc.dataValid,
+                  builder: (context, snapshot) => ButtonTheme(
+                      minWidth: 100,
+                      child: RaisedButton(
+                          color: snapshot.hasData ?  Colors.red : Colors.red[900],
+                          child: Text('Delete',
+                              style: TextStyle(color: Colors.white)),
+                          onPressed: snapshot.hasData ? () async {
+                            bool deleteRes = await UserRepository().delete(
+                                GetIt.I.get<AuthService>().currentIdentity.id
+                            );
+                            setState(() => _loading = true);
+
+
+                              if(deleteRes) {
+                                Application.router.navigateTo(context, '/login', clearStack: true);
+                                Fluttertoast.showToast(msg: 'Account deletion successful');
+                              } else {
+                                Fluttertoast.showToast(msg: "Unable to delete account");
+                                _loading = false;
+                              }
+                          } : (){}),
+                    ),
+                  ),
                 ButtonTheme(
-                  minWidth: 130,
-                  child: RaisedButton(
-                      color: Colors.red,
-                      child: Text('Delete Account',
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: () {
-                        setState(() => _loading = true);
-                      }),
-                ),
-                ButtonTheme(
-                  minWidth: 130,
+                  minWidth: 100,
                   child: RaisedButton(
                       child: Text('Cancel',
                           style: TextStyle(color: Colors.black54)),

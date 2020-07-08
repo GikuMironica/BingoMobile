@@ -104,7 +104,7 @@ class IdentityRepository{
     }
   }
 
-  Future<void> forgotPassword(String email) async {
+  Future<bool> forgotPassword(String email) async {
     // TODO: Insert logic here.
     final Map<String, dynamic> payload = {
       'email': email
@@ -115,13 +115,13 @@ class IdentityRepository{
           .dio
           .post(apiUrl['forgotPassword'], data: payload);
 
-      print(response.data);
+      return (response.statusCode == 200);
     } on DioError catch (e) {
-      print(e.response.toString());
+      return false;
     }
   }
 
-  Future<void> changePassword({
+  Future<bool> changePassword({
     @required String email,
     @required String oldPassword,
     @required String newPassword
@@ -139,9 +139,9 @@ class IdentityRepository{
           .dio
           .post(apiUrl['changePassword'], data: payload);
 
-      print(response.data);
+      if(response is Map<String, dynamic>) return true;
     } on DioError catch (e) {
-      print(e.response.toString());
+      return false;
     }
   }
 }

@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/presentation/forms/blocs/registration.dart';
+import 'package:hopaut/presentation/widgets/buttons/gradient_box_decoration.dart';
+import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
+import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
+import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
+import 'package:hopaut/presentation/widgets/loadingPopup.dart';
+import 'package:hopaut/services/auth_service/auth_service.dart';
 import '../../widgets/widgets.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -8,37 +18,11 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  RegistrationBloc _registrationBloc = RegistrationBloc();
   bool _obscureText = true;
 
   void togglePasswordVisibility(){
     setState(() => _obscureText = !_obscureText);
-  }
-
-  Widget displayPasswordInput({String label, bool enableHint = true}){
-    return TextField(
-      obscureText: _obscureText,
-      decoration: InputDecoration(
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          alignLabelWithHint: true,
-          suffixIcon: GestureDetector(
-            onTap: () {togglePasswordVisibility(); Future<void>.delayed(const Duration(seconds: 3), () => togglePasswordVisibility());},
-            child: Icon(
-              _obscureText ? Icons.lock_outline : Icons.lock_open,
-              color: Colors.black,
-            ),
-          ),
-          isDense: true,
-          labelText: label ??= 'Password',
-          hintText: enableHint ? 'Enter your password': '',
-          hintStyle: TextStyle(color: Colors.grey[400]),
-          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey[400]),
-          ),
-          labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
-          border: const OutlineInputBorder()
-      ),
-    );
   }
 
   @override
@@ -52,8 +36,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             height: MediaQuery.of(context).size.height,
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: ListView(
               children: <Widget>[
                 Column(children: <Widget>[
                   const SizedBox(height: 50,),
@@ -68,16 +51,55 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         padding: EdgeInsets.symmetric(horizontal: 50),
                         child: Column(
                           children: <Widget>[
-                            displayEmailInput(),
+                            emailInput(_registrationBloc),
                             const SizedBox(height: 20,),
-                            displayPasswordInput(),
+                            displayPasswordInput(
+                                _registrationBloc,
+                                _obscureText,
+                                togglePasswordVisibility),
                             const SizedBox(height: 20,),
-                            displayPasswordInput(label: 'Confirm Password', enableHint: false),
+                            displayConfirmPasswordInput(
+                                _registrationBloc,
+                                _obscureText,
+                                togglePasswordVisibility),
                             const SizedBox(height: 20,),
                             Text('By registering an account you agree blah blah',
                               textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w300, color: Colors.grey[700]),),
                             const SizedBox(height: 30,),
-                            authActionButton(text: 'Sign up'),
+                            StreamBuilder<bool>(
+                              stream: _registrationBloc.dataValid,
+                              builder: (ctx, snapshot) => Container(
+                                width: 200,
+                                height: 50,
+                                decoration: gradientBoxDecoration(),
+                                child: MaterialButton(
+                                  onPressed: snapshot.hasData ? () async {
+                                    attemptRegister(
+                                        _registrationBloc.email.trimRight(),
+                                        _registrationBloc.password
+                                    );
+                                  } : (){},
+                                    elevation: 100,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(80),
+                                    ),
+                                    padding: EdgeInsets.all(0),
+                                    child: Ink(
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          'Sign Up',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -91,5 +113,34 @@ class _RegistrationPageState extends State<RegistrationPage> {
         ),
       ),
     );
+  }
+
+  void showLoadingDialog() async {
+    await showDialog(
+        context: context,
+        builder: (context) => CustomDialog(
+          pageWidget: LoadingPopup('Signing up'),
+        )
+    );
+  }
+
+  void attemptRegister(String email, String password) async {
+    showLoadingDialog();
+    bool registrationResult = await GetIt.I.get<AuthService>()
+        .register(email, password);
+
+    if(registrationResult){
+      Application.router.navigateTo(context, '/login', clearStack: true);
+      Fluttertoast.showToast(msg: "Check your email for a confirmation");
+    }else{
+      Fluttertoast.showToast(msg: "Unable to register");
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _registrationBloc.dispose();
+    super.dispose();
   }
 }
