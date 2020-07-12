@@ -1,10 +1,10 @@
 class MiniPost {
   int postId;
   int postType;
-  Null thumbnail;
-  Null address;
+  String thumbnail;
+  String address;
   String title;
-  int hostRating;
+  double hostRating;
   double latitude;
   double longitude;
   int repteatableEnabled;
@@ -13,7 +13,7 @@ class MiniPost {
   int postTime;
   int startTime;
   int endTime;
-  int entracePrice;
+  double entracePrice;
   int slots;
 
   MiniPost(

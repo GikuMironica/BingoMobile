@@ -49,7 +49,7 @@ class User {
     if(profilePicture != null){
       if(profilePicture.startsWith("http")){ return profilePicture; }
       else {
-        return "${webUrl['baseUrl']}/assets/profile/$profilePicture.webp";
+        return "${webUrl['baseUrl']}${webUrl['profiles']}/$profilePicture.webp";
       }
     }
   }

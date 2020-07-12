@@ -1,5 +1,5 @@
 final Map<String, String> apiUrl = {
-  'baseUrl': 'https://hopout.de/api/v1',
+  'baseUrl': 'https://hopout.eu/api/v1',
 
   // Identity
   'login': '/identity/login',
@@ -38,6 +38,6 @@ final Map<String, String> apiUrl = {
 
 final Map<String, String> webUrl = {
   'baseUrl': 'https://www.hopaut.com',
-  'images': '/assets/images',
-  'profiles': '/assets/profiles'
+  'images': '/images',
+  'profiles': '/images/profiles'
 };
