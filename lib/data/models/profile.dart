@@ -16,6 +16,16 @@ class Profile {
     description = json['Description'];
   }
 
-  String get getProfilePicture =>
-      "${webUrl['baseUrl']}/assets/profiles/$profilePicture.webp";
+  String get getFullName => "$firstName $lastName";
+
+  String get getInitials => "${firstName.substring(0,1)}${lastName.substring(0,1)}";
+
+  String get getProfilePicture {
+    if(profilePicture != null){
+      if(profilePicture.startsWith("http")){ return profilePicture; }
+      else {
+        return "${webUrl['baseUrl']}${webUrl['profiles']}/$profilePicture.webp";
+      }
+    }
+  }
 }

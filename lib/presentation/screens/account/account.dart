@@ -259,11 +259,14 @@ class _AccountState extends State<Account>{
 
   void updateProfileData() async {
     final oldData = GetIt.I.get<AuthService>().user;
+    print("First Name " + oldData.getFirstName.compareTo(_accountBloc.firstName).toString());
+    print("Last Name " + oldData.getLastName.compareTo(_accountBloc.lastName).toString());
+    print("Description " + oldData.getDescription.compareTo(descriptionController.text.trim()).toString());
     if(
       // Shitty workaround but shows that nothing has changed
-      oldData.firstName.compareTo(_accountBloc.firstName) != 0 ||
-      oldData.lastName.compareTo(_accountBloc.lastName) != 0 ||
-      oldData.description.compareTo(descriptionController.text.trim()) != 0
+      oldData.getFirstName.compareTo(_accountBloc.firstName) != 0 ||
+      oldData.getLastName.compareTo(_accountBloc.lastName) != 0 ||
+      oldData.getDescription.compareTo(descriptionController.text.trim()) != 0
     ){
       final User temp = User(
         firstName: _accountBloc.firstName,
@@ -320,11 +323,11 @@ class _AccountState extends State<Account>{
           subtitle: Provider<AuthService>(
             create: (context) => GetIt.I.get<AuthService>(),
             child: Text(
-              context.watch<AuthService>().user.description == null ?
+              context.watch<AuthService>().user.description == '' ?
               "You have not set a description as yet"
               : context.watch<AuthService>().user.description,
               style: TextStyle(fontSize: 16,
-                  color: Colors.black87),
+                  color: Colors.black54),
             ),
           ),
         ),

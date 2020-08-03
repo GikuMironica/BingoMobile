@@ -1,7 +1,7 @@
 class Location {
   int id;
-  int longitude;
-  int latitude;
+  double longitude;
+  double latitude;
   String entityName;
   String address;
   String city;
@@ -20,7 +20,7 @@ class Location {
 
   Location.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
-    longitude = json['Logitude'];
+    longitude = json['Longitude'];
     latitude = json['Latitude'];
     entityName = json['EntityName'];
     address = json['Address'];
@@ -31,8 +31,7 @@ class Location {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['Id'] = this.id;
-    data['Logitude'] = this.longitude;
+    data['Longitude'] = this.longitude;
     data['Latitude'] = this.latitude;
     data['EntityName'] = this.entityName;
     data['Address'] = this.address;

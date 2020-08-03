@@ -1,3 +1,7 @@
+import 'package:get_it/get_it.dart';
+import 'package:hopaut/services/date_formatter.dart';
+import 'package:intl/intl.dart';
+
 class MiniPost {
   int postId;
   int postType;
@@ -73,4 +77,6 @@ class MiniPost {
     data['Slots'] = this.slots;
     return data;
   }
+
+  String get getStartTime => GetIt.I.get<DateFormatter>().formatDateTime(startTime);
 }

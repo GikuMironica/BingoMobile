@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/mini_post.dart';
-import 'package:hopaut/data/models/searchQuery.dart';
+import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/data/repositories/post_repository.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';

@@ -37,12 +37,13 @@ class User {
     if (this.firstName != null && this.firstName.trim().length != 0) data['FirstName'] = this.firstName.trim();
     if (this.lastName != null && this.lastName.trim().length != 0) data['LastName'] = this.lastName.trim();
     if (this.phoneNumber != null && this.phoneNumber.trim().length != 0) data['PhoneNumber'] = this.phoneNumber.trim();
-    if (this.description != null && this.description.trim().length != 0) data['Description'] = this.description.trim();
+    if (this.description != null) data['Description'] = this.description.trim();
     return data;
   }
 
   String get getFirstName => firstName ??= '';
   String get getLastName => lastName ??= '';
+  String get getDescription => description ??= '';
   String get fullName => "$getFirstName $getLastName".trim();
 
   String get getProfilePicture {

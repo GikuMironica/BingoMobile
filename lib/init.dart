@@ -1,6 +1,8 @@
 import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/presentation/screens/account/account.dart';
+import 'package:hopaut/presentation/screens/events/event_list.dart';
 import 'package:hopaut/presentation/screens/login/login.dart';
+import 'package:hopaut/presentation/screens/search/search.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
 import 'package:hopaut/services/secure_service/secure_service.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +29,7 @@ class _InitializationState extends State<Initialization> {
     if (user == null){
       return LoginPage();
     }else{
-      return Account();
+      return EventList();
     }
   }
 }

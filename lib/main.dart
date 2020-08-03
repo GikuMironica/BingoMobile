@@ -3,12 +3,14 @@ import 'dart:io';
 
 import 'package:fluro/fluro.dart';
 import 'package:get_it/get_it.dart';
+import 'package:here_sdk/core.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/router.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/services/dio_service/dio_service.dart';
+import 'package:hopaut/services/event_manager/event_manager.dart';
 import 'package:hopaut/services/secure_service/secure_service.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +20,7 @@ import 'services/setup.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  SdkContext.init(IsolateOrigin.main);
   await Hive.initFlutter();
   serviceSetup();
   var authBox = await Hive.openBox('auth');
@@ -58,8 +61,11 @@ class HopAut extends StatelessWidget {
           currentFocus.focusedChild.unfocus();
         }
       },
-      child: ChangeNotifierProvider(
-          create: (context) => GetIt.I.get<AuthService>(),
+      child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (context) => GetIt.I.get<AuthService>()),
+            ChangeNotifierProvider(create: (context) => GetIt.I.get<EventManager>()),
+          ],
           child: MaterialApp(
             onGenerateRoute: Application.router.generator,
           home: Initialization(),
