@@ -1,6 +1,8 @@
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
+import 'package:hopaut/services/date_formatter.dart';
+import 'package:hopaut/services/event_manager/event_manager.dart';
 import 'dio_service/dio_service.dart';
 import 'secure_service/secure_service.dart';
 import 'package:get_it/get_it.dart';
@@ -12,5 +14,7 @@ void serviceSetup() async {
   // TODO: Implement singleton services
   getIt.registerSingleton<SecureStorage>(SecureStorage());
   getIt.registerSingleton<DioService>(DioService());
+  getIt.registerLazySingleton<DateFormatter>(() => DateFormatter());
+  getIt.registerSingleton<EventManager>(EventManager());
   getIt.registerSingleton<AuthService>(AuthService());
 }

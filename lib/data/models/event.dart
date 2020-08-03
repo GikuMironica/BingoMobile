@@ -1,11 +1,14 @@
+import 'package:hopaut/config/event_types.dart';
+
 class Event {
   int id;
   String description;
   int slots;
   String title;
-  int entrancePrice;
+  double entrancePrice;
   String requirements;
   int eventType;
+  int currency;
 
   Event(
       {this.id,
@@ -14,7 +17,8 @@ class Event {
         this.title,
         this.entrancePrice,
         this.requirements,
-        this.eventType});
+        this.eventType,
+      this.currency});
 
   Event.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
@@ -24,6 +28,7 @@ class Event {
     entrancePrice = json['EntrancePrice'];
     requirements = json['Requirements'];
     eventType = json['EventType'];
+    currency = json['Currency'];
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +40,9 @@ class Event {
     data['EntrancePrice'] = this.entrancePrice;
     data['Requirements'] = this.requirements;
     data['EventType'] = this.eventType;
+    data['Currency'] = this.currency;
     return data;
   }
+
+  String get type => eventTypes[eventType];
 }

@@ -13,7 +13,7 @@ import 'dart:io';
 import 'package:mime_type/mime_type.dart';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+import '../../../services/image_conversion.dart';
 
 class UploadPictureDialogue extends StatefulWidget {
   @override
@@ -23,16 +23,6 @@ class UploadPictureDialogue extends StatefulWidget {
 class _UploadPictureDialogueState extends State<UploadPictureDialogue> {
   File _image;
   final picker = ImagePicker();
-
-  Future<File> testCompressAndGetFile(File file, String targetPath) async {
-    var result = await FlutterImageCompress.compressAndGetFile(
-      file.absolute.path, targetPath,
-      quality: 85,
-      format: CompressFormat.webp,
-    );
-
-    return result;
-  }
 
   Future uploadImage(File file) async {
     String fileName = file.path.split('/').last;

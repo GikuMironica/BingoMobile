@@ -12,6 +12,8 @@ class Routes {
   static String termsOfServices = '/tos';
   static String settings = '/settings';
   static String privacyPolicy = '/privacy_policy';
+  static String event = '/event/:id';
+  static String createEvent = '/create-event';
 
   static void configureRoutes(Router router){
     router.notFoundHandler = new Handler(
@@ -29,5 +31,7 @@ class Routes {
     router.define(changePassword, handler: changePasswordHandler);
     router.define(termsOfServices, handler: tosHandler);
     router.define(privacyPolicy, handler: ppHandler);
+    router.define(event, handler: eventPageHandler);
+    router.define(createEvent, handler: createEventHandler);
   }
 }

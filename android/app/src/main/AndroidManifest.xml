@@ -71,8 +71,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
-
+        <meta-data android:name="com.here.sdk.access_key_id" android:value="jhGYNi0TwTYhkR_gHINssw"/>
+        <meta-data android:name="com.here.sdk.access_key_secret" android:value="ERW6aOR-thhVDaEK87acFczpXSoOH3YxtNrid1ecwI80HpYJ3pMwT1CeW_xwXX5JYfvKu1QShU683rYdnfGhUQ"/>
     </application>
 
 </manifest>

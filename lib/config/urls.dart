@@ -14,9 +14,14 @@ final Map<String, String> apiUrl = {
 
   // Posts
   'posts': '/posts',
+  'my_inactive': '/posts/myinactive',
+  'my_active': '/posts/myactive',
 
   // Profile
   'profile': '/profile',
+
+  // Tags
+  'tags': '/tag',
 
   // Announcements
   'announcements': '/announcements',

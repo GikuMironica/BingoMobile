@@ -1,3 +1,11 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
+import 'package:hopaut/services/date_formatter.dart';
+import 'package:hopaut/services/setup.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:mime_type/mime_type.dart';
 
 import 'event.dart';
 import 'location.dart';
@@ -10,7 +18,7 @@ class Post {
   int activeFlag;
   Location location;
   String userId;
-  int hostRating;
+  double hostRating;
   bool isAttending;
   int availableSlots;
   Event event;
@@ -47,13 +55,13 @@ class Post {
     endTime = json['EndTime'];
     activeFlag = json['ActiveFlag'];
     location = json['Location'] != null
-        ? new Location.fromJson(json['Location'])
+        ? Location.fromJson(json['Location'])
         : null;
     userId = json['UserId'];
     hostRating = json['HostRating'];
     isAttending = json['IsAttending'];
     availableSlots = json['AvailableSlots'];
-    event = json['Event'] != null ? new Event.fromJson(json['Event']) : null;
+    event = json['Event'] != null ? Event.fromJson(json['Event']) : null;
     repeatablePropertyDataId = json['RepeatablePropertyDataId'];
     voucherDataId = json['VoucherDataId'];
     announcementsDataId = json['AnnouncementsDataId'];
@@ -62,29 +70,59 @@ class Post {
     tags = json['Tags'].cast<String>();
   }
 
-  Map<String, dynamic> toJson() {
+  Future<Map<String, dynamic>> toJson() async {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['Id'] = this.id;
-    data['PostTime'] = this.postTime;
     data['EventTime'] = this.eventTime;
     data['EndTime'] = this.endTime;
-    data['ActiveFlag'] = this.activeFlag;
     if (this.location != null) {
-      data['Location'] = this.location.toJson();
+      data['UserLocation.Longitude'] = this.location.longitude;
+      data['UserLocation.Latitude'] = this.location.latitude;
+      data['UserLocation.Address'] = this.location.address;
+      data['UserLocation.City'] = this.location.city;
+      data['UserLocation.Region'] = this.location.region;
+      data['UserLocation.EntityName'] = this.location.entityName;
+      data['UserLocation.Country'] = this.location.country;
     }
-    data['UserId'] = this.userId;
-    data['HostRating'] = this.hostRating;
-    data['IsAttending'] = this.isAttending;
-    data['AvailableSlots'] = this.availableSlots;
     if (this.event != null) {
-      data['Event'] = this.event.toJson();
+      data['Event.Description'] = this.event.description;
+      data['Event.Requirements'] = this.event.requirements;
+      data['Event.Slots'] = this.event.slots;
+      data['Event.Title'] = this.event.title;
+      data['Event.Currency'] = this.event.currency;
+      data['Event.EntrancePrice'] = this.event.entrancePrice;
+      data['Event.EventType'] = this.event.eventType;
     }
-    data['RepeatablePropertyDataId'] = this.repeatablePropertyDataId;
-    data['VoucherDataId'] = this.voucherDataId;
-    data['AnnouncementsDataId'] = this.announcementsDataId;
-    data['AttendanceDataId'] = this.attendanceDataId;
-    data['Pictures'] = this.pictures;
-    data['Tags'] = this.tags;
+    if(pictures.isNotEmpty){
+      String mimeType = mimeFromExtension('webp');
+      String mimee = mimeType.split('/')[0];
+      String type = mimeType.split('/')[1];
+      if(pictures[0] != null) data['Picture1'] = await MultipartFile.fromFile(File(pictures[0]).absolute.path, filename: '0.webp', contentType: MediaType(mimee, type));
+      if(pictures[1] != null) data['Picture2'] = await MultipartFile.fromFile(File(pictures[1]).absolute.path, filename: '1.webp', contentType: MediaType(mimee, type));
+      if(pictures[2] != null) data['Picture3'] = await MultipartFile.fromFile(File(pictures[2]).absolute.path, filename: '2.webp', contentType: MediaType(mimee, type));
+    }
+    data['Tags'] = this.tags ?? null;
     return data;
+  }
+
+  String get timeRange => GetIt.I.get<DateFormatter>().formatTimeRange(eventTime, endTime);
+  double get entryPrice => event.entrancePrice != 0.0 ? event.entrancePrice : null;
+
+  DateTime get startTimeAsDateTime => DateTime.fromMillisecondsSinceEpoch(eventTime * 1000);
+  DateTime get endTimeAsDateTime => DateTime.fromMillisecondsSinceEpoch(endTime * 1000);
+
+  void setTitle(String string) {
+    this.event.title = string;
+  }
+
+  void setLocation(Location location){
+    this.location = location;
+  }
+
+  void setEndTime(int int){
+    this.endTime = int;
+  }
+
+  void setStartTime(int int){
+    this.eventTime = int;
   }
 }
