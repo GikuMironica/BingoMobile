@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:flutter/material.dart';
+import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/data/repositories/post_repository.dart';
 
@@ -10,6 +11,7 @@ class EventManager with ChangeNotifier{
   List<MiniPost> activeList;
   List<MiniPost> inactiveList;
   static EventManager _eventManager;
+  Post postContext;
 
   factory EventManager() {
     return _eventManager ??= EventManager._();
@@ -43,6 +45,33 @@ class EventManager with ChangeNotifier{
       userActiveList.insert(0, miniPost);
       notifyListeners();
     }
+  }
+
+  void setPostContext(Post post){
+    postContext = post;
+  }
+
+  Post get getPostContext{
+    if(postContext != null) return postContext;
+  }
+
+  void setPostDescription(String text){
+    postContext.event.description = text;
+    notifyListeners();
+  }
+
+  void setPostTags(List<String> text){
+    postContext.tags = text;
+    notifyListeners();
+  }
+
+  void setPostTitle(String text){
+    postContext.event.title = text;
+    notifyListeners();
+  }
+  void setPostRequirements(String text){
+    postContext.event.requirements = text;
+    notifyListeners();
   }
 
   void removeUserActive(int id){

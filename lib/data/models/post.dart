@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/urls.dart';
 import 'package:hopaut/services/date_formatter.dart';
 import 'package:hopaut/services/setup.dart';
 import 'package:http_parser/http_parser.dart';
@@ -70,7 +71,18 @@ class Post {
     tags = json['Tags'].cast<String>();
   }
 
-  Future<Map<String, dynamic>> toJson() async {
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['EventTime'] = this.eventTime;
+    data['EndTime'] = this.endTime;
+    data['Location'] = this.location.toJson();
+    data['Event'] = this.event.toJson();
+    data['Pictures'] = this.pictures;
+    data['Tags'] = this.tags ?? null;
+    return data;
+  }
+
+  Future<Map<String, dynamic>> toMultipartJson() async {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['EventTime'] = this.eventTime;
     data['EndTime'] = this.endTime;
@@ -106,6 +118,15 @@ class Post {
 
   String get timeRange => GetIt.I.get<DateFormatter>().formatTimeRange(eventTime, endTime);
   double get entryPrice => event.entrancePrice != 0.0 ? event.entrancePrice : null;
+
+  List<String> pictureUrls() {
+    List<String> pics = List();
+    for (String picture in pictures){
+
+      if(picture != null) pics.add("${webUrl['baseUrl']}${webUrl['images']}/$picture.webp");
+    }
+    return pics;
+  }
 
   DateTime get startTimeAsDateTime => DateTime.fromMillisecondsSinceEpoch(eventTime * 1000);
   DateTime get endTimeAsDateTime => DateTime.fromMillisecondsSinceEpoch(endTime * 1000);

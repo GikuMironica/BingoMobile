@@ -33,7 +33,7 @@ class EventDetails extends StatelessWidget {
         GridCell(
             title: 'Date', data: date, icon: MdiIcons.calendarBlankOutline),
         GridCell(title: 'Time', data: time, icon: ClockIcon(time)),
-        if (price != null) GridCell(
+        if (price != 0.0) GridCell(
               title: 'Entrance Price',
               data: '${price.toString()} $priceCurrency',
               icon: MdiIcons.cash),

@@ -15,9 +15,13 @@ import 'package:hopaut/presentation/widgets/event_page/event_host.dart';
 import 'package:hopaut/presentation/widgets/event_page/event_participants.dart';
 import 'package:hopaut/presentation/widgets/event_page/event_requirements.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
+import 'package:hopaut/presentation/widgets/text/subtitle.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
 import 'package:hopaut/services/date_formatter.dart';
+import 'package:hopaut/services/event_manager/event_manager.dart';
+import 'package:image_viewer/image_viewer.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class EventPage extends StatefulWidget {
@@ -33,6 +37,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   bool attendCellVisible = false;
   bool isAttending = false;
   bool isHost = false;
+  bool isActiveEvent = false;
+
   Key attendCellKey = Key('attend-list-cell');
   List<NetworkImage> _postImages = [];
 
@@ -48,10 +54,20 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
 
   _EventPageState(this.postId);
 
+  Iterable<Widget> get tagWidgets sync* {
+    for (final String tag in post.tags) {
+      yield Chip(
+        elevation: 2,
+        label: Text(tag),
+      );
+    }
+  }
+
   Future<void> getDetails() async {
     post = await PostRepository().get(postId);
     host = await ProfileRepository().get(post.userId);
     isHost = post.userId == GetIt.I.get<AuthService>().user.id;
+    isActiveEvent = post.activeFlag == 1;
   }
 
   void checkForImages() {
@@ -71,7 +87,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
     // TODO: We need to call the event details here.
 
     getDetails().then((value) => setState(
-      () => postIsLoaded = true)).then((value) => checkForImages());
+      () => postIsLoaded = true)).then((value){checkForImages(); GetIt.I.get<EventManager>().setPostContext(post);});
     super.initState();
 
 
@@ -128,20 +144,21 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
               child: FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,
                 background: Carousel(
-                  images: postHasPictures ? _postImages : [
-                    AssetImage('assets/images/bg_placeholder.jpg'),
-                  ],
-                  dotSize: 4.0,
-                  dotSpacing: 15.0,
-                  dotColor: Colors.white70,
-                  indicatorBgPadding: 16.0,
-                  dotBgColor: Colors.transparent,
-                  moveIndicatorFromBottom: 240.0,
-                  noRadiusForIndicator: true,
-                  autoplay: false,
-                  animationDuration: Duration(milliseconds: 500),
-                  dotPosition: DotPosition.bottomRight,
-                ),
+                    images: postHasPictures ? _postImages : [
+                      AssetImage('assets/images/bg_placeholder.jpg'),
+                    ],
+                    dotSize: 4.0,
+                    dotSpacing: 15.0,
+                    dotColor: Colors.white70,
+                    indicatorBgPadding: 16.0,
+                    dotBgColor: Colors.transparent,
+                    moveIndicatorFromBottom: 240.0,
+                    noRadiusForIndicator: true,
+                    autoplay: false,
+                    animationDuration: Duration(milliseconds: 500),
+                    dotPosition: DotPosition.bottomRight,
+                    onImageTap: (value) => ImageViewer.showImageSlider(images: post.pictureUrls(), startingPosition: value),
+                  ),
               ),
             ),
             elevation: 0,
@@ -152,6 +169,15 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
               onPressed: () => Application.router.pop(context),
             ),
             actions: <Widget>[
+              Visibility(
+                visible: isHost && isActiveEvent,
+                child: IconButton(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  icon: Icon(Icons.edit),
+                  onPressed: () { Application.router.navigateTo(context, '/edit-event');},
+                ),
+              ),
               IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
@@ -188,7 +214,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                       ),
                       SizedBox(width: 4,),
                       Text(
-                        post.location.city,
+                        '${post.location.address}, ${post.location.city}',
                         style: TextStyle(fontSize: 14, color: Colors.black54),
                       ),
                       SizedBox(width: 16,),
@@ -224,16 +250,43 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                   EventDetails(
                     date: GetIt.I.get<DateFormatter>().formatDate(post.eventTime),
                     time: post.timeRange,
-                    price: post.entryPrice,
+                    price: post.event.entrancePrice,
                     priceCurrency: 'EUR',
                     slots: '${post.availableSlots} / ${post.event.slots}',
                   ),
                   Divider(),
                   SizedBox(height: 16),
-                  EventDescription(post.event.description ?? 'No description for this event yet'),
-                  if (post.event.requirements != null) SizedBox(height: 32),
-                  if (post.event.requirements != null) EventRequirements(post.event.requirements),
+                  EventDescription(Provider.of<EventManager>(context).postContext.event.description ?? 'No description for this event yet'),
+                  Visibility(
+                    visible: ((post.event.requirements != null) && (post.event.requirements?.length != 0)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: 32),
+                        EventRequirements(post.event.requirements),
+                      ],
+                    ),
+                  ),
                   SizedBox(height: 16,),
+                  Visibility(
+                    visible: post.tags.isNotEmpty,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start  ,
+                      children: <Widget>[
+                        Divider(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16, bottom: 8),
+                          child: Subtitle(label: 'Tags'),
+                        ),
+                        Wrap(
+                          spacing: 8.0,
+                          runSpacing: 4.0,
+                          children: tagWidgets.toList(),
+                        ),
+                        SizedBox(height: 16,),
+                      ],
+                    ),
+                  ),
                   Divider(),
                   Visibility(
                     visible: !isHost && DateTime.now().isBefore(post.endTimeAsDateTime),
@@ -265,15 +318,44 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {},
-                    child: ListTile(
-                        contentPadding: EdgeInsets.symmetric(vertical: 4),
-                        leading: Icon(MdiIcons.alertCircleOutline),
-                        title: Align(
-                          child: Text('Report this event'),
-                          alignment: Alignment(-1.2, 0),
-                        )),
+                  Visibility(
+                    visible: !isHost,
+                    child: InkWell(
+                      onTap: () {},
+                      child: ListTile(
+                          contentPadding: EdgeInsets.symmetric(vertical: 4),
+                          leading: Icon(MdiIcons.alertCircleOutline),
+                          title: Align(
+                            child: Text('Report this event'),
+                            alignment: Alignment(-1.2, 0),
+                          )),
+                    ),
+                  ),
+                  Visibility(
+                    visible: isHost && isActiveEvent,
+                    child: InkWell(
+                      onTap: () { Application.router.navigateTo(context, '/edit-event');},
+                      child: ListTile(
+                          contentPadding: EdgeInsets.symmetric(vertical: 4),
+                          leading: Icon(Icons.edit),
+                          title: Align(
+                            child: Text('Edit this event'),
+                            alignment: Alignment(-1.2, 0),
+                          )),
+                    ),
+                  ),
+                  Visibility(
+                    visible: isHost,
+                    child: InkWell(
+                      onTap: () {},
+                      child: ListTile(
+                          contentPadding: EdgeInsets.symmetric(vertical: 4),
+                          leading: Icon(MdiIcons.delete),
+                          title: Align(
+                            child: Text('Delete this event'),
+                            alignment: Alignment(-1.2, 0),
+                          )),
+                    ),
                   ),
                 ]
               ),
@@ -288,6 +370,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   void dispose() {
     _scrollController?.dispose();
     _animationController?.dispose();
+    GetIt.I.get<EventManager>().setPostContext(null);
 
     super.dispose();
   }

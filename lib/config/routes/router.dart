@@ -14,13 +14,20 @@ class Routes {
   static String privacyPolicy = '/privacy_policy';
   static String event = '/event/:id';
   static String createEvent = '/create-event';
+  // -- EDIT EVENT ------------------------------------------------------------
+  static String editEvent = '/edit-event';
+  static String editEventDescription = '/edit-event/description';
+  static String editEventTitle = '/edit-event/title';
+  static String editEventTags = '/edit-event/tags';
+  static String editEventRequirements = '/edit-event/requirements';
+  static String editEventPictures = '/edit-event/pictures';
+  static String editEventTime = '/edit-event/time';
 
-  static void configureRoutes(Router router){
+  static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
-      handlerFunc: (BuildContext ctx, Map<String, List<String>> params){
-        print('Error: Route not found');
-      }
-    );
+        handlerFunc: (BuildContext ctx, Map<String, List<String>> params) {
+      print('Error: Route not found');
+    });
 
     router.define(root, handler: rootHandler);
     // router.define(home, handler: homeHandler);
@@ -33,5 +40,12 @@ class Routes {
     router.define(privacyPolicy, handler: ppHandler);
     router.define(event, handler: eventPageHandler);
     router.define(createEvent, handler: createEventHandler);
+    router.define(editEvent, handler: editEventHandler);
+    router.define(editEventDescription, handler: editEventDescriptionHandler);
+    router.define(editEventRequirements, handler: editEventRequirementsHandler);
+    router.define(editEventTitle, handler: editEventTitleHandler);
+    router.define(editEventTags, handler: editEventTagsHandler);
+    router.define(editEventPictures, handler: editEventPicturesHandler);
+    router.define(editEventTime, handler: editEventTimeHandler);
   }
 }

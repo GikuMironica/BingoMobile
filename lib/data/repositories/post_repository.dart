@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/urls.dart';
 import 'package:hopaut/data/models/mini_post.dart';
+import 'package:hopaut/data/models/multipart/updated_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/services/dio_service/dio_service.dart';
 
@@ -26,8 +27,15 @@ class PostRepository {
   }
 
   /// Update Post
-  Future<bool> update(Post post) async {
-
+  Future<bool> update(int postId, Map<String, dynamic> newValues) async {
+    try{
+      FormData _data = FormData.fromMap(await MultiPartUpdatedPost(newValues));
+      Response response = await GetIt.I.get<DioService>().dio.post('${apiUrl['posts']}/$postId', data: _data, options: Options(headers: { '${HttpHeaders.contentTypeHeader}': 'multipart/form-data'}));
+      return response.statusCode == 200;
+    } on DioError catch (e){
+      print(e.response.statusMessage);
+      return false;
+    }
   }
 
   /// Delete Post
@@ -88,7 +96,7 @@ class PostRepository {
   /// Must be multi-part form.
   Future<Post> create(Post post, List images) async {
     try{
-      FormData _data = FormData.fromMap(await post.toJson());
+      FormData _data = FormData.fromMap(await post.toMultipartJson());
       Response response = await GetIt.I.get<DioService>().dio.post(apiUrl['posts'], data: _data, options: Options(headers: { '${HttpHeaders.contentTypeHeader}': 'multipart/form-data'}));
       if(response.statusCode == 201){
         Post post = Post.fromJson(response.data['Data']);

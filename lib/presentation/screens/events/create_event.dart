@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/currencies.dart';
 import 'package:hopaut/config/event_types.dart';
@@ -8,9 +10,11 @@ import 'package:hopaut/config/paid_event_types.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/event.dart';
 import 'package:hopaut/data/models/location.dart' deferred as PostLocation;
+import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/widgets/currency_icons.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
+import 'package:hopaut/services/event_manager/event_manager.dart';
 import 'package:hopaut/services/image_conversion.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -33,30 +37,76 @@ class CreateEventForm extends StatefulWidget {
 }
 
 class _CreateEventFormState extends State<CreateEventForm> {
-  final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   Post _post;
   SearchEngine _searchEngine;
   final imagePicker = ImagePicker();
-  final RegExp tags_nospaced = RegExp(r' ');
 
   final List<String> _currencyList = List();
 
   DateTime _eventStart;
   PaidEventType _paidEventType = PaidEventType.NONE;
   List<String> _eventList = List();
+  List<bool> _picturesSelected;
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _tagsController = TextEditingController();
   DateTime now = DateTime.now();
   int _currency = 0;
   ScrollController _scrollController = ScrollController(keepScrollOffset: true);
 
-  Future getImage(int index) async {
-    final pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
-    final File res = File(pickedFile.path);
-    File file = await testCompressAndGetFile(res, "${res.parent.absolute.path}/$index.webp");
-    setState(() => _post.pictures[index] = file.path);
+  List<MemoryImage> _pictureFiles = [null, null, null];
+
+  Future setImage(int index) async {
+    print(_picturesSelected); print(_post.pictures);
+    final PickedFile pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
+    File file = File(pickedFile.path);
+    setState(() {
+      _picturesSelected[index] = true;
+    });
+    File convertedImage = await testCompressAndGetFile(file,
+        "${file.parent.absolute.path}/$index.webp");
+    print(convertedImage.path);
+    setState((){
+      _post.pictures[index] = convertedImage.path;
+      _pictureFiles[index] = MemoryImage(convertedImage.readAsBytesSync());
+    });
   }
+
+  Widget getImage(int index) {
+    if(_picturesSelected[index] == false){
+      return Icon(Icons.add);
+    }else{
+      if(_post.pictures[index] == null){
+        return CupertinoActivityIndicator();
+      }else{
+        return Stack(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: _pictureFiles[index],
+                  )
+              ),
+            ),
+            InkWell(
+              onTap: () => resetImages(index),
+              child: deleteImageIcon(),
+            ),
+          ],
+        );
+      }
+    }
+  }
+
+  void resetImages(int index){
+    setState(() {
+      _post.pictures[index] = null;
+      _picturesSelected[index] = false;
+      _pictureFiles[index] = null;
+    });
+  }
+
 
  Iterable<Widget> get tagWidgets sync* {
     for (final String tag in _post.tags) {
@@ -80,6 +130,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
     _searchEngine = SearchEngine();
     eventTypes.forEach((key, value) => _eventList.add(value));
     currencies.forEach((key, value) => _currencyList.add(value));
+    _picturesSelected = [false, false, false];
 
     super.initState();
   }
@@ -108,11 +159,58 @@ class _CreateEventFormState extends State<CreateEventForm> {
         controller: _scrollController,
         physics: ClampingScrollPhysics(),
         padding: EdgeInsets.all(24.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
+        child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Subtitle(label: 'Pictures'),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  InkWell(
+                    onTap: () async { await setImage(0); },
+                    child: Card(
+                      elevation: 3,
+                      child: Container(
+                        width: 96,
+                        height: 96,
+                        color: Colors.grey[200],
+                        child: getImage(0),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () async { await setImage(1); },
+                    child: Card(
+                      elevation: 3,
+                      child: Container(
+                          width: 96,
+                          height: 96,
+                          color: Colors.grey[200],
+                          child: getImage(1)
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () async { await setImage(2); },
+                    child: Card(
+                      elevation: 3,
+                      child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                          ),
+                          width: 96,
+                          height: 96,
+                          child: getImage(2)
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8,),
+              Divider(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Subtitle(label: 'Event Title'),
@@ -120,10 +218,11 @@ class _CreateEventFormState extends State<CreateEventForm> {
               EventTextField(
                 onChanged: (v) => _post.setTitle(v),
                 textHint: 'Event Title',
-                onSaved: (v) => _post.event.title = v,
-                validator: (v) => _post.event.title == null
-                    ? "Event Title is required" : null,
+                inputFormatter: [
+                  LengthLimitingTextInputFormatter(50),
+                ]
               ),
+              Divider(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Subtitle(label: 'Event Type'),
@@ -136,15 +235,19 @@ class _CreateEventFormState extends State<CreateEventForm> {
                   setState((){
                     switch(_post.event.eventType){
                       case 1:
+                        _post.event.currency = 0;
                         _paidEventType = PaidEventType.HOUSE_PARTY;
                         break;
                       case 2:
+                        _post.event.currency = 0;
                         _paidEventType = PaidEventType.CLUB;
                         break;
                       case 3:
+                        _post.event.currency = 0;
                         _paidEventType = PaidEventType.BAR;
                         break;
                       default:
+                        _post.event.currency = null;
                         _paidEventType = PaidEventType.NONE;
                         break;
                     }
@@ -158,6 +261,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
               ),
               if (_paidEventType == PaidEventType.HOUSE_PARTY) housePartySlots(),
               if (_paidEventType != PaidEventType.NONE) entrancePrice(),
+              Divider(),
               Padding(padding: EdgeInsets.all(8.0),
               child: Subtitle(label: 'Event Location'),),
               Container(
@@ -186,7 +290,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                               List<Place> suggestion) =>
                               suggestion.forEach((element) {
                                 if([PlaceType.street, PlaceType.poi, PlaceType.unit, PlaceType.houseNumber].contains(element.type)){
-                                  suggestionList.add(addressParser(element));
+                                  if(element.address.streetName.isNotEmpty) suggestionList.add(addressParser(element));
                                 }
                               }));
                       await Future.delayed(Duration(seconds: 1));
@@ -205,13 +309,15 @@ class _CreateEventFormState extends State<CreateEventForm> {
                     return suggestionsBox;
                   },
                   onSuggestionSelected: (suggestion) {
+                    print(suggestion);
                     _post.setLocation(PostLocation.Location.fromJson(suggestion));
-                    this._locationController.text = '${suggestion['EntityName']}, ${suggestion['Address']}, ${suggestion['Region']} ${suggestion['City']}';
+                    this._locationController.text = suggestion['Address'] != suggestion['EntityName'] ? '${suggestion['EntityName']}, ${suggestion['Address']}, ${suggestion['Region']} ${suggestion['City']}' : '${suggestion['EntityName']}, ${suggestion['Region']} ${suggestion['City']}';
                   },
                   hideOnEmpty: true,
                   validator: (value) => value.isEmpty ? 'Please confirm an address' : null,
                 ),
               ),
+              Divider(),
               Padding(padding: EdgeInsets.all(8.0), child: Subtitle(label: 'Event Time'),),
               Container(
                 height: 48,
@@ -304,6 +410,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                       onSaved: (value) {}),
                 ),
               ),
+              Divider(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Subtitle(label: 'Event Description'),
@@ -313,8 +420,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                 height: 144.0,
                 expand: true,
                 textHint: 'Event Description',
-                onSaved: (p) => _post.event.description = p.trim(),
-                validator: (p) => p.trim().length < 10 ? "Please Enter a longer description." : null,
+                maxChars: 3000,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -325,102 +431,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                 height: 144.0,
                 expand: true,
                 textHint: 'Event Requirements (Optional)',
-                onSaved: (p) => _post.event.requirements = p.trim(),
-                validator: (p) => null,
               ),
-              Divider(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Subtitle(label: 'Pictures'),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  InkWell(
-                    onTap: () async { await getImage(0); },
-                    child: Card(
-                      elevation: 3,
-                      child: Container(
-                        width: 96,
-                        height: 96,
-                        color: Colors.grey[200],
-                        child: _post.pictures[0] == null ? Icon(Icons.add) : Stack(
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: FileImage(File(_post.pictures[0])),
-                                  )
-                              ),
-                            ),  InkWell(
-                              onTap: () => setState(() => _post.pictures[0] = null),
-                              child: deleteImageIcon(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () async { await getImage(1); },
-                    child: Card(
-                      elevation: 3,
-                      child: Container(
-                        width: 96,
-                        height: 96,
-                        color: Colors.grey[200],
-                        child: _post.pictures[1] == null ? Icon(Icons.add) : Stack(
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: FileImage(File(_post.pictures[1])),
-                                  )
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () => setState(() => _post.pictures[1] = null),
-                              child: deleteImageIcon(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () async { await getImage(2); },
-                    child: Card(
-                      elevation: 3,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                        ),
-                        width: 96,
-                        height: 96,
-                        child: _post.pictures[2] == null ? Icon(Icons.add) : Stack(
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: FileImage(File(_post.pictures[2])),
-                                  )
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () => setState(() => _post.pictures[2] = null),
-                              child: deleteImageIcon(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8,),
               Divider(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -496,21 +507,20 @@ class _CreateEventFormState extends State<CreateEventForm> {
               ),
               RaisedButton(
                 onPressed: () async {print(await _post.toJson());},
-                child: Text('Nigga'),
+                child: Text('log toJson'),
               ),
               RaisedButton(
                 onPressed:  () async { Post postRes = await PostRepository().create(_post, []);
                 if(postRes != null){
                   Application.router.navigateTo(context, '/event/${postRes.id}', replace: true);
                 }else{
-                  Fluttertoast.showToast(msg: "NEINNNNNNNNN");
+                  Fluttertoast.showToast(msg: "Unable to create event");
                 }
                 },
                 child: Text('Save'),
               )
 
             ],
-          ),
         ),
       ),
     );
@@ -530,21 +540,22 @@ class _CreateEventFormState extends State<CreateEventForm> {
           ),
           child: Wrap(
             children: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width * 0.72,
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.73,
                 child: TextField(
-                  maxLength: 6,
-                  decoration: InputDecoration(
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.zero,
-                      child: Icon(currencyIcon(_currency), color: Colors.black54, size: 20,),
+                      onChanged: (v) => _post.event.entrancePrice = double.parse(v),
+                      maxLength: 6,
+                      decoration: InputDecoration(
+                        prefixIcon: Padding(
+                          padding: EdgeInsets.zero,
+                          child: Icon(currencyIcon(_currency), color: Colors.black54, size: 20,),
+                        ),
+                        contentPadding: EdgeInsets.only(top: 16.0),
+                        border: InputBorder.none,
+                        hintText: 'Price',
+                      ),
+                      keyboardType: TextInputType.number,
                     ),
-                    contentPadding: EdgeInsets.only(top: 16.0),
-                    border: InputBorder.none,
-                    hintText: 'Price',
-                  ),
-                  keyboardType: TextInputType.number,
-                ),
               ),
               DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
@@ -579,7 +590,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
           padding: EdgeInsets.all(8.0),
           child: Subtitle(label: 'Slots'),
         ),
-        EventTextField(textInputType: TextInputType.number, textHint: 'Slots', onSaved: null, validator: null),
+        EventTextField(onChanged: (v) => _post.event.slots = int.parse(v),textInputType: TextInputType.number, textHint: 'Slots',),
       ],
     );
   }
@@ -593,9 +604,10 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
   Map<String, dynamic> addressParser(Place place){
     Map<String, dynamic> map = Map();
-
-    map['EntityName'] = (place.type == PlaceType.street) ? place.address.streetName : place.title;
-    map['Address'] = (place.type != PlaceType.street) ? '${place.address.streetName} ${place.address.houseNumOrName}' : '';
+    map['placeType'] = place.type.toString();
+    map['EntityName'] = (place.type == PlaceType.street) ? place.address.streetName : (place.type == PlaceType.houseNumber) ? '${place.address.streetName} ${place.address.houseNumOrName}' : place.title;
+    map['Address'] = place.address.streetName;
+    if(place.address.houseNumOrName.isNotEmpty) map['Address'] = '${map['Address']} ${place.address.houseNumOrName}';
     map['City'] = place.address.city;
     map['Country'] = place.address.country;
     map['Longitude'] = place.geoCoordinates.longitude;

@@ -1,7 +1,7 @@
-//import 'package:events/ui/event_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/data/models/mini_post.dart';
-//import 'package:page_transition/page_transition.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class MiniPostCard extends StatelessWidget {
   final MiniPost miniPost;
@@ -20,7 +20,8 @@ class MiniPostCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: Padding(
-          padding: EdgeInsets.only(bottom: 12), child: Container(
+          padding: EdgeInsets.only(bottom: 16),
+          child: Container(
           height: 136.0,
           width: MediaQuery.of(context).size.width * 0.75,
           margin: EdgeInsets.symmetric(horizontal: 16.0),
@@ -29,7 +30,7 @@ class MiniPostCard extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.35),
+                color: Colors.black.withOpacity(0.1),
                 offset: Offset(4, 4),
                 blurRadius: 6.0,
               ),
@@ -37,67 +38,95 @@ class MiniPostCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Hero(tag: miniPost.title,
-                child: Container(
-                  width: 102.0,
-                  height: 116.0,
+              Container(
+                  width: 108.0,
+                  height: 136.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(10.0),
+                      left: Radius.circular(10)
                     ),
                     image: DecorationImage(
-                      image: NetworkImage(
-                          'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80'),
+                      image: miniPost.thumbnail != null ? NetworkImage(miniPost.thumbnailUrl) : AssetImage('assets/images/bg_placeholder.jpg'),
                       fit: BoxFit.cover,
                     ),
                   ),
-                ),),
+                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          miniPost.title,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 11.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Spacer(),
-                        Row(
-                          children: [
-                            Image.asset(
-                              'assets/icons/location.png',
-                              color: Color(0xFF656565),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            miniPost.title,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
                             ),
-                            SizedBox(width: 8.0),
-                            Expanded(
-                              child: Text(
-                              miniPost.address ?? "No Address",
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 8.0,
-                                  fontWeight: FontWeight.bold,
+                          ),
+                          Row(
+                            children: [
+                              Wrap(
+                                spacing: 1,
+                                children: <Widget>[
+                                  Text(
+                                    miniPost.type,
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  Icon(
+                                    MdiIcons.circleSmall,
+                                    color: Colors.black54,
+                                    size: 11,
+                                  ),
+                                  Icon(MdiIcons.mapMarker, size: 14.0, color: Colors.black54,),
+                                  Text(miniPost.address ?? "No Address",
+                                    style: TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 12.0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16,),
+                          Row(
+                            children: <Widget>[
+                              Wrap(
+                                spacing: 8,
+                                children: <Widget>[
+                                  Icon(MdiIcons.calendarBlankOutline, size: 14,),
+                                  Text(miniPost.getStartTime, style: TextStyle(fontSize: 12),),
+                                ],
+                              )
+                            ],
+                          ),
+                          Spacer(),
+                          Row(
+                            children: <Widget>[
+                              Visibility(
+                                visible: DateTime.now().isAfter(miniPost.getStartTimeAsDT) && DateTime.now().isBefore(miniPost.getEndTimeAsDT),
+                                child: Text(
+                                  'Happening now',
+                                  style: TextStyle(color: Colors.green, fontSize: 12),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Spacer(),
-                        Text(
-                          miniPost.getStartTime,
-                          style: TextStyle(
-                            color: Color(0xFF343434),
-                            fontSize: 7.0,
+                              Spacer(),
+                              Text(
+                                timeago.format(DateTime.now().subtract(DateTime.now().difference(miniPost.getPostTimeAsDT))),
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),

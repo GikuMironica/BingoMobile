@@ -1,4 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/event_types.dart';
+import 'package:hopaut/config/urls.dart';
+import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/services/date_formatter.dart';
 import 'package:intl/intl.dart';
 
@@ -37,6 +40,21 @@ class MiniPost {
         this.endTime,
         this.entracePrice,
         this.slots});
+
+  MiniPost.fromPost(Post post){
+    postId = post.id;
+    postType = post.event.eventType;
+    address = post.location.address;
+    title = post.event.title;
+    hostRating = post.hostRating;
+    latitude = post.location.latitude;
+    longitude = post.location.longitude;
+    postTime = post.postTime;
+    startTime = post.eventTime;
+    endTime = post.endTime;
+    entracePrice = post.event.entrancePrice;
+    slots = post.event.slots;
+  }
 
   MiniPost.fromJson(Map<String, dynamic> json) {
     postId = json['PostId'];
@@ -78,5 +96,10 @@ class MiniPost {
     return data;
   }
 
+  String get type => eventTypes[postType];
   String get getStartTime => GetIt.I.get<DateFormatter>().formatDateTime(startTime);
+  DateTime get getPostTimeAsDT => DateTime.fromMillisecondsSinceEpoch(postTime * 1000);
+  DateTime get getStartTimeAsDT => DateTime.fromMillisecondsSinceEpoch(startTime * 1000);
+  DateTime get getEndTimeAsDT => DateTime.fromMillisecondsSinceEpoch(endTime * 1000);
+  String get thumbnailUrl => '${webUrl['baseUrl']}${webUrl['images']}/$thumbnail.webp';
 }

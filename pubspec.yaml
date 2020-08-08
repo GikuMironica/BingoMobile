@@ -58,6 +58,8 @@ dependencies:
   datetime_picker_formfield: ^1.0.0
   carousel_pro:           ^1.0.0
   material_design_icons_flutter: ^4.0.5345
+  image_viewer: ^0.5.1
+  timeago: ^2.0.26
 
   here_sdk:
     path: plugins/here_sdk
