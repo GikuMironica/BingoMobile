@@ -538,13 +538,13 @@ class _CreateEventFormState extends State<CreateEventForm> {
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Wrap(
+          child: Row(
             children: <Widget>[
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.73,
+                width: MediaQuery.of(context).size.width * 0.67,
                 child: TextField(
                       onChanged: (v) => _post.event.entrancePrice = double.parse(v),
-                      maxLength: 6,
+                      inputFormatters: [LengthLimitingTextInputFormatter(6)],
                       decoration: InputDecoration(
                         prefixIcon: Padding(
                           padding: EdgeInsets.zero,

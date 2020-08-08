@@ -68,9 +68,6 @@ class MiniPostCard extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              Wrap(
-                                spacing: 1,
-                                children: <Widget>[
                                   Text(
                                     miniPost.type,
                                     style: TextStyle(fontSize: 12),
@@ -81,14 +78,16 @@ class MiniPostCard extends StatelessWidget {
                                     size: 11,
                                   ),
                                   Icon(MdiIcons.mapMarker, size: 14.0, color: Colors.black54,),
-                                  Text(miniPost.address ?? "No Address",
+                                  Expanded(
+                                    child: Text(miniPost.address ?? "No Address",
+                                  softWrap: false,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: Colors.black54,
                                       fontSize: 12.0,
                                     ),
                                   ),
-                                ],
-                              ),
+                                  ),
                             ],
                           ),
                           SizedBox(height: 16,),

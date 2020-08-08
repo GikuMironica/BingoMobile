@@ -10,6 +10,7 @@ import 'package:hopaut/presentation/screens/events/edit_event/requirements/requi
 import 'package:hopaut/presentation/screens/events/edit_event/tags/tags.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/time/time.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/title/title.dart';
+import 'package:hopaut/presentation/screens/events/event_list.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/screens/login/login.dart';
 import 'package:hopaut/presentation/screens/registration/registration.dart';
