@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         .then((value) => Application.router
         .navigateTo(
         context,
-        '/account',
+        '/home',
         clearStack: true)).catchError((e)=>Fluttertoast.showToast(msg: 'Something wrong happened'));
   }
 
@@ -177,7 +177,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         .loginWithEmail(email, password);
 
     if(loginResult){
-      Application.router.navigateTo(context, '/account', clearStack: true);
+      Application.router.navigateTo(context, '/home', clearStack: true);
     }else{
       Application.router.pop(context);
       Fluttertoast.showToast(msg: "Unable to login");

@@ -67,6 +67,10 @@ class HopAut extends StatelessWidget {
             ChangeNotifierProvider(create: (context) => GetIt.I.get<EventManager>()),
           ],
           child: MaterialApp(
+            theme: ThemeData(
+              fontFamily: 'OpenSans',
+              primaryColor: Colors.pinkAccent
+            ),
             onGenerateRoute: Application.router.generator,
           home: Initialization(),
           debugShowCheckedModeBanner: false,

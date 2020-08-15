@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hopaut/config/urls.dart';
 
 class EventParticipants extends StatefulWidget {
   final Map<String, dynamic> participants;
@@ -20,8 +21,8 @@ class _EventParticipantsState extends State<EventParticipants> {
   void initState() {
     super.initState();
     widgetList = [];
-    int count = participants['count'];
-    List members = participants['participants'];
+    int count = participants['AttendeesNumber'];
+    List members = participants['Attendees'];
     double pos = 0;
     switch (count) {
       case 3:
@@ -45,10 +46,10 @@ class _EventParticipantsState extends State<EventParticipants> {
         widgetList.add(SizedBox(height: 36, width: 36,));
         break;
       default:
-        if(participants['count'] != null) {
+        if(participants['AttendeesNumber'] != null) {
           widgetList
               .add(
-              participant(element: participants['count'] - 3, position: 0));
+              participant(element: participants['AttendeesNumber'] - 3, position: 0));
           pos = -30;
           members.forEach((element) {
             widgetList.add(participant(element: element, position: pos));
@@ -73,8 +74,8 @@ Widget participant({dynamic element, double position}) {
   String imageUrl;
 
   if (element is Map) {
-    if (element['Photo'] != null) {
-      imageUrl = element['Photo'];
+    if (element.containsKey('Picture')) {
+      imageUrl = '${webUrl['baseUrl']}${webUrl['profiles']}/${element['Picture']}.webp';
     } else {
       initials = '${element['FirstName'].substring(0, 1)}';
       initials = initials + '${element['LastName'].substring(0, 1)}';

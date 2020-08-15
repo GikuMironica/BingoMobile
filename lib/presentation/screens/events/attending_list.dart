@@ -8,19 +8,19 @@ import 'package:hopaut/presentation/widgets/hopaut_app_bar.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/event_manager/event_manager.dart';
 
+import 'current_attending.dart';
 import 'user_active_list.dart';
 
-class EventList extends StatefulWidget {
+class AttendingList extends StatefulWidget {
   @override
-  _EventListState createState() => _EventListState();
+  _AttendingListState createState() => _AttendingListState();
 }
 
-class _EventListState extends State<EventList> {
+class _AttendingListState extends State<AttendingList> {
 
   @override
   void initState() {
     // TODO: implement initState
-    GetIt.I.get<EventManager>().fetchAllListData();
     super.initState();
   }
 
@@ -39,41 +39,41 @@ class _EventListState extends State<EventList> {
         child: NestedScrollView(
           headerSliverBuilder:
               (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
-                HopAutAppBar(
-                  title: 'Events List',
-                  actions: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.add, color: Colors.white,),
-                      iconSize: 24,
-                      onPressed: () async {
-                        Application.router.navigateTo(context, '/create-event');
-                      },
-                    )
-                  ],
-                ),
-                SliverPersistentHeader(
-                  delegate: _SliverAppBarDelegate(
-                    TabBar(
-                      indicatorColor: Colors.pink,
-                      labelColor: Colors.white,
-                      unselectedLabelColor: Colors.white,
-                      tabs: [
-                        Tab(text: "Current"),
-                        Tab(text: "Past"),
-                      ],
-                    ),
-                  ),
-                  pinned: true,
+            HopAutAppBar(
+              title: 'Attending Events List',
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.add, color: Colors.white,),
+                  iconSize: 24,
+                  onPressed: () async {
+                    Application.router.navigateTo(context, '/create-event');
+                  },
                 )
               ],
-              body: TabBarView(
-                children: <Widget>[
-                  UserActiveList(),
-                  PastEventsList(),
-                ],
-              ),
             ),
+            SliverPersistentHeader(
+              delegate: _SliverAppBarDelegate(
+                TabBar(
+                  indicatorColor: Colors.pink,
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.white,
+                  tabs: [
+                    Tab(text: "Current"),
+                    Tab(text: "Past"),
+                  ],
+                ),
+              ),
+              pinned: true,
+            )
+          ],
+          body: TabBarView(
+            children: <Widget>[
+              CurrentAttendingList(),
+              Container(),
+            ],
           ),
+        ),
+      ),
     );
   }
 }

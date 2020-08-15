@@ -29,14 +29,10 @@ class EventManager with ChangeNotifier{
   }
   
   Future<void> fetchAllListData() async {
-    List<MiniPost> _listResult = await PostRepository().getUserActive();
-    if(_listResult != null) userActiveList = [...userActiveList, ..._listResult].toList();
-    _listResult = await PostRepository().getUserInactive();
-    if(_listResult != null) userInactiveList = [...userInactiveList, ..._listResult].toList();
-    _listResult = await EventRepository().getAttending();
-    if(_listResult != null) activeList = [...activeList, ..._listResult].toList();
-    _listResult = await EventRepository().getAttended();
-    if(_listResult != null) inactiveList = [...activeList, ..._listResult].toList();
+    userActiveList = await PostRepository().getUserActive();
+    userInactiveList = await PostRepository().getUserInactive();
+    activeList = await EventRepository().getAttending();
+    inactiveList = await EventRepository().getAttended();
     notifyListeners();
   }
 
@@ -74,15 +70,35 @@ class EventManager with ChangeNotifier{
     notifyListeners();
   }
 
-  void removeUserActive(int id){
-    if(userActiveList != null){
-      for(MiniPost mp in userActiveList){
-        if(mp.postId == id){
-          userActiveList.remove(mp);
+  void removeUserEvent(int id, bool isActive){
+    if(isActive) {
+        if (userActiveList != null) {
+          int mpIdx;
+          for (MiniPost mp in userActiveList) {
+            if (mp.postId == id) {
+              mpIdx = userActiveList.indexOf(mp);
+            }
+          }
+          if(mpIdx != null) {
+            userActiveList.removeAt(mpIdx);
+            notifyListeners();
+          }
+        }
+    }else{
+      if (userInactiveList != null){
+        int mpIdx;
+        for (MiniPost mp in userInactiveList) {
+          if(mp.postId == id){
+            mpIdx = userInactiveList.indexOf(mp);
+          }
+        }
+        if(mpIdx != null){
+          userInactiveList.removeAt(mpIdx);
           notifyListeners();
         }
       }
     }
+
   }
 
   void addUserInactive(MiniPost miniPost){

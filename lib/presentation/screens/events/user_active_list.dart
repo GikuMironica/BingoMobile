@@ -8,12 +8,12 @@ import 'package:hopaut/services/event_manager/event_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
 
-class CurrentEventsList extends StatefulWidget {
+class UserActiveList extends StatefulWidget {
   @override
-  _CurrentEventsListState createState() => _CurrentEventsListState();
+  _UserActiveListState createState() => _UserActiveListState();
 }
 
-class _CurrentEventsListState extends State<CurrentEventsList> {
+class _UserActiveListState extends State<UserActiveList> {
   int _page = 1;
   bool _isLoading = false;
   StreamController<MiniPost> _streamController;
@@ -35,7 +35,7 @@ class _CurrentEventsListState extends State<CurrentEventsList> {
     return Container(
       child: Provider<EventManager>(
         create: (context) => GetIt.I.get<EventManager>(),
-    child: ListView.builder(
+    child: context.watch<EventManager>().userActiveList?.length == null ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
     itemCount: context.watch<EventManager>().userActiveList.length,
     itemBuilder: (BuildContext ctx, int index) =>
       InkWell(

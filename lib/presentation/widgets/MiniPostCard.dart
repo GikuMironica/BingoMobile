@@ -23,7 +23,7 @@ class MiniPostCard extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 16),
           child: Container(
           height: 136.0,
-          width: MediaQuery.of(context).size.width * 0.75,
+          width: MediaQuery.of(context).size.width * 0.8,
           margin: EdgeInsets.symmetric(horizontal: 16.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),

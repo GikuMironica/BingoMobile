@@ -39,6 +39,7 @@ final Map<String, String> apiUrl = {
   'fetchAttendees': '/fetchallattendee',
   'fetchAllAccepted': '/fetchallaccepted',
   'fetchAllPending': '/fetchallpending',
+  'participants': '/fetchaccepteddata',
 };
 
 final Map<String, String> webUrl = {

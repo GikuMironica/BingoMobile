@@ -1,16 +1,12 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/data/models/mini_post.dart';
-import 'package:hopaut/data/models/search_query.dart';
-import 'package:hopaut/data/repositories/post_repository.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'delete_account.dart';
 
 class Settings extends StatefulWidget {
@@ -20,7 +16,6 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   bool _lights = false;
-  bool _pageChange = false;
 
   @override
   Widget build(BuildContext context) {
@@ -45,21 +40,7 @@ class _SettingsState extends State<Settings> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              VisibilityDetector(
-                key: Key('Settings-Title'),
-                onVisibilityChanged: (visibilityInfo) {
-                  if (visibilityInfo.visibleBounds.height < 5 && !_pageChange) {
-                    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-                      statusBarIconBrightness: Brightness.dark,
-                      statusBarColor: Colors.white,
-                    ));
-                  } else {
-                    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-                        statusBarIconBrightness: Brightness.light,
-                        statusBarColor: Colors.transparent));
-                  }
-                },
-                child: Column(
+              Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(
@@ -97,7 +78,6 @@ class _SettingsState extends State<Settings> {
                       ),
                     ),
                   ],
-                ),
               ),
               Container(
                   width: double.infinity,
@@ -230,15 +210,11 @@ class _SettingsState extends State<Settings> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    _pageChange = true;
     super.dispose();
   }
 
   void changePage(String path) {
-    _pageChange = true;
     Application.router.navigateTo(context, path, transition: TransitionType.cupertino);
-    Future.delayed(Duration(seconds: 1)).then((value) => _pageChange = false);
   }
 }
 

@@ -29,7 +29,7 @@ Widget hostDetails({String hostName, String hostInitials, String hostImage, doub
         child: CircleAvatar(
             backgroundColor: Colors.grey,
             radius: 18,
-            child: hostImage == null ? Text(hostInitials, style: TextStyle(color: Colors.black87, fontFamily: 'Roboto'),) : null,
+            child: hostImage == null ? Text('?', style: TextStyle(color: Colors.black87, fontFamily: 'Roboto'),) : null,
             backgroundImage: hostImage == null ? null : NetworkImage(hostImage)),
       ),
       SizedBox(width: 8),

@@ -6,9 +6,14 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/urls.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/models/profile.dart';
+import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/data/repositories/post_repository.dart';
 import 'package:hopaut/data/repositories/profile_repository.dart';
+import 'package:hopaut/presentation/screens/events/delete_event/delete_event.dart';
+import 'package:hopaut/presentation/screens/profile/profile.dart';
 import 'package:hopaut/presentation/widgets/buttons/event_attend_button.dart';
+import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
+import 'package:hopaut/presentation/widgets/dialogs/profile_dialog.dart';
 import 'package:hopaut/presentation/widgets/event_page/event_description.dart';
 import 'package:hopaut/presentation/widgets/event_page/event_details.dart';
 import 'package:hopaut/presentation/widgets/event_page/event_host.dart';
@@ -47,6 +52,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   
   Post post;
   Profile host;
+  Map<String, dynamic> participants;
   final int postId;
 
   bool postIsLoaded = false;
@@ -66,7 +72,9 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   Future<void> getDetails() async {
     post = await PostRepository().get(postId);
     host = await ProfileRepository().get(post.userId);
+    participants = await PostRepository().getAttendees(postId);
     isHost = post.userId == GetIt.I.get<AuthService>().user.id;
+    isAttending = post.isAttending;
     isActiveEvent = post.activeFlag == 1;
   }
 
@@ -81,6 +89,24 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
     }
   }
 
+
+  void attendEvent() async {
+    bool attendResponse = await EventRepository().attend(postId);
+    if(attendResponse){
+      setState(() {
+        isAttending = true;
+      });
+    }
+  }
+
+  void unattendEvent() async {
+    bool unattendResponse = await EventRepository().unAttend(postId);
+    if(unattendResponse){
+      setState(() {
+        isAttending = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -129,7 +155,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
           context: context,
           isAttending: isAttending,
           animationController: _animationController,
-          onPressed: () {},
+          onPressed: isAttending ? () => unattendEvent() : () => attendEvent(),
         ),
       ),
       body: CustomScrollView(
@@ -232,16 +258,27 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      hostDetails(
-                        hostName: host.getFullName,
-                        hostInitials: host.getInitials,
-                        hostImage: host.getProfilePicture,
-                        rating: post.hostRating,
+                      InkWell(
+                        onTap: () => showDialog(
+                          context: context,
+                          builder: (BuildContext context) => ProfileDialog(
+                            buttonText: "TEXT",
+                            title: host.getFullName,
+                            image: host.getProfilePicture,
+                            description: host.description,
+                          ),
+                        ),
+                        child: hostDetails(
+                          hostName: host.getFullName,
+                          hostInitials: host.getInitials,
+                          hostImage: host.getProfilePicture,
+                          rating: post.hostRating,
+                        ),
                       ),
                       Container(
                         width: 36,
                         height: 36,
-                        child: EventParticipants({'participants': []}),
+                        child: EventParticipants(participants),
                       ),
                     ],
                   ),
@@ -300,11 +337,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                         }
                       },
                       child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            isAttending = !isAttending;
-                          });
-                        },
+                        onTap: isAttending ? () => unattendEvent() : () => attendEvent(),
                         child: ListTile(
                             contentPadding: EdgeInsets.symmetric(vertical: 4),
                             leading: isAttending
@@ -346,15 +379,21 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                   ),
                   Visibility(
                     visible: isHost,
-                    child: InkWell(
-                      onTap: () {},
-                      child: ListTile(
+                    child: ListTile(
+                          onTap: () async {
+                            bool res = false;
+                            showDialog(
+                            context: context,
+                            builder: (context) => CustomDialog(
+                              pageWidget: DeleteEventDialog(postId: post.id, postTitle: post.event.title, isActive: isActiveEvent,),
+                            )).then((value) => value == true ? Application.router.pop(context) : null);
+                          },
                           contentPadding: EdgeInsets.symmetric(vertical: 4),
                           leading: Icon(MdiIcons.delete),
                           title: Align(
                             child: Text('Delete this event'),
                             alignment: Alignment(-1.2, 0),
-                          )),
+                          )
                     ),
                   ),
                 ]

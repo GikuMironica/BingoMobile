@@ -5,12 +5,24 @@ import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/services/dio_service/dio_service.dart';
 
 class EventRepository {
-  void attend(int postId){
-
+  Future<bool> attend(int postId) async {
+    try{
+      Response response = await GetIt.I.get<DioService>().dio.post('${apiUrl['attend']}/$postId');
+      return response.statusCode == 200;
+    } on DioError catch(e){
+      print(e.response.data);
+      return false;
+    }
   }
 
-  void unAttend(int postId){
-
+  Future<bool> unAttend(int postId) async {
+    try{
+      Response response = await GetIt.I.get<DioService>().dio.post('${apiUrl['unattend']}/$postId');
+      return response.statusCode == 200;
+    } on DioError catch(e){
+      print(e.response.data);
+      return false;
+    }
   }
 
   /// Get user's currently attending events

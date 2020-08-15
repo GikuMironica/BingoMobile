@@ -7,8 +7,11 @@ import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/presentation/forms/blocs/edit_accout.dart';
 import 'package:hopaut/presentation/screens/account/upload_picture.dart';
+import 'package:hopaut/presentation/screens/settings/settings.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
+import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class Account extends StatefulWidget {
@@ -17,20 +20,23 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account>{
-  bool _editMode = false;
-  EditAccountBloc _accountBloc = EditAccountBloc();
+  bool _editMode;
+  EditAccountBloc _accountBloc;
 
-  TextEditingController fnController = TextEditingController(
-      text: GetIt.I.get<AuthService>().user.getFirstName
-  );
+  TextEditingController _fnController;
+  TextEditingController _lnController;
+  TextEditingController _descriptionController;
 
-  TextEditingController lnController = TextEditingController(
-      text: GetIt.I.get<AuthService>().user.getLastName
-  );
+  @override
+  void initState() {
+    _accountBloc = EditAccountBloc();
+    _editMode = false;
+    _fnController = TextEditingController(text: GetIt.I.get<AuthService>().user.firstName);
+    _lnController = TextEditingController(text: GetIt.I.get<AuthService>().user.lastName);
+    _descriptionController = TextEditingController(text: GetIt.I.get<AuthService>().user.description);
 
-  TextEditingController descriptionController = TextEditingController(
-      text: GetIt.I.get<AuthService>().user.description
-  );
+    super.initState();
+  }
 
 
 
@@ -43,22 +49,13 @@ class _AccountState extends State<Account>{
             child: Stack(
               children: <Widget>[
                 Wrap(
-                  children: [Container(
+                  children: [
+                    Container(
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      gradient: RadialGradient(
-                        center: const Alignment(-0.5, -2.1), // near the top right
-                        radius: 1.75,
-                        colors: [
-                          const Color(0xFFffbe6a), // yellow sun
-                          const Color(0xFFed2f65), // blue sky
-                        ],
-                        stops: [0.55, 1],
-                      ),
-                    ),
+                    height: MediaQuery.of(context).size.height / 2,
+                    decoration: decorationGradient(),
                   ),
-          ],
+                  ],
                 ),
                 Row(
                   children: <Widget>[
@@ -132,10 +129,11 @@ class _AccountState extends State<Account>{
                           iconSize: 30,
                           color: Colors.black.withOpacity(0.5),
                           icon: Icon(Icons.settings),
-                          onPressed: () => Application.router.navigateTo(
-                              context,
-                              '/settings',
-                              transition: TransitionType.cupertino
+                          onPressed: () => pushNewScreen(
+                            context,
+                            screen: Settings(),
+                            withNavBar: false,
+                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
                           ),
                       )
                     ],
@@ -167,7 +165,7 @@ class _AccountState extends State<Account>{
                 decoration: InputDecoration(
                   errorText: snapshot.error,
                 ),
-                controller: fnController,
+                controller: _fnController,
               );
             })
               ),
@@ -186,7 +184,7 @@ class _AccountState extends State<Account>{
                       decoration: InputDecoration(
                         errorText: snapshot.error,
                       ),
-                      controller: lnController,
+                      controller: _lnController,
                     );
                   })
               ),
@@ -198,7 +196,7 @@ class _AccountState extends State<Account>{
             ),
           ),
           subtitle: TextField(
-            controller: descriptionController,
+            controller: _descriptionController,
             maxLength: 255,
             maxLines: 3,
           ),
@@ -228,7 +226,9 @@ class _AccountState extends State<Account>{
                 builder: (ctx, snapshot) => InkWell(
                   onTap: snapshot.hasData ? () async {
                     updateProfileData();
-                  } : () { setState(() {
+                  } : () {
+                    print('no data');
+                    setState(() {
                     _editMode = false;
                   });},
                   child: Row(
@@ -250,9 +250,9 @@ class _AccountState extends State<Account>{
   @override
   void dispose() {
     // TODO: implement dispose
-    descriptionController.dispose();
-    fnController.dispose();
-    lnController.dispose();
+    _descriptionController.dispose();
+    _fnController.dispose();
+    _lnController.dispose();
     _accountBloc.dispose();
     super.dispose();
   }
@@ -261,17 +261,17 @@ class _AccountState extends State<Account>{
     final oldData = GetIt.I.get<AuthService>().user;
     print("First Name " + oldData.getFirstName.compareTo(_accountBloc.firstName).toString());
     print("Last Name " + oldData.getLastName.compareTo(_accountBloc.lastName).toString());
-    print("Description " + oldData.getDescription.compareTo(descriptionController.text.trim()).toString());
-    if(
+    print("Description " + oldData.getDescription.compareTo(_descriptionController.text.trim()).toString());
+    if(true
       // Shitty workaround but shows that nothing has changed
-      oldData.getFirstName.compareTo(_accountBloc.firstName) != 0 ||
-      oldData.getLastName.compareTo(_accountBloc.lastName) != 0 ||
-      oldData.getDescription.compareTo(descriptionController.text.trim()) != 0
+//      oldData.getFirstName.compareTo(_accountBloc.firstName) != 0 ||
+//      oldData.getLastName.compareTo(_accountBloc.lastName) != 0 ||
+//      oldData.getDescription.compareTo(descriptionController.text.trim()) != 0
     ){
       final User temp = User(
         firstName: _accountBloc.firstName,
         lastName: _accountBloc.lastName,
-        description: descriptionController.text.trim(),
+        description: _descriptionController.text.trim(),
       );
       User updateRes = await UserRepository().update(
           GetIt.I.get<AuthService>().user.id,
@@ -323,7 +323,7 @@ class _AccountState extends State<Account>{
           subtitle: Provider<AuthService>(
             create: (context) => GetIt.I.get<AuthService>(),
             child: Text(
-              context.watch<AuthService>().user.description == '' ?
+              context.watch<AuthService>().user.description == null || context.watch<AuthService>().user.description?.length == 0 ?
               "You have not set a description as yet"
               : context.watch<AuthService>().user.description,
               style: TextStyle(fontSize: 16,

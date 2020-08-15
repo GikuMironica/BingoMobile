@@ -41,6 +41,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
   Post _post;
   SearchEngine _searchEngine;
   final imagePicker = ImagePicker();
+  bool _submitButtonDisabled = false;
 
   final List<String> _currencyList = List();
 
@@ -510,13 +511,17 @@ class _CreateEventFormState extends State<CreateEventForm> {
                 child: Text('log toJson'),
               ),
               RaisedButton(
-                onPressed:  () async { Post postRes = await PostRepository().create(_post, []);
+                onPressed:  !_submitButtonDisabled ? () async {
+                  MiniPost postRes = await PostRepository().create(_post, []);
+                setState(() => _submitButtonDisabled = true);
                 if(postRes != null){
-                  Application.router.navigateTo(context, '/event/${postRes.id}', replace: true);
+                  GetIt.I.get<EventManager>().addUserActive(postRes);
+                  Application.router.navigateTo(context, '/event/${postRes.postId}', replace: true);
                 }else{
+                  setState(() => _submitButtonDisabled = false);
                   Fluttertoast.showToast(msg: "Unable to create event");
                 }
-                },
+                } : () {},
                 child: Text('Save'),
               )
 

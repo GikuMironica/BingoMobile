@@ -21,7 +21,7 @@ class EditAccountBloc extends Object implements BaseBloc {
 
   Stream<String> get fnValid => _firstNameController.stream.transform(
       StreamTransformer.fromHandlers(
-          handleData: (name, sink) => name.trim().length > 1
+          handleData: (name, sink) => name.trim().length >= 1
               ? sink.add(name) : sink.addError("First name is too short")
       )
   );
@@ -31,12 +31,12 @@ class EditAccountBloc extends Object implements BaseBloc {
 
   Stream<String> get lnValid => _lastNameController.stream.transform(
       StreamTransformer.fromHandlers(
-          handleData: (name, sink) => name.trim().length > 1
+          handleData: (name, sink) => name.trim().length >= 1
               ? sink.add(name) : sink.addError("Last name is too short")
       )
   );
 
-  Stream<bool> get dataValid => Rx.combineLatest2(fnValid, lnValid, (a, b) => true);
+  Stream<bool> get dataValid => Rx.combineLatest2(fnValid, lnValid, (a, b) { print(a); print(b); return true;});
 
   @override
   void dispose() {

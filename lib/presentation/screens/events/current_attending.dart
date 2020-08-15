@@ -1,5 +1,4 @@
-import 'dart:async';
-
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -8,12 +7,13 @@ import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
 import 'package:hopaut/services/event_manager/event_manager.dart';
 import 'package:provider/provider.dart';
 
-class PastEventsList extends StatefulWidget {
+class CurrentAttendingList extends StatefulWidget {
   @override
-  _PastEventsListState createState() => _PastEventsListState();
+  _CurrentAttendingListState createState() => _CurrentAttendingListState();
 }
 
-class _PastEventsListState extends State<PastEventsList> {
+class _CurrentAttendingListState extends State<CurrentAttendingList> {
+  int _page = 1;
   bool _isLoading = false;
   List<MiniPost> events = new List();
 
@@ -33,12 +33,13 @@ class _PastEventsListState extends State<PastEventsList> {
     return Container(
       child: Provider<EventManager>(
         create: (context) => GetIt.I.get<EventManager>(),
-        child: context.watch<EventManager>().userInactiveList?.length == null ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
-            itemCount: context.watch<EventManager>().userInactiveList.length,
+        child: context.watch<EventManager>().activeList?.length == null ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
+            itemCount: context.watch<EventManager>().activeList.length,
             itemBuilder: (BuildContext ctx, int index) =>
                 InkWell(
-                  onTap: () => Application.router.navigateTo(context, '/event/${context.read<EventManager>().userInactiveList[index].postId}'),
-                    child: MiniPostCard(miniPost: context.read<EventManager>().userInactiveList[index])),
+                  onTap: () { Application.router.navigateTo(context, '/event/${context.read<EventManager>().activeList[index].postId}', transition: TransitionType.fadeIn, transitionDuration: Duration(milliseconds: 500));},
+                  child: MiniPostCard(miniPost: context.read<EventManager>().activeList[index]),
+                )
         ),
       ),
     );
@@ -49,8 +50,7 @@ class _PastEventsListState extends State<PastEventsList> {
       setState(() {
         _isLoading = true;
       });
-      
+
     }
   }
 }
-

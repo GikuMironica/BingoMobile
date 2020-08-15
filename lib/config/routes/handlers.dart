@@ -12,6 +12,7 @@ import 'package:hopaut/presentation/screens/events/edit_event/time/time.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/title/title.dart';
 import 'package:hopaut/presentation/screens/events/event_list.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
+import 'package:hopaut/presentation/screens/home_page.dart';
 import 'package:hopaut/presentation/screens/login/login.dart';
 import 'package:hopaut/presentation/screens/registration/registration.dart';
 import 'package:hopaut/presentation/screens/settings/change_password.dart';
@@ -23,10 +24,10 @@ var rootHandler = new Handler(
   return Initialization();
 });
 
-// var homeHandler = new Handler(
-//   handlerFunc: (BuildContext context, Map<String, List<String>> params){
-//     return HomeScreen();
-//   });
+ var homeHandler = new Handler(
+   handlerFunc: (BuildContext context, Map<String, List<String>> params){
+     return HomePage();
+   });
 
 var accountHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -65,6 +66,11 @@ var editEventHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return EditEventPage();
 });
+
+var eventListHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+      return EventList();
+    });
 
 var editEventDescriptionHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {

@@ -31,7 +31,8 @@ FadeTransition EventAttendButton({
           shape: CircleBorder(),
           elevation: 3,
           child: Text(
-            isAttending ? "Attending" : "Attend"
+            isAttending ? "Attending" : "Attend",
+            style: TextStyle(color: Colors.white),
           ),
           onPressed: onPressed,
         ),

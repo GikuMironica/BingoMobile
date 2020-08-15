@@ -13,6 +13,8 @@ class EditPostRequirements extends StatefulWidget {
 }
 
 class _EditPostRequirementsState extends State<EditPostRequirements> {
+  final String nullRequirements = ':~+_77?!';
+
   Map<String, dynamic> _newPost;
   Post _oldPost;
   TextEditingController _requirementsController = TextEditingController();
@@ -38,7 +40,7 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
 
   void submitNewRequirements() async {
     if (_oldPost.event.requirements != _requirementsController.text.trim()) {
-      _newPost['Requirements'] = _requirementsController.text.trim();
+      _newPost['Requirements'] = _requirementsController.text.trim().length == 0 ?  nullRequirements : _requirementsController.text.trim();
       bool res = await PostRepository().update(_oldPost.id, _newPost);
       if (res) {
         GetIt.I

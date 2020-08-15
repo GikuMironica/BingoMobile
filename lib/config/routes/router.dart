@@ -4,6 +4,7 @@ import 'handlers.dart';
 
 class Routes {
   static String root = '/';
+  static String home = '/home';
   static String search = '/search';
   static String login = '/login';
   static String registration = '/registration';
@@ -22,6 +23,7 @@ class Routes {
   static String editEventRequirements = '/edit-event/requirements';
   static String editEventPictures = '/edit-event/pictures';
   static String editEventTime = '/edit-event/time';
+  static String eventList = '/event-list';
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
@@ -30,7 +32,7 @@ class Routes {
     });
 
     router.define(root, handler: rootHandler);
-    // router.define(home, handler: homeHandler);
+    router.define(home, handler: homeHandler);
     router.define(login, handler: loginHandler);
     router.define(registration, handler: registrationHandler);
     router.define(account, handler: accountHandler);
@@ -38,6 +40,9 @@ class Routes {
     router.define(changePassword, handler: changePasswordHandler);
     router.define(termsOfServices, handler: tosHandler);
     router.define(privacyPolicy, handler: ppHandler);
+
+    // EVENT
+    router.define(eventList, handler: eventListHandler);
     router.define(event, handler: eventPageHandler);
     router.define(createEvent, handler: createEventHandler);
     router.define(editEvent, handler: editEventHandler);

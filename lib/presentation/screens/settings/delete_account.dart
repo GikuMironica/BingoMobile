@@ -16,10 +16,10 @@ class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
   DeleteAccountBloc _deleteAccountBloc = DeleteAccountBloc(GetIt.I.get<AuthService>().user.email);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 285,
+    return SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
       child: ListView(
+        shrinkWrap: true,
           children: !_loading
               ? <Widget>[
             Text(

@@ -38,9 +38,29 @@ class PostRepository {
     }
   }
 
+  Future<Map<String, dynamic>> getAttendees(int postId) async {
+    try{
+      Response response = await GetIt.I.get<DioService>().dio.get('${apiUrl['participants']}?PostId=$postId');
+      if(response.statusCode == 200){
+        return response.data['Data'];
+      }else{
+        return {};
+      }
+    } on DioError catch (e) {
+
+    }
+  }
+
   /// Delete Post
   Future<bool> delete(int postId) async {
-
+    try {
+      Response response = await GetIt.I.get<DioService>().dio.delete('${apiUrl['posts']}/$postId');
+      if(response.statusCode == 204){
+        return true;
+      }
+    } on DioError catch(e) {
+      return false;
+    }
   }
 
   /// Get the user's active hosted events
@@ -94,12 +114,12 @@ class PostRepository {
   /// Endpoint for creating a post.
   ///
   /// Must be multi-part form.
-  Future<Post> create(Post post, List images) async {
+  Future<MiniPost> create(Post post, List images) async {
     try{
       FormData _data = FormData.fromMap(await post.toMultipartJson());
       Response response = await GetIt.I.get<DioService>().dio.post(apiUrl['posts'], data: _data, options: Options(headers: { '${HttpHeaders.contentTypeHeader}': 'multipart/form-data'}));
       if(response.statusCode == 201){
-        Post post = Post.fromJson(response.data['Data']);
+        MiniPost post = MiniPost.fromJson(response.data['Data']);
         return post;
       }
     } on DioError catch (e){

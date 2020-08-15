@@ -64,7 +64,7 @@ class MiniPost {
     title = json['Title'];
     hostRating = json['HostRating'];
     latitude = json['Latitude'];
-    longitude = json['Logitude'];
+    longitude = json['Longitude'];
     repteatableEnabled = json['RepteatableEnabled'];
     frequency = json['Frequency'];
     vouchersEnabled = json['VouchersEnabled'];
