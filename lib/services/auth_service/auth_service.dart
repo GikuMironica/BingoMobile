@@ -1,7 +1,6 @@
-import 'dart:collection';
+
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
@@ -10,6 +9,7 @@ import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/services/dio_service/dio_service.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../data/repositories/identity_repository.dart';
 import '../secure_service/secure_service.dart';
@@ -124,6 +124,8 @@ class AuthService with ChangeNotifier {
       GetIt.I.get<SecureStorage>().deleteAll();
       GetIt.I.get<DioService>().dio.options.headers.remove(HttpHeaders.authorizationHeader);
       _user = null;
+      await OneSignal.shared.setExternalUserId(null);
+      await OneSignal.shared.setSubscription(false);
       notifyListeners();
     }
   }

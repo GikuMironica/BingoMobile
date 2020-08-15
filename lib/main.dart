@@ -12,6 +12,7 @@ import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/services/dio_service/dio_service.dart';
 import 'package:hopaut/services/event_manager/event_manager.dart';
 import 'package:hopaut/services/secure_service/secure_service.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'init.dart';
@@ -20,7 +21,19 @@ import 'services/setup.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   SdkContext.init(IsolateOrigin.main);
+  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+  OneSignal.shared.init(
+      "fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
+      iOSSettings: {
+        OSiOSSettings.autoPrompt: false,
+        OSiOSSettings.inAppLaunchUrl: false
+      }
+  );
+  OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
+  await OneSignal.shared.promptUserForPushNotificationPermission(fallbackToSettings: true);
+  await OneSignal.shared.setSubscription(false);
   await Hive.initFlutter();
   serviceSetup();
   var authBox = await Hive.openBox('auth');
@@ -38,6 +51,8 @@ void main() async {
       = 'bearer ${await GetIt.I.get<SecureStorage>().read(key: 'token')}';
       print("Bearer token applied");
       await GetIt.I.get<AuthService>().refreshUser();
+      await OneSignal.shared.setSubscription(true);
+      await OneSignal.shared.setExternalUserId(identity.id);
     }
     await GetIt.I.get<AuthService>().refreshToken();
   }else{

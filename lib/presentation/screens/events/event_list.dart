@@ -7,6 +7,7 @@ import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/hopaut_app_bar.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/event_manager/event_manager.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import 'user_active_list.dart';
 
@@ -46,7 +47,12 @@ class _EventListState extends State<EventList> {
                       icon: Icon(Icons.add, color: Colors.white,),
                       iconSize: 24,
                       onPressed: () async {
-                        Application.router.navigateTo(context, '/create-event');
+                        pushNewScreen(
+                          context,
+                          screen: CreateEventForm(),
+                          withNavBar: false,
+                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                        );
                       },
                     )
                   ],

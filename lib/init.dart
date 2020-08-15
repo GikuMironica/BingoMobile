@@ -1,13 +1,8 @@
-import 'package:hopaut/data/repositories/user_repository.dart';
-import 'package:hopaut/presentation/screens/account/account.dart';
-import 'package:hopaut/presentation/screens/events/event_list.dart';
 import 'package:hopaut/presentation/screens/home_page.dart';
-import 'package:hopaut/presentation/screens/login/login.dart';
-import 'package:hopaut/presentation/screens/search/search.dart';
+import 'package:hopaut/presentation/screens/login/_login.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
-import 'package:hopaut/services/secure_service/secure_service.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'data/models/user.dart';
@@ -18,7 +13,8 @@ class Initialization extends StatefulWidget {
 }
 
 class _InitializationState extends State<Initialization> {
-  User user;
+  User _user;
+
   @override
   void initState() {
     super.initState();
@@ -26,10 +22,11 @@ class _InitializationState extends State<Initialization> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<AuthService>(context).user;
-    if (user == null){
+    _user = Provider.of<AuthService>(context).user;
+    if(_user == null){
       return LoginPage();
     }else{
+
       return HomePage();
     }
   }
