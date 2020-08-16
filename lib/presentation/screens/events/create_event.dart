@@ -15,6 +15,7 @@ import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/widgets/currency_icons.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/image_conversion.dart';
+import 'package:hopaut/services/location_manager/location_manager.dart';
 import 'package:hopaut/services/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -284,7 +285,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                     if(pattern.length > 2) {
                       List suggestionList = [];
                       _searchEngine.searchByText(TextQuery.withCircleArea(pattern,
-                          GeoCircle(GeoCoordinates(48.39841, 9.99155), 50000)),
+                          GeoCircle(GeoCoordinates(GetIt.I.get<LocationManager>().currentPosition.latitude, GetIt.I.get<LocationManager>().currentPosition.longitude), 50000)),
                           SearchOptions(LanguageCode.deDe, 50), (e,
                               List<Place> suggestion) =>
                               suggestion.forEach((element) {
