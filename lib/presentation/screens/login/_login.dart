@@ -42,55 +42,55 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              children: <Widget>[
-                displayLogoIcon(context),
-                SizedBox(height: 32,),
-                H1(text: _loginMode ? "Login" : "Forgot Password"),
-                SizedBox(height: 32,),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 48),
-                  child: Column(
-                    children: <Widget>[
-                      emailInput(_loginBloc),
-                      SizedBox(height: 16,),
-                      Visibility(
-                        visible: _loginMode,
-                        child: displayPasswordInput(
-                            _loginBloc, _obscureText, _togglePasswordVisibility),
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            children: <Widget>[
+              displayLogoIcon(context),
+              SizedBox(height: 32,),
+              H1(text: _loginMode ? "Login" : "Forgot Password"),
+              SizedBox(height: 32,),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 48),
+                child: Column(
+                  children: <Widget>[
+                    emailInput(_loginBloc),
+                    SizedBox(height: 16,),
+                    Visibility(
+                      visible: _loginMode,
+                      child: displayPasswordInput(
+                          _loginBloc, _obscureText, _togglePasswordVisibility),
+                    ),
+                    Visibility(
+                      visible: _loginMode,
+                      child: SizedBox(height: 16,),
+                    ),
+                    forgotPasswordPrompt(_toggleForgotPassword, _loginMode),
+                    SizedBox(height: 24),
+                    Visibility(
+                      visible: _loginMode,
+                      child: authentication_button(
+                        bloc: _loginBloc,
+                        onPressedSuccess: () => _attemptLogin(_loginBloc.email,
+                            _loginBloc.password),
+                        label: 'Login',
                       ),
-                      Visibility(
-                        visible: _loginMode,
-                        child: SizedBox(height: 16,),
+                      replacement: BasicButton(
+                        label: 'Send Email',
+                        onPressed: () => _attemptPasswordRecovery(_loginBloc.email)
                       ),
-                      forgotPasswordPrompt(_toggleForgotPassword, _loginMode),
-                      SizedBox(height: 24),
-                      Visibility(
-                        visible: _loginMode,
-                        child: authentication_button(
-                          bloc: _loginBloc,
-                          onPressedSuccess: () => _attemptLogin(_loginBloc.email,
-                              _loginBloc.password),
-                          label: 'Login',
-                        ),
-                        replacement: BasicButton(
-                            label: 'Send Email',
-                            onPressed: () => _attemptPasswordRecovery(_loginBloc.email)
-                        ),
+                    ),
+                    SizedBox(height: 16),
+                    Visibility(
+                      visible: _loginMode,
+                      child: FacebookButton(
+                        onPressed: () => _attemptFacebookLogin(),
                       ),
-                      SizedBox(height: 16),
-                      Visibility(
-                        visible: _loginMode,
-                        child: FacebookButton(
-                          onPressed: () => _attemptFacebookLogin(),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            )
+                    )
+                  ],
+                ),
+              )
+            ],
+          )
         ),
       ),
     );
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
     await showDialog(
         context: context,
         builder: (BuildContext context) => CustomDialog(
-          pageWidget: LoadingPopup('Logging In'),
+         pageWidget: LoadingPopup('Logging In'),
         )
     );
   }
@@ -128,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
       _toggleForgotPassword();
     } else {
       Fluttertoast.showToast(msg: "Unable to process your request. Please try again later");
-    }
+     }
     _toggleUiLock();
   }
 
@@ -136,10 +136,10 @@ class _LoginPageState extends State<LoginPage> {
     _toggleUiLock();
     _showLoadingDialog();
     await GetIt.I.get<AuthService>().loginWithFb()
-        .then((value) =>
+      .then((value) =>
         Application.router.navigateTo(context, '/home',
             clearStack: true, transition: TransitionType.fadeIn))
-        .catchError((e) {
+    .catchError((e) {
       Application.router.pop(context);
       Fluttertoast.showToast(msg: 'Unable to login with Facebook');
     });
@@ -150,11 +150,11 @@ class _LoginPageState extends State<LoginPage> {
     _toggleUiLock();
     _showLoadingDialog();
     bool loginResult = await GetIt.I.get<AuthService>()
-        .loginWithEmail(email.trimRight(), password);
+      .loginWithEmail(email.trimRight(), password);
 
     if (loginResult){
       Application.router.navigateTo(context, '/home', clearStack: true,
-          transition: TransitionType.fadeIn);
+      transition: TransitionType.fadeIn);
     } else {
       Application.router.pop(context);
       Fluttertoast.showToast(msg: "Unable to login");

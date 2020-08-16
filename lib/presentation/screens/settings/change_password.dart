@@ -3,9 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/data/repositories/identity_repository.dart';
 import 'package:hopaut/presentation/forms/blocs/change_password.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
+import 'package:hopaut/services/services.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   @override
@@ -281,7 +280,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   }
 
   void doPasswordChange(String currentPassword, String newPassword) async {
-    bool passChangeRes = await IdentityRepository().changePassword(
+    bool passChangeRes = await await GetIt.I.get<RepoLocator>().identity.changePassword(
         email: GetIt.I.get<AuthService>().user.email,
         oldPassword: currentPassword,
         newPassword: newPassword);

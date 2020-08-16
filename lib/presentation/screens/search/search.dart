@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
-import 'package:hopaut/data/repositories/post_repository.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
+import 'package:hopaut/services/services.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -76,7 +77,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> _searchEvents() async {
-    postRes = await PostRepository().search(SearchQuery(
+    postRes = await await GetIt.I.get<RepoLocator>().posts.search(SearchQuery(
         longitude: _currentPosition.longitude, latitude: _currentPosition.latitude, radius: 15));
     if(postRes != null){
       _addSearchResultsToMap(postRes);

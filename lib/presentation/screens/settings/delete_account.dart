@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/presentation/forms/blocs/delete_account.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
+import 'package:hopaut/services/services.dart';
 
 class DeleteAccountPopup extends StatefulWidget {
   @override
@@ -102,7 +101,7 @@ class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
                           child: Text('Delete',
                               style: TextStyle(color: Colors.white)),
                           onPressed: snapshot.hasData ? () async {
-                            bool deleteRes = await UserRepository().delete(
+                            bool deleteRes = await await GetIt.I.get<RepoLocator>().users.delete(
                                 GetIt.I.get<AuthService>().currentIdentity.id
                             );
                             setState(() => _loading = true);

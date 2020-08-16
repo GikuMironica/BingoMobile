@@ -33,7 +33,7 @@ final Map<String, String> apiUrl = {
   'attendedInactive': '/attendedinactive',
   'unattend': '/unattend',
 
-  // Event Attendees
+  // Participants
   'acceptAttendee': '/acceptattendee',
   'rejectAttendee': '/rejectattendee',
   'fetchAttendees': '/fetchallattendee',
