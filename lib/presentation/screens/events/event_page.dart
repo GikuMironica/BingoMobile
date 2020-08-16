@@ -6,11 +6,8 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/urls.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/models/profile.dart';
-import 'package:hopaut/data/repositories/event_repository.dart';
-import 'package:hopaut/data/repositories/post_repository.dart';
-import 'package:hopaut/data/repositories/profile_repository.dart';
 import 'package:hopaut/presentation/screens/events/delete_event/delete_event.dart';
-import 'package:hopaut/presentation/screens/profile/profile.dart';
+import 'package:hopaut/presentation/screens/events/participation_list.dart';
 import 'package:hopaut/presentation/widgets/buttons/event_attend_button.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/dialogs/profile_dialog.dart';
@@ -21,11 +18,11 @@ import 'package:hopaut/presentation/widgets/event_page/event_participants.dart';
 import 'package:hopaut/presentation/widgets/event_page/event_requirements.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
 import 'package:hopaut/services/date_formatter.dart';
-import 'package:hopaut/services/event_manager/event_manager.dart';
+import 'package:hopaut/services/services.dart';
 import 'package:image_viewer/image_viewer.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -70,9 +67,9 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   }
 
   Future<void> getDetails() async {
-    post = await PostRepository().get(postId);
-    host = await ProfileRepository().get(post.userId);
-    participants = await PostRepository().getAttendees(postId);
+    post = await GetIt.I.get<RepoLocator>().posts.get(postId);
+    host = await GetIt.I.get<RepoLocator>().profiles.get(post.userId);
+    participants = await GetIt.I.get<RepoLocator>().posts.getAttendees(postId);
     isHost = post.userId == GetIt.I.get<AuthService>().user.id;
     isAttending = post.isAttending;
     isActiveEvent = post.activeFlag == 1;
@@ -91,7 +88,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
 
 
   void attendEvent() async {
-    bool attendResponse = await EventRepository().attend(postId);
+    bool attendResponse = await GetIt.I.get<RepoLocator>().events.attend(postId);
     if(attendResponse){
       setState(() {
         isAttending = true;
@@ -100,7 +97,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   }
 
   void unattendEvent() async {
-    bool unattendResponse = await EventRepository().unAttend(postId);
+    bool unattendResponse = await GetIt.I.get<RepoLocator>().events.unAttend(postId);
     if(unattendResponse){
       setState(() {
         isAttending = false;
@@ -262,10 +259,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                         onTap: () => showDialog(
                           context: context,
                           builder: (BuildContext context) => ProfileDialog(
-                            buttonText: "TEXT",
-                            title: host.getFullName,
-                            image: host.getProfilePicture,
-                            description: host.description,
+                            profile: host,
                           ),
                         ),
                         child: hostDetails(
@@ -278,7 +272,19 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                       Container(
                         width: 36,
                         height: 36,
-                        child: EventParticipants(participants),
+                        child: Visibility(
+                          visible: isHost,
+                          child: InkWell(
+                            onTap: () async => pushNewScreen(context,
+                                screen: ParticipationList(
+                                  postId: post.id,
+                                  postTitle: post.event.title,
+                                  postType: post.event.eventType,
+                                ), withNavBar: false),
+                            child: EventParticipants(participants)
+                          ),
+                          replacement: EventParticipants(participants),
+                        ),
                       ),
                     ],
                   ),

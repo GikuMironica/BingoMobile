@@ -7,13 +7,13 @@ import 'package:hive/hive.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
-import 'package:hopaut/services/dio_service/dio_service.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../data/repositories/identity_repository.dart';
-import '../secure_service/secure_service.dart';
 import 'package:get_it/get_it.dart';
+
+import '../services.dart';
 
 class AuthService with ChangeNotifier {
 
@@ -59,7 +59,7 @@ class AuthService with ChangeNotifier {
   User get user => _user;
 
   Future<void> refreshUser() async {
-    _user = await UserRepository().get(_identity.id);
+    _user = await GetIt.I.get<RepoLocator>().users.get(_identity.id);
     notifyListeners();
   }
 
@@ -73,7 +73,7 @@ class AuthService with ChangeNotifier {
   /// Triggers Identity Repository -> [IdentityRepository.login()]
   Future<bool> loginWithEmail(String email, String password) async {
     Map<String, dynamic> _loginResult =
-    await IdentityRepository().login(email: email, password: password);
+    await GetIt.I.get<RepoLocator>().identity.login(email: email, password: password);
     if (_loginResult is Map<String, dynamic>) {
       if (_loginResult.containsKey('Token')) return await storeToken(_loginResult).then((value) => true);
     }else{
@@ -83,7 +83,7 @@ class AuthService with ChangeNotifier {
 
   Future<void> loginWithFb() async {
     Map<String, dynamic> _fbResult =
-        await IdentityRepository().loginWithFacebook();
+        await GetIt.I.get<RepoLocator>().identity.loginWithFacebook();
     if(_fbResult.containsKey('Token')) {
       lock = true;
       return await storeToken(_fbResult);
@@ -99,7 +99,7 @@ class AuthService with ChangeNotifier {
         final refreshToken = await GetIt.I.get<SecureStorage>().read(
             key: 'refreshToken');
         Map<String, dynamic> _refreshResult =
-        await IdentityRepository().refresh(token, refreshToken);
+        await GetIt.I.get<RepoLocator>().identity.refresh(token, refreshToken);
         if (_refreshResult.containsKey('Token')) {
           Fluttertoast.showToast(msg: "Token refreshed :)");
           await storeToken(_refreshResult);
@@ -112,7 +112,7 @@ class AuthService with ChangeNotifier {
 
   Future<bool> register(String email, String password) async {
     bool _registrationResult =
-    await IdentityRepository().register(email: email, password: password);
+    await GetIt.I.get<RepoLocator>().identity.register(email: email, password: password);
 
     return _registrationResult;
   }
@@ -124,7 +124,7 @@ class AuthService with ChangeNotifier {
       GetIt.I.get<SecureStorage>().deleteAll();
       GetIt.I.get<DioService>().dio.options.headers.remove(HttpHeaders.authorizationHeader);
       _user = null;
-      await OneSignal.shared.setExternalUserId(null);
+      await OneSignal.shared.setExternalUserId('');
       await OneSignal.shared.setSubscription(false);
       notifyListeners();
     }

@@ -1,17 +1,42 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hopaut/data/models/profile.dart';
+import 'package:hopaut/data/repositories/profile_repository.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class ProfileDialog extends StatelessWidget {
-  final String title, description, buttonText;
-  final String image;
+class ProfileDialog extends StatefulWidget {
+  final Profile profile;
+  final String userId;
 
   ProfileDialog({
-    @required this.title,
-    @required this.description,
-    @required this.buttonText,
-    this.image,
+    this.profile,
+    this.userId,
   });
+
+  @override
+  _ProfileDialogState createState() => _ProfileDialogState();
+}
+
+class _ProfileDialogState extends State<ProfileDialog> {
+  Profile _profileContext;
+
+  @override
+    void initState() {
+    if(widget.profile != null){
+      _profileContext = widget.profile;
+    }else{
+      _getProfile(widget.userId);
+    }
+    super.initState();
+  }
+
+  Future<void> _getProfile(String id) async {
+    Profile _profile = await ProfileRepository().get(id);
+    setState(() {
+      _profileContext = _profile;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +46,7 @@ class ProfileDialog extends StatelessWidget {
       ),
       elevation: 0.0,
       backgroundColor: Colors.transparent,
-      child: dialogContent(context),
+      child: _profileContext == null ? CupertinoActivityIndicator() : dialogContent(context),
     );
   }
 
@@ -74,7 +99,7 @@ class ProfileDialog extends StatelessWidget {
               ),
               SizedBox(height: 24,),
               Text(
-                title,
+                _profileContext.getFullName,
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.w700,
@@ -82,7 +107,7 @@ class ProfileDialog extends StatelessWidget {
               ),
               SizedBox(height: 16.0),
               Text(
-                description,
+                _profileContext.description,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16.0,
@@ -103,9 +128,9 @@ class ProfileDialog extends StatelessWidget {
             child: CircleAvatar(
               backgroundColor: Colors.transparent,
               radius: 72.0,
-              child: ClipOval(
-                child: Image.network(image, fit: BoxFit.cover, width: 144, height: 144,),
-              ),
+              child: _profileContext.profilePicture != null ? ClipOval(
+                child: Image.network(_profileContext.getProfilePicture, fit: BoxFit.cover, width: 144, height: 144,),
+              ) : Text(_profileContext.getFullName),
             ),
           )
         )//...top circlular image part,

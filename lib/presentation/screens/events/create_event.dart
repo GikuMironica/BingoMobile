@@ -14,20 +14,18 @@ import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/widgets/currency_icons.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/services/event_manager/event_manager.dart';
 import 'package:hopaut/services/image_conversion.dart';
+import 'package:hopaut/services/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../../../services/date_formatter.dart';
 import '../../widgets/inputs/event_text_field.dart';
 import '../../widgets/inputs/event_drop_down.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
-import 'package:hopaut/data/repositories/post_repository.dart';
-import 'package:hopaut/data/repositories/tags_repository.dart';
+import 'package:hopaut/data/repositories/repositories.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 
@@ -512,7 +510,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
               ),
               RaisedButton(
                 onPressed:  !_submitButtonDisabled ? () async {
-                  MiniPost postRes = await PostRepository().create(_post, []);
+                  MiniPost postRes = await GetIt.I.get<RepoLocator>().posts.create(_post, []);
                 setState(() => _submitButtonDisabled = true);
                 if(postRes != null){
                   GetIt.I.get<EventManager>().addUserActive(postRes);

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/screens/home_page.dart';
 import 'package:hopaut/presentation/screens/login/_login.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
@@ -8,6 +11,10 @@ import 'package:provider/provider.dart';
 import 'data/models/user.dart';
 
 class Initialization extends StatefulWidget {
+  final String route;
+
+  Initialization({this.route});
+
   @override
   _InitializationState createState() => _InitializationState();
 }
@@ -20,14 +27,17 @@ class _InitializationState extends State<Initialization> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
-    _user = Provider.of<AuthService>(context).user;
-    if(_user == null){
+    _user = Provider
+        .of<AuthService>(context)
+        .user;
+    if (_user == null) {
       return LoginPage();
-    }else{
+    } else {
 
-      return HomePage();
+      return widget.route == null ? HomePage() : HomePage(route: widget.route);
     }
   }
 }

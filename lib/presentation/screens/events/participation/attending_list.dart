@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/presentation/screens/events/create_event.dart';
-import 'package:hopaut/presentation/screens/events/past_events.dart';
-import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/hopaut_app_bar.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/services/event_manager/event_manager.dart';
 
 import 'current_attending.dart';
-import 'user_active_list.dart';
 
 class AttendingList extends StatefulWidget {
   @override

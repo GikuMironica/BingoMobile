@@ -2,8 +2,9 @@ import 'package:get_it/get_it.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/data/models/post.dart';
-import 'package:hopaut/data/repositories/event_repository.dart';
-import 'package:hopaut/data/repositories/post_repository.dart';
+import 'package:hopaut/data/repositories/repositories.dart';
+import 'package:hopaut/services/repo_locator/repo_locator.dart';
+
 
 class EventManager with ChangeNotifier{
   List<MiniPost> userActiveList;
@@ -29,10 +30,10 @@ class EventManager with ChangeNotifier{
   }
   
   Future<void> fetchAllListData() async {
-    userActiveList = await PostRepository().getUserActive();
-    userInactiveList = await PostRepository().getUserInactive();
-    activeList = await EventRepository().getAttending();
-    inactiveList = await EventRepository().getAttended();
+    userActiveList = await GetIt.I.get<RepoLocator>().posts.getUserActive();
+    userInactiveList = await GetIt.I.get<RepoLocator>().posts.getUserInactive();
+    activeList = await GetIt.I.get<RepoLocator>().events.getAttending();
+    inactiveList = await GetIt.I.get<RepoLocator>().events.getAttended();
     notifyListeners();
   }
 
