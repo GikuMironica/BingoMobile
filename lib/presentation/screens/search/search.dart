@@ -13,6 +13,7 @@ import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
 import 'package:hopaut/services/services.dart';
+import 'package:hopaut/services/location_manager/location_manager.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -204,15 +205,12 @@ class _SearchPageState extends State<SearchPage> {
 
   void _onMapCreated(HereMapController hereMapController) async {
     _hereMapController = hereMapController;
-    if(_currentPosition != null){
-      _getCurrentLocation();
-    }
     _hereMapController.mapScene.loadSceneForMapScheme(MapScheme.greyDay, (MapError error) {
       if(error == null){
         _hereMapController.mapScene.setLayerState(MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
         const double distanceToEarthInMeters = 3000;
         _hereMapController.camera.lookAtPointWithDistance(
-            GeoCoordinates(_currentPosition.latitude, _currentPosition.longitude),
+            GeoCoordinates(GetIt.I.get<LocationManager>().currentPosition.latitude, GetIt.I.get<LocationManager>().currentPosition.longitude),
             distanceToEarthInMeters
         );
       }else{
