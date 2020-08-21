@@ -8,6 +8,7 @@ import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/models/profile.dart';
 import 'package:hopaut/presentation/screens/events/delete_event/delete_event.dart';
 import 'package:hopaut/presentation/screens/events/participation_list.dart';
+import 'package:hopaut/presentation/screens/events/rate_event/rate_event.dart';
 import 'package:hopaut/presentation/widgets/buttons/event_attend_button.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/dialogs/profile_dialog.dart';
@@ -142,7 +143,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return !postIsLoaded ? Scaffold(
-      body: Container(child: CircularProgressIndicator(),),
+      body: Container(),
     )
 
         : Scaffold(
@@ -379,6 +380,19 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                           leading: Icon(Icons.edit),
                           title: Align(
                             child: Text('Edit this event'),
+                            alignment: Alignment(-1.2, 0),
+                          )),
+                    ),
+                  ),
+                  Visibility(
+                    visible: true,
+                    child: InkWell(
+                      onTap: () => Application.router.navigateTo(context, '/rate-event/$postId'),
+                      child: ListTile(
+                          contentPadding: EdgeInsets.symmetric(vertical: 4),
+                          leading: Icon(Icons.star),
+                          title: Align(
+                            child: Text('Rate event'),
                             alignment: Alignment(-1.2, 0),
                           )),
                     ),

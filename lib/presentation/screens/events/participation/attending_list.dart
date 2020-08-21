@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/presentation/screens/events/participation/inactive_attended_events.dart';
 import 'package:hopaut/presentation/widgets/hopaut_app_bar.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
+import 'package:hopaut/services/event_manager/event_manager.dart';
 
 import 'current_attending.dart';
 
@@ -20,7 +23,8 @@ class _AttendingListState extends State<AttendingList> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    GetIt.I.get<EventManager>().activeList.clear();
+    GetIt.I.get<EventManager>().inactiveList.clear();
     super.dispose();
   }
 
@@ -63,7 +67,7 @@ class _AttendingListState extends State<AttendingList> {
           body: TabBarView(
             children: <Widget>[
               CurrentAttendingList(),
-              Container(),
+              InactiveAttendedEventsList(),
             ],
           ),
         ),

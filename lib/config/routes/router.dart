@@ -13,8 +13,10 @@ class Routes {
   static String termsOfServices = '/tos';
   static String settings = '/settings';
   static String privacyPolicy = '/privacy_policy';
+  // -- EVENT -----------------------------------------------------------------
   static String event = '/event/:id';
   static String createEvent = '/create-event';
+  static String rateEvent = '/rate-event/:id';
   // -- EDIT EVENT ------------------------------------------------------------
   static String editEvent = '/edit-event';
   static String editEventDescription = '/edit-event/description';
@@ -52,5 +54,6 @@ class Routes {
     router.define(editEventTags, handler: editEventTagsHandler);
     router.define(editEventPictures, handler: editEventPicturesHandler);
     router.define(editEventTime, handler: editEventTimeHandler);
+    router.define(rateEvent, handler: rateEventHandler);
   }
 }

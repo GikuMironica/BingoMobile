@@ -56,9 +56,9 @@ class _HomePageState extends State<HomePage> {
         curve: Curves.ease,
       ),
       screenTransitionAnimation: ScreenTransitionAnimation( // Screen transition animation on change of selected tab.
-        animateTabTransition: true,
+        animateTabTransition: false,
         curve: Curves.ease,
-        duration: Duration(milliseconds: 200),
+        duration: Duration(milliseconds: 100),
       ),
       navBarStyle: NavBarStyle.style6,
     );
@@ -66,8 +66,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    _controller.dispose();
     super.dispose();
   }
 

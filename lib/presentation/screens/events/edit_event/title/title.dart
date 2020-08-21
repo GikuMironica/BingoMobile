@@ -24,8 +24,6 @@ class _EditPostTitleState extends State<EditPostTitle> {
     // TODO: implement initState
     _oldPost = GetIt.I.get<EventManager>().getPostContext;
     _newPost = {
-      'EndTime': _oldPost.endTime,
-      'EventTime': _oldPost.eventTime,
       'Longitude': _oldPost.location.longitude,
       'Latitude': _oldPost.location.latitude,
       'Tags': _oldPost.tags,
@@ -43,6 +41,7 @@ class _EditPostTitleState extends State<EditPostTitle> {
       bool res = await PostRepository().update(_oldPost.id, _newPost);
       if (res) {
         GetIt.I.get<EventManager>().setPostTitle(_titleController.text.trim());
+        GetIt.I.get<EventManager>().userActiveList[GetIt.I.get<EventManager>().miniPostContextId].title = _newPost['Title'];
         Fluttertoast.showToast(msg: 'Event Title updated');
         Application.router.pop(context);
       } else {
@@ -78,7 +77,7 @@ class _EditPostTitleState extends State<EditPostTitle> {
         padding: EdgeInsets.all(24.0),
         physics: ClampingScrollPhysics(),
         child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.8),
+          constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.72),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

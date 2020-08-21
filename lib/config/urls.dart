@@ -40,6 +40,10 @@ final Map<String, String> apiUrl = {
   'fetchAllAccepted': '/fetchallaccepted',
   'fetchAllPending': '/fetchallpending',
   'participants': '/fetchaccepteddata',
+
+  // Ratings
+  'ratings': '/ratings',
+  'ratingsByUserId': '/ratings/userId',
 };
 
 final Map<String, String> webUrl = {

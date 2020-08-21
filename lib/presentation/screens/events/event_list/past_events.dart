@@ -13,12 +13,14 @@ class PastEventsList extends StatefulWidget {
   _PastEventsListState createState() => _PastEventsListState();
 }
 
-class _PastEventsListState extends State<PastEventsList> {
+class _PastEventsListState extends State<PastEventsList>{
+
   bool _isLoading = false;
   List<MiniPost> events = new List();
 
   @override
   void initState() {
+    GetIt.I.get<EventManager>().getUserInactiveEvents();
     super.initState();
   }
 

@@ -19,6 +19,7 @@ class _CurrentAttendingListState extends State<CurrentAttendingList> {
 
   @override
   void initState() {
+    GetIt.I.get<EventManager>().getAttendingActiveEvents();
     super.initState();
   }
 
@@ -37,7 +38,14 @@ class _CurrentAttendingListState extends State<CurrentAttendingList> {
             itemCount: context.watch<EventManager>().activeList.length,
             itemBuilder: (BuildContext ctx, int index) =>
                 InkWell(
-                  onTap: () { Application.router.navigateTo(context, '/event/${context.read<EventManager>().activeList[index].postId}', transition: TransitionType.fadeIn, transitionDuration: Duration(milliseconds: 500));},
+                  onTap: () {
+                    Application.router.navigateTo(
+                        context,
+                        '/event/${context.read<EventManager>().activeList[index].postId}',
+                        transition: TransitionType.fadeIn,
+                        transitionDuration: Duration(milliseconds:250)
+                    );
+                    },
                   child: MiniPostCard(miniPost: context.read<EventManager>().activeList[index]),
                 )
         ),
