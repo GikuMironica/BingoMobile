@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -13,14 +14,11 @@ class UserActiveList extends StatefulWidget {
   _UserActiveListState createState() => _UserActiveListState();
 }
 
-class _UserActiveListState extends State<UserActiveList> {
-  int _page = 1;
-  bool _isLoading = false;
-  StreamController<MiniPost> _streamController;
-  List<MiniPost> events = new List();
+class _UserActiveListState extends State<UserActiveList>{
 
   @override
   void initState() {
+    GetIt.I.get<EventManager>().getUserActiveEvents();
     super.initState();
   }
 
@@ -35,25 +33,23 @@ class _UserActiveListState extends State<UserActiveList> {
     return Container(
       child: Provider<EventManager>(
         create: (context) => GetIt.I.get<EventManager>(),
-    child: context.watch<EventManager>().userActiveList?.length == null ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
+    child: context.watch<EventManager>().userActiveList?.length == 0 ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
     itemCount: context.watch<EventManager>().userActiveList.length,
     itemBuilder: (BuildContext ctx, int index) =>
       InkWell(
-        onTap: () { Application.router.navigateTo(context, '/event/${context.read<EventManager>().userActiveList[index].postId}');},
+        onTap: () {
+          GetIt.I.get<EventManager>().miniPostContextId = index;
+          Application.router.navigateTo(
+              context,
+              '/event/${context.read<EventManager>().userActiveList[index].postId}',
+              transition: TransitionType.fadeIn,
+          transitionDuration: Duration(milliseconds: 250));
+          },
         child: MiniPostCard(miniPost: context.read<EventManager>().userActiveList[index]),
       )
       ),
     ),
     );
-  }
-
-  void _getData(int index) async {
-    if(!_isLoading){
-      setState(() {
-        _isLoading = true;
-      });
-
-    }
   }
 }
 

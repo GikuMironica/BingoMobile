@@ -21,6 +21,7 @@ class AuthService with ChangeNotifier {
   Identity _identity;
   User _user;
   bool lock = false;
+  bool oneSignalSettings = false;
 
 
   factory AuthService(){
@@ -46,6 +47,11 @@ class AuthService with ChangeNotifier {
         key: 'refreshToken', value: data['RefreshToken']).then((value) =>
         print('Refresh Token has been written to the device.'));
 
+    if(!oneSignalSettings){
+      await setOneSignalParams();
+      oneSignalSettings = true;
+    }
+
     // Dio Interceptor
     GetIt.I.get<DioService>().dio
         .options.headers
@@ -61,6 +67,11 @@ class AuthService with ChangeNotifier {
   Future<void> refreshUser() async {
     _user = await GetIt.I.get<RepoLocator>().users.get(_identity.id);
     notifyListeners();
+  }
+
+  Future<void> setOneSignalParams() async {
+    await OneSignal.shared.setSubscription(true);
+    await OneSignal.shared.setExternalUserId(currentIdentity.id);
   }
 
   void setUser(User user){
@@ -124,8 +135,9 @@ class AuthService with ChangeNotifier {
       GetIt.I.get<SecureStorage>().deleteAll();
       GetIt.I.get<DioService>().dio.options.headers.remove(HttpHeaders.authorizationHeader);
       _user = null;
-      await OneSignal.shared.setExternalUserId('');
+      await OneSignal.shared.removeExternalUserId();
       await OneSignal.shared.setSubscription(false);
+      oneSignalSettings = false;
       notifyListeners();
     }
   }

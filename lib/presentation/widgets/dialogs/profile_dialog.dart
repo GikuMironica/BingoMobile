@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hopaut/data/models/profile.dart';
 import 'package:hopaut/data/repositories/profile_repository.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
+import 'package:hopaut/presentation/screens/report/report_user.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ProfileDialog extends StatefulWidget {
@@ -89,8 +90,11 @@ class _ProfileDialogState extends State<ProfileDialog> {
                             leading: Icon(MdiIcons.alertCircleOutline),
                             title: Align(
                                 alignment: Alignment(-1.4, 0),
-                                child: Text('Report user')
+                                child: Text('Report user'),
                             ),
+                            onTap: () => showDialog(context: context, builder: (BuildContext context) => CustomDialog(
+                              pageWidget: ReportUser(),
+                            )),
                           )]),
                     )),
                     icon: Icon(MdiIcons.dotsVertical),

@@ -13,12 +13,14 @@ class PastEventsList extends StatefulWidget {
   _PastEventsListState createState() => _PastEventsListState();
 }
 
-class _PastEventsListState extends State<PastEventsList> {
+class _PastEventsListState extends State<PastEventsList>{
+
   bool _isLoading = false;
   List<MiniPost> events = new List();
 
   @override
   void initState() {
+    GetIt.I.get<EventManager>().getUserInactiveEvents();
     super.initState();
   }
 
@@ -33,7 +35,7 @@ class _PastEventsListState extends State<PastEventsList> {
     return Container(
       child: Provider<EventManager>(
         create: (context) => GetIt.I.get<EventManager>(),
-        child: context.watch<EventManager>().userInactiveList?.length == null ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
+        child: context.watch<EventManager>().userInactiveList?.length == 0 ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
             itemCount: context.watch<EventManager>().userInactiveList.length,
             itemBuilder: (BuildContext ctx, int index) =>
                 InkWell(

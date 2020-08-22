@@ -5,8 +5,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
+import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
+import 'package:hopaut/services/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
 import 'delete_account.dart';
 
 class Settings extends StatefulWidget {
@@ -15,7 +18,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool _lights = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +26,7 @@ class _SettingsState extends State<Settings> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: RadialGradient(
-            center: const Alignment(-0.5, -2.1), // near the top right
-            radius: 1.75,
-            colors: [
-              const Color(0xFFffbe6a), // yellow sun
-              const Color(0xFFed2f65), // blue sky
-            ],
-            stops: [0.55, 1],
-          ),
-        ),
+        decoration: decorationGradient(),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -102,25 +94,20 @@ class _SettingsState extends State<Settings> {
                         Text('Notifications',
                             style: TextStyle(color: Colors.black54)),
                         MergeSemantics(
-                          child: ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            title: Text(
-                              'Push Notifications',
-                              style: TextStyle(fontSize: 18),
+                          child: Provider<SettingsManager>(
+                            create: (context) => GetIt.I.get<SettingsManager>(),
+                            child: ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: Text(
+                                'Push Notifications',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              trailing: CupertinoSwitch(
+                                  value: context.watch<SettingsManager>().pushNotifications,
+                                  onChanged: (bool value){ context.read<SettingsManager>().togglePushNotifications();},
+                                ),
+                              onTap: () => context.read<SettingsManager>().togglePushNotifications(),
                             ),
-                            trailing: CupertinoSwitch(
-                              value: _lights,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  _lights = value;
-                                });
-                              },
-                            ),
-                            onTap: () {
-                              setState(() {
-                                _lights = !_lights;
-                              });
-                            },
                           ),
                         ),
                         SizedBox(
@@ -214,7 +201,7 @@ class _SettingsState extends State<Settings> {
   }
 
   void changePage(String path) {
-    Application.router.navigateTo(context, path, transition: TransitionType.cupertino);
+    Application.router.navigateTo(context, path, transition: TransitionType.fadeIn);
   }
 }
 

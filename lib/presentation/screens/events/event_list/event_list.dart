@@ -19,13 +19,14 @@ class _EventListState extends State<EventList> {
   @override
   void initState() {
     // TODO: implement initState
-    GetIt.I.get<EventManager>().fetchAllListData();
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    GetIt.I.get<EventManager>().userActiveList.clear();
+    GetIt.I.get<EventManager>().userInactiveList.clear();
+    print('Event List disposed');
     super.dispose();
   }
 

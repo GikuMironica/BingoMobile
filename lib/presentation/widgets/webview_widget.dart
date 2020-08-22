@@ -1,33 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
-class WebvPage extends StatelessWidget {
+class WebvPage extends StatefulWidget {
   final String initialUrl;
   final String _title;
+
+  WebvPage(this._title, this.initialUrl);
+
+  @override
+  _WebvPageState createState() => _WebvPageState();
+}
+
+class _WebvPageState extends State<WebvPage> {
   final flutterWebViewPlugin = FlutterWebviewPlugin();
 
-  WebvPage(this._title, this.initialUrl) {
-    setStatusBar();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
-  void setStatusBar() {
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light));
+  @override
+  void dispose() {
+    flutterWebViewPlugin.close();
+    flutterWebViewPlugin.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return WebviewScaffold(
-      url: initialUrl,
+      url: widget.initialUrl,
       appBar: AppBar(
-        title: Text(_title),
+        title: Text(widget._title),
         backgroundColor: Colors.pink,
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              flutterWebViewPlugin.close();
-              flutterWebViewPlugin.dispose();
               Navigator.of(context).pop();
             }),
       ),

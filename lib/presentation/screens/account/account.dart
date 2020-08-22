@@ -52,7 +52,7 @@ class _AccountState extends State<Account>{
                   children: [
                     Container(
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height / 2,
+                    height: MediaQuery.of(context).size.height,
                     decoration: decorationGradient(),
                   ),
                   ],

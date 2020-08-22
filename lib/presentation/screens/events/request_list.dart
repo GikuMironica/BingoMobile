@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/urls.dart';
@@ -76,7 +77,13 @@ class _RequestListState extends State<RequestList> {
                           children: <Widget>[
                             IconButton(
                               icon: Icon(Icons.check),
-                              onPressed: () {},
+                              onPressed: () async {
+                                bool res = await GetIt.I.get<RepoLocator>().participants.acceptAttendee(postId: widget.postId, userId: _requests[index]['Id']);
+                                if(res){
+                                  Fluttertoast.showToast(msg: '${_requests[index]['FirstName']} ${_requests[index]['LastName']} has been accepted');
+                                  _requests.removeAt(index);
+                                }
+                              },
                             ),
                             IconButton(
                               icon: Icon(MdiIcons.windowClose),
