@@ -34,7 +34,7 @@ class _CurrentAttendingListState extends State<CurrentAttendingList> {
     return Container(
       child: Provider<EventManager>(
         create: (context) => GetIt.I.get<EventManager>(),
-        child: context.watch<EventManager>().activeList?.length == null ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
+        child: context.watch<EventManager>().activeList?.length == 0 ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
             itemCount: context.watch<EventManager>().activeList.length,
             itemBuilder: (BuildContext ctx, int index) =>
                 InkWell(

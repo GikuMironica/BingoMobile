@@ -9,6 +9,7 @@ import 'package:hopaut/data/models/profile.dart';
 import 'package:hopaut/presentation/screens/events/delete_event/delete_event.dart';
 import 'package:hopaut/presentation/screens/events/participation_list.dart';
 import 'package:hopaut/presentation/screens/events/rate_event/rate_event.dart';
+import 'package:hopaut/presentation/screens/report/report_event.dart';
 import 'package:hopaut/presentation/widgets/buttons/event_attend_button.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/dialogs/profile_dialog.dart';
@@ -300,7 +301,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                   ),
                   Divider(),
                   SizedBox(height: 16),
-                  EventDescription(Provider.of<EventManager>(context).postContext.event.description ?? 'No description for this event yet'),
+                  EventDescription(isHost ? Provider.of<EventManager>(context).postContext.event.description : post.event.description ?? 'No description for this event yet'),
                   Visibility(
                     visible: ((post.event.requirements != null) && (post.event.requirements?.length != 0)),
                     child: Column(
@@ -333,6 +334,19 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                   ),
                   Divider(),
                   Visibility(
+                    visible: !isHost && isAttending && DateTime.now().isAfter(post.startTimeAsDateTime),
+                    child: InkWell(
+                      onTap: () => Application.router.navigateTo(context, '/rate-event/$postId'),
+                      child: ListTile(
+                          contentPadding: EdgeInsets.symmetric(vertical: 4),
+                          leading: Icon(Icons.star),
+                          title: Align(
+                            child: Text('Rate event'),
+                            alignment: Alignment(-1.17, 0),
+                          )),
+                    ),
+                  ),
+                  Visibility(
                     visible: !isHost && DateTime.now().isBefore(post.endTimeAsDateTime),
                     child: VisibilityDetector(
                       key: attendCellKey,
@@ -352,7 +366,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                 : Icon(MdiIcons.accountPlus),
                             title: Align(
                               child: Text(isAttending ? 'Not Interested?' : 'Attend'),
-                              alignment: Alignment(-1.133, 0),
+                              alignment: Alignment(-1.2, 0),
                             ),
                         ),
                       ),
@@ -360,16 +374,17 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                   ),
                   Visibility(
                     visible: !isHost,
-                    child: InkWell(
-                      onTap: () {},
-                      child: ListTile(
+                    child: ListTile(
+                      onTap: () => showDialog(context: context,
+                      builder: (BuildContext context) => CustomDialog(
+                        pageWidget: ReportEvent(),
+                      )),
                           contentPadding: EdgeInsets.symmetric(vertical: 4),
                           leading: Icon(MdiIcons.alertCircleOutline),
                           title: Align(
                             child: Text('Report this event'),
                             alignment: Alignment(-1.2, 0),
                           )),
-                    ),
                   ),
                   Visibility(
                     visible: isHost && isActiveEvent,
@@ -380,19 +395,6 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                           leading: Icon(Icons.edit),
                           title: Align(
                             child: Text('Edit this event'),
-                            alignment: Alignment(-1.2, 0),
-                          )),
-                    ),
-                  ),
-                  Visibility(
-                    visible: true,
-                    child: InkWell(
-                      onTap: () => Application.router.navigateTo(context, '/rate-event/$postId'),
-                      child: ListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: 4),
-                          leading: Icon(Icons.star),
-                          title: Align(
-                            child: Text('Rate event'),
                             alignment: Alignment(-1.2, 0),
                           )),
                     ),

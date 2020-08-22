@@ -10,9 +10,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/router.dart';
 import 'package:hopaut/data/models/identity.dart';
-import 'package:hopaut/services/dio_service/dio_service.dart';
-import 'package:hopaut/services/event_manager/event_manager.dart';
-import 'package:hopaut/services/secure_service/secure_service.dart';
+import 'package:hopaut/services/services.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +25,7 @@ void main() async {
   await Hive.initFlutter();
   serviceSetup();
   var authBox = await Hive.openBox('auth');
+  var settingsBox = await Hive.openBox(('settingsBox'));
   final LinkedHashMap<dynamic, dynamic> data = authBox.get('identity');
   if(data != null){
     Map<String, dynamic> _data = data.map((a, b) => MapEntry(a as String,b));
@@ -110,6 +109,7 @@ class _HopAutState extends State<HopAut> {
           providers: [
             ChangeNotifierProvider(create: (context) => GetIt.I.get<AuthService>()),
             ChangeNotifierProvider(create: (context) => GetIt.I.get<EventManager>()),
+            ChangeNotifierProvider(create: (context) => GetIt.I.get<SettingsManager>()),
           ],
           child: MaterialApp(
             theme: ThemeData(

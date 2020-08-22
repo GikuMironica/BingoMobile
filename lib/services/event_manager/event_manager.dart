@@ -2,7 +2,6 @@ import 'package:get_it/get_it.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/data/models/post.dart';
-import 'package:hopaut/data/repositories/repositories.dart';
 import 'package:hopaut/services/repo_locator/repo_locator.dart';
 
 

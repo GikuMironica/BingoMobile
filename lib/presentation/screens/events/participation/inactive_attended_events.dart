@@ -30,7 +30,7 @@ class _InactiveAttendedEventsListState extends State<InactiveAttendedEventsList>
     return Container(
       child: Provider<EventManager>(
         create: (context) => GetIt.I.get<EventManager>(),
-        child: context.watch<EventManager>().inactiveList?.length == null ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
+        child: context.watch<EventManager>().inactiveList?.length == 0 ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
             itemCount: context.watch<EventManager>().inactiveList.length,
             itemBuilder: (BuildContext ctx, int index) =>
                 InkWell(

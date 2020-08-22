@@ -8,6 +8,7 @@ final getIt = GetIt.instance;
 
 void serviceSetup() async {
   // TODO: Implement singleton services
+  getIt.registerSingleton<SettingsManager>(SettingsManager());
   getIt.registerSingleton<SecureStorage>(SecureStorage());
   getIt.registerSingleton<DioService>(DioService());
   getIt.registerSingleton<RepoLocator>(RepoLocator());

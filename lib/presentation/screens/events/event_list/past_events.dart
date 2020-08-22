@@ -35,7 +35,7 @@ class _PastEventsListState extends State<PastEventsList>{
     return Container(
       child: Provider<EventManager>(
         create: (context) => GetIt.I.get<EventManager>(),
-        child: context.watch<EventManager>().userInactiveList?.length == null ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
+        child: context.watch<EventManager>().userInactiveList?.length == 0 ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
             itemCount: context.watch<EventManager>().userInactiveList.length,
             itemBuilder: (BuildContext ctx, int index) =>
                 InkWell(
