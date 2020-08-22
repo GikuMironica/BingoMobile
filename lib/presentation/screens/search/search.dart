@@ -4,7 +4,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
@@ -24,7 +23,6 @@ class _SearchPageState extends State<SearchPage> {
   bool isSearching = false;
   bool hasSearchResults = false;
   List<MiniPost> postRes;
-  Position _currentPosition;
 
 
   HereMapController _hereMapController;
@@ -79,7 +77,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> _searchEvents() async {
     postRes = await await GetIt.I.get<RepoLocator>().posts.search(SearchQuery(
-        longitude: _currentPosition.longitude, latitude: _currentPosition.latitude, radius: 15));
+        longitude: GetIt.I.get<LocationManager>().currentPosition.longitude, latitude: GetIt.I.get<LocationManager>().currentPosition.latitude, radius: 15));
     if(postRes != null){
       _addSearchResultsToMap(postRes);
       setState(() {
@@ -91,7 +89,7 @@ class _SearchPageState extends State<SearchPage> {
   }
   @override
   void initState() {
-    _getCurrentLocation();
+    GetIt.I.get<LocationManager>().getCurrentLocation();
     super.initState();
   }
 
@@ -219,19 +217,6 @@ class _SearchPageState extends State<SearchPage> {
 
 
 
-    });
-  }
-
-  _getCurrentLocation() async {
-    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
-    await geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      setState(() {
-        _currentPosition = position;
-      });
-    }).catchError((e) {
-      print(e);
     });
   }
 }

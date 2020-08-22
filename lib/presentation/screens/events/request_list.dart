@@ -81,7 +81,7 @@ class _RequestListState extends State<RequestList> {
                                 bool res = await GetIt.I.get<RepoLocator>().participants.acceptAttendee(postId: widget.postId, userId: _requests[index]['Id']);
                                 if(res){
                                   Fluttertoast.showToast(msg: '${_requests[index]['FirstName']} ${_requests[index]['LastName']} has been accepted');
-                                  _requests.removeAt(index);
+                                  setState(() => _requests.removeAt(index));
                                 }
                               },
                             ),
