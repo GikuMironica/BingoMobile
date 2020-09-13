@@ -31,6 +31,7 @@ void main() async {
     Map<String, dynamic> _data = data.map((a, b) => MapEntry(a as String,b));
     Identity identity = Identity.fromJson(_data);
     GetIt.I.get<AuthService>().setIdentity(identity);
+    await GetIt.I.get<AuthService>().refreshToken();
     if(GetIt.I.get<SecureStorage>().read(key: 'token') != null) {
       GetIt.I
           .get<DioService>()
@@ -41,7 +42,6 @@ void main() async {
       print("Bearer token applied");
       await GetIt.I.get<AuthService>().refreshUser();
     }
-    await GetIt.I.get<AuthService>().refreshToken();
   }else{
     print('Auth box not found');
   }

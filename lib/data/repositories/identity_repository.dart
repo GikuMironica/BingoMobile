@@ -100,7 +100,7 @@ class IdentityRepository{
       Response response = await GetIt.I.get<DioService>().dio.post(apiUrl['refresh'], data: payload);
       return response.data;
     } on DioError catch(e) {
-      print(e.response.toString());
+      return { 'Error': e.message };
     }
   }
 

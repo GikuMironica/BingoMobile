@@ -8,7 +8,6 @@ import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/models/profile.dart';
 import 'package:hopaut/presentation/screens/events/delete_event/delete_event.dart';
 import 'package:hopaut/presentation/screens/events/participation_list.dart';
-import 'package:hopaut/presentation/screens/events/rate_event/rate_event.dart';
 import 'package:hopaut/presentation/screens/report/report_event.dart';
 import 'package:hopaut/presentation/widgets/buttons/event_attend_button.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';

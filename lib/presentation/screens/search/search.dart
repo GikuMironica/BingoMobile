@@ -76,7 +76,10 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> _searchEvents() async {
-    postRes = await await GetIt.I.get<RepoLocator>().posts.search(SearchQuery(
+    if(GetIt.I.get<LocationManager>().currentPosition == null){
+      await GetIt.I.get<LocationManager>().getCurrentLocation();
+    }
+    postRes = await GetIt.I.get<RepoLocator>().posts.search(SearchQuery(
         longitude: GetIt.I.get<LocationManager>().currentPosition.longitude, latitude: GetIt.I.get<LocationManager>().currentPosition.latitude, radius: 15));
     if(postRes != null){
       _addSearchResultsToMap(postRes);
