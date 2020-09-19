@@ -23,6 +23,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SdkContext.init(IsolateOrigin.main);
   await Hive.initFlutter();
+  await OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+  await OneSignal.shared.init(
+      "fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
+      iOSSettings: {
+        OSiOSSettings.autoPrompt: false,
+        OSiOSSettings.inAppLaunchUrl: false
+      }
+  );
   serviceSetup();
   var authBox = await Hive.openBox('auth');
   var settingsBox = await Hive.openBox(('settingsBox'));
@@ -70,14 +78,6 @@ class _HopAutState extends State<HopAut> {
   }
 
   Future<void> initPlatformState() async {
-    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-    OneSignal.shared.init(
-        "fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
-        iOSSettings: {
-          OSiOSSettings.autoPrompt: false,
-          OSiOSSettings.inAppLaunchUrl: false
-        }
-    );
     OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
     await OneSignal.shared.promptUserForPushNotificationPermission(fallbackToSettings: true);
     await OneSignal.shared.setSubscription(false);

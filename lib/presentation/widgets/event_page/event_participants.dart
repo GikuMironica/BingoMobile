@@ -33,8 +33,8 @@ class _EventParticipantsState extends State<EventParticipants> {
         break;
       case 2:
         members.forEach((element) {
-          widgetList.add(participant(element: element, position: 0));
-          widgetList.add(participant(element: element, position: -30));
+          widgetList.add(participant(element: element, position: pos));
+          pos = pos - 30;
         });
         break;
       case 1:

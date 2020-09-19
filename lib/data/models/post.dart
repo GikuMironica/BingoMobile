@@ -131,6 +131,8 @@ class Post {
   DateTime get startTimeAsDateTime => DateTime.fromMillisecondsSinceEpoch(eventTime * 1000);
   DateTime get endTimeAsDateTime => DateTime.fromMillisecondsSinceEpoch(endTime * 1000);
 
+  String get hostRatingAsString => hostRating.toStringAsFixed(2);
+
   void setTitle(String string) {
     this.event.title = string;
   }

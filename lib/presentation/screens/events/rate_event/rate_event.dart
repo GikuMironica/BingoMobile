@@ -19,11 +19,13 @@ class RateEvent extends StatefulWidget {
 }
 
 class _RateEventState extends State<RateEvent> {
+  TextEditingController ratingController;
   int rating = 0;
 
   @override
   void initState() {
     super.initState();
+    ratingController = TextEditingController();
   }
 
   @override
@@ -58,6 +60,7 @@ class _RateEventState extends State<RateEvent> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: TextField(
+                    controller: ratingController,
                     maxLines: 6,
                     onChanged: (value) {},
                     inputFormatters: [LengthLimitingTextInputFormatter(500)],
@@ -82,7 +85,7 @@ class _RateEventState extends State<RateEvent> {
       'rate': rating,
       'userId': GetIt.I.get<EventManager>().postContext.userId,
       'postId': widget.postId,
-      'feedback': 'Some string'
+      'feedback': ratingController.text.trim()
     };
     return ratingPayload;
   }

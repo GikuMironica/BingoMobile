@@ -11,7 +11,7 @@ Widget hostRating({double rating}) {
       SizedBox(width: 4),
       Icon(MdiIcons.circleSmall, color: Colors.black54, size: 11),
       SizedBox(width: 4),
-      Text(rating.toString(), style: TextStyle(color: Colors.black54)),
+      Text(rating.toStringAsFixed(2), style: TextStyle(color: Colors.black54)),
       SizedBox(width: 4),
       Icon(MdiIcons.star, size: 16, color: Colors.pink),
     ]);

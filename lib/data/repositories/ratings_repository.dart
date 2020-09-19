@@ -20,7 +20,7 @@ class RatingsRepository{
       }
     }on DioError catch(e){
       print(e.message);
-
+      return false;
     }
 
   }

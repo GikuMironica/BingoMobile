@@ -47,11 +47,6 @@ class AuthService with ChangeNotifier {
         key: 'refreshToken', value: data['RefreshToken']).then((value) =>
         print('Refresh Token has been written to the device.'));
 
-    if(!oneSignalSettings){
-      await setOneSignalParams();
-      oneSignalSettings = true;
-    }
-
     // Dio Interceptor
     GetIt.I.get<DioService>().dio
         .options.headers
@@ -60,6 +55,10 @@ class AuthService with ChangeNotifier {
             ifAbsent: () => 'bearer ${data['Token']}'
     );
     await refreshUser();
+    if(!oneSignalSettings){
+      await setOneSignalParams();
+      oneSignalSettings = true;
+    }
   }
 
   User get user => _user;
