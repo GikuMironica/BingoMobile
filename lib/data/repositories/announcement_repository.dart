@@ -1,4 +1,4 @@
-import '../models/announcement.dart';
+import '../models/announcement_message.dart';
 
 /// Announcement Repository
 /// -------------------------
@@ -9,7 +9,7 @@ import '../models/announcement.dart';
 class AnnouncementRepository {
   /// PUT: This endpoint is used for updating an announcement.
   /// Can be updated only by event host.
-  void create(Announcement announcement){
+  void create(AnnouncementMessage announcement){
 
   }
 
