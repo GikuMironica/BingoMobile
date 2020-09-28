@@ -2,6 +2,9 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/init.dart';
 import 'package:hopaut/presentation/screens/account/account.dart';
+import 'package:hopaut/presentation/screens/announcements/announcement_screen.dart';
+import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
+import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
 import 'package:hopaut/presentation/screens/events/create_event.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/description/description.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/edit_event.dart';
@@ -107,6 +110,24 @@ var editEventPicturesHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return EditPostPictures();
 });
+
+var announcementsIndexHandler = new Handler(
+  handlerFunc: (BuildContext context, Map<String, List<String>> params){
+    return AnnouncementsIndex();
+  }
+);
+
+var announcementUserListHandler = new Handler(
+  handlerFunc: (BuildContext context, Map<String, List<String>> params){
+    return NewAnnouncementList();
+  }
+);
+
+var announcementScreen = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params){
+      return AnnouncementScreen(postId: int.parse(params["id"][0]),);
+    }
+);
 
 var tosHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {

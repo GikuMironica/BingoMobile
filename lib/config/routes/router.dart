@@ -26,6 +26,10 @@ class Routes {
   static String editEventPictures = '/edit-event/pictures';
   static String editEventTime = '/edit-event/time';
   static String eventList = '/event-list';
+  // -- ANNOUNCEMENTS ---------------------------------------------------------
+  static String announcements = '/announcements';
+  static String announcementById = '/announcements/:id';
+  static String userListAnnouncements = '/announcements/user_list';
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
@@ -55,5 +59,10 @@ class Routes {
     router.define(editEventPictures, handler: editEventPicturesHandler);
     router.define(editEventTime, handler: editEventTimeHandler);
     router.define(rateEvent, handler: rateEventHandler);
+
+    // ANNOUNCEMENT
+    router.define(announcements, handler: announcementsIndexHandler);
+    router.define(userListAnnouncements, handler: announcementUserListHandler);
+    router.define(announcementById, handler: announcementScreen);
   }
 }

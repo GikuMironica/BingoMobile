@@ -44,6 +44,12 @@ final Map<String, String> apiUrl = {
   // Ratings
   'ratings': '/ratings',
   'ratingsByUserId': '/ratings/userId',
+
+  // Announcements
+  'announcement': '/announcements',
+  'announcementsByPost': '/announcements/postId/',
+  'announcementsInbox': '/attended/withannouncements',
+  'announcementsOutbox': '/posts/withoutbox',
 };
 
 final Map<String, String> webUrl = {

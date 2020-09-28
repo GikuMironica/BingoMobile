@@ -11,6 +11,7 @@ class EventManager with ChangeNotifier{
   List<MiniPost> activeList = List();
   List<MiniPost> inactiveList = List();
   static EventManager _eventManager;
+
   Post postContext;
   int miniPostContextId;
 
