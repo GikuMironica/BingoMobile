@@ -3,10 +3,12 @@ class AnnouncementMessage {
   int postId;
   String message;
   int timestamp;
+  String error;
 
   String get text => message;
 
   AnnouncementMessage({this.id, this.postId, this.message, this.timestamp});
+  AnnouncementMessage.error({this.error});
 
   AnnouncementMessage.fromJson(Map<String, dynamic> json) {
     id = json['Id'];

@@ -9,7 +9,7 @@ import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/paid_event_types.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/event.dart';
-import 'package:hopaut/data/models/location.dart' deferred as PostLocation;
+import 'package:hopaut/data/models/location.dart' as PostLocation;
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/widgets/currency_icons.dart';

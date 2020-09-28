@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/urls.dart';
 import 'package:hopaut/services/date_formatter.dart';
-import 'package:hopaut/services/setup.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
 

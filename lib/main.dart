@@ -10,6 +10,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/router.dart';
 import 'package:hopaut/data/models/identity.dart';
+import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
 import 'package:hopaut/services/services.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
@@ -39,8 +40,8 @@ void main() async {
     Map<String, dynamic> _data = data.map((a, b) => MapEntry(a as String,b));
     Identity identity = Identity.fromJson(_data);
     GetIt.I.get<AuthService>().setIdentity(identity);
-    await GetIt.I.get<AuthService>().refreshToken();
     if(GetIt.I.get<SecureStorage>().read(key: 'token') != null) {
+      await GetIt.I.get<AuthService>().refreshToken();
       GetIt.I
           .get<DioService>()
           .dio
@@ -48,7 +49,9 @@ void main() async {
           .headers[HttpHeaders.authorizationHeader]
       = 'bearer ${await GetIt.I.get<SecureStorage>().read(key: 'token')}';
       print("Bearer token applied");
-      await GetIt.I.get<AuthService>().refreshUser();
+      if(GetIt.I.get<AuthService>().user == null){
+        await GetIt.I.get<AuthService>().refreshUser();
+      }
     }
   }else{
     print('Auth box not found');
@@ -80,17 +83,12 @@ class _HopAutState extends State<HopAut> {
   Future<void> initPlatformState() async {
     OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
     await OneSignal.shared.promptUserForPushNotificationPermission(fallbackToSettings: true);
-    await OneSignal.shared.setSubscription(false);
     OneSignal.shared
         .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
       setState(() {
         nextRoute = result.notification.payload.additionalData['event'];
       });
     });
-    if(GetIt.I.get<AuthService>().currentIdentity != null){
-      await OneSignal.shared.setSubscription(true);
-      await OneSignal.shared.setExternalUserId(GetIt.I.get<AuthService>().currentIdentity.id);
-    }
   }
 
   @override
@@ -112,6 +110,12 @@ class _HopAutState extends State<HopAut> {
             ChangeNotifierProvider(create: (context) => GetIt.I.get<SettingsManager>()),
           ],
           child: MaterialApp(
+            builder: (context, child) {
+              return ScrollConfiguration(
+                behavior: DisableGlowBehavior(),
+                child: child,
+              );
+            },
             theme: ThemeData(
               fontFamily: 'OpenSans',
               primaryColor: Colors.pinkAccent

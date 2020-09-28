@@ -56,25 +56,28 @@ class AuthService with ChangeNotifier {
     );
     await refreshUser();
     if(!oneSignalSettings){
-      await setOneSignalParams();
-      oneSignalSettings = true;
+      setOneSignalParams();
     }
   }
 
   User get user => _user;
 
   Future<void> refreshUser() async {
-    _user = await GetIt.I.get<RepoLocator>().users.get(_identity.id);
+    final User user = await GetIt.I.get<RepoLocator>().users.get(_identity.id);
+
+    setUser(user);
     notifyListeners();
   }
 
   Future<void> setOneSignalParams() async {
     await OneSignal.shared.setSubscription(true);
     await OneSignal.shared.setExternalUserId(currentIdentity.id);
+    oneSignalSettings = true;
   }
 
   void setUser(User user){
     _user = user;
+    print('User has been set');
     notifyListeners();
   }
 
