@@ -27,8 +27,8 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons:        ^0.1.3
-  provider:               ^4.3.2
+  cupertino_icons:        ^1.0.0
+  provider:               ^4.3.2+2
   visibility_detector:    0.1.5
   flutter_webview_plugin: 0.3.11
   meta:                   1.1.8
@@ -49,21 +49,22 @@ dependencies:
   hive:                   ^1.4.3
   hive_flutter:           ^0.3.1
   intl:                   ^0.16.1
-  image_picker:           ^0.6.7+4
-  image_cropper:          ^1.3.0
-  path_provider:           ^1.6.11
+  image_picker:           ^0.6.7+11
+  image_cropper:          ^1.3.1
+  path_provider:           ^1.6.18
   flutter_image_compress: ^0.7.0
-  carousel_slider:        ^2.2.1
-  flutter_typeahead:       ^1.8.7
+  carousel_slider:        ^2.3.1
+  flutter_typeahead:       ^1.8.8
   datetime_picker_formfield: ^1.0.0
   carousel_pro:           ^1.0.0
-  material_design_icons_flutter: ^4.0.5345
-  image_viewer: ^0.5.1
-  timeago: ^2.0.26
+  material_design_icons_flutter: ^4.0.5655
+  image_viewer: ^0.5.2
+  timeago: ^2.0.27
   persistent_bottom_nav_bar: ^2.0.5
-  geolocator: ^5.3.2+2
-  onesignal_flutter: ^2.6.0
-  badges: ^1.1.1
+  geolocator: ^6.0.0
+  onesignal_flutter: ^2.6.1
+  badges: ^1.1.3
+  logger: ^0.9.4
 
   here_sdk:
     path: plugins/here_sdk

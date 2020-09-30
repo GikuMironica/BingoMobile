@@ -1,4 +1,5 @@
 import 'package:fluro/fluro.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -92,7 +93,7 @@ class _AnnouncementsIndexState extends State<AnnouncementsIndex> {
             //   ),
             // ),
             SizedBox(height: 16,),
-            ListView.builder(
+            announcementsLoaded ? ListView.builder(
               itemCount: announcementsList.length,
               shrinkWrap: true,
               itemBuilder: (context, index) => InkWell(
@@ -104,7 +105,7 @@ class _AnnouncementsIndexState extends State<AnnouncementsIndex> {
                     '/announcements/${announcementsList[index].postId}'
                 ),
               )
-            ),
+            ) : CupertinoActivityIndicator(),
           ],
         ),
       ),

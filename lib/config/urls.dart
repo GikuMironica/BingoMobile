@@ -48,8 +48,8 @@ final Map<String, String> apiUrl = {
   // Announcements
   'announcement': '/announcements',
   'announcementsByPost': '/announcements/postId/',
-  'announcementsInbox': '/attended/withannouncements',
-  'announcementsOutbox': '/posts/withoutbox',
+  'announcementsInbox': '/announcements/inbox',
+  'announcementsOutbox': '/announcements/outbox',
 };
 
 final Map<String, String> webUrl = {
