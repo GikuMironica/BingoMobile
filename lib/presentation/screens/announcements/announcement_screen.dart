@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/data/models/announcement_message.dart';
+import 'package:hopaut/data/models/mini_post.dart';
+import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/widgets/announcements/announcement_message_bubble.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/date_formatter.dart';
@@ -21,6 +23,7 @@ class AnnouncementScreen extends StatefulWidget {
 
 class _AnnouncementScreenState extends State<AnnouncementScreen> {
   List<AnnouncementMessage> chatMessages = [];
+  MiniPost _miniPost;
 
   bool chatMessagesLoaded = false;
 
@@ -28,6 +31,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
   ScrollController scrollController = ScrollController();
   FocusNode focusNode = FocusNode();
   bool endOfChat = true;
+  bool userIsHost = false;
 
   List<Widget> chatScreenWidgets = [];
 
@@ -60,6 +64,8 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
   @override
   void initState() {
     fetchMessages();
+    // Todo: check if user is the host;
+    userIsHost = true;
     super.initState();
   }
 
@@ -78,7 +84,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 66),
+            padding: userIsHost ? const EdgeInsets.only(left: 16, right: 16, bottom: 66) : const EdgeInsets.only(left: 16, right: 16, bottom: 16),
             child: ListView.builder(
               controller: scrollController,
               physics: ClampingScrollPhysics(),
@@ -89,44 +95,47 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
               },
             ),
           ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              padding: EdgeInsets.only(top: 8, bottom: 8, left: 18, right: 16),
-              width: double.infinity,
-              color: Colors.grey.shade200,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(
-                                color: Colors.grey.shade300
-                            )
+          Visibility(
+            visible: userIsHost,
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                padding: EdgeInsets.only(top: 8, bottom: 8, left: 18, right: 16),
+                width: double.infinity,
+                color: Colors.grey.shade200,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(
+                                  color: Colors.grey.shade300
+                              )
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(
+                                  color: Colors.grey.shade300
+                              )
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey.shade300,
+                          hintText: "Enter Message",
+                          contentPadding: EdgeInsets.all(16.0),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(
-                                color: Colors.grey.shade300
-                            )
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey.shade300,
-                        hintText: "Enter Message",
-                        contentPadding: EdgeInsets.all(16.0),
+                        controller: messageController,
+                        maxLines: null,
+                        focusNode: focusNode,
                       ),
-                      controller: messageController,
-                      maxLines: null,
-                      focusNode: focusNode,
                     ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.send),
-                    onPressed: () => messageController.value.text.trim().length == 0 ? null : sendMessage(messageController.text),
-                  )
-                ],
+                    IconButton(
+                      icon: Icon(Icons.send),
+                      onPressed: () => messageController.value.text.trim().length == 0 ? null : sendMessage(messageController.text),
+                    )
+                  ],
+                ),
               ),
             ),
           )

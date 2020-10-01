@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:collection';
-import 'package:background_fetch/background_fetch.dart';
 import 'package:fluro/fluro.dart';
 import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
@@ -87,48 +86,6 @@ class _HopAutState extends State<HopAut> {
           OSiOSSettings.autoPrompt: false,
           OSiOSSettings.inAppLaunchUrl: false
         });
-    BackgroundFetch.configure(
-        BackgroundFetchConfig(
-          minimumFetchInterval: 15,
-          stopOnTerminate: true,
-          requiredNetworkType: NetworkType.NONE,
-          requiresBatteryNotLow: false,
-          requiresCharging: false,
-          requiresDeviceIdle: false,
-          requiresStorageNotLow: false,
-          enableHeadless: false,
-        ), (String taskId) async {
-      logger.i('Background task running: $taskId}');
-
-      switch(taskId){
-        case 'com.transistorsoft.refreshTokenTask':
-          if (GetIt.I.get<AuthService>().currentIdentity != null) {
-            if (DateTime.now().isAfter(DateTime.fromMillisecondsSinceEpoch(GetIt.I
-                .get<AuthService>()
-                .currentIdentity
-                .expiry))) {
-              logger.i('Refreshing token via Background task');
-              await refreshTokenTask();
-            }else{
-              Duration delay = DateTime.fromMillisecondsSinceEpoch(GetIt.I.get<AuthService>().currentIdentity.expiry).difference(DateTime.now());
-              logger.d('Token refresh is scheduled in ${delay.inMilliseconds} milliseconds (${delay.inSeconds} seconds)');
-              await Future.delayed(delay, () async => await refreshTokenTask());
-            }
-            logger.i('Next Token refresh at ${DateTime.fromMillisecondsSinceEpoch(GetIt.I.get<AuthService>().currentIdentity.expiry)}');
-          }
-          break;
-        default:
-          logger.d('Default fetch task');
-
-      }
-      BackgroundFetch.finish(taskId);
-    });
-    TaskConfig refreshTokenTaskConfig = TaskConfig(
-      taskId: 'com.transistorsoft.refreshTokenTask',
-      delay: 3000,
-      periodic: true
-    );
-    BackgroundFetch.scheduleTask(refreshTokenTaskConfig);
     OneSignal.shared
         .setInFocusDisplayType(OSNotificationDisplayType.notification);
     await OneSignal.shared
