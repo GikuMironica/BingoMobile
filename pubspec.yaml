@@ -31,10 +31,10 @@ dependencies:
   provider:               ^4.3.2+2
   visibility_detector:    0.1.5
   flutter_webview_plugin: 0.3.11
-  meta:                   1.1.8
+  meta: ^1.2.3
   flutter_secure_storage: 3.3.3
   fluro:                  1.6.3
-  get_it:                 4.0.2
+  get_it: ^5.0.1
   jwt_decode:             0.1.0
   fluttertoast:           4.0.1
   email_validator:        1.0.4

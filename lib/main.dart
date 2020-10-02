@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 import 'init.dart';
 import 'services/auth_service/auth_service.dart';
 import 'services/setup.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Router;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
