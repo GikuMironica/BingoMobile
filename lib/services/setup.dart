@@ -8,12 +8,13 @@ final getIt = GetIt.instance;
 
 void serviceSetup() async {
   // TODO: Implement singleton services
+  getIt.registerSingleton<LoggingService>(LoggingService());
   getIt.registerSingleton<SettingsManager>(SettingsManager());
   getIt.registerSingleton<SecureStorage>(SecureStorage());
   getIt.registerSingleton<DioService>(DioService());
+  getIt.registerSingleton<AuthService>(AuthService());
   getIt.registerSingleton<RepoLocator>(RepoLocator());
   getIt.registerSingleton<LocationManager>(LocationManager());
   getIt.registerLazySingleton<DateFormatter>(() => DateFormatter());
   getIt.registerSingleton<EventManager>(EventManager());
-  getIt.registerSingleton<AuthService>(AuthService());
 }

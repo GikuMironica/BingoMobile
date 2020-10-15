@@ -8,23 +8,27 @@ import 'package:hopaut/services/auth_service/auth_service.dart';
 enum LoginPageState { IDLE, LOGGING_IN, ERROR }
 
 class LoginPageController extends ChangeNotifier {
-  final LoginBloc _loginBloc = LoginBloc();
+  final LoginBloc loginBloc = LoginBloc();
   bool _obscureText = true;
   LoginPageState _pageState = LoginPageState.IDLE;
   AuthService _authService = GetIt.I.get<AuthService>();
-  BuildContext _context;
-  List<String> errors;
+  BuildContext context;
+  String error = '';
 
   bool get obscureText => _obscureText;
   LoginPageState get pageState => _pageState;
 
 
   void dispose(){
-    _loginBloc.dispose();
   }
 
   void toggleTextObscurity() {
     _obscureText = !_obscureText;
+    notifyListeners();
+  }
+
+  void setError(String message){
+    error = message;
     notifyListeners();
   }
 
@@ -37,9 +41,9 @@ class LoginPageController extends ChangeNotifier {
     setPageState(LoginPageState.LOGGING_IN);
     await _authService
         .loginWithFb()
-        .then((value) => Application.router.navigateTo(_context, '/home',
+        .then((value) => Application.router.navigateTo(context, '/home',
             clearStack: true, transition: TransitionType.fadeIn))
-        .catchError((error) => setPageState(LoginPageState.ERROR));
+        .catchError((error) => setPageState(LoginPageState.IDLE));
   }
 
   Future<void> login(String email, String password) async {
@@ -47,10 +51,13 @@ class LoginPageController extends ChangeNotifier {
     bool loginResult =
         await _authService.loginWithEmail(email.trimRight(), password);
     if (loginResult) {
-      Application.router.navigateTo(_context, '/home',
+      setPageState(LoginPageState.IDLE);
+      Application.router.navigateTo(context, '/home',
           clearStack: true, transition: TransitionType.fadeIn);
+
     } else {
       setPageState(LoginPageState.ERROR);
+      setError('Invalid Credentials');
     }
   }
 }

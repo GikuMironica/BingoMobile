@@ -1,4 +1,4 @@
-import 'package:hopaut/config/urls.dart';
+import 'package:hopaut/config/constants.dart';
 
 class Announcement {
   int postId;
@@ -8,7 +8,7 @@ class Announcement {
   int lastMessageTime;
   String title;
 
-  String get thumbnailUrl => '${webUrl['baseUrl']}${webUrl['images']}/$thumbnail.webp';
+  String get thumbnailUrl => '${WEB.IMAGES}/$thumbnail.webp';
 
   Announcement({this.postId, this.postType, this.thumbnail, this.lastMessage, this.lastMessageTime, this.title});
 

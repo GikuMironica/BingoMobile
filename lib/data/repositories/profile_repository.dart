@@ -1,18 +1,21 @@
+import 'package:hopaut/services/services.dart' show LoggingService, DioService, Logger;
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hopaut/config/urls.dart';
+import 'package:hopaut/config/constants.dart' show API;
 import 'package:hopaut/data/models/profile.dart';
-import 'package:hopaut/services/dio_service/dio_service.dart';
 
 class ProfileRepository {
+  Logger _logger = GetIt.I.get<LoggingService>().getLogger(ProfileRepository);
+  Dio _dio = GetIt.I.get<DioService>().dio;
+  String _endpoint = API.PROFILE;
+
   Future<Profile> get(String userId) async {
     try {
-      Response response = await GetIt.I.get<DioService>().dio.get('${apiUrl['profile']}/$userId');
-      if(response.statusCode == 200){
-        return Profile.fromJson(response.data['Data']);
-      }
+      Response response = await _dio.get('$_endpoint/$userId');
+      return response.statusCode == 200 ? Profile.fromJson(response.data['Data']) : null;
     } on DioError catch(e){
-
+      _logger.e(e.message);
+      return null;
     }
   }
 }

@@ -6,7 +6,7 @@ import 'package:hopaut/presentation/screens/announcements/announcements_index.da
 import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/location/map.dart';
 import 'package:hopaut/presentation/screens/home_page.dart';
-import 'package:hopaut/presentation/screens/login/_login.dart';
+import 'package:hopaut/presentation/screens/authentication/login/login.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';

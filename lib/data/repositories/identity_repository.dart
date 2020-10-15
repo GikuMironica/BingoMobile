@@ -1,14 +1,14 @@
-import 'dart:convert';
+import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/services/services.dart';
 
-import '../../config/urls.dart';
-import '../../services/dio_service/dio_service.dart';
-import '../../services/secure_service/secure_service.dart';
-import 'package:dio/dio.dart' show Response, DioError;
+import 'package:dio/dio.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 
 class IdentityRepository{
+  Logger _logger = GetIt.I.get<LoggingService>().getLogger(IdentityRepository);
+  Dio _dio = GetIt.I.get<DioService>().dio;
 
   /// Login: Authenticates a user with the system.
   Future<Map<String, dynamic>> login({@required String email, @required String password}) async {
@@ -18,11 +18,8 @@ class IdentityRepository{
     };
 
     try {
-      Response response = await GetIt.I
-          .get<DioService>()
-          .dio
-          .post(
-        apiUrl['login'],
+      Response response = await _dio.post(
+        API.LOGIN,
         data: payload,
       );
       return response.data;
@@ -35,24 +32,20 @@ class IdentityRepository{
 
   /// Registers a user with the system.
   Future<bool> register({@required String email, @required String password}) async {
-    // TODO: Insert logic here.
     final Map<String, dynamic> payload = {
       'email': email,
       'password': password
     };
 
     try {
-      Response response = await GetIt.I
-          .get<DioService>()
-          .dio
-          .post(
-        apiUrl['register'],
+      Response response = await _dio.post(
+        API.REGISTER,
         data: payload,
       );
       return (response.statusCode == 200);
     } on DioError catch(e) {
       if (e.response != null){
-        print(e.response.data.toString());
+        _logger.e(e.response.data.toString());
         return false;
       }
     }
@@ -60,28 +53,24 @@ class IdentityRepository{
 
 
   Future<Map<String, dynamic>> loginWithFacebook() async {
-    // TODO: Insert logic here.
     FacebookLogin _facebookLogin = FacebookLogin();
     FacebookLoginResult _facebookLoginResult = await _facebookLogin.logIn(['email']);
 
     switch(_facebookLoginResult.status){
       case FacebookLoginStatus.error:
-        print('Error');
-        print(_facebookLoginResult.errorMessage);
+        _logger.e('Facebook Error');
+        _logger.e(_facebookLoginResult.errorMessage);
         break;
       case FacebookLoginStatus.cancelledByUser:
-        print('Login was cancelled by the user');
+        _logger.e('Login was cancelled by the user');
         break;
       case FacebookLoginStatus.loggedIn:
-        print('Facebook login successful');
+        _logger.d('Facebook login successful');
         final Map<String, dynamic> payload = {
           'accessToken': _facebookLoginResult.accessToken.token
         };
         try {
-          Response response = await GetIt.I
-              .get<DioService>()
-              .dio
-              .post(apiUrl['fb-auth'], data: payload);
+          Response response = await _dio.post(API.FB_AUTH, data: payload);
 
           return response.data;
         } on DioError catch (e) {
@@ -91,13 +80,12 @@ class IdentityRepository{
   }
 
   Future<Map<String, dynamic>> refresh(String token, String refreshToken) async {
-    // TODO: Insert logic here.
     final Map<String, dynamic> payload = {
       'token': await GetIt.I.get<SecureStorage>().read(key: 'token'),
       'refreshToken': await GetIt.I.get<SecureStorage>().read(key: 'refreshToken')
     };
     try {
-      Response response = await GetIt.I.get<DioService>().dio.post(apiUrl['refresh'], data: payload);
+      Response response = await GetIt.I.get<DioService>().dio.post(API.REFRESH, data: payload);
       return response.data;
     } on DioError catch(e) {
       return { 'Error': e.message };
@@ -105,7 +93,6 @@ class IdentityRepository{
   }
 
   Future<bool> forgotPassword(String email) async {
-    // TODO: Insert logic here.
     final Map<String, dynamic> payload = {
       'email': email
     };
@@ -113,7 +100,7 @@ class IdentityRepository{
       Response response = await GetIt.I
           .get<DioService>()
           .dio
-          .post(apiUrl['forgotPassword'], data: payload);
+          .post(API.FORGOT_PASSWORD, data: payload);
 
       return (response.statusCode == 200);
     } on DioError catch (e) {
@@ -126,7 +113,6 @@ class IdentityRepository{
     @required String oldPassword,
     @required String newPassword
   }) async {
-    // TODO: Insert logic here.
     final Map<String, dynamic> payload = {
       'email': email,
       'oldPass': oldPassword,
@@ -134,11 +120,7 @@ class IdentityRepository{
     };
 
     try {
-      Response response = await GetIt.I
-          .get<DioService>()
-          .dio
-          .post(apiUrl['changePassword'], data: payload);
-
+      Response response = await _dio.post(API.CHANGE_PASSWORD, data: payload);
       if(response is Map<String, dynamic>) return true;
     } on DioError catch (e) {
       return false;

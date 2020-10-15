@@ -2,8 +2,8 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/config/urls.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/models/profile.dart';
 import 'package:hopaut/presentation/screens/events/delete_event/delete_event.dart';
@@ -80,9 +80,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
       if(post.pictures.length != 0) {
         postHasPictures = true;
         for (String picture in post.pictures) {
-          print('${webUrl['baseUrl']}${webUrl['images']}/$picture.webp');
           _postImages.add(NetworkImage(
-              '${webUrl['baseUrl']}${webUrl['images']}/$picture.webp'));
+              '${WEB.IMAGES}/$picture.webp'));
         }
     }
   }

@@ -2,9 +2,8 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/constants/web.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/config/urls.dart';
-import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/event_manager/event_manager.dart';
 
@@ -44,7 +43,7 @@ class _NewAnnouncementListState extends State<NewAnnouncementList> {
           itemCount: GetIt.I.get<EventManager>().userActiveList.length,
           shrinkWrap: true,
           itemBuilder: (context, index) => ListTile(
-            leading: CircleAvatar(backgroundImage: NetworkImage('${webUrl['baseUrl']}${webUrl['images']}/${GetIt.I.get<EventManager>().userActiveList[index].thumbnail}.webp'),),
+            leading: CircleAvatar(backgroundImage: NetworkImage('${WEB.IMAGES}/${GetIt.I.get<EventManager>().userActiveList[index].thumbnail}.webp'),),
             title: Text(GetIt.I.get<EventManager>().userActiveList[index].title),
             onTap: () => Application.router.navigateTo(context,
                 '/announcements/${GetIt.I.get<EventManager>().userActiveList[index].postId}',

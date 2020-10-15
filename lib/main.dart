@@ -26,24 +26,24 @@ import 'package:flutter/material.dart' hide Router;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SdkContext.init(IsolateOrigin.main);
-  await Hive.initFlutter();
   serviceSetup();
-  var authBox;
+
   try {
-    authBox = await Hive.openBox('auth');
-  } on Exception catch (e) {
-    print(e);
-  }
-  final LinkedHashMap<dynamic, dynamic> data = authBox.get('identity');
-  if (data != null) {
-    Map<String, dynamic> _data = data.map((a, b) => MapEntry(a as String, b));
-    GetIt.I.get<AuthService>().setIdentity(Identity.fromJson(_data));
-    if (GetIt.I.get<SecureStorage>().read(key: 'token') != null) {
-      GetIt.I.get<DioService>().setBearerToken(await GetIt.I.get<SecureStorage>().read(key: 'token'));
-      await GetIt.I.get<AuthService>().refreshToken();
+    await Hive.initFlutter();
+    var authBox = await Hive.openBox('auth');
+
+    final LinkedHashMap<dynamic, dynamic> data = authBox.get('identity');
+    if (data != null) {
+      Map<String, dynamic> _data = data.map((a, b) => MapEntry(a as String, b));
+      GetIt.I.get<AuthService>().setIdentity(Identity.fromJson(_data));
+      if (GetIt.I.get<SecureStorage>().read(key: 'token') != null) {
+        GetIt.I.get<DioService>().setBearerToken(
+            await GetIt.I.get<SecureStorage>().read(key: 'token'));
+        await GetIt.I.get<AuthService>().refreshToken();
+      }
     }
-  } else {
-    print('Auth box not found');
+  } on HiveError catch (err) {
+    print('Authbox not found');
   }
 
   runApp(HopAut());
@@ -58,12 +58,6 @@ class _HopAutState extends State<HopAut> {
   Router router;
   GlobalKey globals;
   String nextRoute;
-  Logger logger = Logger(
-    printer: PrettyPrinter(
-      printTime: true,
-      printEmojis: true,
-    )
-  );
 
   @override
   void initState() {
@@ -97,15 +91,13 @@ class _HopAutState extends State<HopAut> {
     if (GetIt.I.get<SecureStorage>().read(key: 'token') != null) {
       await GetIt.I.get<AuthService>().refreshToken();
       GetIt.I
-          .get<DioService>()
-          .dio
-          .options
-          .headers[HttpHeaders.authorizationHeader] =
-      'bearer ${await GetIt.I.get<SecureStorage>().read(key: 'token')}';
+              .get<DioService>()
+              .dio
+              .options
+              .headers[HttpHeaders.authorizationHeader] =
+          'bearer ${await GetIt.I.get<SecureStorage>().read(key: 'token')}';
       print("Bearer token applied");
-      if (GetIt.I
-          .get<AuthService>()
-          .user == null) {
+      if (GetIt.I.get<AuthService>().user == null) {
         await GetIt.I.get<AuthService>().refreshUser();
       }
     }
@@ -135,8 +127,14 @@ class _HopAutState extends State<HopAut> {
             create: (context) => MapLocationController(),
             lazy: true,
           ),
-          ChangeNotifierProvider(create: (_) => LoginPageController(), lazy: true,),
-          ChangeNotifierProvider(create: (_) => SearchPageController(), lazy: true,)
+          ChangeNotifierProvider(
+            create: (_) => LoginPageController(),
+            lazy: true,
+          ),
+          ChangeNotifierProvider(
+            create: (_) => SearchPageController(),
+            lazy: true,
+          )
         ],
         child: MaterialApp(
           builder: (context, child) {

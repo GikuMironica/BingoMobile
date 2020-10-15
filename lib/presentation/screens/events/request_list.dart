@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/config/urls.dart';
 import 'package:hopaut/data/repositories/participant_repository.dart';
 import 'package:hopaut/presentation/widgets/dialogs/profile_dialog.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
@@ -69,7 +69,7 @@ class _RequestListState extends State<RequestList> {
                         title: Text('${_requests[index]['FirstName']} ${_requests[index]['LastName']}'),
                         leading: CircleAvatar(
                             backgroundImage: (_requests[index]['Picture'] != null) ?
-                            NetworkImage('${webUrl['baseUrl']}${webUrl['profiles']}/${_requests[index]['Picture']}.webp') : null,
+                            NetworkImage('${WEB.PROFILE_PICTURES}/${_requests[index]['Picture']}.webp') : null,
                             child: _requests[index]['Picture'] == null ?
                             Text(makeInitials(firstName: _requests[index]['FirstName'], lastName: _requests[index]['LastName']),) : null
                         ),

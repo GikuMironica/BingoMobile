@@ -137,9 +137,11 @@ class AuthService with ChangeNotifier {
     await Hive.box('auth').delete('identity');
     GetIt.I.get<SecureStorage>().deleteAll();
     GetIt.I.get<DioService>().removeBearerToken();
-    await OneSignal.shared.removeExternalUserId();
-    await OneSignal.shared.setSubscription(false);
-    oneSignalSettings = false;
+    if(oneSignalSettings) {
+      await OneSignal.shared.removeExternalUserId();
+      await OneSignal.shared.setSubscription(false);
+      oneSignalSettings = false;
+    }
     setIdentity(null);
     setUser(null);
   }

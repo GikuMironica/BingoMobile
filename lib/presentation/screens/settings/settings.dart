@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
@@ -42,7 +43,7 @@ class _SettingsState extends State<Settings> {
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       iconSize: 32,
                       color: Colors.white,
-                      icon: Icon(Icons.arrow_back),
+                      icon: HATheme.BACK_BUTTON_IOS,
                       onPressed: () {
                         Navigator.of(context).pop();
                       },

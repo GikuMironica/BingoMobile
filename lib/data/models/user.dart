@@ -1,4 +1,5 @@
-import '../../config/urls.dart';
+import 'package:hopaut/config/constants.dart';
+
 import 'package:intl/intl.dart';
 
 class User {
@@ -50,7 +51,7 @@ class User {
     if(profilePicture != null){
       if(profilePicture.startsWith("http")){ return profilePicture; }
       else {
-        return "${webUrl['baseUrl']}${webUrl['profiles']}/$profilePicture.webp";
+        return "${WEB.PROFILE_PICTURES}/$profilePicture.webp";
       }
     }
   }

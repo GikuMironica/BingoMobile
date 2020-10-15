@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hopaut/config/urls.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/services/date_formatter.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
@@ -122,7 +122,7 @@ class Post {
     List<String> pics = List();
     for (String picture in pictures){
 
-      if(picture != null) pics.add("${webUrl['baseUrl']}${webUrl['images']}/$picture.webp");
+      if(picture != null) pics.add("${WEB.IMAGES}/$picture.webp");
     }
     return pics;
   }

@@ -29,20 +29,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: EdgeInsets.all(0),
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
             height: MediaQuery.of(context).size.height,
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.all(24.0),
             child: ListView(
               children: <Widget>[
                 Column(children: <Widget>[
-                  const SizedBox(height: 50,),
                   displayLogoIcon(context),
                   const SizedBox(height: 30,),
-                  makeTitle(title: 'Sign up'),
+                  makeTitle(title: 'Create Account'),
                   const SizedBox(height: 30,),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,

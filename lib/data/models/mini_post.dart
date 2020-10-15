@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/event_types.dart';
-import 'package:hopaut/config/urls.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/services/date_formatter.dart';
 import 'package:intl/intl.dart';
@@ -101,5 +101,5 @@ class MiniPost {
   DateTime get getPostTimeAsDT => DateTime.fromMillisecondsSinceEpoch(postTime * 1000);
   DateTime get getStartTimeAsDT => DateTime.fromMillisecondsSinceEpoch(startTime * 1000);
   DateTime get getEndTimeAsDT => DateTime.fromMillisecondsSinceEpoch(endTime * 1000);
-  String get thumbnailUrl => '${webUrl['baseUrl']}${webUrl['images']}/$thumbnail.webp';
+  String get thumbnailUrl => '${WEB.IMAGES}/$thumbnail.webp';
 }
