@@ -14,8 +14,8 @@ BoxDecoration gradientBoxDecoration() {
     ),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.3),
-        offset: Offset(2.5, 7),
+        color: Colors.grey.withOpacity(0.4),
+        offset: Offset(3, 7),
         blurRadius: 7,
       ),
     ],

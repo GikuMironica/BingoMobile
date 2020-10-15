@@ -7,13 +7,17 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/router.dart';
+import 'package:hopaut/controllers/search_page_controller/search_page_controller.dart';
 import 'package:hopaut/data/models/identity.dart';
+import 'package:hopaut/presentation/screens/events/edit_event/location/map_location_controller.dart';
+import 'package:hopaut/presentation/screens/search/search.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
 import 'package:hopaut/services/services.dart';
 import 'package:logger/logger.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'controllers/login_page/login_page_controller.dart';
 import 'init.dart';
 import 'services/auth_service/auth_service.dart';
 import 'services/setup.dart';
@@ -33,19 +37,10 @@ void main() async {
   final LinkedHashMap<dynamic, dynamic> data = authBox.get('identity');
   if (data != null) {
     Map<String, dynamic> _data = data.map((a, b) => MapEntry(a as String, b));
-    Identity identity = Identity.fromJson(_data);
-    GetIt.I.get<AuthService>().setIdentity(identity);
+    GetIt.I.get<AuthService>().setIdentity(Identity.fromJson(_data));
     if (GetIt.I.get<SecureStorage>().read(key: 'token') != null) {
+      GetIt.I.get<DioService>().setBearerToken(await GetIt.I.get<SecureStorage>().read(key: 'token'));
       await GetIt.I.get<AuthService>().refreshToken();
-      GetIt.I
-          .get<DioService>()
-          .dio
-          .options
-          .headers[HttpHeaders.authorizationHeader] =
-      'bearer ${await GetIt.I.get<SecureStorage>().read(key: 'token')}';
-      if (GetIt.I.get<AuthService>().user == null) {
-        await GetIt.I.get<AuthService>().refreshUser();
-      }
     }
   } else {
     print('Auth box not found');
@@ -136,6 +131,12 @@ class _HopAutState extends State<HopAut> {
               create: (context) => GetIt.I.get<EventManager>()),
           ChangeNotifierProvider(
               create: (context) => GetIt.I.get<SettingsManager>()),
+          ChangeNotifierProvider(
+            create: (context) => MapLocationController(),
+            lazy: true,
+          ),
+          ChangeNotifierProvider(create: (_) => LoginPageController(), lazy: true,),
+          ChangeNotifierProvider(create: (_) => SearchPageController(), lazy: true,)
         ],
         child: MaterialApp(
           builder: (context, child) {

@@ -44,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               displayLogoIcon(context),
               SizedBox(height: 32,),
@@ -85,7 +86,8 @@ class _LoginPageState extends State<LoginPage> {
                       child: FacebookButton(
                         onPressed: () => _attemptFacebookLogin(),
                       ),
-                    )
+                    ),
+                    noAccountYetPrompt(context),
                   ],
                 ),
               )

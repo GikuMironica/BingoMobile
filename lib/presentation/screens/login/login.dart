@@ -44,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
             padding: const EdgeInsets.all(24.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 displayLogoIcon(context),
                 SizedBox(height: 32,),
@@ -85,10 +86,11 @@ class _LoginPageState extends State<LoginPage> {
                         child: FacebookButton(
                           onPressed: () => _attemptFacebookLogin(),
                         ),
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
+                noAccountYetPrompt(context),
               ],
             )
         ),
@@ -109,6 +111,12 @@ class _LoginPageState extends State<LoginPage> {
       setState(() => _obscureText = !_obscureText);
   void _toggleUiLock() => setState(() => _lockUi = !_lockUi);
 
+  Widget noAccountYet(context) {
+    return RichText(
+      text: TextSpan(text: 'Don\t have an account yet? ', style: TextStyle(color: Colors.black),
+      children: [TextSpan(text: 'Sign up')]),
+      );
+  }
   void _showLoadingDialog() async {
     await showDialog(
         context: context,

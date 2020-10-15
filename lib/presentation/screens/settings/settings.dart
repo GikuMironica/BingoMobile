@@ -123,8 +123,7 @@ class _SettingsState extends State<Settings> {
                               trailing: Icon(Icons.lock),
                               onTap: () => changePage('/change_password'),
                             )),
-                        MergeSemantics(
-                            child: ListTile(
+                        ListTile(
                               contentPadding: EdgeInsets.zero,
                               title: Text('Logout', style: TextStyle(fontSize: 18)),
                               trailing: Icon(Icons.exit_to_app),
@@ -137,7 +136,7 @@ class _SettingsState extends State<Settings> {
                                 }
                                 );
                               },
-                            )),
+                            ),
                         MergeSemantics(
                           child: ListTile(
                               contentPadding: EdgeInsets.zero,
