@@ -5,4 +5,5 @@ class DioServiceBaseOptions extends BaseOptions {
 
   @override
   String get baseUrl => apiUrl['baseUrl'];
+
 }

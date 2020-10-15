@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
+import 'package:hopaut/presentation/screens/events/edit_event/location/map_location_controller.dart';
 import 'package:hopaut/presentation/widgets/buttons/basic_button.dart';
 import 'package:hopaut/presentation/widgets/buttons/gradient_box_decoration.dart';
 import 'package:hopaut/services/location_manager/location_manager.dart';
+import 'package:provider/provider.dart';
 
 class SearchByMap extends StatefulWidget {
   @override
@@ -13,19 +16,14 @@ class SearchByMap extends StatefulWidget {
 }
 
 class _SearchByMapState extends State<SearchByMap> {
-  HereMapController _hereMapController;
-  SearchEngine _searchEngine;
-  List<Place> placeResults = [];
-  bool hasResults = false;
 
   @override
   void initState() {
-    // TODO: implement initState
-    _searchEngine = SearchEngine();
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
+    var mapController = Provider.of<MapLocationController>(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
@@ -48,11 +46,11 @@ class _SearchByMapState extends State<SearchByMap> {
               padding: EdgeInsets.zero,
               height: MediaQuery.of(context).size.height,
               width: double.infinity,
-              child: HereMap(onMapCreated: _onMapCreated,),
+              child: HereMap(onMapCreated: mapController.onMapCreated,),
             ),
             Align(
               alignment: Alignment.center,
-              child: Icon(Icons.clear),
+              child: IconButton(icon: Icon(Icons.clear), onPressed: () => mapController.searchResultState != SearchResultState.IDLE ? mapController.clearSearchResult() : null,),
             ),
             SafeArea(
               child: Align(
@@ -60,15 +58,34 @@ class _SearchByMapState extends State<SearchByMap> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 32),
                   child: BasicButton(
-                    onPressed: () async => getReverseGeocodeResult(),
+                    onPressed: () async => mapController.getReverseGeocodeResult(),
                     label: 'Confirm'
                   ),
                 ),
               ),
             ),
+            SafeArea(child: Align(
+              alignment: Alignment.topCenter,
+              child: TypeAheadField(
+                textFieldConfiguration: TextFieldConfiguration(
+                  keyboardType: TextInputType.text,
+                  controller: mapController.searchBarController,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(12.0),
+                    hintText: 'Search',
+                    border: InputBorder.none,
+                  )
+                ),
+                suggestionsCallback: (pattern) async => await mapController.getAutocompleteResult(pattern),
+                itemBuilder: (context,Place suggestion) => ListTile(title: Text(suggestion.title),),
+                onSuggestionSelected: (Place suggestion) => mapController.addToSearchResult(suggestion),
+                hideOnEmpty: true,
+                hideOnError: true,
+              ),
+            )),
             SafeArea(
               child: Visibility(
-              visible: hasResults,
+              visible: mapController.searchResults.isNotEmpty,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Container(
@@ -79,11 +96,11 @@ class _SearchByMapState extends State<SearchByMap> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: ListView.builder(
-                      itemCount: placeResults.length,
+                      itemCount: mapController.searchResults.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text(placeResults[index].title),
+                          title: Text(mapController.searchResults[index].title),
                         );
                       }),
                 ),
@@ -93,36 +110,5 @@ class _SearchByMapState extends State<SearchByMap> {
           ],
         ),
       );
-  }
-
-
-
-  Future<void> getReverseGeocodeResult() async {
-    print('Hello!');
-    GeoCoordinates coords = _hereMapController.camera.state.internalcoordinates;
-    print('${coords.longitude} ${coords.latitude}');
-    _searchEngine.searchByCoordinates(
-      coords,
-      SearchOptions.withDefaults(), (err, List<Place> call) {
-        placeResults = [...call];
-
-        setState(() => hasResults = true);
-    });
-  }
-  
-  void _onMapCreated(HereMapController hereMapController){
-    _hereMapController = hereMapController;
-    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.greyDay, (MapError err) {
-      if(err == null){
-        hereMapController.mapScene.setLayerState(MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
-        const double distanceToEarthInMeters = 3000;
-        hereMapController.camera.lookAtPointWithDistance(
-            GeoCoordinates(GetIt.I.get<LocationManager>().currentPosition.latitude, GetIt.I.get<LocationManager>().currentPosition.longitude),
-            distanceToEarthInMeters
-        );
-      }else{
-        print('Map Scene not loaded MapError ${err.toString()}');
-      }
-    });
   }
 }
