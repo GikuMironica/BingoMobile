@@ -22,7 +22,6 @@ class DeleteAccountBloc extends Object implements BaseBloc {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _emailController?.close();
   }
 }

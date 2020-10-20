@@ -176,7 +176,7 @@ class SearchPageController extends ChangeNotifier {
             .lookAtPointWithDistance(geoCoordinates, distanceToEarthInMeters);
         GeoCircle geoCircle = GeoCircle(geoCoordinates, 15000);
         MapPolygon mapPolygon = MapPolygon(
-            GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.1));
+            GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.05));
         _hereMapController.mapScene.addMapPolygon(mapPolygon);
       } else {
         print('Map Scene not loaded MapError ${error.toString()}');

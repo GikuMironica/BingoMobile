@@ -94,6 +94,14 @@ class EventManager with ChangeNotifier{
     }
   }
 
+  void reset() {
+    userActiveList.clear();
+    userInactiveList.clear();
+    activeList.clear();
+    inactiveList.clear();
+    notifyListeners();
+  }
+
   void setPostContext(Post post){
     postContext = post;
   }

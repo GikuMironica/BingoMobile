@@ -31,11 +31,17 @@ class DioService {
 
   DioService._() {
     _dio = Dio(DioServiceBaseOptions())
-      ..options.headers['content-type'] = 'application/json';
+      ..options.headers.addAll({
+        Headers.contentTypeHeader: 'application/json',
+      });
     print('Dio initalized - BaseUrl: ${_dio.options.baseUrl}');
     // For development:
     _dio.interceptors.add(PrettyDioLogger(
+      request: true,
+      requestHeader: true,
       requestBody: true,
+      responseHeader: true,
+      responseBody: true,
     ));
     _dio.interceptors.add(InterceptorsWrapper(
         onResponse: (Response response) => response,

@@ -14,14 +14,20 @@ class PastEventsList extends StatefulWidget {
 }
 
 class _PastEventsListState extends State<PastEventsList>{
-
+  EventManager eventManager;
   bool _isLoading = false;
-  List<MiniPost> events = new List();
 
   @override
   void initState() {
     GetIt.I.get<EventManager>().getUserInactiveEvents();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    eventManager.reset();
+    print('Past Events disposed');
+    super.dispose();
   }
 
   @override
@@ -32,15 +38,24 @@ class _PastEventsListState extends State<PastEventsList>{
   }
 
   Widget _buildList() {
-    return Container(
-      child: Provider<EventManager>(
-        create: (context) => GetIt.I.get<EventManager>(),
-        child: context.watch<EventManager>().userInactiveList?.length == 0 ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
-            itemCount: context.watch<EventManager>().userInactiveList.length,
-            itemBuilder: (BuildContext ctx, int index) =>
-                InkWell(
-                  onTap: () => Application.router.navigateTo(context, '/event/${context.read<EventManager>().userInactiveList[index].postId}'),
-                    child: MiniPostCard(miniPost: context.read<EventManager>().userInactiveList[index])),
+    eventManager = Provider.of<EventManager>(context);
+    return SingleChildScrollView(
+      child: Visibility(
+        visible: eventManager.userInactiveList.length != 0,
+        child: ListView.builder(
+          primary: false,
+          shrinkWrap: true,
+          itemCount: eventManager.userInactiveList.length,
+          itemBuilder: (ctx, idx) => InkWell(
+            onTap: () => Application.router.navigateTo(ctx, '/event/${eventManager.userInactiveList[idx].postId}'),
+            child: MiniPostCard(miniPost: eventManager.userInactiveList[idx],),
+          ),
+        ),
+        replacement: Center(
+          child: Text(
+            'No Events',
+            style: TextStyle(fontSize: 24, color: Colors.grey),
+          ),
         ),
       ),
     );

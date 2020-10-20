@@ -51,5 +51,11 @@ class _UserActiveListState extends State<UserActiveList>{
     ),
     );
   }
+
+  @override
+  void dispose() {
+    GetIt.I.get<EventManager>().userActiveList.clear();
+    super.dispose();
+  }
 }
 

@@ -29,14 +29,8 @@ class _EditPostDescriptionState extends State<EditPostDescription> {
       'Longitude': _oldPost.location.longitude,
       'Latitude': _oldPost.location.latitude,
       'Tags': _oldPost.tags,
+      'RemainingImagesGuids': _oldPost.pictures
     };
-    if(_oldPost.pictures != null){
-      List<String> keys = ['Picture1', 'Picture2', 'Picture3'];
-      _oldPost.pictures.forEach((element) {
-        int idx = _oldPost.pictures.indexOf(element);
-        _newPost[keys[idx]] = element;
-      });
-    }
     _descriptionController.text = _oldPost.event.description ?? '';
     currentCharCount = _descriptionController.text.length;
     super.initState();

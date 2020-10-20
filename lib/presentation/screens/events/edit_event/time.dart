@@ -113,7 +113,6 @@ class _EditPostTimeState extends State<EditPostTime> {
                             context: context,
                             initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
                           );
-
                           _eventStart = DateTimeField.combine(date, time);
                           _newPost['EventTime'] = (_eventStart.millisecondsSinceEpoch / 1000).floor();
                           return _eventStart;
@@ -128,9 +127,7 @@ class _EditPostTimeState extends State<EditPostTime> {
                         return null;
                       },
                       onSaved: (value) {
-                        _newPost['EventTime'] = (value
-                            .toUtc()
-                            .millisecondsSinceEpoch / 1000).floor();
+                        _newPost['EventTime'] = (value.millisecondsSinceEpoch / 1000).floor();
                       }),
                 ),
               ),

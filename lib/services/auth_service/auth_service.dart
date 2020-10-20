@@ -43,16 +43,16 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> applyToken(Map<String, dynamic> data) async {
-    // TODO: remove these stupid prints
     final Map<String, dynamic> parsedData = Jwt.parseJwt(data['Token']);
     await Hive.box('auth').put('identity', parsedData);
 
     await writeTokenToKeychain(
         token: data['Token'], refreshToken: data['RefreshToken']);
     setIdentity(Identity.fromJson(parsedData));
+    if(user == null){
+      refreshUser();
+    }
     GetIt.I.get<DioService>().setBearerToken(data['Token']);
-
-    await refreshUser();
     if (!oneSignalSettings) {
       setOneSignalParams();
     }
@@ -137,12 +137,15 @@ class AuthService with ChangeNotifier {
     await Hive.box('auth').delete('identity');
     GetIt.I.get<SecureStorage>().deleteAll();
     GetIt.I.get<DioService>().removeBearerToken();
+
+    GetIt.I.get<EventManager>().reset();
+    setIdentity(null);
+    setUser(null);
     if(oneSignalSettings) {
       await OneSignal.shared.removeExternalUserId();
       await OneSignal.shared.setSubscription(false);
       oneSignalSettings = false;
     }
-    setIdentity(null);
-    setUser(null);
+
   }
 }

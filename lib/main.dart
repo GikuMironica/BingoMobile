@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:collection';
 import 'package:fluro/fluro.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:hive/hive.dart';
@@ -27,6 +28,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SdkContext.init(IsolateOrigin.main);
   serviceSetup();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
   try {
     await Hive.initFlutter();
@@ -40,6 +43,8 @@ void main() async {
         GetIt.I.get<DioService>().setBearerToken(
             await GetIt.I.get<SecureStorage>().read(key: 'token'));
         await GetIt.I.get<AuthService>().refreshToken();
+        await GetIt.I.get<AuthService>().refreshUser();
+
       }
     }
   } on HiveError catch (err) {

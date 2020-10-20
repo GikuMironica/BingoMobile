@@ -223,7 +223,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                     ),
                   ),
                   SizedBox(height:4),
-                  Row(
+                  Wrap(
                     children: <Widget>[
                       SizedBox(width: 1,),
                       Text(
@@ -238,6 +238,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                       SizedBox(width: 4,),
                       Text(
                         '${post.location.address}, ${post.location.city}',
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 14, color: Colors.black54),
                       ),
                       SizedBox(width: 16,),

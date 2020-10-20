@@ -33,16 +33,18 @@ class PostRepository {
   Future<bool> update(int postId, Map<String, dynamic> newValues) async {
     try {
       FormData _data = FormData.fromMap(await MultiPartUpdatedPost(newValues));
+      _dio.options.headers.addAll({
+        Headers.contentTypeHeader: 'multipart/form-data',
+      });
       Response response = await _dio.post(
           '$_endpoint/$postId',
-          data: _data,
-          options: Options(headers: {
-            '${HttpHeaders.contentTypeHeader}': 'multipart/form-data'
-          }));
+          data: _data,);
       return response.statusCode == 200;
     } on DioError catch (e) {
       _logger.e(e.response.statusMessage);
       return false;
+    } finally {
+      _dio.options.headers.addAll({Headers.contentTypeHeader : 'application/json'});
     }
   }
 
