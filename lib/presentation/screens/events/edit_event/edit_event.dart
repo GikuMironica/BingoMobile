@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/paid_event_types.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
@@ -49,7 +50,7 @@ class _EditEventPageState extends State<EditEventPage> {
         leading: IconButton(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
-          icon: Icon(Icons.arrow_back),
+          icon: HATheme.backButton,
           onPressed: () => Application.router.pop(context),
         ),
         title: Text('Edit Event'),

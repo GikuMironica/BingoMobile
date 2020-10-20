@@ -36,7 +36,7 @@ class _WebvPageState extends State<WebvPage> {
         title: Text(widget._title),
         backgroundColor: Colors.pink,
         leading: IconButton(
-            icon: HATheme.BACK_BUTTON_IOS,
+            icon: HATheme.backButton,
             onPressed: () {
               Navigator.of(context).pop();
             }),

@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/forms/blocs/change_password.dart';
+import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/services.dart';
 
 class ChangePasswordPage extends StatefulWidget {
@@ -33,13 +34,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       body: Container(
-        height: MediaQuery.of(context).size.height,
         width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: HATheme.HOPAUT_GRADIENT,
-        ),
+        decoration: decorationGradient(),
         child: SingleChildScrollView(
           physics: NeverScrollableScrollPhysics(),
           child: Column(
@@ -53,7 +52,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 iconSize: 32,
                 color: Colors.white,
-                icon: HATheme.BACK_BUTTON_IOS,
+                icon: HATheme.backButton,
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -82,18 +81,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               ),
               Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.74,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        offset: Offset(10, 10),
-                        blurRadius: 10,
-                      spreadRadius: 4
-                    )
-                  ],
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -252,9 +242,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             ),
                           ),
                         ],
-                      ),
-                      SizedBox(
-                        height: 10,
                       ),
                     ],
                   ),

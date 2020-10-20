@@ -188,7 +188,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
             leading: IconButton(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-              icon: Icon(Icons.arrow_back),
+              icon: HATheme.backButton,
               onPressed: () => Application.router.pop(context),
             ),
             actions: <Widget>[

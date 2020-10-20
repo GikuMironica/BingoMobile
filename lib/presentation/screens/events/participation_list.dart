@@ -39,7 +39,7 @@ class _ParticipationListState extends State<ParticipationList> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: HATheme.backButton,
           onPressed: () => Application.router.pop(context),
         ),
         title: Text('Member List'),

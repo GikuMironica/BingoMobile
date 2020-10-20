@@ -43,7 +43,7 @@ class _AccountState extends State<Account>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFed2f65),
+      backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
             child: Stack(
@@ -51,8 +51,8 @@ class _AccountState extends State<Account>{
                 Wrap(
                   children: [
                     Container(
+                      height: MediaQuery.of(context).size.height * 0.3,
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height,
                     decoration: decorationGradient(),
                   ),
                   ],

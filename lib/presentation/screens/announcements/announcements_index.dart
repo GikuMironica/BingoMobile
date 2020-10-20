@@ -2,6 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/announcement.dart';
 import 'package:hopaut/presentation/widgets/announcements/index_child.dart';
@@ -42,7 +43,7 @@ class _AnnouncementsIndexState extends State<AnnouncementsIndex> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Announcements'),
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.white70,),),
+        leading: IconButton(icon: HATheme.backButton, onPressed: () => Application.router.pop(context),),
         actions: [
           IconButton(icon: Icon(Icons.tune, color: Colors.white70))
         ],

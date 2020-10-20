@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:here_sdk/search.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/currencies.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/paid_event_types.dart';
@@ -152,7 +153,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
         flexibleSpace: Container(
           decoration: decorationGradient(),
         ),
-        leading: IconButton(icon: Icon(Icons.arrow_back), onPressed:() => Application.router.pop(context)),
+        leading: IconButton(icon: HATheme.backButton, onPressed:() => Application.router.pop(context)),
         title: Text('Create Event'),
       ),
       body: SingleChildScrollView(

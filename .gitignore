@@ -29,6 +29,7 @@
 .pub-cache/
 .pub/
 /build/
+/android/radle-version=6/*
 
 # Web related
 lib/generated_plugin_registrant.dart

@@ -25,8 +25,6 @@ class _PastEventsListState extends State<PastEventsList>{
 
   @override
   void dispose() {
-    eventManager.reset();
-    print('Past Events disposed');
     super.dispose();
   }
 

@@ -38,7 +38,7 @@ class _RequestListState extends State<RequestList> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: HATheme.backButton,
           onPressed: () => Application.router.pop(context),
         ),
         title: Text('Requests'),

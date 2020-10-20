@@ -22,7 +22,7 @@ class _AnnouncementMessageBubbleState extends State<AnnouncementMessageBubble> {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.shade400,
+                color: Colors.black.withOpacity(0.09),
                 offset: Offset(1.5, 1.5),
                 blurRadius: 3
               )

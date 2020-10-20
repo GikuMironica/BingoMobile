@@ -2,6 +2,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/post_repository.dart';
@@ -71,7 +72,7 @@ class _EditPostTimeState extends State<EditPostTime> {
           decoration: decorationGradient(),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: HATheme.backButton,
           onPressed: () => Application.router.pop(context),
         ),
         title: Text('Edit Time'),

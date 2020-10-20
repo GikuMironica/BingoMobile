@@ -43,7 +43,7 @@ class _SettingsState extends State<Settings> {
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       iconSize: 32,
                       color: Colors.white,
-                      icon: HATheme.BACK_BUTTON_IOS,
+                      icon: HATheme.backButton,
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
