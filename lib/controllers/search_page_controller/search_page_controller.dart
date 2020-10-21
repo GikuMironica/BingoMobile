@@ -50,14 +50,18 @@ class SearchPageController extends ChangeNotifier {
   LocationManager _locationManager = GetIt.I.get<LocationManager>();
 
   List<Widget> get cardList => _cardList;
+
   List<MiniPost> get searchResults => _searchResults;
 
   SearchPageState get pageState => _pageState;
 
   bool get filterToggled => _filterToggled;
+
   bool get hasFocus => _hasFocus;
 
-  SearchPageController(){ init(); }
+  SearchPageController() {
+    init();
+  }
 
   void init() {
     _pageState = SearchPageState.IDLE;
@@ -92,10 +96,9 @@ class SearchPageController extends ChangeNotifier {
     await _locationManager.getCurrentLocation();
     searchQuery.longitude = _locationManager.currentPosition.longitude;
     searchQuery.latitude = _locationManager.currentPosition.latitude;
-    if(_filterToggled) toggleFilter();
+    if (_filterToggled) toggleFilter();
 
-    _searchResults =
-        await GetIt.I.get<RepoLocator>().posts.search(searchQuery);
+    _searchResults = await GetIt.I.get<RepoLocator>().posts.search(searchQuery);
     if (_searchResults != null) {
       setPageState(SearchPageState.HAS_SEARCH_RESULTS);
       buildMiniPostCards();
@@ -107,7 +110,7 @@ class SearchPageController extends ChangeNotifier {
   }
 
   void clearSearch() {
-    for (MapMarker mapMarker in _mapMarkerList){
+    for (MapMarker mapMarker in _mapMarkerList) {
       _hereMapController.mapScene.removeMapMarker(mapMarker);
     }
     _searchResults.clear();
@@ -121,9 +124,7 @@ class SearchPageController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleSearchQuery(){
-
-  }
+  void toggleSearchQuery() {}
 
   @override
   void dispose() {
@@ -134,13 +135,12 @@ class SearchPageController extends ChangeNotifier {
   // --------------------------------------------------------------------------
 
   Future<void> _addSearchResultsToMap(List<MiniPost> searchResults) async {
-    if (_marker == null) {
-      Uint8List imgPixelData = await _loadFileAsUint8List('location.png');
+    for (MiniPost miniPost in searchResults) {
+      Uint8List imgPixelData =
+          await _loadFileAsUint8List('${miniPost.postType}.png');
       _marker =
           MapImage.withPixelDataAndImageFormat(imgPixelData, ImageFormat.png);
-    }
 
-    for (MiniPost miniPost in searchResults) {
       GeoCoordinates geoCoordinates =
           GeoCoordinates(miniPost.latitude, miniPost.longitude);
       Anchor2D anchor2d = Anchor2D.withHorizontalAndVertical(0.5, 1);
@@ -157,7 +157,7 @@ class SearchPageController extends ChangeNotifier {
   }
 
   Future<Uint8List> _loadFileAsUint8List(String filename) async {
-    ByteData fileData = await rootBundle.load('assets/icons/' + filename);
+    ByteData fileData = await rootBundle.load('assets/icons/map/' + filename);
     return Uint8List.view(fileData.buffer);
   }
 

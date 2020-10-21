@@ -101,6 +101,7 @@ flutter:
     - assets/facebook/
     - assets/i18n/
     - assets/icons/
+    - assets/icons/map/
     - assets/icons/svg/
     - assets/fonts/
 
