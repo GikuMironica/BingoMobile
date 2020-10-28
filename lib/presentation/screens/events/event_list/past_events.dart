@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/mini_post.dart';
+import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
 import 'package:hopaut/services/event_manager/event_manager.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class PastEventsList extends StatefulWidget {
@@ -13,13 +15,15 @@ class PastEventsList extends StatefulWidget {
   _PastEventsListState createState() => _PastEventsListState();
 }
 
-class _PastEventsListState extends State<PastEventsList>{
+class _PastEventsListState extends State<PastEventsList> {
   EventManager eventManager;
   bool _isLoading = false;
 
   @override
   void initState() {
-    GetIt.I.get<EventManager>().getUserInactiveEvents();
+    if(GetIt.I.get<EventManager>().userInactiveListState == ListState.NOT_LOADED_YET) {
+      GetIt.I.get<EventManager>().fetchUserInactiveEvents();
+    }
     super.initState();
   }
 
@@ -45,8 +49,15 @@ class _PastEventsListState extends State<PastEventsList>{
           shrinkWrap: true,
           itemCount: eventManager.userInactiveList.length,
           itemBuilder: (ctx, idx) => InkWell(
-            onTap: () => Application.router.navigateTo(ctx, '/event/${eventManager.userInactiveList[idx].postId}'),
-            child: MiniPostCard(miniPost: eventManager.userInactiveList[idx],),
+            onTap: () => pushNewScreen(context,
+                screen: EventPage(
+                  postId: eventManager.userInactiveList[idx].postId,
+                ),
+                withNavBar: false,
+                pageTransitionAnimation: PageTransitionAnimation.fade),
+            child: MiniPostCard(
+              miniPost: eventManager.userInactiveList[idx],
+            ),
           ),
         ),
         replacement: Center(
@@ -58,14 +69,4 @@ class _PastEventsListState extends State<PastEventsList>{
       ),
     );
   }
-
-  void _getData(int index) async {
-    if(!_isLoading){
-      setState(() {
-        _isLoading = true;
-      });
-      
-    }
-  }
 }
-

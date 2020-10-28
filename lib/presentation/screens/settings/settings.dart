@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,43 +35,43 @@ class _SettingsState extends State<Settings> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 50,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 50,
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    iconSize: 32,
+                    color: Colors.white,
+                    icon: HATheme.backButton,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20, bottom: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Settings',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              shadows: [
+                                Shadow(
+                                    color: Colors.black.withOpacity(0.3),
+                                    offset: Offset(3, 3),
+                                    blurRadius: 10)
+                              ]),
+                        ),
+                        SizedBox(height: 20),
+                      ],
                     ),
-                    IconButton(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      iconSize: 32,
-                      color: Colors.white,
-                      icon: HATheme.backButton,
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20, bottom: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Settings',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                                shadows: [
-                                  Shadow(
-                                      color: Colors.black.withOpacity(0.3),
-                                      offset: Offset(3, 3),
-                                      blurRadius: 10)
-                                ]),
-                          ),
-                          SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
+                ],
               ),
               Container(
                   width: double.infinity,
@@ -94,21 +95,27 @@ class _SettingsState extends State<Settings> {
                         ),
                         Text('Notifications',
                             style: TextStyle(color: Colors.black54)),
-                        MergeSemantics(
-                          child: Provider<SettingsManager>(
-                            create: (context) => GetIt.I.get<SettingsManager>(),
-                            child: ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: Text(
-                                'Push Notifications',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                              trailing: CupertinoSwitch(
-                                  value: context.watch<SettingsManager>().pushNotifications,
-                                  onChanged: (bool value){ context.read<SettingsManager>().togglePushNotifications();},
-                                ),
-                              onTap: () => context.read<SettingsManager>().togglePushNotifications(),
+                        Consumer<SettingsManager>(
+                          builder: (context, settingsMgr, child) => ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: Text(
+                              'Push Notifications',
+                              style: TextStyle(fontSize: 18),
                             ),
+                            trailing: Visibility(
+                              visible: Platform.isIOS,
+                              child: CupertinoSwitch(
+                                value: settingsMgr.pushNotifications,
+                                onChanged: (v) =>
+                                    settingsMgr.togglePushNotifications(),
+                              ),
+                              replacement: Switch(
+                                value: settingsMgr.pushNotifications,
+                                onChanged: (v) =>
+                                    settingsMgr.togglePushNotifications(),
+                              ),
+                            ),
+                            onTap: () => settingsMgr.togglePushNotifications(),
                           ),
                         ),
                         SizedBox(
@@ -118,26 +125,28 @@ class _SettingsState extends State<Settings> {
                             style: TextStyle(color: Colors.black54)),
                         MergeSemantics(
                             child: ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: Text('Change Password',
-                                  style: TextStyle(fontSize: 18)),
-                              trailing: Icon(Icons.lock),
-                              onTap: () => changePage('/change_password'),
-                            )),
+                          contentPadding: EdgeInsets.zero,
+                          title: Text('Change Password',
+                              style: TextStyle(fontSize: 18)),
+                          trailing: Icon(Icons.lock),
+                          onTap: () => changePage('/change_password'),
+                        )),
                         ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: Text('Logout', style: TextStyle(fontSize: 18)),
-                              trailing: Icon(Icons.exit_to_app),
-                              onTap: () async {
-                                await GetIt.I.get<AuthService>().logout().then((value) {
-                                  Application.router.navigateTo(
-                                      context, '/login', clearStack: true);
-                                  Fluttertoast.showToast(
-                                      msg: 'You have been logged out');
-                                }
-                                );
-                              },
-                            ),
+                          contentPadding: EdgeInsets.zero,
+                          title: Text('Logout', style: TextStyle(fontSize: 18)),
+                          trailing: Icon(Icons.exit_to_app),
+                          onTap: () async {
+                            await GetIt.I
+                                .get<AuthService>()
+                                .logout()
+                                .then((value) {
+                              Application.router.navigateTo(context, '/login',
+                                  clearStack: true);
+                              Fluttertoast.showToast(
+                                  msg: 'You have been logged out');
+                            });
+                          },
+                        ),
                         MergeSemantics(
                           child: ListTile(
                               contentPadding: EdgeInsets.zero,
@@ -156,11 +165,11 @@ class _SettingsState extends State<Settings> {
                         ),
                         InkWellButton(
                             'Delete Account',
-                                () => showDialog(
+                            () => showDialog(
                                 context: context,
                                 builder: (context) => CustomDialog(
-                                  pageWidget: DeleteAccountPopup(),
-                                )),
+                                      pageWidget: DeleteAccountPopup(),
+                                    )),
                             Colors.redAccent),
                         SizedBox(
                           height: 15,
@@ -182,9 +191,12 @@ class _SettingsState extends State<Settings> {
                           'HopAut',
                           style: TextStyle(color: Colors.white),
                         ),
-                        Text('version 0.2',
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.8))),
+                        Consumer<SettingsManager>(
+                          builder: (_, settingsMgr, child) => Text(
+                              'version ${settingsMgr.appVersion}',
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8))),
+                        ),
                       ],
                     )),
               ),
@@ -201,7 +213,8 @@ class _SettingsState extends State<Settings> {
   }
 
   void changePage(String path) {
-    Application.router.navigateTo(context, path, transition: TransitionType.fadeIn);
+    Application.router
+        .navigateTo(context, path, transition: TransitionType.fadeIn);
   }
 }
 

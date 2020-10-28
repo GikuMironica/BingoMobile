@@ -24,7 +24,7 @@ class _NewAnnouncementListState extends State<NewAnnouncementList> {
 
   void fetchUserActiveEvents() async {
     if(GetIt.I.get<EventManager>().userActiveList.isEmpty) {
-      await GetIt.I.get<EventManager>().getUserActiveEvents();
+      await GetIt.I.get<EventManager>().fetchUserActiveEvents();
     }
     setState(() => userEventsLoaded = true);
   }

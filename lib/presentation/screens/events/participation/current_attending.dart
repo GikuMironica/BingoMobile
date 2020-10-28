@@ -1,10 +1,10 @@
-import 'package:fluro/fluro.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/data/models/mini_post.dart';
+import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
 import 'package:hopaut/services/event_manager/event_manager.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class CurrentAttendingList extends StatefulWidget {
@@ -13,52 +13,48 @@ class CurrentAttendingList extends StatefulWidget {
 }
 
 class _CurrentAttendingListState extends State<CurrentAttendingList> {
-  int _page = 1;
-  bool _isLoading = false;
-  List<MiniPost> events = new List();
-
   @override
   void initState() {
-    GetIt.I.get<EventManager>().getAttendingActiveEvents();
+    if(GetIt.I.get<EventManager>().activeHopautsListState == ListState.NOT_LOADED_YET) {
+      GetIt.I.get<EventManager>().fetchActiveHopauts();
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: _buildList(),
+      child: _buildList(context),
     );
   }
 
-  Widget _buildList() {
+  Widget _buildList(BuildContext context) {
     return Container(
-      child: Provider<EventManager>(
-        create: (context) => GetIt.I.get<EventManager>(),
-        child: context.watch<EventManager>().activeList?.length == 0 ? Center(child: Text('No Events', style: TextStyle(fontSize: 24, color: Colors.grey),),) : ListView.builder(
-            itemCount: context.watch<EventManager>().activeList.length,
-            itemBuilder: (BuildContext ctx, int index) =>
-                InkWell(
-                  onTap: () {
-                    Application.router.navigateTo(
-                        context,
-                        '/event/${context.read<EventManager>().activeList[index].postId}',
-                        transition: TransitionType.fadeIn,
-                        transitionDuration: Duration(milliseconds:250)
-                    );
-                    },
-                  child: MiniPostCard(miniPost: context.read<EventManager>().activeList[index]),
-                )
-        ),
+      child: Consumer<EventManager>(
+        builder: (context, eventManager, child){
+          if(eventManager.activeHopautsListState == ListState.LOADING){
+            return Center(
+              child: CupertinoActivityIndicator(),
+            );
+          } else {
+            if(eventManager.activeHopautsListState == ListState.IDLE){
+              return eventManager.activeHopauts.isNotEmpty ? ListView.builder(
+                itemBuilder: (context, index) => InkWell(
+                  onTap: () => pushNewScreen(
+                      context,
+                      screen: EventPage(postId: eventManager.activeHopauts[index].postId,),
+                      withNavBar: false,
+                      pageTransitionAnimation: PageTransitionAnimation.fade),
+                  child: MiniPostCard(miniPost: eventManager.activeHopauts[index],),
+                ),
+                itemCount: eventManager.activeHopauts.length,
+                shrinkWrap: true,
+              ) : Center(child: Text('No Events'),);
+            }
+          }
+          return Center(child: Text('No Events'));
+        },
       ),
     );
   }
-
-  void _getData(int index) async {
-    if(!_isLoading){
-      setState(() {
-        _isLoading = true;
-      });
-
-    }
   }
-}

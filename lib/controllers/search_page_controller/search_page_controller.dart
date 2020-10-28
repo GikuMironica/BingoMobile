@@ -14,6 +14,7 @@ import 'package:hopaut/presentation/screens/search/search.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
 import 'package:hopaut/services/location_manager/location_manager.dart';
 import 'package:hopaut/services/repo_locator/repo_locator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 enum SearchPageState {
   IDLE,
@@ -54,20 +55,18 @@ class SearchPageController extends ChangeNotifier {
   List<MiniPost> get searchResults => _searchResults;
 
   SearchPageState get pageState => _pageState;
-
-  bool get filterToggled => _filterToggled;
-
   bool get hasFocus => _hasFocus;
 
   SearchPageController() {
     init();
   }
 
-  void init() {
+  void init() async {
     _pageState = SearchPageState.IDLE;
     searchQuery = SearchQuery(radius: searchRadius);
     _filterToggled = false;
     _hasFocus = false;
+    await Permission.location.request();
   }
 
   void setPageState(SearchPageState searchPageState) {
@@ -123,8 +122,6 @@ class SearchPageController extends ChangeNotifier {
     _filterToggled = !_filterToggled;
     notifyListeners();
   }
-
-  void toggleSearchQuery() {}
 
   @override
   void dispose() {
@@ -182,5 +179,51 @@ class SearchPageController extends ChangeNotifier {
         print('Map Scene not loaded MapError ${error.toString()}');
       }
     });
+  }
+
+  void filterToggleBar(){
+    searchQuery.bar = !searchQuery.bar;
+    notifyListeners();
+  }
+
+  void filterToggleClub() {
+    searchQuery.club = !searchQuery.club;
+    notifyListeners();
+  }
+
+  void filterToggleHouseParty() {
+    searchQuery.houseParty = !searchQuery.houseParty;
+    notifyListeners();
+  }
+
+  void filterToggleStreetParty() {
+    searchQuery.houseParty = !searchQuery.houseParty;
+    notifyListeners();
+  }
+
+  void filterToggleBicycleMeet(){
+    searchQuery.bicycleMeet = !searchQuery.bicycleMeet;
+    notifyListeners();
+  }
+  void filterToggleBikerMeet(){
+    searchQuery.bikerMeet = !searchQuery.bikerMeet;
+    notifyListeners();
+  }
+  void filterToggleCarMeet() {
+    searchQuery.carMeet = !searchQuery.carMeet;
+    notifyListeners();
+  }
+  void filterToggleMarathon(){
+    searchQuery.marathon = !searchQuery.marathon;
+    notifyListeners();
+  }
+
+  void filterToggleOthers(){
+    searchQuery.other = !searchQuery.other;
+    notifyListeners();
+  }
+  void filterToggleToday(){
+    searchQuery.today = !searchQuery.today;
+    notifyListeners();
   }
 }

@@ -8,6 +8,14 @@ class HATheme {
 
   static Icon backButton = Platform.isIOS ? Icon(Icons.arrow_back_ios) : Icon(Icons.arrow_back);
 
+  static ThemeData themeData = ThemeData(
+    primaryColor: HOPAUT_PINK,
+    fontFamily: 'Open Sans',
+    primarySwatch: Colors.pink,
+    accentColor: HOPAUT_PINK,
+    accentColorBrightness: Brightness.light,
+  );
+
   static const LinearGradient HOPAUT_GRADIENT = LinearGradient(
     colors: [
       HOPAUT_ORANGE,

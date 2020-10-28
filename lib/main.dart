@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/router.dart';
 import 'package:hopaut/controllers/search_page_controller/search_page_controller.dart';
@@ -122,21 +123,21 @@ class _HopAutState extends State<HopAut> {
       },
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider(
+          ChangeNotifierProvider<AuthService>(
               create: (context) => GetIt.I.get<AuthService>()),
-          ChangeNotifierProvider(
+          ChangeNotifierProvider<EventManager>(
               create: (context) => GetIt.I.get<EventManager>()),
-          ChangeNotifierProvider(
+          ChangeNotifierProvider<SettingsManager>(
               create: (context) => GetIt.I.get<SettingsManager>()),
-          ChangeNotifierProvider(
+          ChangeNotifierProvider<MapLocationController>(
             create: (context) => MapLocationController(),
             lazy: true,
           ),
-          ChangeNotifierProvider(
+          ChangeNotifierProvider<LoginPageController>(
             create: (_) => LoginPageController(),
             lazy: true,
           ),
-          ChangeNotifierProvider(
+          ChangeNotifierProvider<SearchPageController>(
             create: (_) => SearchPageController(),
             lazy: true,
           )
@@ -148,8 +149,7 @@ class _HopAutState extends State<HopAut> {
               child: child,
             );
           },
-          theme: ThemeData(
-              fontFamily: 'OpenSans', primaryColor: Colors.pinkAccent),
+          theme: HATheme.themeData,
           onGenerateRoute: Application.router.generator,
           navigatorKey: Application.navigatorKey,
           home: Initialization(route: nextRoute),

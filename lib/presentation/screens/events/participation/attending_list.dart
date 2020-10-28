@@ -18,14 +18,11 @@ class _AttendingListState extends State<AttendingList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   void dispose() {
-    GetIt.I.get<EventManager>().activeList.clear();
-    GetIt.I.get<EventManager>().inactiveList.clear();
     super.dispose();
   }
 
