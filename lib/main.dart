@@ -12,10 +12,8 @@ import 'package:hopaut/config/routes/router.dart';
 import 'package:hopaut/controllers/search_page_controller/search_page_controller.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/location/map_location_controller.dart';
-import 'package:hopaut/presentation/screens/search/search.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
 import 'package:hopaut/services/services.dart';
-import 'package:logger/logger.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -61,14 +59,14 @@ class HopAut extends StatefulWidget {
 }
 
 class _HopAutState extends State<HopAut> {
-  Router router;
+  FluroRouter router;
   GlobalKey globals;
   String nextRoute;
 
   @override
   void initState() {
     // TODO: implement initState
-    router = new Router();
+    router = FluroRouter();
     Routes.configureRoutes(router);
     Application.router = router;
     super.initState();

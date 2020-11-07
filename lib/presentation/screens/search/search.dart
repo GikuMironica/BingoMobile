@@ -34,6 +34,7 @@ class _SearchPageState extends State<SearchPage> {
         child: SvgPicture.asset(
           'assets/icons/svg/locate-outline.svg',
           color: Colors.black,
+          height: 24,
         ),
         onPressed: () => controller.mapController.camera.lookAtPoint(
             GeoCoordinates(

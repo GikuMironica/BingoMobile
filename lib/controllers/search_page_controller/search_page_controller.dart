@@ -24,8 +24,14 @@ enum SearchPageState {
   ERROR,
 }
 
+enum MapState {
+  LOADING,
+  LOADED
+}
+
 class SearchPageController extends ChangeNotifier {
   SearchPageState _pageState;
+  MapState _mapState;
 
   List<MiniPost> _searchResults;
   SearchQuery searchQuery;
@@ -54,6 +60,7 @@ class SearchPageController extends ChangeNotifier {
 
   List<MiniPost> get searchResults => _searchResults;
 
+  MapState get mapState => _mapState;
   SearchPageState get pageState => _pageState;
   bool get hasFocus => _hasFocus;
 
@@ -63,6 +70,7 @@ class SearchPageController extends ChangeNotifier {
 
   void init() async {
     _pageState = SearchPageState.IDLE;
+    _mapState = MapState.LOADING;
     searchQuery = SearchQuery(radius: searchRadius);
     _filterToggled = false;
     _hasFocus = false;
@@ -71,6 +79,11 @@ class SearchPageController extends ChangeNotifier {
 
   void setPageState(SearchPageState searchPageState) {
     _pageState = searchPageState;
+    notifyListeners();
+  }
+
+  void setMapState(MapState mapState){
+    _mapState = mapState;
     notifyListeners();
   }
 
@@ -161,7 +174,7 @@ class SearchPageController extends ChangeNotifier {
   void onMapCreated(HereMapController hereMapController) async {
     _hereMapController = hereMapController;
     _hereMapController.mapScene.loadSceneForMapScheme(MapScheme.greyDay,
-        (MapError error) {
+        (MapError error) async {
       if (error == null) {
         _hereMapController.mapScene.setLayerState(
             MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
@@ -175,6 +188,16 @@ class SearchPageController extends ChangeNotifier {
         MapPolygon mapPolygon = MapPolygon(
             GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.05));
         _hereMapController.mapScene.addMapPolygon(mapPolygon);
+
+        // Show the user on the map.
+        MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight('assets/icons/map/radio-button-off-outline.svg', 48, 48);
+        MapMarker userMarker = MapMarker(geoCoordinates, userMarkerSvg);
+
+        _hereMapController.mapScene.addMapMarker(userMarker);
+
+
+        setMapState(MapState.LOADED);
+        searchEvents();
       } else {
         print('Map Scene not loaded MapError ${error.toString()}');
       }

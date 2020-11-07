@@ -31,7 +31,7 @@ class Routes {
   static String announcementById = '/announcements/:id';
   static String userListAnnouncements = '/announcements/user_list';
 
-  static void configureRoutes(Router router) {
+  static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = new Handler(
         handlerFunc: (BuildContext ctx, Map<String, List<String>> params) {
       print('Error: Route not found');
