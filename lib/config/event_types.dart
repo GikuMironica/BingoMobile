@@ -9,3 +9,16 @@ Map<int, String> eventTypes = {
   8: "Marathon",
   9: "Other"
 };
+
+// Todo: Remove the map above, it's redundant.
+const List<String> EVENT_TYPES = [
+  'House Party',
+  'Club',
+  'Bar',
+  'Biker Meet',
+  'Bicycle Meet',
+  'Car Meet',
+  'Street Party',
+  'Marathon',
+  'Other'
+];
