@@ -33,6 +33,7 @@ class _EventListState extends State<EventList> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        heroTag: 'create-event',
         child: Icon(Icons.add, color: Colors.white, size: 24),
         backgroundColor: HATheme.HOPAUT_PINK,
         onPressed: () async => pushNewScreen(context,

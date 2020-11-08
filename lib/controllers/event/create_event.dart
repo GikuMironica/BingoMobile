@@ -7,5 +7,6 @@ class CreateEventController extends ChangeNotifier {
   Post _tempPost;
 
   CreateEventController(){
+    _tempPost = Post();
   }
 }
