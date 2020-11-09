@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -44,7 +45,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   bool isActiveEvent = false;
 
   Key attendCellKey = Key('attend-list-cell');
-  List<NetworkImage> _postImages = [];
+  List<CachedNetworkImageProvider> _postImages = [];
 
   ScrollController _scrollController;
   AnimationController _animationController;
@@ -81,7 +82,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
     if (post.pictures.length != 0) {
       postHasPictures = true;
       for (String picture in post.pictures) {
-        _postImages.add(NetworkImage('${WEB.IMAGES}/$picture.webp'));
+        _postImages.add(CachedNetworkImageProvider('${WEB.IMAGES}/$picture.webp'));
       }
     }
   }

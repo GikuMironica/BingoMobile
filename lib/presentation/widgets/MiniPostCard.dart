@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -46,7 +47,7 @@ class MiniPostCard extends StatelessWidget {
                       left: Radius.circular(10)
                     ),
                     image: DecorationImage(
-                      image: miniPost.thumbnail != null ? NetworkImage(miniPost.thumbnailUrl) : AssetImage('assets/images/bg_placeholder.jpg'),
+                      image: miniPost.thumbnail != null ? CachedNetworkImageProvider(miniPost.thumbnailUrl) : AssetImage('assets/images/bg_placeholder.jpg'),
                       fit: BoxFit.cover,
                     ),
                   ),
