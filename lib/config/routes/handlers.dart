@@ -2,6 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/init.dart';
 import 'package:hopaut/presentation/screens/account/account.dart';
+import 'package:hopaut/presentation/screens/account/account_page/account_page.dart';
 import 'package:hopaut/presentation/screens/announcements/announcement_screen.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
@@ -35,7 +36,7 @@ var rootHandler = new Handler(
 
 var accountHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return Account();
+  return AccountPage();
 });
 
 var registrationHandler = new Handler(

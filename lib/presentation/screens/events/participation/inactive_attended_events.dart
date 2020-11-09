@@ -27,14 +27,13 @@ class _InactiveAttendedEventsListState
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SingleChildScrollView(
       child: _buildList(context),
     );
   }
 
   Widget _buildList(BuildContext context) {
-    return Container(
-      child: Consumer<EventManager>(
+    return Consumer<EventManager>(
         builder: (context, eventManager, child){
           if(eventManager.inactiveHopautsListState == ListState.LOADING){
             return Center(
@@ -58,7 +57,6 @@ class _InactiveAttendedEventsListState
           }
           return Center(child: Text('No Events'));
         },
-      ),
     );
   }
 }

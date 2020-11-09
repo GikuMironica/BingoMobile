@@ -23,38 +23,34 @@ class _CurrentAttendingListState extends State<CurrentAttendingList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: _buildList(context),
-    );
+    return _buildList(context);
   }
 
   Widget _buildList(BuildContext context) {
-    return Container(
-      child: Consumer<EventManager>(
-        builder: (context, eventManager, child){
-          if(eventManager.activeHopautsListState == ListState.LOADING){
-            return Center(
-              child: CupertinoActivityIndicator(),
-            );
-          } else {
-            if(eventManager.activeHopautsListState == ListState.IDLE){
-              return eventManager.activeHopauts.isNotEmpty ? ListView.builder(
-                itemBuilder: (context, index) => InkWell(
-                  onTap: () => pushNewScreen(
-                      context,
-                      screen: EventPage(postId: eventManager.activeHopauts[index].postId,),
-                      withNavBar: false,
-                      pageTransitionAnimation: PageTransitionAnimation.fade),
-                  child: MiniPostCard(miniPost: eventManager.activeHopauts[index],),
-                ),
-                itemCount: eventManager.activeHopauts.length,
-                shrinkWrap: true,
-              ) : Center(child: Text('No Events'),);
-            }
+    return Consumer<EventManager>(
+      builder: (context, eventManager, child){
+        if(eventManager.activeHopautsListState == ListState.LOADING){
+          return Center(
+            child: CupertinoActivityIndicator(),
+          );
+        } else {
+          if(eventManager.activeHopautsListState == ListState.IDLE){
+            return eventManager.activeHopauts.isNotEmpty ? ListView.builder(
+              itemBuilder: (context, index) => InkWell(
+                onTap: () => pushNewScreen(
+                    context,
+                    screen: EventPage(postId: eventManager.activeHopauts[index].postId,),
+                    withNavBar: false,
+                    pageTransitionAnimation: PageTransitionAnimation.fade),
+                child: MiniPostCard(miniPost: eventManager.activeHopauts[index],),
+              ),
+              itemCount: eventManager.activeHopauts.length,
+              shrinkWrap: true,
+            ) : Center(child: Text('No Events'),);
           }
-          return Center(child: Text('No Events'));
-        },
-      ),
+        }
+        return Center(child: Text('No Events'));
+      },
     );
   }
   }
