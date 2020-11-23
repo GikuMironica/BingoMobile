@@ -9,6 +9,10 @@ class Routes {
   static String login = '/login';
   static String registration = '/registration';
   static String account = '/account';
+  static String editAccount = account + '/edit';
+  static String editAccountPicture = editAccount + '/picture';
+  static String editAccountName = editAccount + '/name';
+  static String editAccountDescription = editAccount + '/description';
   static String changePassword = '/change_password';
   static String termsOfServices = '/tos';
   static String settings = '/settings';
@@ -42,6 +46,10 @@ class Routes {
     router.define(login, handler: loginHandler);
     router.define(registration, handler: registrationHandler);
     router.define(account, handler: accountHandler);
+    router.define(editAccount, handler: editAccountHandler);
+    router.define(editAccountName, handler: editAccountNameHandler);
+    router.define(editAccountDescription, handler: editAccountDescriptionHandler);
+    router.define(editAccountPicture, handler: editAccountPictureHandler);
     router.define(settings, handler: settingsHandler);
     router.define(changePassword, handler: changePasswordHandler);
     router.define(termsOfServices, handler: tosHandler);

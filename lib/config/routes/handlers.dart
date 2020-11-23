@@ -1,8 +1,11 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/init.dart';
-import 'package:hopaut/presentation/screens/account/account.dart';
 import 'package:hopaut/presentation/screens/account/account_page/account_page.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/edit_account.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/edit_description.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/edit_name.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/edit_profile_picture.dart';
 import 'package:hopaut/presentation/screens/announcements/announcement_screen.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
@@ -29,14 +32,31 @@ var rootHandler = new Handler(
   return Initialization();
 });
 
- var homeHandler = new Handler(
-   handlerFunc: (BuildContext context, Map<String, List<String>> params){
-     return HomePage();
-   });
+var homeHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return HomePage();
+});
 
 var accountHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return AccountPage();
+});
+var editAccountHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return EditAccountPage();
+});
+
+var editAccountNameHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return EditAccountName();
+});
+var editAccountDescriptionHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return EditAccountDescription();
+});
+var editAccountPictureHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return EditAccountPicture();
 });
 
 var registrationHandler = new Handler(
@@ -79,8 +99,8 @@ var editEventHandler = new Handler(
 
 var eventListHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-      return EventList();
-    });
+  return EventList();
+});
 
 var editEventDescriptionHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -113,22 +133,21 @@ var editEventPicturesHandler = new Handler(
 });
 
 var announcementsIndexHandler = new Handler(
-  handlerFunc: (BuildContext context, Map<String, List<String>> params){
-    return AnnouncementsIndex();
-  }
-);
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return AnnouncementsIndex();
+});
 
 var announcementUserListHandler = new Handler(
-  handlerFunc: (BuildContext context, Map<String, List<String>> params){
-    return NewAnnouncementList();
-  }
-);
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return NewAnnouncementList();
+});
 
 var announcementScreen = new Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params){
-      return AnnouncementScreen(postId: int.parse(params["id"][0]),);
-    }
-);
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return AnnouncementScreen(
+    postId: int.parse(params["id"][0]),
+  );
+});
 
 var tosHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {

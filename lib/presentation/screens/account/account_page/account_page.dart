@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/theme.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/edit_account.dart';
 import 'package:hopaut/presentation/screens/settings/settings.dart';
 import 'package:hopaut/presentation/widgets/profile_picture/profile_picture.dart';
 import 'package:hopaut/services/services.dart';
@@ -50,19 +51,10 @@ class _AccountPageState extends State<AccountPage> {
                       height: 16,
                     ),
                     userDescription(),
-                    SizedBox(
-                      height: 16,
-                    ),
                     accountInformation(),
-                    SizedBox(
-                      height: 16,
-                    ),
                     Divider(
                       indent: _size.width * 0.2,
                       endIndent: _size.width * 0.2,
-                    ),
-                    SizedBox(
-                      height: 16,
                     ),
                     accountMenu(),
                   ],
@@ -70,9 +62,12 @@ class _AccountPageState extends State<AccountPage> {
               ),
             ),
           ),
-          Center(
-            heightFactor: 2,
-            child: ProfilePicture(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Center(
+              heightFactor: 2,
+              child: ProfilePicture(),
+            ),
           )
         ]),
       ),
@@ -95,7 +90,7 @@ class _AccountPageState extends State<AccountPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(auth.user.description),
+            Text(auth.user.description, textAlign: TextAlign.center,),
           ],
         ),
       ),
@@ -105,6 +100,7 @@ class _AccountPageState extends State<AccountPage> {
   Widget accountInformation() {
     return Consumer<AuthService>(
       builder: (context, auth, child) => ListView(
+        primary: false,
         shrinkWrap: true,
         children: [
           ListTile(
@@ -122,10 +118,11 @@ class _AccountPageState extends State<AccountPage> {
 
   Widget accountMenu() {
     return ListView(
+      primary: false,
       shrinkWrap: true,
       children: [
         ListTile(
-          onTap: () {},
+          onTap: () => pushNewScreen(context, screen: EditAccountPage(), withNavBar: false),
           leading: Icon(MdiIcons.pencil),
           title: Align(
               alignment: Alignment(-1.15, 0), child: Text('Edit Profile')),

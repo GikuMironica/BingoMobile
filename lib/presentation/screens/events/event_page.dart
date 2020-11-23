@@ -23,7 +23,6 @@ import 'package:hopaut/presentation/widgets/image_screen/image_screen.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
 import 'package:hopaut/services/date_formatter.dart';
 import 'package:hopaut/services/services.dart';
-import 'package:image_viewer/image_viewer.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';

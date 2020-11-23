@@ -1,5 +1,4 @@
 import 'package:hopaut/config/constants.dart';
-
 import 'package:intl/intl.dart';
 
 class User {
