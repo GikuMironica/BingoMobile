@@ -21,7 +21,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
           builder: (context, _, __) => InkWell(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onTap: () => Application.router.navigateTo(context, Routes.editAccountPicture),
+            onTap: () => Application.router.navigateTo(context, Routes.editAccountPicture, transition: TransitionType.cupertino),
             child: Column(
               children: [
                 ProfilePicture(),

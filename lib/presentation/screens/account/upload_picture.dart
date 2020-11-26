@@ -61,10 +61,12 @@ class _UploadPictureDialogueState extends State<UploadPictureDialogue> {
       _image = File(pickedFile.path);
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    return _image != null ? Container(
-        padding: EdgeInsets.only(top:10, bottom: 0),
+    return _image != null
+        ? Container(
+            padding: EdgeInsets.only(top:10, bottom: 0),
         width: double.infinity,
         height: 280,
       child: Column(
