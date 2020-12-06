@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
+import 'package:hopaut/data/models/location.dart' as HopautLocation;
 import 'package:hopaut/services/location_manager/location_manager.dart';
 
 enum SearchResultState {IDLE, HAS_RESULTS_GEOCODE, HAS_RESULTS_AUTOCOMPLETE, NO_RESULT}
@@ -18,6 +19,25 @@ class MapLocationController extends ChangeNotifier{
   MapScheme mapScheme = MapScheme.greyDay;
 
   List<Place> searchResults = [];
+
+  HopautLocation.Location parseLocation(Place place){
+      Map<String, dynamic> map = Map();
+      map['placeType'] = place.type.toString();
+      map['EntityName'] = (place.type == PlaceType.street)
+          ? place.address.streetName
+          : (place.type == PlaceType.houseNumber)
+          ? '${place.address.streetName} ${place.address.houseNumOrName}'
+          : place.title;
+      map['Address'] = place.address.streetName;
+      if (place.address.houseNumOrName.isNotEmpty)
+        map['Address'] = '${map['Address']} ${place.address.houseNumOrName}';
+      map['City'] = place.address.city;
+      map['Country'] = place.address.country;
+      map['Longitude'] = place.geoCoordinates.longitude;
+      map['Latitude'] = place.geoCoordinates.latitude;
+      map['Region'] = place.address.postalCode;
+      return HopautLocation.Location.fromJson(map);
+  }
 
   MapLocationController(){
     this.searchResultState = SearchResultState.IDLE;

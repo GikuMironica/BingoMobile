@@ -20,6 +20,7 @@ class Routes {
   // -- EVENT -----------------------------------------------------------------
   static String event = '/event/:id';
   static String createEvent = '/create-event';
+  static String searchByMap = createEvent + '/map';
   static String rateEvent = '/rate-event/:id';
   // -- EDIT EVENT ------------------------------------------------------------
   static String editEvent = '/edit-event';
@@ -67,6 +68,7 @@ class Routes {
     router.define(editEventPictures, handler: editEventPicturesHandler);
     router.define(editEventTime, handler: editEventTimeHandler);
     router.define(rateEvent, handler: rateEventHandler);
+    router.define(searchByMap, handler: locationSearchPageHandler);
 
     // ANNOUNCEMENT
     router.define(announcements, handler: announcementsIndexHandler);

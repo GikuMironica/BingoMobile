@@ -11,7 +11,6 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/router.dart';
 import 'package:hopaut/controllers/search_page_controller/search_page_controller.dart';
 import 'package:hopaut/data/models/identity.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/location/map_location_controller.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
 import 'package:hopaut/services/services.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -29,7 +28,11 @@ void main() async {
   serviceSetup();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-
+  await OneSignal.shared.init("fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
+      iOSSettings: {
+        OSiOSSettings.autoPrompt: false,
+        OSiOSSettings.inAppLaunchUrl: false
+      });
   try {
     await Hive.initFlutter();
     var authBox = await Hive.openBox('auth');
@@ -65,7 +68,6 @@ class _HopAutState extends State<HopAut> {
 
   @override
   void initState() {
-    // TODO: implement initState
     router = FluroRouter();
     Routes.configureRoutes(router);
     Application.router = router;
@@ -74,11 +76,7 @@ class _HopAutState extends State<HopAut> {
   }
 
   Future<void> initPlatformState() async {
-    await OneSignal.shared.init("fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
-        iOSSettings: {
-          OSiOSSettings.autoPrompt: false,
-          OSiOSSettings.inAppLaunchUrl: false
-        });
+
     OneSignal.shared
         .setInFocusDisplayType(OSNotificationDisplayType.notification);
     await OneSignal.shared
@@ -89,6 +87,8 @@ class _HopAutState extends State<HopAut> {
         nextRoute = result.notification.payload.additionalData['event'];
       });
     });
+    await OneSignal.shared.setSubscription(true);
+    await OneSignal.shared.setExternalUserId(GetIt.I.get<AuthService>().currentIdentity.id);
   }
 
   Future<void> refreshTokenTask() async {
@@ -127,10 +127,6 @@ class _HopAutState extends State<HopAut> {
               create: (context) => GetIt.I.get<EventManager>()),
           ChangeNotifierProvider<SettingsManager>(
               create: (context) => GetIt.I.get<SettingsManager>()),
-          ChangeNotifierProvider<MapLocationController>(
-            create: (context) => MapLocationController(),
-            lazy: true,
-          ),
           ChangeNotifierProvider<LoginPageController>(
             create: (_) => LoginPageController(),
             lazy: true,

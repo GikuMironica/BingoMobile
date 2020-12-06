@@ -48,7 +48,11 @@ class DioService {
         onError: (DioError error) async {
           if (error.response?.statusCode == 401) {
             RequestOptions requestOptions = error.response.request;
+            if(requestOptions.headers[HttpHeaders.contentTypeHeader] != 'application/json'){
+              _dio.options.headers[HttpHeaders.contentTypeHeader] = 'application/json';
+            }
             await GetIt.I.get<AuthService>().refreshToken();
+            _dio.options.headers[HttpHeaders.contentTypeHeader] = requestOptions.headers[HttpHeaders.contentTypeHeader];
             return _dio.request(requestOptions.path);
           } else {
             return error;

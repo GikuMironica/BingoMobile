@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
 import 'package:hopaut/presentation/screens/events/create_event.dart';
+import 'package:hopaut/presentation/screens/events/create_event/create_event.dart';
 import 'package:hopaut/presentation/screens/events/event_list/past_events.dart';
 import 'package:hopaut/presentation/widgets/hopaut_app_bar.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';

@@ -3,17 +3,21 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/currencies.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/paid_event_types.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/config/routes/router.dart';
 import 'package:hopaut/data/models/event.dart';
 import 'package:hopaut/data/models/location.dart' as PostLocation;
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/post.dart';
+import 'package:hopaut/presentation/widgets/create_event_form/time_picker.dart';
 import 'package:hopaut/presentation/widgets/currency_icons.dart';
+import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/image_conversion.dart';
 import 'package:hopaut/services/location_manager/location_manager.dart';
@@ -23,6 +27,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:jiffy/jiffy.dart';
 import '../../../services/date_formatter.dart';
 import '../../widgets/inputs/event_text_field.dart';
 import '../../widgets/inputs/event_drop_down.dart';
@@ -278,79 +283,85 @@ class _CreateEventFormState extends State<CreateEventForm> {
               padding: EdgeInsets.all(8.0),
               child: Subtitle(label: 'Event Location'),
             ),
-            Container(
-              height: 48,
-              margin: EdgeInsets.only(bottom: 24.0),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: TypeAheadFormField(
-                textFieldConfiguration: TextFieldConfiguration(
-                    keyboardType: TextInputType.text,
-                    controller: this._locationController,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(12.0),
-                        hintText: 'Event Address',
-                        border: InputBorder.none)),
-                suggestionsCallback: (pattern) async {
-                  if (pattern.length > 2) {
-                    List suggestionList = [];
-                    _searchEngine.searchByText(
-                        TextQuery.withCircleArea(
-                            pattern,
-                            GeoCircle(
-                                GeoCoordinates(
-                                    GetIt.I
-                                        .get<LocationManager>()
-                                        .currentPosition
-                                        .latitude,
-                                    GetIt.I
-                                        .get<LocationManager>()
-                                        .currentPosition
-                                        .longitude),
-                                50000)),
-                        SearchOptions(LanguageCode.deDe, 50),
-                        (e, List<Place> suggestion) =>
-                            suggestion.forEach((element) {
-                              if ([
-                                PlaceType.street,
-                                PlaceType.poi,
-                                PlaceType.unit,
-                                PlaceType.houseNumber
-                              ].contains(element.type)) {
-                                if (element.address.streetName.isNotEmpty)
-                                  suggestionList.add(addressParser(element));
-                              }
-                            }));
-                    await Future.delayed(Duration(seconds: 1));
-                    return suggestionList;
-                  }
-                  return null;
-                },
-                itemBuilder: (context, suggestion) {
-                  return ListTile(
-                    title: Text(suggestion['EntityName']),
-                    subtitle: Text(((suggestion['Address'] != '')
-                            ? '${suggestion['Address']}, '
-                            : '') +
-                        '${suggestion['Region']} ${suggestion['City']}'),
-                  );
-                },
-                transitionBuilder: (context, suggestionsBox, controller) {
-                  return suggestionsBox;
-                },
-                onSuggestionSelected: (suggestion) {
-                  print(suggestion);
-                  _post.setLocation(PostLocation.Location.fromJson(suggestion));
-                  this._locationController.text = suggestion['Address'] !=
-                          suggestion['EntityName']
-                      ? '${suggestion['EntityName']}, ${suggestion['Address']}, ${suggestion['Region']} ${suggestion['City']}'
-                      : '${suggestion['EntityName']}, ${suggestion['Region']} ${suggestion['City']}';
-                },
-                hideOnEmpty: true,
-                validator: (value) =>
-                    value.isEmpty ? 'Please confirm an address' : null,
+            InkWell(
+              onTap: () => Application.router.navigateTo(context, Routes.searchByMap).then((value) => setState(() => _post.location = value as PostLocation.Location)),
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(12.0),
+                height: 48,
+                margin: EdgeInsets.only(bottom: 24.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(_post.location?.address ?? ''),
+                // child: TypeAheadFormField(
+                //   textFieldConfiguration: TextFieldConfiguration(
+                //       keyboardType: TextInputType.text,
+                //       controller: this._locationController,
+                //       decoration: InputDecoration(
+                //           contentPadding: EdgeInsets.all(12.0),
+                //           hintText: 'Event Address',
+                //           border: InputBorder.none)),
+                //   suggestionsCallback: (pattern) async {
+                //     if (pattern.length > 2) {
+                //       List suggestionList = [];
+                //       _searchEngine.searchByText(
+                //           TextQuery.withCircleArea(
+                //               pattern,
+                //               GeoCircle(
+                //                   GeoCoordinates(
+                //                       GetIt.I
+                //                           .get<LocationManager>()
+                //                           .currentPosition
+                //                           .latitude,
+                //                       GetIt.I
+                //                           .get<LocationManager>()
+                //                           .currentPosition
+                //                           .longitude),
+                //                   50000)),
+                //           SearchOptions(LanguageCode.deDe, 50),
+                //           (e, List<Place> suggestion) =>
+                //               suggestion.forEach((element) {
+                //                 if ([
+                //                   PlaceType.street,
+                //                   PlaceType.poi,
+                //                   PlaceType.unit,
+                //                   PlaceType.houseNumber
+                //                 ].contains(element.type)) {
+                //                   if (element.address.streetName.isNotEmpty)
+                //                     suggestionList.add(addressParser(element));
+                //                 }
+                //               }));
+                //       await Future.delayed(Duration(seconds: 1));
+                //       return suggestionList;
+                //     }
+                //     return null;
+                //   },
+                //   itemBuilder: (context, suggestion) {
+                //     return ListTile(
+                //       title: Text(suggestion['EntityName']),
+                //       subtitle: Text(((suggestion['Address'] != '')
+                //               ? '${suggestion['Address']}, '
+                //               : '') +
+                //           '${suggestion['Region']} ${suggestion['City']}'),
+                //     );
+                //   },
+                //   transitionBuilder: (context, suggestionsBox, controller) {
+                //     return suggestionsBox;
+                //   },
+                //   onSuggestionSelected: (suggestion) {
+                //     print(suggestion);
+                //     _post.setLocation(PostLocation.Location.fromJson(suggestion));
+                //     this._locationController.text = suggestion['Address'] !=
+                //             suggestion['EntityName']
+                //         ? '${suggestion['EntityName']}, ${suggestion['Address']}, ${suggestion['Region']} ${suggestion['City']}'
+                //         : '${suggestion['EntityName']}, ${suggestion['Region']} ${suggestion['City']}';
+                //   },
+                //   hideOnEmpty: true,
+                //   validator: (value) =>
+                //       value.isEmpty ? 'Please confirm an address' : null,
+                // ),
               ),
             ),
             Divider(),
@@ -358,110 +369,75 @@ class _CreateEventFormState extends State<CreateEventForm> {
               padding: EdgeInsets.all(8.0),
               child: Subtitle(label: 'Event Time'),
             ),
-            Container(
-              height: 48,
-              margin: EdgeInsets.zero,
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-              ),
-              child: Theme(
-                data: ThemeData(
-                  primarySwatch: Colors.pink,
+            InkWell(
+              onTap: () async {
+                  await showDialog<DateTime>(
+                      context: context,
+                      builder: (context) => CustomDialog(
+                        pageWidget: TimePicker(
+                              minTime: DateTime.now(),
+                              maxTime: DateTime.now().add(Duration(days: 90)),
+                            ),
+                      )).then((value) => setState((){ _eventStart = value;
+                        _post.eventTime = value.millisecondsSinceEpoch ~/ 1000;
+                      }));
+                },
+              child: Container(
+                padding: EdgeInsets.all(12.0),
+                width: double.infinity,
+                height: 48,
+                margin: EdgeInsets.zero,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8)),
                 ),
-                child: DateTimeField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(12.0),
-                        hintText: 'Start Time'),
-                    format: GetIt.I.get<DateFormatter>().dateTimeFormat,
-                    onShowPicker: (context, currentValue) async {
-                      final date = await showDatePicker(
-                          context: context,
-                          initialDate: now,
-                          firstDate: now,
-                          lastDate: now.add(Duration(days: 90)));
-                      if (date != null) {
-                        final time = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.fromDateTime(
-                              currentValue ?? DateTime.now()),
-                        );
-
-                        _eventStart = DateTimeField.combine(date, time);
-                        _post.setStartTime(
-                            (_eventStart.millisecondsSinceEpoch / 1000)
-                                .floor());
-                        return _eventStart;
-                      } else {
-                        return currentValue;
-                      }
-                    },
-                    onChanged: (value) => setState(() => _eventStart = value),
-                    validator: (value) {
-                      if (value == null)
-                        return "Enter a start time for the event";
-                      if (value.isBefore(DateTime.now()))
-                        return "An event cannot start in the past.";
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _post.eventTime =
-                          (value.toUtc().millisecondsSinceEpoch / 1000).floor();
-                    }),
+                child: Theme(
+                  data: ThemeData(
+                    primarySwatch: Colors.pink,
+                  ),
+                  child: Text(_eventStart != null
+                      ? Jiffy(_eventStart).format('MMMM do yyyy, h:mm a')
+                      : 'Start Time'),
+                ),
               ),
             ),
             Divider(
               height: 1,
               color: Colors.black38,
             ),
-            Container(
-              height: 48,
-              margin: EdgeInsets.only(bottom: 24.0),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(8),
-                    bottomRight: Radius.circular(8)),
-              ),
-              child: Theme(
-                data: ThemeData(primarySwatch: Colors.pink),
-                child: DateTimeField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(12.0),
-                        hintText: 'End Time'),
-                    format: GetIt.I.get<DateFormatter>().dateTimeFormat,
-                    onShowPicker: (context, currentValue) async {
-                      if (_eventStart != null) {
-                        final date = await showDatePicker(
-                            context: context,
-                            initialDate: _eventStart,
-                            firstDate: _eventStart,
-                            lastDate: _eventStart.add(Duration(hours: 8)));
-                        if (date != null) {
-                          final time = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.fromDateTime(
-                                currentValue ?? DateTime.now()),
-                          );
-                          _post.setEndTime((DateTimeField.combine(date, time)
-                                      .millisecondsSinceEpoch /
-                                  1000)
-                              .floor());
-                          return DateTimeField.combine(date, time);
-                        } else {
-                          return currentValue;
-                        }
-                      } else {
-                        return null;
-                      }
-                    },
-                    validator: (value) => value.isBefore(_eventStart)
-                        ? "The event cannot end before it starts"
-                        : null,
-                    onSaved: (value) {}),
+            InkWell(
+              onTap: _eventStart != null ? () async {
+                await showDialog<DateTime>(
+                    context: context,
+                    builder: (context) => CustomDialog(
+                      pageWidget: TimePicker(
+                        pickerForEndTime: true,
+                        minTime: _eventStart,
+                        maxTime: _eventStart.add(Duration(hours: 12)),
+                      ),
+                    )).then((value) => setState(() => _post.endTime = value.millisecondsSinceEpoch ~/ 1000));
+              } :() {},
+              child: Container(
+                height: 48,
+                width: double.infinity,
+                padding: EdgeInsets.all(12.0),
+                margin: EdgeInsets.only(bottom: 24.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(8),
+                      bottomRight: Radius.circular(8)),
+                ),
+                child: Theme(
+                  data: ThemeData(primarySwatch: Colors.pink),
+                  child: Text(_post.endTime != null
+                      ? Jiffy(DateTime.fromMillisecondsSinceEpoch(
+                              _post.endTime * 1000))
+                          .format('MMMM do yyyy, h:mm a')
+                      : 'End Time'),
+                ),
               ),
             ),
             Divider(),
@@ -570,7 +546,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
               },
               child: Text('log toJson'),
             ),
-            RaisedButton(
+            MaterialButton(
               onPressed: !_submitButtonDisabled
                   ? () async {
                       MiniPost postRes = await GetIt.I
@@ -589,7 +565,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                       }
                     }
                   : () {},
-              child: Text('Save'),
+              child: Ink(child: Container(child: Text('Save'))),
             )
           ],
         ),

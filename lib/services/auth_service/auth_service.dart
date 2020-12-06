@@ -53,9 +53,7 @@ class AuthService with ChangeNotifier {
       refreshUser();
     }
     GetIt.I.get<DioService>().setBearerToken(data['Token']);
-    if (!oneSignalSettings) {
-      setOneSignalParams();
-    }
+
   }
 
   User get user => _user;
@@ -63,6 +61,9 @@ class AuthService with ChangeNotifier {
   Future<void> refreshUser() async {
     final User user = await GetIt.I.get<RepoLocator>().users.get(_identity.id);
     setUser(user);
+    if (!oneSignalSettings) {
+      await setOneSignalParams();
+    }
   }
 
   Future<void> setOneSignalParams() async {
