@@ -10,6 +10,7 @@ import 'package:hopaut/presentation/widgets/hopaut_app_bar.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/event_manager/event_manager.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 import 'user_active_list.dart';
 
@@ -32,6 +33,7 @@ class _EventListState extends State<EventList> {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> _tabs = ['Current', 'Past'];
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         heroTag: 'create-event',
@@ -42,51 +44,63 @@ class _EventListState extends State<EventList> {
             withNavBar: false,
             pageTransitionAnimation: PageTransitionAnimation.cupertino),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterFloat,
       extendBodyBehindAppBar: false,
       body: DefaultTabController(
         length: 2,
         child: NestedScrollView(
+          floatHeaderSlivers: true,
           headerSliverBuilder:
               (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
-            HopAutAppBar(
-              title: 'Events List',
-              actions: <Widget>[
-                IconButton(
-                  icon: SvgPicture.asset('assets/icons/svg/paper-plane-outline.svg', color: Colors.white, height: 24,),
-                  onPressed: () async {
-                    pushNewScreen(
-                      context,
-                      screen: AnnouncementsIndex(),
-                      withNavBar: false,
-                      pageTransitionAnimation:
-                          PageTransitionAnimation.cupertino,
-                    );
-                  },
-                )
-              ],
-            ),
-            SliverPersistentHeader(
-              delegate: _SliverAppBarDelegate(
-                TabBar(
-                  indicatorColor: HATheme.HOPAUT_PINK,
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.white,
-                  tabs: [
-                    Tab(text: "Current"),
-                    Tab(text: "Past"),
-                  ],
-                ),
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: MultiSliver(
+                children: [
+                  HopAutAppBar(
+                    title: 'Events List',
+                    actions: <Widget>[
+                      IconButton(
+                        icon: SvgPicture.asset(
+                          'assets/icons/svg/paper-plane-outline.svg',
+                          color: Colors.white,
+                          height: 24,
+                        ),
+                        onPressed: () async {
+                          pushNewScreen(
+                            context,
+                            screen: AnnouncementsIndex(),
+                            withNavBar: false,
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                  SliverPersistentHeader(
+                    delegate: _SliverAppBarDelegate(
+                      TabBar(
+                        indicatorColor: HATheme.HOPAUT_PINK,
+                        labelColor: Colors.white,
+                        unselectedLabelColor: Colors.white70,
+                        tabs: _tabs
+                            .map((e) => Tab(
+                                  text: e,
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                    pinned: true,
+                  ),
+                ],
               ),
-              pinned: true,
-            )
+            ),
           ],
-          body: TabBarView(
-            children: <Widget>[
-              UserActiveList(),
-              PastEventsList(),
-            ],
-          ),
+          body: TabBarView(children: <Widget>[
+            UserActiveList(),
+            PastEventsList(),
+          ]),
         ),
       ),
     );
@@ -111,9 +125,8 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.grey,
-          gradient: LinearGradient(
-              colors: [
-                Color(0xFFff9e6f),
+          gradient: LinearGradient(colors: [
+            Color(0xFFff9e6f),
             Color(0xFFf2326d),
           ]),
         ),

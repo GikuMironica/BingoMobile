@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -40,33 +41,50 @@ class _PastEventsListState extends State<PastEventsList> {
   }
 
   Widget _buildList() {
-    eventManager = Provider.of<EventManager>(context);
-    return SingleChildScrollView(
-      child: Visibility(
-        visible: eventManager.userInactiveList.length != 0,
-        child: ListView.builder(
-          primary: false,
-          shrinkWrap: true,
-          itemCount: eventManager.userInactiveList.length,
-          itemBuilder: (ctx, idx) => InkWell(
-            onTap: () => pushNewScreen(context,
-                screen: EventPage(
-                  postId: eventManager.userInactiveList[idx].postId,
+    return Consumer<EventManager>(
+      builder: (context, eventManager, child) {
+        if(eventManager.userInactiveListState == ListState.LOADING){
+          return Center(
+            child: CupertinoActivityIndicator(),
+          );
+        } else {
+          if(eventManager.userInactiveListState == ListState.IDLE){
+            if (eventManager.userInactiveList.isNotEmpty) {
+              return SafeArea(
+                top: false,
+                bottom: false,
+                child: CustomScrollView(
+                  primary: true,
+                  slivers: [SliverOverlapInjector(
+                    // This is the flip side of the SliverOverlapAbsorber
+                    // above.
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                  ),
+                    SliverPadding(padding: EdgeInsets.symmetric(vertical: 16.0),
+                      sliver: SliverFixedExtentList(
+                        itemExtent: 136,
+                        delegate: SliverChildBuilderDelegate(
+                              (ctx, index) => InkWell(
+                            onTap: () => pushNewScreen(
+                                context,
+                                screen: EventPage(postId: eventManager.userInactiveList[index].postId,),
+                                withNavBar: false,
+                                pageTransitionAnimation: PageTransitionAnimation.fade),
+                            child: MiniPostCard(miniPost: eventManager.userInactiveList[index],),
+                          ),
+                          childCount: eventManager.userInactiveList.length,
+                        ),
+                      ),),],
                 ),
-                withNavBar: false,
-                pageTransitionAnimation: PageTransitionAnimation.fade),
-            child: MiniPostCard(
-              miniPost: eventManager.userInactiveList[idx],
-            ),
-          ),
-        ),
-        replacement: Center(
-          child: Text(
-            'No Events',
-            style: TextStyle(fontSize: 24, color: Colors.grey),
-          ),
-        ),
-      ),
+              );
+            } else {
+              return Center(child: Text('No Events'));
+            }
+          }
+        }
+        return Center(child: Text('No Events'));
+      },
     );
   }
 }

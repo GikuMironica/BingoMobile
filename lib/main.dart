@@ -87,8 +87,15 @@ class _HopAutState extends State<HopAut> {
         nextRoute = result.notification.payload.additionalData['event'];
       });
     });
-    await OneSignal.shared.setSubscription(true);
-    await OneSignal.shared.setExternalUserId(GetIt.I.get<AuthService>().currentIdentity.id);
+    if(GetIt.I.get<AuthService>().currentIdentity != null) {
+      await OneSignal.shared.setSubscription(true);
+      await OneSignal.shared.setExternalUserId(GetIt.I
+          .get<AuthService>()
+          .currentIdentity
+          .id);
+    } else {
+      await OneSignal.shared.setSubscription(false);
+    }
   }
 
   Future<void> refreshTokenTask() async {

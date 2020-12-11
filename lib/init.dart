@@ -45,6 +45,8 @@ class _InitializationState extends State<Initialization> {
                   transitionDuration: Duration(milliseconds: 0)))
           : HomePage(route: widget.route);
     }
+
+
     return Stack(children: [
       Container(
         width: MediaQuery.of(context).size.width,

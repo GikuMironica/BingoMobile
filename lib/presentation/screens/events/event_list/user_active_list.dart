@@ -32,32 +32,50 @@ class _UserActiveListState extends State<UserActiveList> {
   }
 
   Widget _buildList() {
-    return Container(
-      child: Consumer<EventManager>(
-        builder: (context, eventManager, child) {
-          if(eventManager.userActiveListState == ListState.LOADING){
-            return Center(
-              child: CupertinoActivityIndicator(),
-            );
-          } else {
-            if(eventManager.userActiveListState == ListState.IDLE){
-              return ListView.builder(
-                itemBuilder: (context, index) => InkWell(
-                  onTap: () => pushNewScreen(
-                      context,
-                      screen: EventPage(postId: eventManager.userActiveList[index].postId,),
-                      withNavBar: false,
-                      pageTransitionAnimation: PageTransitionAnimation.fade),
-                  child: MiniPostCard(miniPost: eventManager.userActiveList[index],),
+    return Consumer<EventManager>(
+      builder: (context, eventManager, child) {
+        if(eventManager.userActiveListState == ListState.LOADING){
+          return Center(
+            child: CupertinoActivityIndicator(),
+          );
+        } else {
+          if(eventManager.userActiveListState == ListState.IDLE){
+            if (eventManager.userActiveList.isNotEmpty) {
+              return SafeArea(
+                top: false,
+                bottom: false,
+                child: CustomScrollView(
+                  primary: true,
+                slivers: [SliverOverlapInjector(
+                  // This is the flip side of the SliverOverlapAbsorber
+                  // above.
+                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                      context),
                 ),
-                itemCount: eventManager.userActiveList.length,
-                shrinkWrap: true,
+                  SliverPadding(padding: EdgeInsets.symmetric(vertical: 16.0),
+                  sliver: SliverFixedExtentList(
+                    itemExtent: 136,
+                    delegate: SliverChildBuilderDelegate(
+                        (ctx, index) => InkWell(
+                          onTap: () => pushNewScreen(
+                              context,
+                              screen: EventPage(postId: eventManager.userActiveList[index].postId,),
+                              withNavBar: false,
+                              pageTransitionAnimation: PageTransitionAnimation.fade),
+                          child: MiniPostCard(miniPost: eventManager.userActiveList[index],),
+                        ),
+                      childCount: eventManager.userActiveList.length,
+                    ),
+                  ),),],
+            ),
               );
+            } else {
+              return Center(child: Text('No Events'));
             }
           }
-          return Center(child: Text('No Events'));
-        },
-      ),
+        }
+        return Center(child: Text('No Events'));
+      },
     );
   }
 

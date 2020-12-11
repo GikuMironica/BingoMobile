@@ -27,9 +27,7 @@ class _InactiveAttendedEventsListState
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: _buildList(context),
-    );
+    return _buildList(context);
   }
 
   Widget _buildList(BuildContext context) {
@@ -41,7 +39,7 @@ class _InactiveAttendedEventsListState
             );
           } else {
             if(eventManager.inactiveHopautsListState == ListState.IDLE){
-              return ListView.builder(
+              return eventManager.inactiveHopauts.isNotEmpty ? ListView.builder(
                 itemBuilder: (context, index) => InkWell(
                   onTap: () => pushNewScreen(
                       context,
@@ -52,7 +50,8 @@ class _InactiveAttendedEventsListState
                 ),
                 itemCount: eventManager.inactiveHopauts.length,
                 shrinkWrap: true,
-              );
+                primary: false,
+              ) : Center(child: Text('No Events'));
             }
           }
           return Center(child: Text('No Events'));
