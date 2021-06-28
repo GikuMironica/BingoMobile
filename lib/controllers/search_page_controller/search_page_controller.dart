@@ -7,14 +7,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
-import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
-import 'package:hopaut/presentation/screens/search/search.dart';
+import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
 import 'package:hopaut/services/location_manager/location_manager.dart';
 import 'package:hopaut/services/repo_locator/repo_locator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 enum SearchPageState {
   IDLE,
@@ -24,10 +24,7 @@ enum SearchPageState {
   ERROR,
 }
 
-enum MapState {
-  LOADING,
-  LOADED
-}
+enum MapState { LOADING, LOADED }
 
 class SearchPageController extends ChangeNotifier {
   SearchPageState _pageState;
@@ -82,7 +79,7 @@ class SearchPageController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setMapState(MapState mapState){
+  void setMapState(MapState mapState) {
     _mapState = mapState;
     notifyListeners();
   }
@@ -92,8 +89,10 @@ class SearchPageController extends ChangeNotifier {
       if (_searchResults.isNotEmpty) {
         for (MiniPost mp in _searchResults) {
           _cardList.add(InkWell(
-            onTap: () =>
-                Application.router.navigateTo(context, '/event/${mp.postId}'),
+            onTap: () => pushNewScreen(context,
+                screen: EventPage(postId: mp.postId),
+                withNavBar: false,
+                pageTransitionAnimation: PageTransitionAnimation.fade),
             child: MiniPostCard(miniPost: mp),
           ));
         }
@@ -186,15 +185,15 @@ class SearchPageController extends ChangeNotifier {
             .lookAtPointWithDistance(geoCoordinates, distanceToEarthInMeters);
         GeoCircle geoCircle = GeoCircle(geoCoordinates, 15000);
         MapPolygon mapPolygon = MapPolygon(
-            GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.05));
+            GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.01));
         _hereMapController.mapScene.addMapPolygon(mapPolygon);
 
         // Show the user on the map.
-        MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight('assets/icons/map/radio-button-off-outline.svg', 48, 48);
+        MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
+            'assets/icons/map/radio-button-off-outline.svg', 48, 48);
         MapMarker userMarker = MapMarker(geoCoordinates, userMarkerSvg);
 
         _hereMapController.mapScene.addMapMarker(userMarker);
-
 
         setMapState(MapState.LOADED);
         searchEvents();
@@ -204,7 +203,7 @@ class SearchPageController extends ChangeNotifier {
     });
   }
 
-  void filterToggleBar(){
+  void filterToggleBar() {
     searchQuery.bar = !searchQuery.bar;
     notifyListeners();
   }
@@ -224,28 +223,32 @@ class SearchPageController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void filterToggleBicycleMeet(){
+  void filterToggleBicycleMeet() {
     searchQuery.bicycleMeet = !searchQuery.bicycleMeet;
     notifyListeners();
   }
-  void filterToggleBikerMeet(){
+
+  void filterToggleBikerMeet() {
     searchQuery.bikerMeet = !searchQuery.bikerMeet;
     notifyListeners();
   }
+
   void filterToggleCarMeet() {
     searchQuery.carMeet = !searchQuery.carMeet;
     notifyListeners();
   }
-  void filterToggleMarathon(){
+
+  void filterToggleMarathon() {
     searchQuery.marathon = !searchQuery.marathon;
     notifyListeners();
   }
 
-  void filterToggleOthers(){
+  void filterToggleOthers() {
     searchQuery.other = !searchQuery.other;
     notifyListeners();
   }
-  void filterToggleToday(){
+
+  void filterToggleToday() {
     searchQuery.today = !searchQuery.today;
     notifyListeners();
   }

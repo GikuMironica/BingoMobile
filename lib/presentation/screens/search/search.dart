@@ -1,13 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:hopaut/controllers/search_page_controller/search_page_controller.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/services/location_manager/location_manager.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
@@ -31,10 +31,11 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       floatingActionButton: FloatingActionButton(
-        child: SvgPicture.asset(
-          'assets/icons/svg/locate-outline.svg',
-          color: Colors.black,
-          height: 24,
+        mini: true,
+        child: Icon(
+          Ionicons.locate_outline,
+          color: Colors.white,
+          size: 16,
         ),
         onPressed: () => controller.mapController.camera.lookAtPoint(
             GeoCoordinates(
@@ -96,32 +97,32 @@ class _SearchPageState extends State<SearchPage> {
                   )),
             ),
           ),
-          Visibility(
-            visible: controller.pageState == SearchPageState.HAS_SEARCH_RESULTS,
-            child: Positioned(
-              bottom: 160,
-              right: 20,
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  child: Card(
-                      elevation: 10,
-                      color: Colors.transparent,
-                      clipBehavior: Clip.antiAlias,
-                      shape: CircleBorder(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: Icon(
-                          Icons.close,
-                          color: Colors.white,
-                          size: 16,
-                        ),
-                      )),
-                  onTap: () => controller.clearSearch(),
-                ),
-              ),
-            ),
-          )
+          // Visibility(
+          //   visible: controller.pageState == SearchPageState.HAS_SEARCH_RESULTS,
+          //   child: Positioned(
+          //     bottom: 160,
+          //     right: 20,
+          //     child: Material(
+          //       color: Colors.transparent,
+          //       child: InkWell(
+          //         child: Card(
+          //             elevation: 10,
+          //             color: Colors.transparent,
+          //             clipBehavior: Clip.antiAlias,
+          //             shape: CircleBorder(),
+          //             child: Padding(
+          //               padding: const EdgeInsets.all(3.0),
+          //               child: Icon(
+          //                 Icons.close,
+          //                 color: Colors.white,
+          //                 size: 16,
+          //               ),
+          //             )),
+          //         onTap: () => controller.clearSearch(),
+          //       ),
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );
@@ -144,8 +145,12 @@ class _SearchPageState extends State<SearchPage> {
                 Row(
                   children: [
                     Icon(
-                      Icons.search,
-                      color: Colors.black,
+                      Ionicons.search_outline,
+                      color: Color(0xFFED2F65),
+                    ),
+                    VerticalDivider(
+                      width: 3,
+                      color: Color(0xFFED2F65),
                     ),
                     Expanded(
                       child: TextField(
@@ -153,7 +158,7 @@ class _SearchPageState extends State<SearchPage> {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.only(left: 8.0),
-                          hintText: 'Search',
+                          hintText: 'Search for events',
                           hintStyle: TextStyle(
                             color: Color(0xFF818181).withOpacity(0.69),
                             fontSize: 14.0,
@@ -162,20 +167,13 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () => con.toggleFilter(),
-                      child: Container(
-                        height: 34.0,
-                        width: 33.0,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFED2F65),
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Center(
-                          child: Image.asset('assets/icons/filter.png'),
-                        ),
+                    IconButton(
+                      icon: Icon(
+                        Ionicons.options_outline,
+                        color: Color(0xFFED2F65),
                       ),
-                    ),
+                      onPressed: () => con.toggleFilter(),
+                    )
                   ],
                 ),
                 if (con.filter) ...[

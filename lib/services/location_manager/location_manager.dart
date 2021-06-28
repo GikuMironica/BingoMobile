@@ -19,6 +19,8 @@ class LocationManager {
       await getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     } else {
       print("Location permission was not granted.");
+      await Permission.location.request();
+      getCurrentLocation();
     }
   }
 }

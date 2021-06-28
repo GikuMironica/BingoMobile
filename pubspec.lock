@@ -353,7 +353,7 @@ packages:
       path: "plugins/here_sdk"
       relative: true
     source: path
-    version: "4.5.0"
+    version: "4.6.4"
   hive:
     dependency: "direct main"
     description:
@@ -431,6 +431,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.1"
+  ionicons:
+    dependency: "direct main"
+    description:
+      name: ionicons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   jiffy:
     dependency: "direct main"
     description:
@@ -836,5 +843,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: "2.10.4"
+  dart: "2.10.5"
   flutter: ">=1.22.2 <2.0.0"

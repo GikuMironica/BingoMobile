@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/presentation/screens/account/account.dart';
 import 'package:hopaut/presentation/screens/account/account_page/account_page.dart';
-import 'package:hopaut/presentation/screens/events/participation/attending_list.dart';
 import 'package:hopaut/presentation/screens/events/event_list/event_list.dart';
+import 'package:hopaut/presentation/screens/events/participation/attending_list.dart';
 import 'package:hopaut/presentation/screens/search/search.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -22,16 +21,14 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _controller = PersistentTabController(initialIndex: 0);
     super.initState();
-    if(widget.route != null){
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => Application.router.navigateTo(context, widget.route));
-
+    if (widget.route != null) {
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) => Application.router.navigateTo(context, widget.route));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return PersistentTabView(
       controller: _controller,
       screens: _buildScreens(),
@@ -44,24 +41,25 @@ class _HomePageState extends State<HomePage> {
       hideNavigationBarWhenKeyboardShows: true,
       decoration: NavBarDecoration(
         border: Border(
-          top: BorderSide(
-            color: Colors.grey[300],
-            width: 1.0,
-          )
-        ),
+            top: BorderSide(
+          color: Colors.grey[300],
+          width: 1.0,
+        )),
         colorBehindNavBar: Colors.transparent,
       ),
       popAllScreensOnTapOfSelectedTab: true,
-      itemAnimationProperties: ItemAnimationProperties( // Navigation Bar's items animation properties.
+      itemAnimationProperties: ItemAnimationProperties(
+        // Navigation Bar's items animation properties.
         duration: Duration(milliseconds: 200),
         curve: Curves.ease,
       ),
-      screenTransitionAnimation: ScreenTransitionAnimation( // Screen transition animation on change of selected tab.
+      screenTransitionAnimation: ScreenTransitionAnimation(
+        // Screen transition animation on change of selected tab.
         animateTabTransition: false,
         curve: Curves.ease,
         duration: Duration(milliseconds: 100),
       ),
-      navBarStyle: NavBarStyle.style6,
+      navBarStyle: NavBarStyle.style12,
     );
   }
 

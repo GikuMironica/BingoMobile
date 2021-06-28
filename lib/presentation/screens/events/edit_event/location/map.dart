@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:get_it/get_it.dart';
-import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/constants.dart';
@@ -9,8 +7,6 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/location.dart' as HopautLocation;
 import 'package:hopaut/presentation/screens/events/edit_event/location/map_location_controller.dart';
 import 'package:hopaut/presentation/widgets/buttons/basic_button.dart';
-import 'package:hopaut/presentation/widgets/buttons/gradient_box_decoration.dart';
-import 'package:hopaut/services/location_manager/location_manager.dart';
 import 'package:provider/provider.dart';
 
 class SearchByMap extends StatefulWidget {
@@ -53,7 +49,7 @@ class _SearchByMapState extends State<SearchByMap> {
                   blurRadius: 2)
             ]),
           ),
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.black38,
           elevation: 0,
         ),
         body: Stack(
@@ -62,9 +58,11 @@ class _SearchByMapState extends State<SearchByMap> {
               padding: EdgeInsets.zero,
               height: MediaQuery.of(context).size.height,
               width: double.infinity,
-              child: Consumer<MapLocationController>(
-                builder: (_, mapController, __) => HereMap(
-                  onMapCreated: mapController.onMapCreated,
+              child: RepaintBoundary(
+                child: Consumer<MapLocationController>(
+                  builder: (_, mapController, __) => HereMap(
+                    onMapCreated: mapController.onMapCreated,
+                  ),
                 ),
               ),
             ),
@@ -98,24 +96,40 @@ class _SearchByMapState extends State<SearchByMap> {
                 child: Align(
               alignment: Alignment.topCenter,
               child: Consumer<MapLocationController>(
-                builder: (_, mapController, __) => TypeAheadField(
-                  textFieldConfiguration: TextFieldConfiguration(
-                      keyboardType: TextInputType.text,
-                      controller: mapController.searchBarController,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(12.0),
-                        hintText: 'Search',
-                        border: InputBorder.none,
-                      )),
-                  suggestionsCallback: (pattern) async =>
-                      await mapController.getAutocompleteResult(pattern),
-                  itemBuilder: (context, Place suggestion) => ListTile(
-                    title: Text(suggestion.title),
+                builder: (_, mapController, __) => Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.grey[200].withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey[300].withOpacity(0.7)),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.07),
+                              blurRadius: 3.0,
+                              spreadRadius: 2.0,
+                          offset: Offset(0,1.5))
+                        ]),
+                    child: TypeAheadField(
+                      textFieldConfiguration: TextFieldConfiguration(
+                          keyboardType: TextInputType.text,
+                          controller: mapController.searchBarController,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(12.0),
+                            hintText: 'Search',
+                            border: InputBorder.none,
+                          )),
+                      suggestionsCallback: (pattern) async =>
+                          await mapController.getAutocompleteResult(pattern),
+                      itemBuilder: (context, Place suggestion) => ListTile(
+                        title: Text(suggestion.title),
+                      ),
+                      onSuggestionSelected: (Place suggestion) =>
+                          mapController.addToSearchResult(suggestion),
+                      hideOnEmpty: true,
+                      hideOnError: true,
+                    ),
                   ),
-                  onSuggestionSelected: (Place suggestion) =>
-                      mapController.addToSearchResult(suggestion),
-                  hideOnEmpty: true,
-                  hideOnError: true,
                 ),
               ),
             )),
@@ -123,24 +137,26 @@ class _SearchByMapState extends State<SearchByMap> {
               child: Consumer<MapLocationController>(
                 builder: (_, mapController, __) => Visibility(
                   visible: mapController.searchResults.isNotEmpty,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(5),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Container(
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: ListView.builder(
+                            itemCount: mapController.searchResults.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(
+                                    mapController.searchResults[index].title),
+                              );
+                            }),
                       ),
-                      child: ListView.builder(
-                          itemCount: mapController.searchResults.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(
-                                  mapController.searchResults[index].title),
-                            );
-                          }),
                     ),
                   ),
                 ),

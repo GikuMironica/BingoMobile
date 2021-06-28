@@ -57,11 +57,14 @@ class _UserActiveListState extends State<UserActiveList> {
                     itemExtent: 136,
                     delegate: SliverChildBuilderDelegate(
                         (ctx, index) => InkWell(
-                          onTap: () => pushNewScreen(
+                          onTap: ()async {
+                            GetIt.I.get<EventManager>().setMiniPostContext(index);
+                            await pushNewScreen(
                               context,
                               screen: EventPage(postId: eventManager.userActiveList[index].postId,),
                               withNavBar: false,
-                              pageTransitionAnimation: PageTransitionAnimation.fade),
+                              pageTransitionAnimation: PageTransitionAnimation.fade);
+                          },
                           child: MiniPostCard(miniPost: eventManager.userActiveList[index],),
                         ),
                       childCount: eventManager.userActiveList.length,

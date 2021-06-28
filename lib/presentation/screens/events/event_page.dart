@@ -81,7 +81,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
     if (post.pictures.length != 0) {
       postHasPictures = true;
       for (String picture in post.pictures) {
-        _postImages.add(CachedNetworkImageProvider('${WEB.IMAGES}/$picture.webp'));
+        _postImages
+            .add(CachedNetworkImageProvider('${WEB.IMAGES}/$picture.webp'));
       }
     }
   }
@@ -238,6 +239,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                       ),
                       SizedBox(height: 4),
                       Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: <Widget>[
                           SizedBox(
                             width: 1,

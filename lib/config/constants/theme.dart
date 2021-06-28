@@ -1,17 +1,18 @@
-import 'dart:ui';
-import 'package:flutter/material.dart';
 import 'dart:io';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 class HATheme {
   static const Color HOPAUT_ORANGE = Color(0xFFFFBE6A);
   static const Color HOPAUT_PINK = Color(0xFFED2F65);
 
   static Icon backButton =
-  Platform.isIOS ? Icon(Icons.arrow_back_ios) : Icon(Icons.arrow_back);
+      Platform.isIOS ? Icon(Icons.arrow_back_ios) : Icon(Icons.arrow_back);
 
   static ThemeData themeData = ThemeData(
     primaryColor: HOPAUT_PINK,
-    fontFamily: 'Open Sans',
+    fontFamily: 'Poppins',
     primarySwatch: Colors.pink,
     accentColor: HOPAUT_PINK,
     accentColorBrightness: Brightness.light,
@@ -31,6 +32,6 @@ class HATheme {
     const Color(0xFFf2326d), // blue sky
   ], begin: Alignment.centerLeft, end: Alignment.centerRight);
 
-  static const BoxDecoration GRADIENT_DECORATION = BoxDecoration(
-      gradient: APP_GRADIENT);
+  static const BoxDecoration GRADIENT_DECORATION =
+      BoxDecoration(gradient: APP_GRADIENT);
 }

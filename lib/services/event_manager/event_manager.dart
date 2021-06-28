@@ -127,6 +127,10 @@ class EventManager with ChangeNotifier {
     postContext = post;
   }
 
+  void setMiniPostContext(int id){
+    miniPostContextId = id;
+  }
+
   Post get getPostContext {
     return postContext;
   }
