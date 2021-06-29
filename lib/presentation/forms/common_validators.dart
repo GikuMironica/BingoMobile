@@ -18,5 +18,4 @@ mixin Validator {
         : sink.addError("Passwords must be 8 characters long, be alpha-numeric, "
         "and contain at least 1 uppercase letter.")
   );
-    
 }

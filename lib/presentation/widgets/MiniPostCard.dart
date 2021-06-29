@@ -1,7 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/data/models/mini_post.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'package:ionicons/ionicons.dart';
+import 'package:jiffy/jiffy.dart';
 
 class MiniPostCard extends StatelessWidget {
   final MiniPost miniPost;
@@ -10,124 +11,130 @@ class MiniPostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-//      onTap: () => Navigator.of(context).push(
-//        PageTransition(
-//          child: EventPage(tag: tag),
-//          type: PageTransitionType.downToUp,
-//        ),
-//      ),
-      child: Material(
-        color: Colors.transparent,
-        child: Padding(
-          padding: EdgeInsets.only(bottom: 16),
-          child: Container(
-          height: 136.0,
-          width: MediaQuery.of(context).size.width * 0.8,
-          margin: EdgeInsets.symmetric(horizontal: 16.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
+    return Material(
+      color: Colors.transparent,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        child: Container(
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height / 5,
+          decoration: ShapeDecoration(
             color: Colors.white,
-            boxShadow: [
+            shadows: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                offset: Offset(4, 4),
-                blurRadius: 6.0,
-              ),
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 5,
+                  spreadRadius: 0,
+                  offset: Offset(0, 5)),
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  blurRadius: 5,
+                  spreadRadius: -2,
+                  offset: Offset(5, 0)),
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  blurRadius: 5,
+                  spreadRadius: -2,
+                  offset: Offset(-5, 0)),
             ],
+            shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.horizontal(
+                  left: Radius.elliptical(240, 50),
+                  right: Radius.elliptical(240, 50)),
+            ),
           ),
           child: Row(
             children: [
               Container(
-                  width: 108.0,
-                  height: 136.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(10)
-                    ),
-                    image: DecorationImage(
-                      image: miniPost.thumbnail != null ? NetworkImage(miniPost.thumbnailUrl) : AssetImage('assets/images/bg_placeholder.jpg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            miniPost.title,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                                  Text(
-                                    miniPost.type,
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                  Icon(
-                                    MdiIcons.circleSmall,
-                                    color: Colors.black54,
-                                    size: 11,
-                                  ),
-                                  Icon(MdiIcons.mapMarker, size: 14.0, color: Colors.black54,),
-                                  Expanded(
-                                    child: Text(miniPost.address ?? "No Address",
-                                  softWrap: false,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 12.0,
-                                    ),
-                                  ),
-                                  ),
-                            ],
-                          ),
-                          SizedBox(height: 16,),
-                          Row(
-                            children: <Widget>[
-                              Wrap(
-                                spacing: 8,
-                                children: <Widget>[
-                                  Icon(MdiIcons.calendarBlankOutline, size: 14,),
-                                  Text(miniPost.getStartTime, style: TextStyle(fontSize: 12),),
-                                ],
-                              )
-                            ],
-                          ),
-                          Spacer(),
-                          Row(
-                            children: <Widget>[
-                              Visibility(
-                                visible: DateTime.now().isAfter(miniPost.getStartTimeAsDT) && DateTime.now().isBefore(miniPost.getEndTimeAsDT),
-                                child: Text(
-                                  'Happening now',
-                                  style: TextStyle(color: Colors.green, fontSize: 12),
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                timeago.format(DateTime.now().subtract(DateTime.now().difference(miniPost.getPostTimeAsDT))),
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 12.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                width: MediaQuery.of(context).size.width / 3.5,
+                height: MediaQuery.of(context).size.height / 5,
+                decoration: ShapeDecoration(
+                    shape: ContinuousRectangleBorder(
+                      borderRadius: BorderRadius.horizontal(
+                        left: Radius.elliptical(240, 50),
                       ),
                     ),
+                    image: DecorationImage(
+                      image: miniPost.thumbnail != null
+                          ? CachedNetworkImageProvider(miniPost.thumbnailUrl)
+                          : AssetImage('assets/images/bg_placeholder.jpg'),
+                      fit: BoxFit.cover,
+                    )),
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        miniPost.type,
+                        style:
+                            TextStyle(color: Color(0xFF9A9DB2), fontSize: 11),
+                      ),
+                      FittedBox(
+                        child: Text(
+                          miniPost.title,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      FittedBox(
+                          child: Text(
+                        miniPost.address,
+                        style: TextStyle(
+                            color: Color(0xFF747686),
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400),
+                      )),
+                      Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Ionicons.calendar_clear_outline,
+                              size: 14,
+                              color: Color(0xFF747686),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Text(
+                              Jiffy.unix(miniPost.startTime).format('d.M.y'),
+                              style: TextStyle(
+                                  color: Color(0xFF747686),
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            Spacer(),
+                            Icon(
+                              Ionicons.time_outline,
+                              size: 14,
+                              color: Color(0xFF747686),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Text(
+                              Jiffy.unix(miniPost.startTime).Hm,
+                              style: TextStyle(
+                                  color: Color(0xFF747686),
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w400),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
                   ),
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

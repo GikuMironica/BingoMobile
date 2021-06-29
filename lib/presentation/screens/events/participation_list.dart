@@ -2,8 +2,8 @@ import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/config/urls.dart';
 import 'package:hopaut/presentation/widgets/dialogs/profile_dialog.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/services.dart';
@@ -39,7 +39,7 @@ class _ParticipationListState extends State<ParticipationList> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: HATheme.backButton,
           onPressed: () => Application.router.pop(context),
         ),
         title: Text('Member List'),
@@ -84,7 +84,7 @@ class _ParticipationListState extends State<ParticipationList> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     onTap: () async => showDialog(context: context, builder: (context) => ProfileDialog(userId: _participators[index]['Id'],)),
-                    leading: CircleAvatar(backgroundImage: NetworkImage('${webUrl['baseUrl']}${webUrl['profiles']}/${_participators[index]['Picture']}.webp'),),
+                    leading: CircleAvatar(backgroundImage: NetworkImage('${WEB.PROFILE_PICTURES}/${_participators[index]['Picture']}.webp'),),
                     title: Text('${_participators[index]['FirstName']} ${_participators[index]['LastName']}'),
                     trailing: Wrap(
                       children: <Widget>[

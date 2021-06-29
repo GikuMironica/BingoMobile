@@ -1,22 +1,23 @@
+import 'package:hopaut/config/constants.dart';
+
 class Announcement {
-  int id;
   int postId;
-  String message;
-  int timestamp;
+  int postType;
+  String thumbnail;
+  String lastMessage;
+  int lastMessageTime;
+  String title;
 
-  Announcement({this.id, this.postId, this.message, this.timestamp});
+  String get thumbnailUrl => '${WEB.IMAGES}/$thumbnail.webp';
 
-  Announcement.fromJson(Map<String, dynamic> json) {
-    id = json['Id'];
+  Announcement({this.postId, this.postType, this.thumbnail, this.lastMessage, this.lastMessageTime, this.title});
+
+  Announcement.fromJson(Map<String, dynamic> json){
     postId = json['PostId'];
-    message = json['Message'];
-    timestamp = json['Timestamp'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['PostId'] = this.postId;
-    data['Message'] = this.message;
-    return data;
+    postType = json['PostType'];
+    thumbnail = json['Thumbnail'];
+    lastMessage = json['LastMessage'];
+    lastMessageTime = json['LastMessageTime'];
+    title = json['Title'];
   }
 }

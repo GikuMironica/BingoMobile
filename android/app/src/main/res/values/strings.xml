@@ -2,12 +2,13 @@
 <resources>
     <string name="app_name">HopAut</string>
 
-    <!-- Replace "000000000000" with your Facebook App ID here. -->
-    <string name="facebook_app_id">218732049417470</string>
+    <!-- Here SDK Key ID -->
+    <string name="here_key_id">jhGYNi0TwTYhkR_gHINssw</string>
+    <!-- Here SDK Secret -->
+    <string name="here_secret">ERW6aOR-thhVDaEK87acFczpXSoOH3YxtNrid1ecwI80HpYJ3pMwT1CeW_xwXX5JYfvKu1QShU683rYdnfGhUQ</string>
 
-    <!--
-      Replace "000000000000" with your Facebook App ID here.
-      **NOTE**: The scheme needs to start with `fb` and then your ID.
-    -->
+    <!-- Facebook App ID -->
+    <string name="facebook_app_id">218732049417470</string>
+    <!-- Facebook Login Protocol Scheme, "fb<app id>" -->
     <string name="fb_login_protocol_scheme">fb218732049417470</string>
 </resources>

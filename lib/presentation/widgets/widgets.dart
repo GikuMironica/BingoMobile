@@ -55,9 +55,8 @@ Widget forgotPasswordPrompt(Function function, bool loginMode) {
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
       FlatButton(
-        child: Text(loginMode
-            ? 'Forgot Password?'
-            : 'Already know your password?'),
+        child: Text(
+            loginMode ? 'Forgot Password?' : 'Already know your password?'),
         onPressed: function,
       ),
     ],
@@ -74,7 +73,7 @@ Widget accountAlreadyPrompt(BuildContext context) {
               transitionDuration: Duration());
         },
         child:
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
           Text('Already have an account? '),
           Text(
             'Login',
@@ -94,7 +93,7 @@ Widget noAccountYetPrompt(BuildContext context) {
             transitionDuration: Duration());
       },
       child:
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
         Text('Don\'t have an account yet? '),
         Text(
           'Sign up',
@@ -122,7 +121,7 @@ Widget authActionButton({String text, BuildContext context}) {
       ),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.3),
+          color: Colors.grey.withOpacity(0.17),
           offset: Offset(2.5, 7),
           blurRadius: 7,
         ),
@@ -130,7 +129,11 @@ Widget authActionButton({String text, BuildContext context}) {
     ),
     child: MaterialButton(
       onPressed: () async {
-        await GetIt.I.get<AuthService>().loginWithEmail('cixi@getnada.com', 'Trevor13').then((value) => Application.router.navigateTo(context, '/account')).catchError(() => Fluttertoast.showToast(msg: 'Unable to login'));
+        await GetIt.I
+            .get<AuthService>()
+            .loginWithEmail('cixi@getnada.com', 'Trevor13')
+            .then((value) => Application.router.navigateTo(context, '/account'))
+            .catchError(() => Fluttertoast.showToast(msg: 'Unable to login'));
       },
       elevation: 100,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),

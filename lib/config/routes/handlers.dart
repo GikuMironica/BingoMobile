@@ -1,20 +1,29 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/init.dart';
-import 'package:hopaut/presentation/screens/account/account.dart';
+import 'package:hopaut/presentation/screens/account/account_page/account_page.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/edit_account.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/edit_description.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/edit_name.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/edit_profile_picture.dart';
+import 'package:hopaut/presentation/screens/announcements/announcement_screen.dart';
+import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
+import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
 import 'package:hopaut/presentation/screens/events/create_event.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/description/description.dart';
+import 'package:hopaut/presentation/screens/events/create_event/create_event.dart';
+import 'package:hopaut/presentation/screens/events/edit_event/description.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/edit_event.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/pictures/pictures.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/requirements/requirements.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/tags/tags.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/time/time.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/title/title.dart';
+import 'package:hopaut/presentation/screens/events/edit_event/location/map.dart';
+import 'package:hopaut/presentation/screens/events/edit_event/pictures.dart';
+import 'package:hopaut/presentation/screens/events/edit_event/requirements.dart';
+import 'package:hopaut/presentation/screens/events/edit_event/tags.dart';
+import 'package:hopaut/presentation/screens/events/edit_event/time.dart';
+import 'package:hopaut/presentation/screens/events/edit_event/title.dart';
 import 'package:hopaut/presentation/screens/events/event_list/event_list.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/screens/events/rate_event/rate_event.dart';
 import 'package:hopaut/presentation/screens/home_page.dart';
-import 'package:hopaut/presentation/screens/login/login.dart';
+import 'package:hopaut/presentation/screens/authentication/login/login.dart';
 import 'package:hopaut/presentation/screens/registration/registration.dart';
 import 'package:hopaut/presentation/screens/settings/change_password.dart';
 import 'package:hopaut/presentation/screens/settings/settings.dart';
@@ -25,14 +34,31 @@ var rootHandler = new Handler(
   return Initialization();
 });
 
- var homeHandler = new Handler(
-   handlerFunc: (BuildContext context, Map<String, List<String>> params){
-     return HomePage();
-   });
+var homeHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return HomePage();
+});
 
 var accountHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return Account();
+  return AccountPage();
+});
+var editAccountHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return EditAccountPage();
+});
+
+var editAccountNameHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return EditAccountName();
+});
+var editAccountDescriptionHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return EditAccountDescription();
+});
+var editAccountPictureHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return EditAccountPicture();
 });
 
 var registrationHandler = new Handler(
@@ -65,7 +91,7 @@ var rateEventHandler = new Handler(
 
 var createEventHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return CreateEventForm();
+  return CreateEventPage();
 });
 
 var editEventHandler = new Handler(
@@ -75,8 +101,8 @@ var editEventHandler = new Handler(
 
 var eventListHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-      return EventList();
-    });
+  return EventList();
+});
 
 var editEventDescriptionHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -98,6 +124,12 @@ var editEventTitleHandler = new Handler(
   return EditPostTitle();
 });
 
+var locationSearchPageHandler = Handler(
+  handlerFunc: (BuildContext ctx, Map<String, List<String>> params) {
+    return SearchByMap();
+  }
+);
+
 var editEventTimeHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return EditPostTime();
@@ -106,6 +138,23 @@ var editEventTimeHandler = new Handler(
 var editEventPicturesHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return EditPostPictures();
+});
+
+var announcementsIndexHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return AnnouncementsIndex();
+});
+
+var announcementUserListHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return NewAnnouncementList();
+});
+
+var announcementScreen = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return AnnouncementScreen(
+    postId: int.parse(params["id"][0]),
+  );
 });
 
 var tosHandler = new Handler(

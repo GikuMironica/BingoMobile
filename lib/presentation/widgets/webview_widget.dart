@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:hopaut/config/constants.dart';
 
 class WebvPage extends StatefulWidget {
   final String initialUrl;
@@ -35,7 +36,7 @@ class _WebvPageState extends State<WebvPage> {
         title: Text(widget._title),
         backgroundColor: Colors.pink,
         leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: HATheme.backButton,
             onPressed: () {
               Navigator.of(context).pop();
             }),

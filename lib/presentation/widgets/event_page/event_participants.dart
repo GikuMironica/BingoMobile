@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hopaut/config/urls.dart';
+import 'package:hopaut/config/constants.dart';
 
 class EventParticipants extends StatefulWidget {
   final Map<String, dynamic> participants;
@@ -75,7 +75,7 @@ Widget participant({dynamic element, double position}) {
 
   if (element is Map) {
     if (element.containsKey('Picture')) {
-      imageUrl = '${webUrl['baseUrl']}${webUrl['profiles']}/${element['Picture']}.webp';
+      imageUrl = '${WEB.PROFILE_PICTURES}/${element['Picture']}.webp';
     } else {
       initials = '${element['FirstName'].substring(0, 1)}';
       initials = initials + '${element['LastName'].substring(0, 1)}';

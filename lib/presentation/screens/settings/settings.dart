@@ -1,196 +1,254 @@
+import 'dart:io';
+
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
 import 'package:hopaut/services/services.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'delete_account.dart';
 
 class Settings extends StatefulWidget {
+  bool logoutStatus;
+
+  Settings({this.logoutStatus = false});
+
   @override
   _SettingsState createState() => _SettingsState();
 }
 
 class _SettingsState extends State<Settings> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: double.infinity,
-        decoration: decorationGradient(),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 50,
-                    ),
-                    IconButton(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      iconSize: 32,
-                      color: Colors.white,
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20, bottom: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Settings',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                                shadows: [
-                                  Shadow(
-                                      color: Colors.black.withOpacity(0.3),
-                                      offset: Offset(3, 3),
-                                      blurRadius: 10)
-                                ]),
-                          ),
-                          SizedBox(height: 20),
-                        ],
+      body: Stack(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: double.infinity,
+            decoration: decorationGradient(),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 50,
                       ),
-                    ),
-                  ],
-              ),
-              Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          offset: Offset(5.0, 5.0),
-                          blurRadius: 5)
+                      IconButton(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        iconSize: 32,
+                        color: Colors.white,
+                        icon: HATheme.backButton,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20, bottom: 15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Settings',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                        color: Colors.black.withOpacity(0.3),
+                                        offset: Offset(3, 3),
+                                        blurRadius: 10)
+                                  ]),
+                            ),
+                            SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Text('Notifications',
-                            style: TextStyle(color: Colors.black54)),
-                        MergeSemantics(
-                          child: Provider<SettingsManager>(
-                            create: (context) => GetIt.I.get<SettingsManager>(),
-                            child: ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: Text(
-                                'Push Notifications',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                              trailing: CupertinoSwitch(
-                                  value: context.watch<SettingsManager>().pushNotifications,
-                                  onChanged: (bool value){ context.read<SettingsManager>().togglePushNotifications();},
-                                ),
-                              onTap: () => context.read<SettingsManager>().togglePushNotifications(),
+                  Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              offset: Offset(5.0, 5.0),
+                              blurRadius: 5)
+                        ],
+                      ),
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            SizedBox(
+                              height: 30,
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text('Account',
-                            style: TextStyle(color: Colors.black54)),
-                        MergeSemantics(
-                            child: ListTile(
+                            Text('Notifications',
+                                style: TextStyle(color: Colors.black54)),
+                            Consumer<SettingsManager>(
+                              builder: (context, settingsMgr, child) =>
+                                  ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(
+                                  'Push Notifications',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                trailing: Visibility(
+                                  visible: Platform.isIOS,
+                                  child: CupertinoSwitch(
+                                    value: settingsMgr.pushNotifications,
+                                    onChanged: (v) =>
+                                        settingsMgr.togglePushNotifications(),
+                                  ),
+                                  replacement: Switch(
+                                    value: settingsMgr.pushNotifications,
+                                    onChanged: (v) =>
+                                        settingsMgr.togglePushNotifications(),
+                                  ),
+                                ),
+                                onTap: () =>
+                                    settingsMgr.togglePushNotifications(),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text('Account',
+                                style: TextStyle(color: Colors.black54)),
+                            MergeSemantics(
+                                child: ListTile(
                               contentPadding: EdgeInsets.zero,
                               title: Text('Change Password',
                                   style: TextStyle(fontSize: 18)),
                               trailing: Icon(Icons.lock),
                               onTap: () => changePage('/change_password'),
                             )),
-                        MergeSemantics(
-                            child: ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: Text('Logout', style: TextStyle(fontSize: 18)),
-                              trailing: Icon(Icons.exit_to_app),
-                              onTap: () async {
-                                await GetIt.I.get<AuthService>().logout().then((value) {
-                                  Application.router.navigateTo(
-                                      context, '/login', clearStack: true);
-                                  Fluttertoast.showToast(
-                                      msg: 'You have been logged out');
-                                }
-                                );
-                              },
-                            )),
-                        MergeSemantics(
-                          child: ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: Text('Terms of Services',
-                                  style: TextStyle(fontSize: 18)),
-                              trailing: Icon(Icons.arrow_forward_ios),
-                              onTap: () => changePage('/tos')),
-                        ),
-                        MergeSemantics(
-                          child: ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: Text('Privacy Policy',
-                                  style: TextStyle(fontSize: 18)),
-                              trailing: Icon(Icons.arrow_forward_ios),
-                              onTap: () => changePage('/privacy_policy')),
-                        ),
-                        InkWellButton(
-                            'Delete Account',
+                            ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                title: Text('Logout',
+                                    style: TextStyle(fontSize: 18)),
+                                trailing: Icon(Icons.exit_to_app),
+                                onTap: () async {
+                                  setState(() => widget.logoutStatus = true);
+                                  await GetIt.I.get<AuthService>().logout().then((v){
+                                    Future.delayed(Duration(seconds: 1), () => Application.router.navigateTo(
+                                        context, '/login',
+                                        transition: TransitionType.fadeIn,
+                                    replace: true,
+                                    clearStack: true));
+                                  });
+                                }),
+                            MergeSemantics(
+                              child: ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  title: Text('Terms of Services',
+                                      style: TextStyle(fontSize: 18)),
+                                  trailing: Icon(Icons.arrow_forward_ios),
+                                  onTap: () => changePage('/tos')),
+                            ),
+                            MergeSemantics(
+                              child: ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  title: Text('Privacy Policy',
+                                      style: TextStyle(fontSize: 18)),
+                                  trailing: Icon(Icons.arrow_forward_ios),
+                                  onTap: () => changePage('/privacy_policy')),
+                            ),
+                            InkWellButton(
+                                'Delete Account',
                                 () => showDialog(
-                                context: context,
-                                builder: (context) => CustomDialog(
-                                  pageWidget: DeleteAccountPopup(),
-                                )),
-                            Colors.redAccent),
-                        SizedBox(
-                          height: 15,
+                                    context: context,
+                                    builder: (context) => CustomDialog(
+                                          pageWidget: DeleteAccountPopup(),
+                                        )),
+                                Colors.redAccent),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text('Feedback',
+                                style: TextStyle(color: Colors.black54)),
+                            InkWellButton('Leave a Rating', () {}),
+                            InkWellButton('Report a bug', () {}),
+                          ],
                         ),
-                        Text('Feedback',
-                            style: TextStyle(color: Colors.black54)),
-                        InkWellButton('Leave a Rating', () {}),
-                        InkWellButton('Report a bug', () {}),
-                      ],
-                    ),
-                  )),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: Container(
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: <Widget>[
-                        Text(
-                          'HopAut',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        Text('version 0.2',
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.8))),
-                      ],
-                    )),
+                      )),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              'HopAut',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            Consumer<SettingsManager>(
+                              builder: (_, settingsMgr, child) => Text(
+                                  'version ${settingsMgr.appVersion}',
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.8))),
+                            ),
+                          ],
+                        )),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          Visibility(
+            visible: widget.logoutStatus,
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.15),
+              ),
+              child: Center(
+                child: Container(
+                  margin: EdgeInsets.all(64.0),
+                  padding: EdgeInsets.all(16.0),
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 5,
+                          spreadRadius: 5,
+                        ),
+                      ]),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CupertinoActivityIndicator(),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Text('Logging Out'),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -201,7 +259,8 @@ class _SettingsState extends State<Settings> {
   }
 
   void changePage(String path) {
-    Application.router.navigateTo(context, path, transition: TransitionType.fadeIn);
+    Application.router
+        .navigateTo(context, path, transition: TransitionType.fadeIn);
   }
 }
 

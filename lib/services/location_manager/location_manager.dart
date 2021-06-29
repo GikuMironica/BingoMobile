@@ -1,8 +1,8 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class LocationManager {
   static LocationManager _locationManager;
-  Geolocator _geolocator;
   Position currentPosition;
 
   factory LocationManager(){
@@ -10,13 +10,17 @@ class LocationManager {
   }
 
   LocationManager._(){
-    _geolocator = Geolocator()..forceAndroidLocationManager;
     getCurrentLocation();
   }
 
   Future<void> getCurrentLocation() async {
-    currentPosition = await _geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-}
-
-  Geolocator get locator => _geolocator;
+    if(await Permission.location.isGranted) {
+      currentPosition =
+      await getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    } else {
+      print("Location permission was not granted.");
+      await Permission.location.request();
+      getCurrentLocation();
+    }
+  }
 }

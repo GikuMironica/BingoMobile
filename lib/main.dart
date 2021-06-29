@@ -1,58 +1,58 @@
-import 'dart:collection';
-import 'dart:convert';
 import 'dart:io';
-
+import 'dart:collection';
 import 'package:fluro/fluro.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/router.dart';
+import 'package:hopaut/controllers/search_page_controller/search_page_controller.dart';
 import 'package:hopaut/data/models/identity.dart';
+import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
 import 'package:hopaut/services/services.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'controllers/login_page/login_page_controller.dart';
 import 'init.dart';
 import 'services/auth_service/auth_service.dart';
 import 'services/setup.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Router;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SdkContext.init(IsolateOrigin.main);
-  await Hive.initFlutter();
-  await OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-  await OneSignal.shared.init(
-      "fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
+  serviceSetup();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  await OneSignal.shared.init("fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
       iOSSettings: {
         OSiOSSettings.autoPrompt: false,
         OSiOSSettings.inAppLaunchUrl: false
+      });
+  try {
+    await Hive.initFlutter();
+    var authBox = await Hive.openBox('auth');
+
+    final LinkedHashMap<dynamic, dynamic> data = authBox.get('identity');
+    if (data != null) {
+      Map<String, dynamic> _data = data.map((a, b) => MapEntry(a as String, b));
+      GetIt.I.get<AuthService>().setIdentity(Identity.fromJson(_data));
+      if (GetIt.I.get<SecureStorage>().read(key: 'token') != null) {
+        GetIt.I.get<DioService>().setBearerToken(
+            await GetIt.I.get<SecureStorage>().read(key: 'token'));
+        await GetIt.I.get<AuthService>().refreshToken();
+        await GetIt.I.get<AuthService>().refreshUser();
+
       }
-  );
-  serviceSetup();
-  var authBox = await Hive.openBox('auth');
-  var settingsBox = await Hive.openBox(('settingsBox'));
-  final LinkedHashMap<dynamic, dynamic> data = authBox.get('identity');
-  if(data != null){
-    Map<String, dynamic> _data = data.map((a, b) => MapEntry(a as String,b));
-    Identity identity = Identity.fromJson(_data);
-    GetIt.I.get<AuthService>().setIdentity(identity);
-    await GetIt.I.get<AuthService>().refreshToken();
-    if(GetIt.I.get<SecureStorage>().read(key: 'token') != null) {
-      GetIt.I
-          .get<DioService>()
-          .dio
-          .options
-          .headers[HttpHeaders.authorizationHeader]
-      = 'bearer ${await GetIt.I.get<SecureStorage>().read(key: 'token')}';
-      print("Bearer token applied");
-      await GetIt.I.get<AuthService>().refreshUser();
     }
-  }else{
-    print('Auth box not found');
+  } on HiveError catch (err) {
+    print('Authbox not found');
   }
+
   runApp(HopAut());
 }
 
@@ -62,34 +62,55 @@ class HopAut extends StatefulWidget {
 }
 
 class _HopAutState extends State<HopAut> {
-  Router router;
+  FluroRouter router;
   GlobalKey globals;
   String nextRoute;
 
   @override
   void initState() {
-    // TODO: implement initState
-    router = new Router();
+    router = FluroRouter();
     Routes.configureRoutes(router);
     Application.router = router;
-    initPlatformState();
-
     super.initState();
+    initPlatformState();
   }
 
   Future<void> initPlatformState() async {
-    OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
-    await OneSignal.shared.promptUserForPushNotificationPermission(fallbackToSettings: true);
-    await OneSignal.shared.setSubscription(false);
+
+    OneSignal.shared
+        .setInFocusDisplayType(OSNotificationDisplayType.notification);
+    await OneSignal.shared
+        .promptUserForPushNotificationPermission(fallbackToSettings: true);
     OneSignal.shared
         .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
       setState(() {
         nextRoute = result.notification.payload.additionalData['event'];
       });
     });
-    if(GetIt.I.get<AuthService>().currentIdentity != null){
+    if(GetIt.I.get<AuthService>().currentIdentity != null) {
       await OneSignal.shared.setSubscription(true);
-      await OneSignal.shared.setExternalUserId(GetIt.I.get<AuthService>().currentIdentity.id);
+      await OneSignal.shared.setExternalUserId(GetIt.I
+          .get<AuthService>()
+          .currentIdentity
+          .id);
+    } else {
+      await OneSignal.shared.setSubscription(false);
+    }
+  }
+
+  Future<void> refreshTokenTask() async {
+    if (GetIt.I.get<SecureStorage>().read(key: 'token') != null) {
+      await GetIt.I.get<AuthService>().refreshToken();
+      GetIt.I
+              .get<DioService>()
+              .dio
+              .options
+              .headers[HttpHeaders.authorizationHeader] =
+          'bearer ${await GetIt.I.get<SecureStorage>().read(key: 'token')}';
+      print("Bearer token applied");
+      if (GetIt.I.get<AuthService>().user == null) {
+        await GetIt.I.get<AuthService>().refreshUser();
+      }
     }
   }
 
@@ -106,17 +127,31 @@ class _HopAutState extends State<HopAut> {
         }
       },
       child: MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (context) => GetIt.I.get<AuthService>()),
-            ChangeNotifierProvider(create: (context) => GetIt.I.get<EventManager>()),
-            ChangeNotifierProvider(create: (context) => GetIt.I.get<SettingsManager>()),
-          ],
-          child: MaterialApp(
-            theme: ThemeData(
-              fontFamily: 'OpenSans',
-              primaryColor: Colors.pinkAccent
-            ),
-            onGenerateRoute: Application.router.generator,
+        providers: [
+          ChangeNotifierProvider<AuthService>(
+              create: (context) => GetIt.I.get<AuthService>()),
+          ChangeNotifierProvider<EventManager>(
+              create: (context) => GetIt.I.get<EventManager>()),
+          ChangeNotifierProvider<SettingsManager>(
+              create: (context) => GetIt.I.get<SettingsManager>()),
+          ChangeNotifierProvider<LoginPageController>(
+            create: (_) => LoginPageController(),
+            lazy: true,
+          ),
+          ChangeNotifierProvider<SearchPageController>(
+            create: (_) => SearchPageController(),
+            lazy: true,
+          )
+        ],
+        child: MaterialApp(
+          builder: (context, child) {
+            return ScrollConfiguration(
+              behavior: DisableGlowBehavior(),
+              child: child,
+            );
+          },
+          theme: HATheme.themeData,
+          onGenerateRoute: Application.router.generator,
           navigatorKey: Application.navigatorKey,
           home: Initialization(route: nextRoute),
           debugShowCheckedModeBanner: false,

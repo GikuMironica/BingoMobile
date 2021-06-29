@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/screens/events/participation/inactive_attended_events.dart';
@@ -17,14 +18,11 @@ class _AttendingListState extends State<AttendingList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   void dispose() {
-    GetIt.I.get<EventManager>().activeList.clear();
-    GetIt.I.get<EventManager>().inactiveList.clear();
     super.dispose();
   }
 
@@ -41,8 +39,7 @@ class _AttendingListState extends State<AttendingList> {
               title: 'Attending Events List',
               actions: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add, color: Colors.white,),
-                  iconSize: 24,
+                  icon: SvgPicture.asset('assets/icons/svg/paper-plane-outline.svg', color: Colors.white, height: 24,),
                   onPressed: () async {
                     Application.router.navigateTo(context, '/create-event');
                   },

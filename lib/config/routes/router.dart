@@ -1,5 +1,5 @@
 import 'package:fluro/fluro.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Router;
 import 'handlers.dart';
 
 class Routes {
@@ -9,6 +9,10 @@ class Routes {
   static String login = '/login';
   static String registration = '/registration';
   static String account = '/account';
+  static String editAccount = account + '/edit';
+  static String editAccountPicture = editAccount + '/picture';
+  static String editAccountName = editAccount + '/name';
+  static String editAccountDescription = editAccount + '/description';
   static String changePassword = '/change_password';
   static String termsOfServices = '/tos';
   static String settings = '/settings';
@@ -16,6 +20,7 @@ class Routes {
   // -- EVENT -----------------------------------------------------------------
   static String event = '/event/:id';
   static String createEvent = '/create-event';
+  static String searchByMap = createEvent + '/map';
   static String rateEvent = '/rate-event/:id';
   // -- EDIT EVENT ------------------------------------------------------------
   static String editEvent = '/edit-event';
@@ -26,9 +31,13 @@ class Routes {
   static String editEventPictures = '/edit-event/pictures';
   static String editEventTime = '/edit-event/time';
   static String eventList = '/event-list';
+  // -- ANNOUNCEMENTS ---------------------------------------------------------
+  static String announcements = '/announcements';
+  static String announcementById = '/announcements/:id';
+  static String userListAnnouncements = '/announcements/user_list';
 
-  static void configureRoutes(Router router) {
-    router.notFoundHandler = new Handler(
+  static void configureRoutes(FluroRouter router) {
+    router.notFoundHandler = Handler(
         handlerFunc: (BuildContext ctx, Map<String, List<String>> params) {
       print('Error: Route not found');
     });
@@ -38,6 +47,10 @@ class Routes {
     router.define(login, handler: loginHandler);
     router.define(registration, handler: registrationHandler);
     router.define(account, handler: accountHandler);
+    router.define(editAccount, handler: editAccountHandler);
+    router.define(editAccountName, handler: editAccountNameHandler);
+    router.define(editAccountDescription, handler: editAccountDescriptionHandler);
+    router.define(editAccountPicture, handler: editAccountPictureHandler);
     router.define(settings, handler: settingsHandler);
     router.define(changePassword, handler: changePasswordHandler);
     router.define(termsOfServices, handler: tosHandler);
@@ -55,5 +68,11 @@ class Routes {
     router.define(editEventPictures, handler: editEventPicturesHandler);
     router.define(editEventTime, handler: editEventTimeHandler);
     router.define(rateEvent, handler: rateEventHandler);
+    router.define(searchByMap, handler: locationSearchPageHandler);
+
+    // ANNOUNCEMENT
+    router.define(announcements, handler: announcementsIndexHandler);
+    router.define(userListAnnouncements, handler: announcementUserListHandler);
+    router.define(announcementById, handler: announcementScreen);
   }
 }

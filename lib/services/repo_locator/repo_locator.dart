@@ -4,7 +4,6 @@ class RepoLocator{
   static RepoLocator _repoLocator;
   EventRepository _eventRepository;
   AnnouncementRepository _announcementRepository;
-  HostRepository _hostRepository;
   IdentityRepository _identityRepository;
   ParticipantRepository _participantRepository;
   PostRepository _postRepository;
@@ -21,7 +20,6 @@ class RepoLocator{
   RepoLocator._(){
     _eventRepository = EventRepository();
     _announcementRepository = AnnouncementRepository();
-    _hostRepository = HostRepository();
     _identityRepository = IdentityRepository();
     _participantRepository = ParticipantRepository();
     _postRepository = PostRepository();
@@ -34,7 +32,6 @@ class RepoLocator{
 
   EventRepository get events => _eventRepository;
   AnnouncementRepository get announcements => _announcementRepository;
-  HostRepository get hosts => _hostRepository;
   IdentityRepository get identity => _identityRepository;
   ParticipantRepository get participants => _participantRepository;
   PostRepository get posts => _postRepository;

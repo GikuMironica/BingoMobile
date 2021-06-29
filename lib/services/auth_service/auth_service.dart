@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -6,25 +5,21 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/data/models/user.dart';
-import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-import '../../data/repositories/identity_repository.dart';
 import 'package:get_it/get_it.dart';
 
 import '../services.dart';
 
 class AuthService with ChangeNotifier {
-
   static AuthService _authService;
   Identity _identity;
   User _user;
   bool lock = false;
   bool oneSignalSettings = false;
 
-
-  factory AuthService(){
+  factory AuthService() {
     return _authService ??= AuthService._();
   }
 
@@ -34,46 +29,50 @@ class AuthService with ChangeNotifier {
 
   void setIdentity(Identity identity) {
     _identity = identity;
+    notifyListeners();
   }
 
-  Future<void> storeToken(Map<String, dynamic> data) async {
-    // TODO: remove these stupid prints
+  Future<void> writeTokenToKeychain({String token, String refreshToken}) async {
+    await GetIt.I.get<SecureStorage>().fss.write(key: 'token', value: token);
+    print('Access token written to keychain');
+    await GetIt.I
+        .get<SecureStorage>()
+        .fss
+        .write(key: 'refreshToken', value: refreshToken);
+    print('Refresh token written to keychain');
+  }
+
+  Future<void> applyToken(Map<String, dynamic> data) async {
     final Map<String, dynamic> parsedData = Jwt.parseJwt(data['Token']);
     await Hive.box('auth').put('identity', parsedData);
-    await GetIt.I.get<SecureStorage>()
-        .write(key: 'token', value: data['Token'])
-        .then((value) => _identity = Identity.fromJson(parsedData));
-    await GetIt.I.get<SecureStorage>().write(
-        key: 'refreshToken', value: data['RefreshToken']).then((value) =>
-        print('Refresh Token has been written to the device.'));
 
-    // Dio Interceptor
-    GetIt.I.get<DioService>().dio
-        .options.headers
-        .update(HttpHeaders.authorizationHeader,
-            (value) => 'bearer ${data['Token']}',
-            ifAbsent: () => 'bearer ${data['Token']}'
-    );
-    await refreshUser();
-    if(!oneSignalSettings){
-      await setOneSignalParams();
-      oneSignalSettings = true;
+    await writeTokenToKeychain(
+        token: data['Token'], refreshToken: data['RefreshToken']);
+    setIdentity(Identity.fromJson(parsedData));
+    if(user == null){
+      refreshUser();
     }
+    GetIt.I.get<DioService>().setBearerToken(data['Token']);
+
   }
 
   User get user => _user;
 
   Future<void> refreshUser() async {
-    _user = await GetIt.I.get<RepoLocator>().users.get(_identity.id);
-    notifyListeners();
+    final User user = await GetIt.I.get<RepoLocator>().users.get(_identity.id);
+    setUser(user);
+    if (!oneSignalSettings) {
+      await setOneSignalParams();
+    }
   }
 
   Future<void> setOneSignalParams() async {
     await OneSignal.shared.setSubscription(true);
     await OneSignal.shared.setExternalUserId(currentIdentity.id);
+    oneSignalSettings = true;
   }
 
-  void setUser(User user){
+  void setUser(User user) {
     _user = user;
     notifyListeners();
   }
@@ -82,11 +81,16 @@ class AuthService with ChangeNotifier {
   ///
   /// Triggers Identity Repository -> [IdentityRepository.login()]
   Future<bool> loginWithEmail(String email, String password) async {
-    Map<String, dynamic> _loginResult =
-    await GetIt.I.get<RepoLocator>().identity.login(email: email, password: password);
+    Map<String, dynamic> _loginResult = await GetIt.I
+        .get<RepoLocator>()
+        .identity
+        .login(email: email, password: password);
     if (_loginResult is Map<String, dynamic>) {
-      if (_loginResult.containsKey('Token')) return await storeToken(_loginResult).then((value) => true);
-    }else{
+      if (_loginResult.containsKey('Token')) {
+        await applyToken(_loginResult);
+        return true;
+      }
+    } else {
       return false;
     }
   }
@@ -94,50 +98,55 @@ class AuthService with ChangeNotifier {
   Future<void> loginWithFb() async {
     Map<String, dynamic> _fbResult =
         await GetIt.I.get<RepoLocator>().identity.loginWithFacebook();
-    if(_fbResult.containsKey('Token')) {
+    if (_fbResult.containsKey('Token')) {
       lock = true;
-      return await storeToken(_fbResult);
+      await applyToken(_fbResult);
     }
   }
 
   Future<void> refreshToken() async {
-    if(_identity != null) {
-      if (DateTime.now().isAfter(
-          DateTime.fromMillisecondsSinceEpoch(_identity.expiry))) {
+    if (_identity != null) {
+      if (DateTime.now()
+          .isAfter(DateTime.fromMillisecondsSinceEpoch(_identity.expiry))) {
         print('Refreshing Token');
         final token = await GetIt.I.get<SecureStorage>().read(key: 'token');
-        final refreshToken = await GetIt.I.get<SecureStorage>().read(
-            key: 'refreshToken');
-        Map<String, dynamic> _refreshResult =
-        await GetIt.I.get<RepoLocator>().identity.refresh(token, refreshToken);
+        final refreshToken =
+            await GetIt.I.get<SecureStorage>().read(key: 'refreshToken');
+        Map<String, dynamic> _refreshResult = await GetIt.I
+            .get<RepoLocator>()
+            .identity
+            .refresh(token, refreshToken);
         if (_refreshResult.containsKey('Token')) {
-          Fluttertoast.showToast(msg: "Token refreshed :)");
-          await storeToken(_refreshResult);
+          print('Token successfully refreshed');
+          await applyToken(_refreshResult);
         }
       } else {
-        Fluttertoast.showToast(msg: "Unable to refresh because its too early.");
+        print('Attempted to refresh, but it\'s too early.');
       }
     }
   }
 
   Future<bool> register(String email, String password) async {
-    bool _registrationResult =
-    await GetIt.I.get<RepoLocator>().identity.register(email: email, password: password);
-
+    bool _registrationResult = await GetIt.I
+        .get<RepoLocator>()
+        .identity
+        .register(email: email, password: password);
     return _registrationResult;
   }
 
   Future<void> logout() async {
-    if(_identity != null) {
-      _identity = null;
-      await Hive.box('auth').delete('identity');
-      GetIt.I.get<SecureStorage>().deleteAll();
-      GetIt.I.get<DioService>().dio.options.headers.remove(HttpHeaders.authorizationHeader);
-      _user = null;
+    await Hive.box('auth').delete('identity');
+    GetIt.I.get<SecureStorage>().deleteAll();
+    GetIt.I.get<DioService>().removeBearerToken();
+
+    GetIt.I.get<EventManager>().reset();
+    setIdentity(null);
+    setUser(null);
+    if(oneSignalSettings) {
       await OneSignal.shared.removeExternalUserId();
       await OneSignal.shared.setSubscription(false);
       oneSignalSettings = false;
-      notifyListeners();
     }
+
   }
 }

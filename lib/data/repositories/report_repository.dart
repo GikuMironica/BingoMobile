@@ -1,4 +1,10 @@
+import 'package:hopaut/services/services.dart' show LoggingService, DioService, Logger;
+import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
+
 class ReportRepository {
+  Logger _logger = GetIt.I.get<LoggingService>().getLogger(ReportRepository);
+  Dio _dio = GetIt.I.get<DioService>().dio;
 
   /// Creates a post report
   ///

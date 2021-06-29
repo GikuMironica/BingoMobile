@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -19,6 +21,7 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
@@ -73,8 +76,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <meta-data android:name="com.here.sdk.access_key_id" android:value="jhGYNi0TwTYhkR_gHINssw"/>
-        <meta-data android:name="com.here.sdk.access_key_secret" android:value="ERW6aOR-thhVDaEK87acFczpXSoOH3YxtNrid1ecwI80HpYJ3pMwT1CeW_xwXX5JYfvKu1QShU683rYdnfGhUQ"/>
+        <meta-data android:name="com.here.sdk.access_key_id" android:value="@string/here_key_id"/>
+        <meta-data android:name="com.here.sdk.access_key_secret" android:value="@string/here_secret"/>
     </application>
 
 </manifest>
