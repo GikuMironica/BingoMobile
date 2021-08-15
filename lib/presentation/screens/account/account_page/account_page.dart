@@ -90,7 +90,12 @@ class _AccountPageState extends State<AccountPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(auth.user.description, textAlign: TextAlign.center,),
+            Text(
+              auth.user.description??"empty",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey[500]
+              )),
           ],
         ),
       ),

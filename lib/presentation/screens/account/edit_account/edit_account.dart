@@ -57,8 +57,13 @@ class _EditAccountPageState extends State<EditAccountPage> {
             context, Routes.editAccountDescription,
             transition: TransitionType.cupertino),
         title: Text('Description'),
-        subtitle: auth.user.description.length == 0
-            ? null
+        subtitle: auth.user.description?.length == null
+            ? Text(
+              "empty",
+              style: TextStyle(
+                color: Colors.grey[500]
+              )
+              )
             : Text(
                 auth.user.description.trim(),
                 maxLines: 1,
