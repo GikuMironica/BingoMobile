@@ -70,8 +70,8 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _buildScreens() {
     return [
-      EventList(),
       SearchPage(),
+      EventList(),
       AttendingList(),
       AccountPage(),
     ];
@@ -80,14 +80,14 @@ class _HomePageState extends State<HomePage> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(MdiIcons.calendarStar),
-        title: ("Events"),
+        icon: Icon(MdiIcons.mapMarkerOutline),
+        title: ("Map"),
         activeColor: Colors.pinkAccent,
         inactiveColor: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(MdiIcons.mapMarkerOutline),
-        title: ("Map"),
+        icon: Icon(MdiIcons.calendarStar),
+        title: ("Events"),
         activeColor: Colors.pinkAccent,
         inactiveColor: Colors.grey,
       ),

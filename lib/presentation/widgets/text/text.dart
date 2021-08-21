@@ -4,7 +4,8 @@ Text H1({String text}) {
   return Text(
     text,
     style: TextStyle(
-      fontSize: 28,
+      fontFamily: "Courier",
+      fontSize: 32,
       fontWeight: FontWeight.bold,
     ),
   );

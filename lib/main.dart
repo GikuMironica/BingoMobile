@@ -46,7 +46,6 @@ void main() async {
             await GetIt.I.get<SecureStorage>().read(key: 'token'));
         await GetIt.I.get<AuthService>().refreshToken();
         await GetIt.I.get<AuthService>().refreshUser();
-
       }
     }
   } on HiveError catch (err) {
@@ -76,7 +75,6 @@ class _HopAutState extends State<HopAut> {
   }
 
   Future<void> initPlatformState() async {
-
     OneSignal.shared
         .setInFocusDisplayType(OSNotificationDisplayType.notification);
     await OneSignal.shared
@@ -87,12 +85,10 @@ class _HopAutState extends State<HopAut> {
         nextRoute = result.notification.payload.additionalData['event'];
       });
     });
-    if(GetIt.I.get<AuthService>().currentIdentity != null) {
+    if (GetIt.I.get<AuthService>().currentIdentity != null) {
       await OneSignal.shared.setSubscription(true);
-      await OneSignal.shared.setExternalUserId(GetIt.I
-          .get<AuthService>()
-          .currentIdentity
-          .id);
+      await OneSignal.shared
+          .setExternalUserId(GetIt.I.get<AuthService>().currentIdentity.id);
     } else {
       await OneSignal.shared.setSubscription(false);
     }
