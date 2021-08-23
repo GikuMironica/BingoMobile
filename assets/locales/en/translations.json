@@ -1,0 +1,58 @@
+{
+    "header": {
+        "home": "Home",
+        "about": "About us",
+        "register": "Register",
+        "login": "Login"
+    },
+    "landing": {
+        "find": "Find what's happening around you.",
+        "ultimate": "Your ultimate event companion.",
+        "build": "Build up a community",
+        "community": "Join the biggest community of party people",
+        "wait": "Don't wait for the perfect opportunity, HopAut!"
+    },
+    "footer": {
+        "company": "Company",
+        "about": "About Us",
+        "impressum": "Imprint",
+        "legal": "Legal",
+        "lang": "Language",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "newsletter-text": "Subscribe to our newsletter to be notified about updates to HopAut."
+    },
+    "us": {
+        "mission": "Our mission",
+        "paragraph1": "Tired of wasting your time at home? Our mission is to make you hop out of your house and join the events that you're looking for, find people with the same interests and make new connections.",
+        "paragraph2": "Enjoy the endless possibilities! Can't find the party that you were looking for? Create one yourself!",
+        "hopout": "What is Hopout?",
+        "hopout1": "HopAut is a geosocial mobile and web based application allowing users to easily create, attend and explore various types of events scattered around their city!",
+        "hopout2": "Utilizing GPS tracking, HopAut can pinpoint the user's current location and display events in close vicinity.",
+        "horizon": "The horizon is the limit",
+        "card1-header": "Register",
+        "card1-text": "No more tedious registration processes and endless forms. Register within a minute and hop out!",
+        "card2-text": "Whatever you are looking for, whether it's a party or car, bicycle or bikers meet, it's all here, don't miss it!",
+        "card3-text": "Are you a party animal? Find your people and make some good memories. Within 2 minutes you can post your party for free and let the others know.",
+        "card2-header": "Find",
+        "card3-header": "Party",
+        "waiting": "What are you waiting for?"
+    },
+    "auth": {
+        "email": "Email address",
+        "password": "Password",
+        "confirm": "Confirm password",
+        "register": "Register",
+        "unavailable": "This function is currently unavailable",
+        "login":"Login"
+    },
+    "impressum": {
+        "subtitle": "Information according to § 5 TMG.",
+        "website": "Website",
+        "germany": "Germany",
+        "title": "Imprint",
+        "founder-title": "Founder",
+        "headquarters": "Headquarters",
+        "vat-id": "VAT Identification number"
+    }
+}

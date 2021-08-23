@@ -9,7 +9,6 @@ import 'package:hopaut/presentation/screens/account/edit_account/edit_profile_pi
 import 'package:hopaut/presentation/screens/announcements/announcement_screen.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
-import 'package:hopaut/presentation/screens/events/create_event.dart';
 import 'package:hopaut/presentation/screens/events/create_event/create_event.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/description.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/edit_event.dart';
@@ -24,7 +23,7 @@ import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/screens/events/rate_event/rate_event.dart';
 import 'package:hopaut/presentation/screens/home_page.dart';
 import 'package:hopaut/presentation/screens/authentication/login/login.dart';
-import 'package:hopaut/presentation/screens/registration/registration.dart';
+import 'package:hopaut/presentation/screens/authentication/register/register.dart';
 import 'package:hopaut/presentation/screens/settings/change_password.dart';
 import 'package:hopaut/presentation/screens/settings/settings.dart';
 import 'package:hopaut/presentation/widgets/webview_widget.dart';
@@ -124,11 +123,10 @@ var editEventTitleHandler = new Handler(
   return EditPostTitle();
 });
 
-var locationSearchPageHandler = Handler(
-  handlerFunc: (BuildContext ctx, Map<String, List<String>> params) {
-    return SearchByMap();
-  }
-);
+var locationSearchPageHandler =
+    Handler(handlerFunc: (BuildContext ctx, Map<String, List<String>> params) {
+  return SearchByMap();
+});
 
 var editEventTimeHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {

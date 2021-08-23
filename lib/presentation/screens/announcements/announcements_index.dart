@@ -20,9 +20,11 @@ class _AnnouncementsIndexState extends State<AnnouncementsIndex> {
   bool announcementsLoaded = false;
 
   Future<List<Announcement>> getAnnouncements() async {
-    if(announcementsList == null){
-      final inboxList = await GetIt.I.get<RepoLocator>().announcements.getInbox();
-      final outboxList = await GetIt.I.get<RepoLocator>().announcements.getOutbox();
+    if (announcementsList == null) {
+      final inboxList =
+          await GetIt.I.get<RepoLocator>().announcements.getInbox();
+      final outboxList =
+          await GetIt.I.get<RepoLocator>().announcements.getOutbox();
       announcementsList = [...inboxList, ...outboxList];
     } else {
       announcementsList = [];
@@ -43,9 +45,13 @@ class _AnnouncementsIndexState extends State<AnnouncementsIndex> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Announcements'),
-        leading: IconButton(icon: HATheme.backButton, onPressed: () => Application.router.pop(context),),
+        leading: IconButton(
+          icon: HATheme.backButton,
+          onPressed: () => Application.router.pop(context),
+        ),
         actions: [
-          IconButton(icon: Icon(Icons.tune, color: Colors.white70))
+          IconButton(
+              icon: Icon(Icons.tune, color: Colors.white70), onPressed: () {})
         ],
         elevation: 0,
         flexibleSpace: Container(
@@ -55,11 +61,16 @@ class _AnnouncementsIndexState extends State<AnnouncementsIndex> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(),
-        onPressed: () => Application.router.navigateTo(context, '/announcements/user_list', transition: TransitionType.fadeIn),
+        onPressed: () => Application.router.navigateTo(
+            context, '/announcements/user_list',
+            transition: TransitionType.fadeIn),
         child: Container(
           width: 76,
           height: 76,
-          child: Icon(Icons.add, size: 40,),
+          child: Icon(
+            Icons.add,
+            size: 40,
+          ),
           decoration: gradientBoxDecoration(),
         ),
       ),
@@ -93,20 +104,21 @@ class _AnnouncementsIndexState extends State<AnnouncementsIndex> {
             //     ),
             //   ),
             // ),
-            SizedBox(height: 16,),
-            announcementsLoaded ? ListView.builder(
-              itemCount: announcementsList.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) => InkWell(
-                child: IndexChild(
-                  announcement: announcementsList[index],
-                ),
-                onTap: () => Application.router.navigateTo(
-                    context,
-                    '/announcements/${announcementsList[index].postId}'
-                ),
-              )
-            ) : CupertinoActivityIndicator(),
+            SizedBox(
+              height: 16,
+            ),
+            announcementsLoaded
+                ? ListView.builder(
+                    itemCount: announcementsList.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => InkWell(
+                          child: IndexChild(
+                            announcement: announcementsList[index],
+                          ),
+                          onTap: () => Application.router.navigateTo(context,
+                              '/announcements/${announcementsList[index].postId}'),
+                        ))
+                : CupertinoActivityIndicator(),
           ],
         ),
       ),
