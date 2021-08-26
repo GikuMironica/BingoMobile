@@ -1,9 +1,11 @@
 
+import 'package:email_validator/email_validator.dart';
+import 'package:hopaut/controllers/blocs/states/base_state.dart';
 import 'package:hopaut/controllers/statuses/login_form_submission_status.dart';
 
-class LoginState{
+class LoginState extends BaseState{
   //validators
-  bool get isValidUsername => username.length >3;
+  bool get isValidEmail => EmailValidator.validate(username.trim());
   bool get isValidPassword => password.length >6;
 
   final String username;
