@@ -9,7 +9,7 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
-import 'package:hopaut/services/services.dart';
+import 'package:hopaut/services/settings_manager/settings_manager.dart';
 import 'package:provider/provider.dart';
 import 'delete_account.dart';
 
@@ -145,12 +145,17 @@ class _SettingsState extends State<Settings> {
                                 trailing: Icon(Icons.exit_to_app),
                                 onTap: () async {
                                   setState(() => widget.logoutStatus = true);
-                                  await GetIt.I.get<AuthService>().logout().then((v){
-                                    Future.delayed(Duration(seconds: 1), () => Application.router.navigateTo(
-                                        context, '/login',
-                                        transition: TransitionType.fadeIn,
-                                    replace: true,
-                                    clearStack: true));
+                                  await GetIt.I
+                                      .get<AuthService>()
+                                      .logout()
+                                      .then((v) {
+                                    Future.delayed(
+                                        Duration(seconds: 1),
+                                        () => Application.router.navigateTo(
+                                            context, '/login',
+                                            transition: TransitionType.fadeIn,
+                                            replace: true,
+                                            clearStack: true));
                                   });
                                 }),
                             MergeSemantics(

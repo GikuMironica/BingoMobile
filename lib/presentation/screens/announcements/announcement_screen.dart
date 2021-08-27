@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/announcement_message.dart';
 import 'package:hopaut/data/models/mini_post.dart';
-import 'package:hopaut/data/models/post.dart';
+import 'package:hopaut/data/repositories/announcement_repository.dart';
 import 'package:hopaut/presentation/widgets/announcements/announcement_message_bubble.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/date_formatter.dart';
-import 'package:hopaut/services/services.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 class AnnouncementScreen extends StatefulWidget {
   final int postId;
@@ -71,8 +70,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
   }
 
   Future<void> fetchMessages() async {
-    chatMessages =
-        await GetIt.I.get<RepoLocator>().announcements.getAll(widget.postId);
+    chatMessages = await getIt<AnnouncementRepository>().getAll(widget.postId);
     if (chatMessages.isNotEmpty) {
       buildChatScreen();
       setState(() => chatMessagesLoaded = true);
@@ -182,7 +180,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
         postId: widget.postId,
         message: message,
         timestamp: (DateTime.now().millisecondsSinceEpoch / 1000).floor());
-    final bool res = await GetIt.I.get<RepoLocator>().announcements.create(msg);
+    final bool res = await getIt<AnnouncementRepository>().create(msg);
     if (res) {
       setState(() {
         addChatBubble(msg);

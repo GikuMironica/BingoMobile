@@ -3,10 +3,11 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/post_repository.dart';
-import 'package:hopaut/data/repositories/tags_repository.dart';
+import 'package:hopaut/data/repositories/tag_repository.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/event_manager/event_manager.dart';
 
@@ -130,7 +131,7 @@ class _EditPostTagsState extends State<EditPostTags> {
                         .replaceAll(RegExp(r" "), '-');
                     if (pattern.length > 2) {
                       List<String> tagResultList =
-                          await TagsRepository().get(pattern: pattern);
+                          await getIt<TagRepository>().get(pattern: pattern);
                       if (tagResultList.isNotEmpty) {
                         if (pattern == tagResultList.first) {
                           tagResultList.removeAt(0);

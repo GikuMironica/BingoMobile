@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/user.dart';
+import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
-import 'package:hopaut/services/repo_locator/repo_locator.dart';
 
 class EditAccountName extends StatefulWidget {
   @override
@@ -227,7 +228,7 @@ class _EditAccountNameState extends State<EditAccountName> {
           description: GetIt.I.get<AuthService>().user.description);
       final String userId = GetIt.I.get<AuthService>().user.id;
       final User updatedUser =
-          await GetIt.I.get<RepoLocator>().users.update(userId, tempUser);
+          await getIt<UserRepository>().update(userId, tempUser);
       GetIt.I.get<AuthService>().setUser(updatedUser);
       Application.router.pop(context);
     }

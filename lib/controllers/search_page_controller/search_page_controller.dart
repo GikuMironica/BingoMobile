@@ -7,12 +7,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
+import 'package:hopaut/data/repositories/post_repository.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
 import 'package:hopaut/services/location_manager/location_manager.dart';
-import 'package:hopaut/services/repo_locator/repo_locator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -109,7 +110,7 @@ class SearchPageController extends ChangeNotifier {
     searchQuery.latitude = _locationManager.currentPosition.latitude;
     if (_filterToggled) toggleFilter();
 
-    _searchResults = await GetIt.I.get<RepoLocator>().posts.search(searchQuery);
+    _searchResults = await getIt<PostRepository>().search(searchQuery);
     if (_searchResults != null) {
       setPageState(SearchPageState.HAS_SEARCH_RESULTS);
       buildMiniPostCards();

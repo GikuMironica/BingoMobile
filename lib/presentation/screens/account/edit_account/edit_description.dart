@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/user.dart';
+import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
-import 'package:hopaut/services/repo_locator/repo_locator.dart';
 
 class EditAccountDescription extends StatefulWidget {
   @override
@@ -29,7 +30,12 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
       appBar: SimpleAppBar(
         context: context,
         text: 'Description',
-        actionButtons: [IconButton(icon: Icon(Icons.check), onPressed: () async => updateDescription(_descriptionController.text.trim(), context))],
+        actionButtons: [
+          IconButton(
+              icon: Icon(Icons.check),
+              onPressed: () async => updateDescription(
+                  _descriptionController.text.trim(), context))
+        ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -93,17 +99,13 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
           firstName: GetIt.I.get<AuthService>().user.firstName,
           lastName: GetIt.I.get<AuthService>().user.lastName,
           description: newDescription);
-      var response = await GetIt.I
-          .get<RepoLocator>()
-          .users
+      var response = await getIt<UserRepository>()
           .update(GetIt.I.get<AuthService>().currentIdentity.userId, tempUser);
 
-      if(response is User){
+      if (response is User) {
         GetIt.I.get<AuthService>().setUser(response);
         Application.router.pop(context);
-      } else {
-
-      }
+      } else {}
     }
   }
 }

@@ -1,31 +1,11 @@
-import 'package:logger/logger.dart' as LoggerLib;
+import 'package:injectable/injectable.dart';
+import 'package:logger/logger.dart';
 
+@injectable
 class LoggingService {
-  static LoggingService _loggingService;
-  List<Logger> _loggerList;
+  final Logger _logger;
 
-  factory LoggingService(){
-    return _loggingService ??= LoggingService._();
-  }
+  LoggingService() : _logger = Logger();
 
-  LoggingService._(){
-    _loggerList = [];
-  }
-
-  Logger getLogger(Type T){
-    for(var logger in _loggerList){
-      if(logger.className == (T.runtimeType).toString()){
-        return logger;
-      }
-    }
-    var logger = Logger((T.runtimeType).toString());
-    _loggerList.add(logger);
-    return logger;
-  }
-}
-
-class Logger extends LoggerLib.Logger {
-  final String className;
-
-  Logger(this.className) : super(printer: LoggerLib.SimplePrinter(printTime: true));
+  Logger get logger => _logger;
 }

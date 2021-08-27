@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/data/models/announcement.dart';
-import 'package:hopaut/services/services.dart';
+import 'package:hopaut/data/repositories/repository.dart';
+import 'package:injectable/injectable.dart';
 
 import '../models/announcement_message.dart';
 
@@ -12,10 +12,9 @@ import '../models/announcement_message.dart';
 /// :author: Braz Castana
 ///
 
-class AnnouncementRepository {
-  Logger _logger =
-      GetIt.I.get<LoggingService>().getLogger(AnnouncementRepository);
-  Dio _dio = GetIt.I.get<DioService>().dio;
+@injectable
+class AnnouncementRepository extends Repository {
+  AnnouncementRepository() : super();
 
   /// POST: This endpoint is used for updating an announcement.
   /// Can be updated only by event host.
@@ -26,10 +25,10 @@ class AnnouncementRepository {
     };
 
     try {
-      final Response res = await _dio.post(API.ANNOUNCEMENTS, data: payload);
+      final Response res = await dio.post(API.ANNOUNCEMENTS, data: payload);
       return res.statusCode == 201;
     } on DioError catch (e) {
-      _logger.e(e.message);
+      logger.e(e.message);
       return false;
     }
   }
@@ -42,11 +41,11 @@ class AnnouncementRepository {
     };
 
     try {
-      final Response res = await _dio
+      final Response res = await dio
           .put('${API.ANNOUNCEMENTS}/${announcement.id}', data: payload);
       return res.statusCode == 200;
     } on DioError catch (e) {
-      _logger.e(e.message);
+      logger.e(e.message);
       return false;
     }
   }
@@ -54,14 +53,15 @@ class AnnouncementRepository {
   /// GET: This endpoint returns an announcement by Id.
   Future<AnnouncementMessage> get(int id) async {
     try {
-      final Response res = await _dio.get('${API.ANNOUNCEMENTS}/$id');
+      final Response res = await dio.get('${API.ANNOUNCEMENTS}/$id');
       if (res.statusCode == 200) {
         return AnnouncementMessage.fromJson(res.data['Data']);
       }
     } on DioError catch (e) {
-      _logger.e(e.message);
+      logger.e(e.message);
       return AnnouncementMessage.error(error: e.message);
     }
+    return null;
   }
 
   /// DELETE: This endpoint is used to delete an announcement.
@@ -69,10 +69,10 @@ class AnnouncementRepository {
   /// Can only be deleted by event host.
   Future<bool> delete(int id) async {
     try {
-      final Response res = await _dio.delete('${API.ANNOUNCEMENTS}/$id');
+      final Response res = await dio.delete('${API.ANNOUNCEMENTS}/$id');
       return res.statusCode == 204;
     } on DioError catch (e) {
-      _logger.e(e.message);
+      logger.e(e.message);
       return false;
     }
   }
@@ -81,7 +81,7 @@ class AnnouncementRepository {
   /// Can be accessed by all users that are related to the post.
   Future<List<AnnouncementMessage>> getAll(int postId) async {
     try {
-      final Response res = await _dio.get('${API.POST_ANNOUNCEMENTS}/$postId');
+      final Response res = await dio.get('${API.POST_ANNOUNCEMENTS}/$postId');
       if (res.statusCode == 200) {
         Iterable iterable = res.data['Data'];
         return iterable.map((e) => AnnouncementMessage.fromJson(e)).toList();
@@ -89,14 +89,14 @@ class AnnouncementRepository {
         return <AnnouncementMessage>[];
       }
     } on DioError catch (e) {
-      _logger.e(e.message);
+      logger.e(e.message);
       return [];
     }
   }
 
   Future<List<Announcement>> getInbox() async {
     try {
-      final Response res = await _dio.get(API.ANNOUNCEMENTS_INBOX);
+      final Response res = await dio.get(API.ANNOUNCEMENTS_INBOX);
       if (res.statusCode == 200) {
         Iterable iterable = res.data['Data'];
         return iterable.map((e) => Announcement.fromJson(e)).toList();
@@ -104,14 +104,14 @@ class AnnouncementRepository {
         return <Announcement>[];
       }
     } on DioError catch (e) {
-      _logger.e(e.message);
+      logger.e(e.message);
       return [];
     }
   }
 
   Future<List<Announcement>> getOutbox() async {
     try {
-      final Response res = await _dio.get(API.ANNOUNCEMENTS_OUTBOX);
+      final Response res = await dio.get(API.ANNOUNCEMENTS_OUTBOX);
       if (res.statusCode == 200) {
         Iterable iterable = res.data['Data'];
         return iterable.map((e) => Announcement.fromJson(e)).toList();
@@ -119,7 +119,7 @@ class AnnouncementRepository {
         return <Announcement>[];
       }
     } on DioError catch (e) {
-      _logger.e(e.message);
+      logger.e(e.message);
       return <Announcement>[];
     }
   }
