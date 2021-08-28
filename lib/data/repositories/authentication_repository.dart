@@ -10,7 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 
-@injectable
+@lazySingleton
 class AuthenticationRepository extends Repository {
   AuthenticationRepository() : super();
 

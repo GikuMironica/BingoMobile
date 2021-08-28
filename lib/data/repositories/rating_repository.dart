@@ -4,7 +4,7 @@ import 'package:hopaut/data/repositories/repository.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@lazySingleton
 class RatingRepository extends Repository {
   RatingRepository() : super();
 

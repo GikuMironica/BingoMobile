@@ -4,7 +4,7 @@ import 'package:hopaut/config/constants.dart' show API;
 import 'package:hopaut/data/models/profile.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@lazySingleton
 class ProfileRepository extends Repository {
   String _endpoint = API.PROFILE;
 

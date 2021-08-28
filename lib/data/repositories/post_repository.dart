@@ -10,7 +10,7 @@ import 'package:injectable/injectable.dart';
 
 import '../models/post.dart';
 
-@injectable
+@lazySingleton
 class PostRepository extends Repository {
   final String _endpoint = API.POSTS;
 

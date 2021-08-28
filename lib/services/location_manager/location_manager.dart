@@ -2,7 +2,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:injectable/injectable.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-@injectable
+@lazySingleton
 class LocationManager {
   static LocationManager _locationManager;
   Position currentPosition;

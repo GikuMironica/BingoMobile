@@ -17,7 +17,7 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import 'package:get_it/get_it.dart';
 
-@injectable
+@lazySingleton
 class AuthService with ChangeNotifier {
   static AuthService _authService;
   Identity _identity;

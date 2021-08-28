@@ -5,7 +5,7 @@ import 'package:injectable/injectable.dart';
 
 import '../models/user.dart';
 
-@injectable
+@lazySingleton
 class UserRepository extends Repository {
   String _endpoint = API.USERS;
 
@@ -14,7 +14,6 @@ class UserRepository extends Repository {
   /// Returns the user data.
   Future<User> get(String userId) async {
     try {
-      logger.i(dio);
       var response = await dio.get("$_endpoint/$userId");
       return User.fromJson(response.data['Data']);
     } on DioError catch (e) {

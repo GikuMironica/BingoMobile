@@ -1,7 +1,7 @@
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@lazySingleton
 class ReportRepository extends Repository {
   ReportRepository() : super();
 

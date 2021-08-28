@@ -8,7 +8,7 @@ import 'package:injectable/injectable.dart';
 
 enum ListState { IDLE, LOADING, NOT_LOADED_YET }
 
-@injectable
+@lazySingleton
 class EventManager with ChangeNotifier {
   ListState _userActiveListState;
   ListState _userInactiveListState;

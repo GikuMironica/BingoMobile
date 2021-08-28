@@ -4,7 +4,7 @@ import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@lazySingleton
 class EventRepository extends Repository {
   EventRepository() : super();
 

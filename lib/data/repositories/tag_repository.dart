@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:hopaut/config/constants.dart' show API;
 import 'package:injectable/injectable.dart';
 
-@injectable
+@lazySingleton
 class TagRepository extends Repository {
   String _endpoint = API.TAGS;
 

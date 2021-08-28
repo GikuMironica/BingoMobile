@@ -3,7 +3,7 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@lazySingleton
 class ParticipantRepository extends Repository {
   ParticipantRepository() : super();
 

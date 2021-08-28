@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
-@injectable
+@lazySingleton
 class LoggingService {
   final Logger _logger;
 

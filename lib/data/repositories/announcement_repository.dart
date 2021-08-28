@@ -12,7 +12,7 @@ import '../models/announcement_message.dart';
 /// :author: Braz Castana
 ///
 
-@injectable
+@lazySingleton
 class AnnouncementRepository extends Repository {
   AnnouncementRepository() : super();
 

@@ -31,23 +31,26 @@ import '../services/settings_manager/settings_manager.dart'
 _i1.GetIt $initGetIt(_i1.GetIt get,
     {String environment, _i2.EnvironmentFilter environmentFilter}) {
   final gh = _i2.GetItHelper(get, environment, environmentFilter);
-  gh.factory<_i3.AnnouncementRepository>(() => _i3.AnnouncementRepository());
-  gh.factory<_i4.AuthService>(() => _i4.AuthService());
-  gh.factory<_i5.AuthenticationRepository>(
+  gh.lazySingleton<_i3.AnnouncementRepository>(
+      () => _i3.AnnouncementRepository());
+  gh.lazySingleton<_i4.AuthService>(() => _i4.AuthService());
+  gh.lazySingleton<_i5.AuthenticationRepository>(
       () => _i5.AuthenticationRepository());
-  gh.factory<_i6.DioService>(() => _i6.DioService());
-  gh.factory<_i7.EventManager>(() => _i7.EventManager());
-  gh.factory<_i8.EventRepository>(() => _i8.EventRepository());
-  gh.factory<_i9.LocationManager>(() => _i9.LocationManager());
-  gh.factory<_i10.LoggingService>(() => _i10.LoggingService());
-  gh.factory<_i11.ParticipantRepository>(() => _i11.ParticipantRepository());
-  gh.factory<_i12.PostRepository>(() => _i12.PostRepository());
-  gh.factory<_i13.ProfileRepository>(() => _i13.ProfileRepository());
-  gh.factory<_i14.RatingRepository>(() => _i14.RatingRepository());
-  gh.factory<_i15.ReportRepository>(() => _i15.ReportRepository());
-  gh.factory<_i16.SecureStorageService>(() => _i16.SecureStorageService());
-  gh.factory<_i17.SettingsManager>(() => _i17.SettingsManager());
-  gh.factory<_i18.TagRepository>(() => _i18.TagRepository());
-  gh.factory<_i19.UserRepository>(() => _i19.UserRepository());
+  gh.lazySingleton<_i6.DioService>(() => _i6.DioService());
+  gh.lazySingleton<_i7.EventManager>(() => _i7.EventManager());
+  gh.lazySingleton<_i8.EventRepository>(() => _i8.EventRepository());
+  gh.lazySingleton<_i9.LocationManager>(() => _i9.LocationManager());
+  gh.lazySingleton<_i10.LoggingService>(() => _i10.LoggingService());
+  gh.lazySingleton<_i11.ParticipantRepository>(
+      () => _i11.ParticipantRepository());
+  gh.lazySingleton<_i12.PostRepository>(() => _i12.PostRepository());
+  gh.lazySingleton<_i13.ProfileRepository>(() => _i13.ProfileRepository());
+  gh.lazySingleton<_i14.RatingRepository>(() => _i14.RatingRepository());
+  gh.lazySingleton<_i15.ReportRepository>(() => _i15.ReportRepository());
+  gh.lazySingleton<_i16.SecureStorageService>(
+      () => _i16.SecureStorageService());
+  gh.lazySingleton<_i17.SettingsManager>(() => _i17.SettingsManager());
+  gh.lazySingleton<_i18.TagRepository>(() => _i18.TagRepository());
+  gh.lazySingleton<_i19.UserRepository>(() => _i19.UserRepository());
   return get;
 }
