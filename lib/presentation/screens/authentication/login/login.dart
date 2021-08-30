@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hopaut/controllers/blocs/login_bloc.dart';
-import 'package:hopaut/controllers/blocs/states/login_state.dart';
-import 'package:hopaut/controllers/statuses/login_form_submission_status.dart';
+import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
+import 'package:hopaut/controllers/blocs/login/login_state.dart';
+import 'package:hopaut/controllers/blocs/login/login_form_submission_status.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';
 import 'package:hopaut/presentation/widgets/text/text.dart';

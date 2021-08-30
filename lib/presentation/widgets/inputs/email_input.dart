@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hopaut/controllers/blocs/events/login_event.dart';
-import 'package:hopaut/controllers/blocs/login_bloc.dart';
+import 'package:hopaut/controllers/blocs/login/login_event.dart';
+import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
 
 Widget emailInputField(BuildContext context, dynamic state) {
   return TextFormField(
@@ -36,7 +36,7 @@ Widget emailInputField(BuildContext context, dynamic state) {
   );
 }
 
-
+// TODO - tobe replaced with the one above
 StreamBuilder<String> emailInput(bloc) {
   return StreamBuilder<String>(
     stream: bloc.emailValid,

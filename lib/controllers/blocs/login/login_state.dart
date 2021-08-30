@@ -1,7 +1,7 @@
 
 import 'package:email_validator/email_validator.dart';
-import 'package:hopaut/controllers/blocs/states/base_state.dart';
-import 'package:hopaut/controllers/statuses/login_form_submission_status.dart';
+import 'package:hopaut/controllers/blocs/base_state.dart';
+import 'package:hopaut/controllers/blocs/login/login_form_submission_status.dart';
 
 class LoginState extends BaseState{
   //validators
