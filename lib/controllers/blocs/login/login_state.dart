@@ -1,31 +1,36 @@
 
 import 'package:email_validator/email_validator.dart';
 import 'package:hopaut/controllers/blocs/base_state.dart';
-import 'package:hopaut/controllers/blocs/login/login_form_submission_status.dart';
+import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
 
 class LoginState extends BaseState{
+  final RegExp _pwdRule = RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
+
   //validators
   bool get isValidEmail => EmailValidator.validate(username.trim());
-  bool get isValidPassword => password.length >6;
 
   final String username;
   final String password;
-  final FormSubmissionStatus formStatus;
+  final bool obscureText;
+  final LoginPageStatus formStatus;
 
   LoginState({
     this.username = '',
     this.password = '',
-    this.formStatus = const InitialFormStatus(),
+    this.obscureText = true,
+    this.formStatus = const Idle(),
   });
 
   LoginState copyWith({
     String username,
     String password,
-    FormSubmissionStatus formStatus,
+    bool obscureText,
+    LoginPageStatus formStatus,
   }){
     return LoginState(
       username: username ?? this.username,
       password: password ?? this.password,
+      obscureText: obscureText ?? this.obscureText,
       formStatus: formStatus ?? this.formStatus,
     );
   }

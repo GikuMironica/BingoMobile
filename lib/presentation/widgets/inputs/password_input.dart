@@ -1,5 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
+import 'package:hopaut/controllers/blocs/login/login_event.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+Widget passwordInputField(BuildContext context, dynamic state){
+  return TextFormField(
+    onChanged: (value) =>
+      context.read<LoginBloc>().add(
+          LoginPasswordChanged(password:value)
+      ),
+    obscureText: state.obscureText,
+    decoration: InputDecoration(
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      alignLabelWithHint: true,
+      suffixIcon: GestureDetector(
+        onTap: () async{
+            context.read<LoginBloc>().add(ShowPasswordClicked(obscureText: state.obscureText));
+            // at this point state is still not updated.
+            // await Future<void>.delayed(
+            //     const Duration(seconds: 3), () => {
+            //       context.read<LoginBloc>().add(ShowPasswordClicked(obscureText: state.obscureText))
+            //     }
+            // );
+        },
+        child: Icon(
+          Icons.remove_red_eye_outlined,
+          color: Colors.black,
+        ),
+      ),
+      isDense: true,
+      labelText: 'Password',
+      hintText: 'Enter a password',
+      hintStyle: TextStyle(color: Colors.grey[400]),
+      contentPadding:
+      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey[400]),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey),
+      ),
+      labelStyle:
+      TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+      border: const OutlineInputBorder()
+      ),
+    );
+}
 
 
 

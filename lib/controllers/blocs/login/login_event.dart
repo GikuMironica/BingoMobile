@@ -31,11 +31,26 @@ class LoginPasswordChanged extends BaseEvent {
 
   @override
   LoginState handleEvent(BaseState state) {
-    throw UnimplementedError();
+    LoginState loginState = state;
+    return loginState.copyWith(password: password);
   }
 }
 
 // Event 3
+class ShowPasswordClicked extends BaseEvent{
+  final bool obscureText;
+
+  ShowPasswordClicked({this.obscureText});
+
+  @override
+  LoginState handleEvent(BaseState state) {
+    LoginState loginState = state;
+    return loginState.copyWith(obscureText: !obscureText);
+  }
+
+}
+
+// Event 4
 class LoginBtnClicked extends BaseEvent {
   @override
   LoginState handleEvent(BaseState state) {
@@ -43,7 +58,7 @@ class LoginBtnClicked extends BaseEvent {
   }
 }
 
-// Event 4
+// Event 5
 class FacebookLoginBtnClicked extends BaseEvent {
   @override
   LoginState handleEvent(BaseState state) {
@@ -51,7 +66,7 @@ class FacebookLoginBtnClicked extends BaseEvent {
   }
 }
 
-// Event 5
+// Event 6
 class ForgotPasswordLabelClicked extends BaseEvent {
   @override
   LoginState handleEvent(BaseState state) {
@@ -59,7 +74,7 @@ class ForgotPasswordLabelClicked extends BaseEvent {
   }
 }
 
-// Event 6
+// Event 7
 class SignUpLabelClicked extends BaseEvent {
   @override
   LoginState handleEvent(BaseState state) {

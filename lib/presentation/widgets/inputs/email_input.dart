@@ -6,7 +6,7 @@ import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
 Widget emailInputField(BuildContext context, dynamic state) {
   return TextFormField(
     validator: (value) =>
-    state.isValidEmail ? null : 'Invalid email',
+      state.isValidEmail ? null : 'Invalid email',
     onChanged: (value) =>
         context.read<LoginBloc>().add(
             LoginUsernameChanged(username: value)

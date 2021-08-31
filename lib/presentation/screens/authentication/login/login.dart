@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
 import 'package:hopaut/controllers/blocs/login/login_state.dart';
-import 'package:hopaut/controllers/blocs/login/login_form_submission_status.dart';
+import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
+import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';
 import 'package:hopaut/presentation/widgets/text/text.dart';
 
@@ -74,6 +75,14 @@ class _LoginPageState extends State<LoginPage> {
             BlocBuilder<LoginBloc, LoginState>(
               builder:(context, state){
                 return emailInputField(context, state);
+              }
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            BlocBuilder<LoginBloc, LoginState>(
+              builder:(context, state){
+                return passwordInputField(context, state);
               }
             ),
           ],
