@@ -4,8 +4,7 @@ import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @lazySingleton
-class SettingsManager with ChangeNotifier {
-  static SettingsManager _settingsManager;
+class SettingsService with ChangeNotifier {
   PackageInfo _packageInfo;
   SharedPreferences _preferences;
 
@@ -13,11 +12,7 @@ class SettingsManager with ChangeNotifier {
 
   bool pushNotifications = true;
 
-  factory SettingsManager() {
-    return _settingsManager ??= SettingsManager._();
-  }
-
-  SettingsManager._() {
+  SettingsService() {
     getPackageInfo();
     getSharedPreferences();
   }

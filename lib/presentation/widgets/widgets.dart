@@ -1,9 +1,9 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
+import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/services/authentication_service.dart';
 import '../../config/routes/application.dart';
 
 Widget makeTitle({String title}) {
@@ -129,8 +129,7 @@ Widget authActionButton({String text, BuildContext context}) {
     ),
     child: MaterialButton(
       onPressed: () async {
-        await GetIt.I
-            .get<AuthService>()
+        await getIt<AuthenticationService>()
             .loginWithEmail('cixi@getnada.com', 'Trevor13')
             .then((value) => Application.router.navigateTo(context, '/account'))
             .catchError(() => Fluttertoast.showToast(msg: 'Unable to login'));

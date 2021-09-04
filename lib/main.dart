@@ -12,16 +12,15 @@ import 'package:hopaut/config/routes/router.dart';
 import 'package:hopaut/controllers/search_page_controller/search_page_controller.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
-import 'package:hopaut/services/dio_service/dio_service.dart';
-import 'package:hopaut/services/event_manager/event_manager.dart';
-import 'package:hopaut/services/secure_service/secure_sotrage_service.dart';
-import 'package:hopaut/services/settings_manager/settings_manager.dart';
+import 'package:hopaut/services/authentication_service.dart';
+import 'package:hopaut/services/dio_service.dart';
+import 'package:hopaut/services/event_service.dart';
+import 'package:hopaut/services/secure_sotrage_service.dart';
+import 'package:hopaut/services/settings_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
-
 import 'controllers/login_page/login_page_controller.dart';
 import 'init.dart';
-import 'services/auth_service/auth_service.dart';
 import 'package:flutter/material.dart' hide Router;
 
 void main() async {
@@ -41,13 +40,18 @@ void main() async {
 
     final LinkedHashMap<dynamic, dynamic> data = authBox.get('identity');
     if (data != null) {
+      AuthenticationService authenticationService =
+          getIt<AuthenticationService>();
+      SecureStorageService secureStorageService = getIt<SecureStorageService>();
+      DioService dioService = getIt<DioService>();
+
       Map<String, dynamic> _data = data.map((a, b) => MapEntry(a as String, b));
-      getIt<AuthService>().setIdentity(Identity.fromJson(_data));
-      if (getIt<SecureStorageService>().read(key: 'token') != null) {
-        getIt<DioService>().setBearerToken(
-            await getIt<SecureStorageService>().read(key: 'token'));
-        await getIt<AuthService>().refreshToken();
-        await getIt<AuthService>().refreshUser();
+      authenticationService.setIdentity(Identity.fromJson(_data));
+      if (secureStorageService.read(key: 'token') != null) {
+        dioService
+            .setBearerToken(await secureStorageService.read(key: 'token'));
+        await authenticationService.refreshToken();
+        await authenticationService.refreshUser();
       }
     }
   } on HiveError catch (err) {
@@ -86,10 +90,10 @@ class _HopAutState extends State<HopAut> {
         nextRoute = result.notification.payload.additionalData['event'];
       });
     });
-    if (getIt<AuthService>().currentIdentity != null) {
+    if (getIt<AuthenticationService>().currentIdentity != null) {
       await OneSignal.shared.setSubscription(true);
       await OneSignal.shared
-          .setExternalUserId(getIt<AuthService>().currentIdentity.id);
+          .setExternalUserId(getIt<AuthenticationService>().currentIdentity.id);
     } else {
       await OneSignal.shared.setSubscription(false);
     }
@@ -97,12 +101,12 @@ class _HopAutState extends State<HopAut> {
 
   Future<void> refreshTokenTask() async {
     if (getIt<SecureStorageService>().read(key: 'token') != null) {
-      await getIt<AuthService>().refreshToken();
+      await getIt<AuthenticationService>().refreshToken();
       getIt<DioService>().dio.options.headers[HttpHeaders.authorizationHeader] =
           'bearer ${await getIt<SecureStorageService>().read(key: 'token')}';
       print("Bearer token applied");
-      if (getIt<AuthService>().user == null) {
-        await getIt<AuthService>().refreshUser();
+      if (getIt<AuthenticationService>().user == null) {
+        await getIt<AuthenticationService>().refreshUser();
       }
     }
   }
@@ -121,12 +125,12 @@ class _HopAutState extends State<HopAut> {
       },
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider<AuthService>(
-              create: (context) => getIt<AuthService>()),
-          ChangeNotifierProvider<EventManager>(
-              create: (context) => getIt<EventManager>()),
-          ChangeNotifierProvider<SettingsManager>(
-              create: (context) => getIt<SettingsManager>()),
+          ChangeNotifierProvider<AuthenticationService>(
+              create: (context) => getIt<AuthenticationService>()),
+          ChangeNotifierProvider<EventService>(
+              create: (context) => getIt<EventService>()),
+          ChangeNotifierProvider<SettingsService>(
+              create: (context) => getIt<SettingsService>()),
           ChangeNotifierProvider<LoginPageController>(
             create: (_) => LoginPageController(),
             lazy: true,

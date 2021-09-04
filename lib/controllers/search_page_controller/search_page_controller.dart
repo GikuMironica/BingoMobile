@@ -13,7 +13,7 @@ import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/data/repositories/post_repository.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
-import 'package:hopaut/services/location_manager/location_manager.dart';
+import 'package:hopaut/services/location_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -52,7 +52,7 @@ class SearchPageController extends ChangeNotifier {
 
   BuildContext context;
 
-  LocationManager _locationManager = GetIt.I.get<LocationManager>();
+  LocationService _locationManager = getIt<LocationService>();
 
   List<Widget> get cardList => _cardList;
 
@@ -179,9 +179,10 @@ class SearchPageController extends ChangeNotifier {
         _hereMapController.mapScene.setLayerState(
             MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
         const double distanceToEarthInMeters = 3000;
+        await getIt<LocationService>().getCurrentLocation();
         GeoCoordinates geoCoordinates = GeoCoordinates(
-            GetIt.I.get<LocationManager>().currentPosition.latitude,
-            GetIt.I.get<LocationManager>().currentPosition.longitude);
+            getIt<LocationService>().currentPosition.latitude,
+            getIt<LocationService>().currentPosition.longitude);
         _hereMapController.camera
             .lookAtPointWithDistance(geoCoordinates, distanceToEarthInMeters);
         GeoCircle geoCircle = GeoCircle(geoCoordinates, 15000);
@@ -220,7 +221,7 @@ class SearchPageController extends ChangeNotifier {
   }
 
   void filterToggleStreetParty() {
-    searchQuery.houseParty = !searchQuery.houseParty;
+    searchQuery.streetParty = !searchQuery.streetParty;
     notifyListeners();
   }
 

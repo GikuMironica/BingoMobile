@@ -23,8 +23,8 @@ import 'package:hopaut/data/repositories/tag_repository.dart';
 import 'package:hopaut/presentation/widgets/currency_icons.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
-import 'package:hopaut/services/event_manager/event_manager.dart';
-import 'package:hopaut/services/image_conversion.dart';
+import 'package:hopaut/services/event_service.dart';
+import 'package:hopaut/utils/image_conversion.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../widgets/inputs/event_drop_down.dart';
@@ -498,7 +498,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                           await getIt<PostRepository>().create(_post, []);
                       setState(() => _submitButtonDisabled = true);
                       if (postRes != null) {
-                        getIt<EventManager>().addUserActive(postRes);
+                        getIt<EventService>().addUserActive(postRes);
                         Application.router.navigateTo(
                             context, '/event/${postRes.postId}',
                             replace: true);

@@ -1,35 +1,34 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/authentication_repository.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
-import 'package:hopaut/services/dio_service/dio_service.dart';
-import 'package:hopaut/services/event_manager/event_manager.dart';
-import 'package:hopaut/services/secure_service/secure_sotrage_service.dart';
+import 'package:hopaut/services/dio_service.dart';
+import 'package:hopaut/services/event_service.dart';
+import 'package:hopaut/services/secure_sotrage_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-import 'package:get_it/get_it.dart';
-
 @lazySingleton
-class AuthService with ChangeNotifier {
-  static AuthService _authService;
+class AuthenticationService with ChangeNotifier {
+  final SecureStorageService _secureStorageService;
+  final UserRepository _userRepository;
+  final AuthenticationRepository _authenticationRepository;
+  final EventService _eventService;
+
   Identity _identity;
   User _user;
   bool lock = false;
   bool oneSignalSettings = false;
 
-  factory AuthService() {
-    return _authService ??= AuthService._();
-  }
-
-  AuthService._();
+  AuthenticationService()
+      : _secureStorageService = getIt<SecureStorageService>(),
+        _userRepository = getIt<UserRepository>(),
+        _authenticationRepository = getIt<AuthenticationRepository>(),
+        _eventService = getIt<EventService>();
 
   Identity get currentIdentity => _identity;
 
@@ -39,10 +38,9 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> writeTokenToKeychain({String token, String refreshToken}) async {
-    await getIt<SecureStorageService>().fss.write(key: 'token', value: token);
+    await _secureStorageService.fss.write(key: 'token', value: token);
     print('Access token written to keychain');
-    await getIt<SecureStorageService>()
-        .fss
+    await _secureStorageService.fss
         .write(key: 'refreshToken', value: refreshToken);
     print('Refresh token written to keychain');
   }
@@ -63,7 +61,7 @@ class AuthService with ChangeNotifier {
   User get user => _user;
 
   Future<void> refreshUser() async {
-    final User user = await getIt<UserRepository>().get(_identity.id);
+    final User user = await _userRepository.get(_identity.id);
     setUser(user);
     if (!oneSignalSettings) {
       await setOneSignalParams();
@@ -85,21 +83,20 @@ class AuthService with ChangeNotifier {
   ///
   /// Triggers Identity Repository -> [IdentityRepository.login()]
   Future<bool> loginWithEmail(String email, String password) async {
-    Map<String, dynamic> _loginResult = await getIt<AuthenticationRepository>()
-        .login(email: email, password: password);
+    Map<String, dynamic> _loginResult =
+        await _authenticationRepository.login(email: email, password: password);
     if (_loginResult is Map<String, dynamic>) {
       if (_loginResult.containsKey('Token')) {
         await applyToken(_loginResult);
         return true;
       }
-    } else {
-      return false;
     }
+    return false;
   }
 
   Future<void> loginWithFb() async {
     Map<String, dynamic> _fbResult =
-        await getIt<AuthenticationRepository>().loginWithFacebook();
+        await _authenticationRepository.loginWithFacebook();
     if (_fbResult.containsKey('Token')) {
       lock = true;
       await applyToken(_fbResult);
@@ -111,12 +108,11 @@ class AuthService with ChangeNotifier {
       if (DateTime.now()
           .isAfter(DateTime.fromMillisecondsSinceEpoch(_identity.expiry))) {
         print('Refreshing Token');
-        final token = await getIt<SecureStorageService>().read(key: 'token');
+        final token = await _secureStorageService.read(key: 'token');
         final refreshToken =
-            await getIt<SecureStorageService>().read(key: 'refreshToken');
+            await _secureStorageService.read(key: 'refreshToken');
         Map<String, dynamic> _refreshResult =
-            await getIt<AuthenticationRepository>()
-                .refresh(token, refreshToken);
+            await _authenticationRepository.refresh(token, refreshToken);
         if (_refreshResult.containsKey('Token')) {
           print('Token successfully refreshed');
           await applyToken(_refreshResult);
@@ -128,17 +124,17 @@ class AuthService with ChangeNotifier {
   }
 
   Future<bool> register(String email, String password) async {
-    bool _registrationResult = await getIt<AuthenticationRepository>()
-        .register(email: email, password: password);
+    bool _registrationResult = await _authenticationRepository.register(
+        email: email, password: password);
     return _registrationResult;
   }
 
   Future<void> logout() async {
     await Hive.box('auth').delete('identity');
-    getIt<SecureStorageService>().deleteAll();
+    _secureStorageService.deleteAll();
     getIt<DioService>().removeBearerToken();
 
-    getIt<EventManager>().reset();
+    _eventService.reset();
     setIdentity(null);
     setUser(null);
     if (oneSignalSettings) {

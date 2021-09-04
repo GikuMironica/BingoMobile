@@ -25,9 +25,9 @@ import 'package:hopaut/presentation/widgets/event_page/event_requirements.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/image_screen/image_screen.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
-import 'package:hopaut/services/date_formatter.dart';
-import 'package:hopaut/services/event_manager/event_manager.dart';
+import 'package:hopaut/services/authentication_service.dart';
+import 'package:hopaut/services/date_formatter_service.dart';
+import 'package:hopaut/services/event_service.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
@@ -77,7 +77,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
     post = await getIt<PostRepository>().get(postId);
     host = await getIt<ProfileRepository>().get(post.userId);
     participants = await getIt<PostRepository>().getAttendees(postId);
-    isHost = post.userId == getIt<AuthService>().user.id;
+    isHost = post.userId == getIt<AuthenticationService>().user.id;
     isAttending = post.isAttending;
     isActiveEvent = post.activeFlag == 1;
   }
@@ -118,7 +118,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
         .then((value) => setState(() => postIsLoaded = true))
         .then((value) {
       checkForImages();
-      getIt<EventManager>().setPostContext(post);
+      getIt<EventService>().setPostContext(post);
     });
     super.initState();
 
@@ -320,8 +320,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                       SizedBox(height: 8),
                       Divider(),
                       EventDetails(
-                        date: GetIt.I
-                            .get<DateFormatter>()
+                        date: getIt<DateFormatterService>()
                             .formatDate(post.eventTime),
                         time: post.timeRange,
                         price: post.event.entrancePrice,
@@ -331,7 +330,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                       Divider(),
                       SizedBox(height: 16),
                       EventDescription(isHost
-                          ? Provider.of<EventManager>(context)
+                          ? Provider.of<EventService>(context)
                               .postContext
                               .event
                               .description
@@ -487,7 +486,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   void dispose() {
     _scrollController?.dispose();
     _animationController?.dispose();
-    GetIt.I.get<EventManager>().setPostContext(null);
+    GetIt.I.get<EventService>().setPostContext(null);
 
     super.dispose();
   }

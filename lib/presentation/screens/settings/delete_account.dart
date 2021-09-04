@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/presentation/forms/blocs/delete_account.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
+import 'package:hopaut/services/authentication_service.dart';
 
 class DeleteAccountPopup extends StatefulWidget {
   @override
@@ -15,7 +14,7 @@ class DeleteAccountPopup extends StatefulWidget {
 class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
   bool _loading = false;
   DeleteAccountBloc _deleteAccountBloc =
-      DeleteAccountBloc(getIt<AuthService>().user.email);
+      DeleteAccountBloc(getIt<AuthenticationService>().user.email);
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -109,7 +108,7 @@ class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
                                   ? () async {
                                       bool deleteRes =
                                           await getIt<UserRepository>().delete(
-                                              getIt<AuthService>()
+                                              getIt<AuthenticationService>()
                                                   .currentIdentity
                                                   .id);
                                       setState(() => _loading = true);

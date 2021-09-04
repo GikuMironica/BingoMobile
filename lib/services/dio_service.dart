@@ -1,10 +1,9 @@
 import 'dart:io';
-
-import 'package:get_it/get_it.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
+import 'package:hopaut/config/dio_base_options.dart';
+import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/services/authentication_service.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../config/dio_base_options.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -35,7 +34,7 @@ class DioService {
               _dio.options.headers[HttpHeaders.contentTypeHeader] =
                   'application/json';
             }
-            await GetIt.I.get<AuthService>().refreshToken();
+            await getIt<AuthenticationService>().refreshToken();
             _dio.options.headers[HttpHeaders.contentTypeHeader] =
                 requestOptions.headers[HttpHeaders.contentTypeHeader];
             return _dio.request(requestOptions.path);

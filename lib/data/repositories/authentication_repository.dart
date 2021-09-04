@@ -1,18 +1,20 @@
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/repositories/repository.dart';
-import 'package:hopaut/services/dio_service/dio_service.dart';
-import 'package:hopaut/services/secure_service/secure_sotrage_service.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:get_it/get_it.dart';
+import 'package:hopaut/services/secure_sotrage_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 
 @lazySingleton
 class AuthenticationRepository extends Repository {
-  AuthenticationRepository() : super();
+  final SecureStorageService _secureStorageService;
+
+  AuthenticationRepository()
+      : _secureStorageService = getIt<SecureStorageService>(),
+        super();
 
   /// Login: Authenticates a user with the system.
   Future<Map<String, dynamic>> login(
@@ -83,13 +85,11 @@ class AuthenticationRepository extends Repository {
   Future<Map<String, dynamic>> refresh(
       String token, String refreshToken) async {
     final Map<String, dynamic> payload = {
-      'token': await getIt<SecureStorageService>().read(key: 'token'),
-      'refreshToken':
-          await getIt<SecureStorageService>().read(key: 'refreshToken')
+      'token': _secureStorageService.read(key: 'token'),
+      'refreshToken': await _secureStorageService.read(key: 'refreshToken')
     };
     try {
-      Response response =
-          await getIt<DioService>().dio.post(API.REFRESH, data: payload);
+      Response response = await dio.post(API.REFRESH, data: payload);
       return response.data;
     } on DioError catch (e) {
       return {'Error': e.message};
@@ -99,10 +99,7 @@ class AuthenticationRepository extends Repository {
   Future<bool> forgotPassword(String email) async {
     final Map<String, dynamic> payload = {'email': email};
     try {
-      Response response = await GetIt.I
-          .get<DioService>()
-          .dio
-          .post(API.FORGOT_PASSWORD, data: payload);
+      Response response = await dio.post(API.FORGOT_PASSWORD, data: payload);
 
       return (response.statusCode == 200);
     } on DioError catch (e) {

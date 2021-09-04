@@ -5,7 +5,7 @@ import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/repositories/rating_repository.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/services/event_manager/event_manager.dart';
+import 'package:hopaut/services/event_service.dart';
 
 class RateEvent extends StatefulWidget {
   final int postId;
@@ -87,7 +87,7 @@ class _RateEventState extends State<RateEvent> {
   Map<String, dynamic> _generatePayload() {
     Map<String, dynamic> ratingPayload = {
       'rate': rating,
-      'userId': GetIt.I.get<EventManager>().postContext.userId,
+      'userId': getIt<EventService>().postContext.userId,
       'postId': widget.postId,
       'feedback': ratingController.text.trim()
     };

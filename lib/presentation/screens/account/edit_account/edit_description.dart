@@ -6,7 +6,7 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
+import 'package:hopaut/services/authentication_service.dart';
 
 class EditAccountDescription extends StatefulWidget {
   @override
@@ -20,7 +20,7 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
   void initState() {
     _descriptionController = TextEditingController();
     _descriptionController.text =
-        GetIt.I.get<AuthService>().user.description ?? '';
+        GetIt.I.get<AuthenticationService>().user.description ?? '';
     super.initState();
   }
 
@@ -90,20 +90,20 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
   Future<void> updateDescription(
       String newDescription, BuildContext context) async {
     bool descriptionHasChanged =
-        GetIt.I.get<AuthService>().user.description != newDescription;
+        getIt<AuthenticationService>().user.description != newDescription;
 
     if (!descriptionHasChanged) {
       Application.router.pop(context);
     } else {
       final User tempUser = User(
-          firstName: GetIt.I.get<AuthService>().user.firstName,
-          lastName: GetIt.I.get<AuthService>().user.lastName,
+          firstName: getIt<AuthenticationService>().user.firstName,
+          lastName: getIt<AuthenticationService>().user.lastName,
           description: newDescription);
-      var response = await getIt<UserRepository>()
-          .update(GetIt.I.get<AuthService>().currentIdentity.userId, tempUser);
+      var response = await getIt<UserRepository>().update(
+          getIt<AuthenticationService>().currentIdentity.userId, tempUser);
 
       if (response is User) {
-        GetIt.I.get<AuthService>().setUser(response);
+        getIt<AuthenticationService>().setUser(response);
         Application.router.pop(context);
       } else {}
     }

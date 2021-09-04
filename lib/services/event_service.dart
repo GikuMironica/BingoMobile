@@ -9,15 +9,13 @@ import 'package:injectable/injectable.dart';
 enum ListState { IDLE, LOADING, NOT_LOADED_YET }
 
 @lazySingleton
-class EventManager with ChangeNotifier {
+class EventService with ChangeNotifier {
   ListState _userActiveListState;
   ListState _userInactiveListState;
   ListState _activeHopautsListState;
   ListState _inactiveHopautsListState;
 
   List<MiniPost> _userActiveList;
-
-  List<MiniPost> get userActiveList => _userActiveList;
   List<MiniPost> _userInactiveList;
   List<MiniPost> _activeHopauts;
   List<MiniPost> _inactiveHopauts;
@@ -30,16 +28,12 @@ class EventManager with ChangeNotifier {
 
   ListState get inactiveHopautsListState => _inactiveHopautsListState;
 
-  static EventManager _eventManager;
+  List<MiniPost> get userActiveList => _userActiveList;
 
-  Post postContext;
-  int miniPostContextId;
+  Post _postContext;
+  int _miniPostContextId;
 
-  factory EventManager() {
-    return _eventManager ??= EventManager._();
-  }
-
-  EventManager._() {
+  EventService() {
     _userActiveListState = ListState.NOT_LOADED_YET;
     _userInactiveListState = ListState.NOT_LOADED_YET;
     _activeHopautsListState = ListState.NOT_LOADED_YET;
@@ -125,34 +119,34 @@ class EventManager with ChangeNotifier {
   }
 
   void setPostContext(Post post) {
-    postContext = post;
+    _postContext = post;
   }
 
   void setMiniPostContext(int id) {
-    miniPostContextId = id;
+    _miniPostContextId = id;
   }
 
-  Post get getPostContext {
-    return postContext;
-  }
+  Post get postContext => _postContext;
+
+  int get miniPostContextId => _miniPostContextId;
 
   void setPostDescription(String text) {
-    postContext.event.description = text;
+    _postContext.event.description = text;
     notifyListeners();
   }
 
   void setPostTags(List<String> text) {
-    postContext.tags = text;
+    _postContext.tags = text;
     notifyListeners();
   }
 
   void setPostTitle(String text) {
-    postContext.event.title = text;
+    _postContext.event.title = text;
     notifyListeners();
   }
 
   void setPostRequirements(String text) {
-    postContext.event.requirements = text;
+    _postContext.event.requirements = text;
     notifyListeners();
   }
 

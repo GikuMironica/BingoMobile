@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
 import 'package:hopaut/presentation/screens/events/create_event.dart';
-import 'package:hopaut/presentation/screens/events/create_event/create_event.dart';
 import 'package:hopaut/presentation/screens/events/event_list/past_events.dart';
 import 'package:hopaut/presentation/widgets/hopaut_app_bar.dart';
-import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/services/event_manager/event_manager.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 

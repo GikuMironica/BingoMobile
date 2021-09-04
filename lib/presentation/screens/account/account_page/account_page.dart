@@ -3,7 +3,7 @@ import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_account.dart';
 import 'package:hopaut/presentation/screens/settings/settings.dart';
 import 'package:hopaut/presentation/widgets/profile_picture/profile_picture.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
+import 'package:hopaut/services/authentication_service.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
@@ -75,7 +75,7 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Widget userFullName() {
-    return Consumer<AuthService>(
+    return Consumer<AuthenticationService>(
       builder: (context, auth, child) => Text(
         auth.user.fullName,
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
@@ -84,7 +84,7 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Widget userDescription() {
-    return Consumer<AuthService>(
+    return Consumer<AuthenticationService>(
       builder: (context, auth, child) => Visibility(
         visible: auth.user.description != null,
         child: Column(
@@ -100,7 +100,7 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Widget accountInformation() {
-    return Consumer<AuthService>(
+    return Consumer<AuthenticationService>(
       builder: (context, auth, child) => ListView(
         primary: false,
         shrinkWrap: true,

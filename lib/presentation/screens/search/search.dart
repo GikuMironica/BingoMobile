@@ -1,12 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/search_page_controller/search_page_controller.dart';
 import 'package:hopaut/data/models/mini_post.dart';
-import 'package:hopaut/services/location_manager/location_manager.dart';
+import 'package:hopaut/services/location_service.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +20,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void initState() {
-    GetIt.I.get<LocationManager>().getCurrentLocation();
+    getIt<LocationService>().getCurrentLocation();
     super.initState();
   }
 
@@ -38,9 +38,8 @@ class _SearchPageState extends State<SearchPage> {
           size: 16,
         ),
         onPressed: () => controller.mapController.camera.lookAtPoint(
-            GeoCoordinates(
-                GetIt.I.get<LocationManager>().currentPosition.latitude,
-                GetIt.I.get<LocationManager>().currentPosition.longitude)),
+            GeoCoordinates(getIt<LocationService>().currentPosition.latitude,
+                getIt<LocationService>().currentPosition.longitude)),
       ),
       resizeToAvoidBottomInset: false,
       body: Stack(
