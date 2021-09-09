@@ -118,11 +118,7 @@ class _HopAutState extends State<HopAut> {
 
     return GestureDetector(
       onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus &&
-            currentFocus.focusedChild != null) {
-          currentFocus.focusedChild.unfocus();
-        }
+        FocusManager.instance.primaryFocus?.unfocus();
       },
       child: MultiProvider(
         providers: [

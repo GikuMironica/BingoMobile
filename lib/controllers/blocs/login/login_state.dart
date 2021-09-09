@@ -13,7 +13,7 @@ class LoginState extends BaseState{
   final String username;
   final String password;
   final bool obscureText;
-  final LoginPageStatus formStatus;
+  LoginPageStatus formStatus;
 
   LoginState({
     this.username = '',

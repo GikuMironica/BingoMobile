@@ -86,9 +86,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget _loginForm(){
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        final formStatus = state.formStatus;
-        if (formStatus is SubmissionFailed) {
-          _showSnackBar(context, formStatus.exception.toString());
+        final status = state.formStatus;
+        if (status is SubmissionFailed) {
+          _showSnackBar(context, status.exception.toString());
+          state.formStatus = new Idle();
         }
       },
       child: Form(

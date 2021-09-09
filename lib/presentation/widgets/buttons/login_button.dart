@@ -9,41 +9,31 @@ import 'package:fluro/fluro.dart';
 
 
 Widget login_button(BuildContext context, dynamic state, GlobalKey<FormState> formKey){
-    if (state.formStatus is LoginSubmitted){
-      return Container(
-          width: 200,
-          height: 50.0,
-          child: Container(
-              child: CircularProgressIndicator()
-          )
-      );
-    }
-    else if (state.formStatus is SubmissionSuccess){
+    if (state.formStatus is SubmissionSuccess){
       Future.delayed(Duration.zero, (){
         Application.router.navigateTo(context, '/home',
         replace: true,
         clearStack: true,
         transition: TransitionType.fadeIn);
       });
-      return CircularProgressIndicator();
-    } else {
-        return Container(
-            width: 200,
-            height: 50.0,
-            decoration: gradientBoxDecoration(),
-            child: MaterialButton(
-                onPressed: () {
-                  //print(state.password+" and "+state.username);
-                  if (formKey.currentState.validate()){
-                    context.read<LoginBloc>().add(new LoginClicked());
-                  }
-                },
-                // TODO - Translation
-                child: Text('Login'),
-            )
-        );
     }
+    return Container(
+        width: 200,
+        height: 50.0,
+        decoration: gradientBoxDecoration(),
+        child: MaterialButton(
+            onPressed: () {
+              //print(state.password+" and "+state.username);
+              if (formKey.currentState.validate()){
+                context.read<LoginBloc>().add(new LoginClicked());
+              }
+            },
+            // TODO - Translation
+            child: Text('Login'),
+        )
+    );
 }
+
 
 
 /// Authentication Button
