@@ -9,6 +9,8 @@ import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
 import 'package:hopaut/presentation/widgets/buttons/login_button.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';
 import 'package:hopaut/presentation/widgets/text/text.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
+import 'package:hopaut/config/constants/theme.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -27,30 +29,35 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: SafeArea(
-          child: BlocProvider(
-            create: (context) => LoginBloc(),
-            child: Stack(children: [
-              _loginView(),
-                BlocBuilder<LoginBloc, LoginState>(
-                  builder: (context, state){
-                    return Visibility(
-                      visible: state.formStatus is LoginSubmitted,
-                      child: Container(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.height,
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.30),
-                        ),
-                        child: Center(
-                            child: CircularProgressIndicator()
-                        ),
-                      )
-                    );
-                  }
-                ),
-            ],
-           ),
-          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              BlocProvider(
+                create: (context) => LoginBloc(),
+                child: Stack(children: [
+                  _loginView(),
+                    BlocBuilder<LoginBloc, LoginState>(
+                      builder: (context, state){
+                        return Visibility(
+                          visible: state.formStatus is LoginSubmitted,
+                          child: Container(
+                            height: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.height,
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.30),
+                            ),
+                            child: Center(
+                                child: CircularProgressIndicator()
+                            ),
+                          )
+                        );
+                      }
+                    ),
+                ],
+               ),
+              ),
+          ]),
         )
       )
     );
@@ -60,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
     return Stack(
         children: [
           Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(10.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -109,20 +116,19 @@ class _LoginPageState extends State<LoginPage> {
                     return passwordInputField(context, state);
                   }
                 ),
-                SizedBox(height: 8),
-                // TODO - Implement Forgot Password page, Translation
-                Text('Forgot Password'),
-                SizedBox(height: 24),
+                forgotPassword(context),
+                SizedBox(height: 16),
                 BlocBuilder<LoginBloc, LoginState>(
                     builder: (context, state){
                       return login_button(context, state, _formKey);
                     }
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 10),
                 FacebookButton(
                   onPressed: () {}
                 ),
-                SizedBox(height: 50),
+                // TODO - Move to bottom
+                noAccountYetPrompt(context)
               ],
             )
           ),
@@ -139,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           behavior: SnackBarBehavior.floating,
           duration: Duration(seconds: 2),
-          backgroundColor: Color(0xFFED2F65)
+          backgroundColor: HATheme.HOPAUT_PINK
         )
     );
   }

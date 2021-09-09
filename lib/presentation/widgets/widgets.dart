@@ -83,48 +83,57 @@ Widget accountAlreadyPrompt(BuildContext context) {
   ]);
 }
 
-Widget signUpOrRecoverPassword(BuildContext context) {
-  return Row(children: <Widget>[
-    FlatButton(
-      onPressed: () {
-        Application.router.navigateTo(context, '/registration',
+Widget forgotPassword(BuildContext context) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.end,
+    children: [
+      FlatButton(
+        padding: EdgeInsets.zero,
+        onPressed: () {
+          Application.router.navigateTo(context, '/registration',
             replace: true,
             transition: TransitionType.fadeIn,
             transitionDuration: Duration());
-      },
-      child: Text(
-        // TODO - Translations
-        'Sign up',
-        style: TextStyle(
-          fontWeight: FontWeight.w500,
-          color: Colors.pink,
-          fontSize: 14
-        ),
-      ),
-    ),
-    Text(
-      "⬤",
-      style: TextStyle(
-        fontWeight: FontWeight.w500,
-        fontSize: 14
-      ),
-    ),
-    FlatButton(
-      onPressed: () {
-        Application.router.navigateTo(context, '/forgot_password',
-            replace: true,
-            transition: TransitionType.fadeIn,
-            transitionDuration: Duration());
-      },
-      child: Text(
-        'Sign up',
-        style: TextStyle(
+        },
+        child: Text(
+          // TODO - Translations
+          'Forgot password?',
+          style: TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.pink,
-            fontSize: 14
+            fontSize: 12
+          ),
+          textAlign: TextAlign.end,
         ),
-      ),
-    ),
+      )
+    ],
+  );
+}
+
+Widget noAccountYetPrompt(BuildContext context){
+  return Column(children: [
+    FlatButton(
+     onPressed: () {
+       Application.router.navigateTo(context, '/registration',
+         replace: true,
+         transition: TransitionType.fadeIn,
+         transitionDuration: Duration());
+     },
+      child:
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Don\'t have an account yet? '),
+            Text(
+              'Sign up',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Colors.pink
+              )
+            )
+          ],
+        )
+    )
   ]);
 }
 

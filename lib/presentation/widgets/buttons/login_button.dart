@@ -22,15 +22,25 @@ Widget login_button(BuildContext context, dynamic state, GlobalKey<FormState> fo
         height: 50.0,
         decoration: gradientBoxDecoration(),
         child: MaterialButton(
-            onPressed: state.formStatus is LoginSubmitted ? null : () {
-              print("Current state, true if login was pressed: ${state.formStatus is LoginSubmitted}");
-              dynamic ok = "Current state, true if login was pressed: ${state.formStatus is LoginSubmitted}";
-              if (formKey.currentState.validate()){
-                context.read<LoginBloc>().add(new LoginClicked());
-              }
-            },
-            // TODO - Translation
-            child: Text('Login'),
+          elevation: 100,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
+          onPressed: state.formStatus is LoginSubmitted ? null : () {
+            print("Current state, true if login was pressed: ${state.formStatus is LoginSubmitted}");
+            dynamic ok = "Current state, true if login was pressed: ${state.formStatus is LoginSubmitted}";
+            if (formKey.currentState.validate()){
+              context.read<LoginBloc>().add(new LoginClicked());
+            }
+          },
+          // TODO - Translation
+          child: Text(
+            'Login',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            )
+          ),
         )
     );
 }
