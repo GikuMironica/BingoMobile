@@ -3,10 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
 import 'package:hopaut/controllers/blocs/login/login_state.dart';
 import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
+import 'package:hopaut/presentation/widgets/buttons/facebook_login_button.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
 import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
+import 'package:hopaut/presentation/widgets/buttons/login_button.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';
 import 'package:hopaut/presentation/widgets/text/text.dart';
+
 
 class LoginPage extends StatefulWidget {
 
@@ -64,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         final formStatus = state.formStatus;
-        if (formStatus is SubmissionFailed){
+        if (formStatus is SubmissionFailed) {
           _showSnackBar(context, formStatus.exception.toString());
         }
       },
@@ -85,6 +88,20 @@ class _LoginPageState extends State<LoginPage> {
                 return passwordInputField(context, state);
               }
             ),
+            SizedBox(height: 8),
+            // TODO - Implement Forgot Password page, Translation
+            Text('Forgot Password'),
+            SizedBox(height: 24),
+            BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state){
+                  return login_button(context, state, _formKey);
+                }
+            ),
+            SizedBox(height: 16),
+            FacebookButton(
+              onPressed: () {}
+            ),
+            SizedBox(height: 50),
           ],
         )
       )

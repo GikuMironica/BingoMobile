@@ -3,6 +3,7 @@ import 'package:hopaut/controllers/blocs/base_state.dart';
 import 'package:hopaut/controllers/blocs/login/login_state.dart';
 import 'package:hopaut/services/auth_service/auth_service.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
 
 abstract class LoginEvent extends BaseEvent{
 
@@ -16,68 +17,80 @@ class LoginUsernameChanged extends LoginEvent {
   LoginUsernameChanged({this.username});
 
   @override
-  LoginState handleEvent(BaseState state) {
+  Stream<LoginState> handleEvent(BaseState state) async*{
     // Dart style down-casting...
     LoginState loginState = state;
-    return loginState.copyWith(username: username);
+    yield loginState.copyWith(username: username);
   }
 }
 
 // Event 2
-class LoginPasswordChanged extends BaseEvent {
+class LoginPasswordChanged extends LoginEvent {
   final String password;
 
   LoginPasswordChanged({this.password});
 
   @override
-  LoginState handleEvent(BaseState state) {
+  Stream<LoginState> handleEvent(BaseState state) async*{
     LoginState loginState = state;
-    return loginState.copyWith(password: password);
+    yield loginState.copyWith(password: password);
   }
 }
 
 // Event 3
-class ShowPasswordClicked extends BaseEvent{
+class ShowPasswordClicked extends LoginEvent{
   final bool obscureText;
 
   ShowPasswordClicked({this.obscureText});
 
   @override
-  LoginState handleEvent(BaseState state) {
+  Stream<LoginState> handleEvent(BaseState state) async*{
     LoginState loginState = state;
-    return loginState.copyWith(obscureText: !obscureText);
+    yield loginState.copyWith(obscureText: !obscureText);
   }
 
 }
 
 // Event 4
-class LoginBtnClicked extends BaseEvent {
+class LoginClicked extends LoginEvent {
   @override
-  LoginState handleEvent(BaseState state) {
-    throw UnimplementedError();
+  Stream<LoginState> handleEvent(BaseState state) async*{
+    LoginState loginState = state;
+
+    yield loginState.copyWith(formStatus: LoginSubmitted());
+    try{
+      bool result =
+        await authService.loginWithUserCredentials(loginState.username.trim(), loginState.password.trim());
+      if(result)
+        yield loginState.copyWith(formStatus: SubmissionSuccess());
+      else
+        yield loginState.copyWith(formStatus: SubmissionFailed(new Exception("Invalid Credentials")));
+    } catch(e){
+      yield loginState.copyWith(formStatus: SubmissionFailed(e));
+    }
   }
 }
 
 // Event 5
-class FacebookLoginBtnClicked extends BaseEvent {
+class FacebookLoginClicked extends LoginEvent {
   @override
-  LoginState handleEvent(BaseState state) {
+  Stream<LoginState> handleEvent(BaseState state) async*{
     throw UnimplementedError();
   }
 }
 
 // Event 6
-class ForgotPasswordLabelClicked extends BaseEvent {
+class ForgotPasswordLabelClicked extends LoginEvent {
   @override
-  LoginState handleEvent(BaseState state) {
+  Stream<LoginState> handleEvent(BaseState state) async*{
     throw UnimplementedError();
   }
 }
 
 // Event 7
-class SignUpLabelClicked extends BaseEvent {
+class SignUpLabelClicked extends LoginEvent {
   @override
-  LoginState handleEvent(BaseState state) {
+  Stream<LoginState> handleEvent(BaseState state) async*{
     throw UnimplementedError();
   }
 }

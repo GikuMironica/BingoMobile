@@ -8,6 +8,7 @@ class LoginState extends BaseState{
 
   //validators
   bool get isValidEmail => EmailValidator.validate(username.trim());
+  bool get isValidPassword => password.isNotEmpty;
 
   final String username;
   final String password;

@@ -5,6 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 Widget passwordInputField(BuildContext context, dynamic state){
   return TextFormField(
+    validator: (value) =>
+      // TODO - Translation
+      state.isValidPassword ? null : 'Please input your password',
     onChanged: (value) =>
       context.read<LoginBloc>().add(
           LoginPasswordChanged(password:value)
@@ -15,7 +18,8 @@ Widget passwordInputField(BuildContext context, dynamic state){
       alignLabelWithHint: true,
       suffixIcon: GestureDetector(
         onTap: () async{
-            context.read<LoginBloc>().add(ShowPasswordClicked(obscureText: state.obscureText));
+          context.read<LoginBloc>().add(ShowPasswordClicked(obscureText: state.obscureText));
+          // TODO - Don't pop up keyboard on tap of 'Show password button'
             // at this point state is still not updated.
             // await Future<void>.delayed(
             //     const Duration(seconds: 3), () => {
@@ -49,6 +53,7 @@ Widget passwordInputField(BuildContext context, dynamic state){
 
 
 
+// TODO - replace this implementation with the one from above in the other components using it (Forgot Password)
 /// Password Input Box
 ///
 /// [bloc] is the Bloc that contains [bloc.passwordChanged]
