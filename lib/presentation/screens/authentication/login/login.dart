@@ -36,10 +36,13 @@ class _LoginPageState extends State<LoginPage> {
                     return Visibility(
                       visible: state.formStatus is LoginSubmitted,
                       child: Container(
-                        height: 1000,
-                        width: 1000,
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.height,
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.20),
+                          color: Colors.black.withOpacity(0.30),
+                        ),
+                        child: Center(
+                            child: CircularProgressIndicator()
                         ),
                       )
                     );
