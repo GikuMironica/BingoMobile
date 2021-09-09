@@ -11,6 +11,6 @@ class LoginSubmitted extends LoginPageStatus {}
 class SubmissionSuccess extends LoginPageStatus {}
 
 class SubmissionFailed extends LoginPageStatus {
-  final Exception exception;
+  final String exception;
   SubmissionFailed(this.exception);
 }

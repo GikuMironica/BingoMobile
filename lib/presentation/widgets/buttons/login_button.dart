@@ -10,7 +10,13 @@ import 'package:fluro/fluro.dart';
 
 Widget login_button(BuildContext context, dynamic state, GlobalKey<FormState> formKey){
     if (state.formStatus is LoginSubmitted){
-      return CircularProgressIndicator();
+      return Container(
+          width: 200,
+          height: 50.0,
+          child: Container(
+              child: CircularProgressIndicator()
+          )
+      );
     }
     else if (state.formStatus is SubmissionSuccess){
       Future.delayed(Duration.zero, (){

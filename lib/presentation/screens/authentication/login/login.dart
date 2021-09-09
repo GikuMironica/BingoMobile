@@ -29,9 +29,26 @@ class _LoginPageState extends State<LoginPage> {
         child: SafeArea(
           child: BlocProvider(
             create: (context) => LoginBloc(),
-            child: _loginView(),
+            child: Stack(children: [
+              _loginView(),
+                BlocBuilder<LoginBloc, LoginState>(
+                  builder: (context, state){
+                    return Visibility(
+                      visible: state.formStatus is LoginSubmitted,
+                      child: Container(
+                        height: 1000,
+                        width: 1000,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.20),
+                        ),
+                      )
+                    );
+                  }
+                ),
+            ],
+           ),
           ),
-        ),
+        )
       )
     );
   }
@@ -72,46 +89,53 @@ class _LoginPageState extends State<LoginPage> {
         }
       },
       child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            BlocBuilder<LoginBloc, LoginState>(
-              builder:(context, state){
-                return emailInputField(context, state);
-              }
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            BlocBuilder<LoginBloc, LoginState>(
-              builder:(context, state){
-                return passwordInputField(context, state);
-              }
-            ),
-            SizedBox(height: 8),
-            // TODO - Implement Forgot Password page, Translation
-            Text('Forgot Password'),
-            SizedBox(height: 24),
-            BlocBuilder<LoginBloc, LoginState>(
-                builder: (context, state){
-                  return login_button(context, state, _formKey);
-                }
-            ),
-            SizedBox(height: 16),
-            FacebookButton(
-              onPressed: () {}
-            ),
-            SizedBox(height: 50),
-          ],
-        )
-      )
+            key: _formKey,
+            child: Column(
+              children: [
+                BlocBuilder<LoginBloc, LoginState>(
+                  builder:(context, state){
+                    return emailInputField(context, state);
+                  }
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                BlocBuilder<LoginBloc, LoginState>(
+                  builder:(context, state){
+                    return passwordInputField(context, state);
+                  }
+                ),
+                SizedBox(height: 8),
+                // TODO - Implement Forgot Password page, Translation
+                Text('Forgot Password'),
+                SizedBox(height: 24),
+                BlocBuilder<LoginBloc, LoginState>(
+                    builder: (context, state){
+                      return login_button(context, state, _formKey);
+                    }
+                ),
+                SizedBox(height: 16),
+                FacebookButton(
+                  onPressed: () {}
+                ),
+                SizedBox(height: 50),
+              ],
+            )
+          ),
     );
   }
 
   void _showSnackBar(BuildContext context, String message) {
     Scaffold.of(context).showSnackBar(
         SnackBar(
-            content: Text(message)
+          content:
+            Text(
+                message,
+                textAlign: TextAlign.center,
+            ),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
+          backgroundColor: Color(0xFFED2F65)
         )
     );
   }

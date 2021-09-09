@@ -64,7 +64,8 @@ class LoginClicked extends LoginEvent {
       if(result)
         yield loginState.copyWith(formStatus: SubmissionSuccess());
       else
-        yield loginState.copyWith(formStatus: SubmissionFailed(new Exception("Invalid Credentials")));
+        // TODO - Translations
+        yield loginState.copyWith(formStatus: SubmissionFailed("Invalid Credentials"));
     } catch(e){
       yield loginState.copyWith(formStatus: SubmissionFailed(e));
     }
