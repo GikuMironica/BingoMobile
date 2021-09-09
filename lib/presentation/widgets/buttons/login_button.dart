@@ -22,8 +22,9 @@ Widget login_button(BuildContext context, dynamic state, GlobalKey<FormState> fo
         height: 50.0,
         decoration: gradientBoxDecoration(),
         child: MaterialButton(
-            onPressed: () {
-              //print(state.password+" and "+state.username);
+            onPressed: state.formStatus is LoginSubmitted ? null : () {
+              print("Current state, true if login was pressed: ${state.formStatus is LoginSubmitted}");
+              dynamic ok = "Current state, true if login was pressed: ${state.formStatus is LoginSubmitted}";
               if (formKey.currentState.validate()){
                 context.read<LoginBloc>().add(new LoginClicked());
               }

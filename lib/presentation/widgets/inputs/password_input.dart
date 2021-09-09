@@ -20,6 +20,7 @@ Widget passwordInputField(BuildContext context, dynamic state){
         onTap: () async{
           FocusManager.instance.primaryFocus.unfocus();
           context.read<LoginBloc>().add(ShowPasswordClicked(obscureText: state.obscureText));
+          FocusManager.instance.primaryFocus.unfocus();
           // TODO - Don't pop up keyboard on tap of 'Show password button'
             // at this point state is still not updated.
             // await Future<void>.delayed(
