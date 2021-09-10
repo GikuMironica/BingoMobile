@@ -33,10 +33,12 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              BlocProvider(
-                create: (context) => LoginBloc(),
-                child: Stack(children: [
-                  _loginView(),
+              Container(
+                child: BlocProvider(
+                  create: (context) => LoginBloc(),
+                  child: Stack(children: [
+                    _loginView(),
+                    // This will make the screen darker and pop up spinner once user clicks login.
                     BlocBuilder<LoginBloc, LoginState>(
                       builder: (context, state){
                         return Visibility(
@@ -54,9 +56,19 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       }
                     ),
-                ],
-               ),
+                  ],
+                 ),
+                ),
               ),
+              Expanded(
+                child: Container(
+                  child: // TODO - Move to bottom
+                  Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    child: noAccountYetPrompt(context)
+                  )
+                ),
+              )
           ]),
         )
       )
@@ -100,38 +112,36 @@ class _LoginPageState extends State<LoginPage> {
         }
       },
       child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                BlocBuilder<LoginBloc, LoginState>(
-                  builder:(context, state){
-                    return emailInputField(context, state);
-                  }
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                BlocBuilder<LoginBloc, LoginState>(
-                  builder:(context, state){
-                    return passwordInputField(context, state);
-                  }
-                ),
-                forgotPassword(context),
-                SizedBox(height: 16),
-                BlocBuilder<LoginBloc, LoginState>(
-                    builder: (context, state){
-                      return login_button(context, state, _formKey);
-                    }
-                ),
-                SizedBox(height: 10),
-                FacebookButton(
-                  onPressed: () {}
-                ),
-                // TODO - Move to bottom
-                noAccountYetPrompt(context)
-              ],
-            )
-          ),
+        key: _formKey,
+        child: Column(
+          children: [
+            BlocBuilder<LoginBloc, LoginState>(
+              builder:(context, state){
+                return emailInputField(context, state);
+              }
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            BlocBuilder<LoginBloc, LoginState>(
+              builder:(context, state){
+                return passwordInputField(context, state);
+              }
+            ),
+            forgotPassword(context),
+            SizedBox(height: 16),
+            BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state){
+                  return login_button(context, state, _formKey);
+                }
+            ),
+            SizedBox(height: 10),
+            FacebookButton(
+              onPressed: () {}
+            ),
+          ],
+        )
+      ),
     );
   }
 

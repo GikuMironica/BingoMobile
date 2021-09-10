@@ -111,30 +111,28 @@ Widget forgotPassword(BuildContext context) {
 }
 
 Widget noAccountYetPrompt(BuildContext context){
-  return Column(children: [
-    FlatButton(
-     onPressed: () {
-       Application.router.navigateTo(context, '/registration',
-         replace: true,
-         transition: TransitionType.fadeIn,
-         transitionDuration: Duration());
-     },
-      child:
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Don\'t have an account yet? '),
-            Text(
-              'Sign up',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.pink
-              )
+  return FlatButton(
+   onPressed: () {
+     Application.router.navigateTo(context, '/registration',
+       replace: true,
+       transition: TransitionType.fadeIn,
+       transitionDuration: Duration());
+   },
+    child:
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Don\'t have an account yet? '),
+          Text(
+            'Sign up',
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: Colors.pink
             )
-          ],
-        )
-    )
-  ]);
+          )
+        ],
+      )
+  );
 }
 
 Widget authActionButton({String text, BuildContext context}) {

@@ -27,8 +27,6 @@ Widget login_button(BuildContext context, dynamic state, GlobalKey<FormState> fo
             borderRadius: BorderRadius.circular(50),
           ),
           onPressed: state.formStatus is LoginSubmitted ? null : () {
-            print("Current state, true if login was pressed: ${state.formStatus is LoginSubmitted}");
-            dynamic ok = "Current state, true if login was pressed: ${state.formStatus is LoginSubmitted}";
             if (formKey.currentState.validate()){
               context.read<LoginBloc>().add(new LoginClicked());
             }
