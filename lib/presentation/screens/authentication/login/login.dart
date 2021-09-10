@@ -10,7 +10,7 @@ import 'package:hopaut/presentation/widgets/buttons/login_button.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';
 import 'package:hopaut/presentation/widgets/text/text.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
-import 'package:hopaut/config/constants/theme.dart';
+import 'package:hopaut/presentation/widgets/animations.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
       listener: (context, state) {
         final status = state.formStatus;
         if (status is SubmissionFailed) {
-          _showSnackBar(context, status.exception.toString());
+          showSnackBar(context, status.exception.toString());
           state.formStatus = new Idle();
         }
       },
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
               }
             ),
             forgotPassword(context),
-            SizedBox(height: 16),
+            SizedBox(height: 32),
             BlocBuilder<LoginBloc, LoginState>(
                 builder: (context, state){
                   return login_button(context, state, _formKey);
@@ -142,21 +142,6 @@ class _LoginPageState extends State<LoginPage> {
           ],
         )
       ),
-    );
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content:
-            Text(
-                message,
-                textAlign: TextAlign.center,
-            ),
-          behavior: SnackBarBehavior.floating,
-          duration: Duration(seconds: 2),
-          backgroundColor: HATheme.HOPAUT_PINK
-        )
     );
   }
 

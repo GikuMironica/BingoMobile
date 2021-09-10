@@ -4,6 +4,7 @@ class HopautLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.fromLTRB(0, 20, 0 ,0),
       height: MediaQuery.of(context).size.height / 7,
       decoration: const BoxDecoration(
           image: DecorationImage(
