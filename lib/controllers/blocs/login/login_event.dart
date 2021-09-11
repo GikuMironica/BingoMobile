@@ -1,13 +1,13 @@
 import 'package:hopaut/controllers/blocs/base_event.dart';
 import 'package:hopaut/controllers/blocs/base_state.dart';
 import 'package:hopaut/controllers/blocs/login/login_state.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
+import 'package:hopaut/services/authentication_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
 
 abstract class LoginEvent extends BaseEvent{
 
-  AuthService authService = GetIt.I.get<AuthService>();
+  AuthenticationService authService = GetIt.I.get<AuthenticationService>();
 }
 
 // Event 1
@@ -60,7 +60,7 @@ class LoginClicked extends LoginEvent {
     yield loginState.copyWith(formStatus: LoginSubmitted());
     try{
       bool result =
-        await authService.loginWithUserCredentials(loginState.username.trim(), loginState.password.trim());
+        await authService.loginWithEmail(loginState.username.trim(), loginState.password.trim());
       if(result)
         yield loginState.copyWith(formStatus: SubmissionSuccess());
       else

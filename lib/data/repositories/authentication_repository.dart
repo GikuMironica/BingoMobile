@@ -4,7 +4,7 @@ import 'package:hopaut/data/repositories/repository.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:hopaut/services/secure_sotrage_service.dart';
+import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 

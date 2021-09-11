@@ -15,7 +15,7 @@ import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/services/dio_service.dart';
 import 'package:hopaut/services/event_service.dart';
-import 'package:hopaut/services/secure_sotrage_service.dart';
+import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:hopaut/services/settings_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
