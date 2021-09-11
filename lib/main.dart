@@ -72,6 +72,7 @@ class _HopAutState extends State<HopAut> {
 
   @override
   void initState() {
+    // initialize Fluro router
     router = FluroRouter();
     Routes.configureRoutes(router);
     Application.router = router;

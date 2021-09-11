@@ -84,7 +84,7 @@ class AuthenticationService with ChangeNotifier {
   /// Triggers Identity Repository -> [IdentityRepository.login()]
   Future<bool> loginWithEmail(String email, String password) async {
     Map<String, dynamic> _loginResult =
-        await _authenticationRepository.login(email: email, password: password);
+    await _authenticationRepository.login(email: email, password: password);
     if (_loginResult is Map<String, dynamic>) {
       if (_loginResult.containsKey('Token')) {
         await applyToken(_loginResult);
@@ -96,11 +96,12 @@ class AuthenticationService with ChangeNotifier {
 
   Future<void> loginWithFb() async {
     Map<String, dynamic> _fbResult =
-        await _authenticationRepository.loginWithFacebook();
-    if (_fbResult.containsKey('Token')) {
+    await _authenticationRepository.loginWithFacebook();
+    if (_fbResult?.containsKey('Token') !=null) {
       lock = true;
       await applyToken(_fbResult);
     }
+    return false;
   }
 
   Future<void> refreshToken() async {
@@ -110,9 +111,9 @@ class AuthenticationService with ChangeNotifier {
         print('Refreshing Token');
         final token = await _secureStorageService.read(key: 'token');
         final refreshToken =
-            await _secureStorageService.read(key: 'refreshToken');
+        await _secureStorageService.read(key: 'refreshToken');
         Map<String, dynamic> _refreshResult =
-            await _authenticationRepository.refresh(token, refreshToken);
+        await _authenticationRepository.refresh(token, refreshToken);
         if (_refreshResult.containsKey('Token')) {
           print('Token successfully refreshed');
           await applyToken(_refreshResult);

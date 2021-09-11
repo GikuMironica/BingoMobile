@@ -34,7 +34,7 @@ class _InitializationState extends State<Initialization> {
           () => Application.router.navigateTo(context, '/login',
               replace: true,
               transition: TransitionType.fadeIn,
-              transitionDuration: Duration(milliseconds: 0)));
+              transitionDuration: Duration(milliseconds: 500)));
     } else {
       widget.route == null
           ? Future.delayed(
