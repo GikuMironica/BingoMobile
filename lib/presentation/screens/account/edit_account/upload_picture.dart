@@ -4,11 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/user.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
-import 'package:hopaut/services/dio_service/dio_service.dart';
+import 'package:hopaut/services/authentication_service.dart';
+import 'package:hopaut/services/dio_service.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -43,13 +43,17 @@ class _UploadPictureState extends State<UploadPicture> {
     var formData = FormData.fromMap(map);
     Dio dio = GetIt.I.get<DioService>().dio;
     try {
-      dio.options.headers[HttpHeaders.contentTypeHeader] = 'multipart/form-data';
-      final response = await dio.put('/users/updateprofilepic/${GetIt.I.get<AuthService>().currentIdentity.userId}', data: formData);
-      if (response.statusCode == 200){
-        GetIt.I.get<AuthService>().setUser(User.fromJson(response.data['Data']));
+      dio.options.headers[HttpHeaders.contentTypeHeader] =
+          'multipart/form-data';
+      final response = await dio.put(
+          '/users/updateprofilepic/${getIt<AuthenticationService>().currentIdentity.userId}',
+          data: formData);
+      if (response.statusCode == 200) {
+        getIt<AuthenticationService>()
+            .setUser(User.fromJson(response.data['Data']));
       }
       return true;
-    } on DioError catch(e) {
+    } on DioError catch (e) {
       return false;
     } finally {
       dio.options.headers[HttpHeaders.contentTypeHeader] = 'application/json';
@@ -147,7 +151,7 @@ class _UploadPictureState extends State<UploadPicture> {
                     InkWell(
                       onTap: () async {
                         final result = await upload();
-                        if(result){
+                        if (result) {
                           Application.router.pop(context);
                         } else {
                           print('Some shit happened');

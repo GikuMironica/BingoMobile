@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/user.dart';
+import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
-import 'package:hopaut/services/repo_locator/repo_locator.dart';
+import 'package:hopaut/services/authentication_service.dart';
 
 class EditAccountName extends StatefulWidget {
   @override
@@ -31,8 +32,8 @@ class _EditAccountNameState extends State<EditAccountName> {
     _firstNameHasErrors = false;
     _lastNameHasErrors = false;
 
-    _firstName.text = GetIt.I.get<AuthService>().user.firstName;
-    _lastName.text = GetIt.I.get<AuthService>().user.lastName;
+    _firstName.text = getIt<AuthenticationService>().user.firstName;
+    _lastName.text = getIt<AuthenticationService>().user.lastName;
   }
 
   @override
@@ -215,8 +216,9 @@ class _EditAccountNameState extends State<EditAccountName> {
   Future<void> updateUserName(
       String firstName, String lastName, BuildContext context) async {
     bool firstNameChanged =
-        GetIt.I.get<AuthService>().user.firstName != firstName;
-    bool lastNameChanged = GetIt.I.get<AuthService>().user.lastName != lastName;
+        getIt<AuthenticationService>().user.firstName != firstName;
+    bool lastNameChanged =
+        getIt<AuthenticationService>().user.lastName != lastName;
 
     if (!firstNameChanged && !lastNameChanged) {
       Application.router.pop(context);
@@ -224,11 +226,11 @@ class _EditAccountNameState extends State<EditAccountName> {
       final User tempUser = User(
           firstName: firstName,
           lastName: lastName,
-          description: GetIt.I.get<AuthService>().user.description);
-      final String userId = GetIt.I.get<AuthService>().user.id;
+          description: getIt<AuthenticationService>().user.description);
+      final String userId = getIt<AuthenticationService>().user.id;
       final User updatedUser =
-          await GetIt.I.get<RepoLocator>().users.update(userId, tempUser);
-      GetIt.I.get<AuthService>().setUser(updatedUser);
+          await getIt<UserRepository>().update(userId, tempUser);
+      getIt<AuthenticationService>().setUser(updatedUser);
       Application.router.pop(context);
     }
   }

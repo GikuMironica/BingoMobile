@@ -3,12 +3,13 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/post_repository.dart';
-import 'package:hopaut/data/repositories/tags_repository.dart';
+import 'package:hopaut/data/repositories/tag_repository.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/services/event_manager/event_manager.dart';
+import 'package:hopaut/services/event_service.dart';
 
 class EditPostTags extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class _EditPostTagsState extends State<EditPostTags> {
   @override
   void initState() {
     // TODO: implement initState
-    _oldPost = GetIt.I.get<EventManager>().getPostContext;
+    _oldPost = getIt<EventService>().postContext;
     _newPost = {
       'EndTime': _oldPost.endTime,
       'EventTime': _oldPost.eventTime,
@@ -40,7 +41,7 @@ class _EditPostTagsState extends State<EditPostTags> {
     if (_oldPost.tags == _newPost['Tags']) {
       bool res = await PostRepository().update(_oldPost.id, _newPost);
       if (res) {
-        GetIt.I.get<EventManager>().setPostTags(_newPost['Tags']);
+        getIt<EventService>().setPostTags(_newPost['Tags']);
         Fluttertoast.showToast(msg: 'Event Tags updated');
         Application.router.pop(context);
       } else {
@@ -130,7 +131,7 @@ class _EditPostTagsState extends State<EditPostTags> {
                         .replaceAll(RegExp(r" "), '-');
                     if (pattern.length > 2) {
                       List<String> tagResultList =
-                          await TagsRepository().get(pattern: pattern);
+                          await getIt<TagRepository>().get(pattern: pattern);
                       if (tagResultList.isNotEmpty) {
                         if (pattern == tagResultList.first) {
                           tagResultList.removeAt(0);

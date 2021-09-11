@@ -3,12 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/announcement.dart';
+import 'package:hopaut/data/repositories/announcement_repository.dart';
 import 'package:hopaut/presentation/widgets/announcements/index_child.dart';
 import 'package:hopaut/presentation/widgets/buttons/gradient_box_decoration.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/services/services.dart';
 
 class AnnouncementsIndex extends StatefulWidget {
   @override
@@ -21,10 +22,8 @@ class _AnnouncementsIndexState extends State<AnnouncementsIndex> {
 
   Future<List<Announcement>> getAnnouncements() async {
     if (announcementsList == null) {
-      final inboxList =
-          await GetIt.I.get<RepoLocator>().announcements.getInbox();
-      final outboxList =
-          await GetIt.I.get<RepoLocator>().announcements.getOutbox();
+      final inboxList = await getIt<AnnouncementRepository>().getInbox();
+      final outboxList = await getIt<AnnouncementRepository>().getOutbox();
       announcementsList = [...inboxList, ...outboxList];
     } else {
       announcementsList = [];

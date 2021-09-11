@@ -1,20 +1,21 @@
-import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/data/models/post.dart';
-import 'package:hopaut/services/repo_locator/repo_locator.dart';
+import 'package:hopaut/data/repositories/event_repository.dart';
+import 'package:hopaut/data/repositories/post_repository.dart';
+import 'package:injectable/injectable.dart';
 
 enum ListState { IDLE, LOADING, NOT_LOADED_YET }
 
-class EventManager with ChangeNotifier {
+@lazySingleton
+class EventService with ChangeNotifier {
   ListState _userActiveListState;
   ListState _userInactiveListState;
   ListState _activeHopautsListState;
   ListState _inactiveHopautsListState;
 
   List<MiniPost> _userActiveList;
-
-  List<MiniPost> get userActiveList => _userActiveList;
   List<MiniPost> _userInactiveList;
   List<MiniPost> _activeHopauts;
   List<MiniPost> _inactiveHopauts;
@@ -27,18 +28,12 @@ class EventManager with ChangeNotifier {
 
   ListState get inactiveHopautsListState => _inactiveHopautsListState;
 
-  RepoLocator _repoLocator = GetIt.I.get<RepoLocator>();
+  List<MiniPost> get userActiveList => _userActiveList;
 
-  static EventManager _eventManager;
+  Post _postContext;
+  int _miniPostContextId;
 
-  Post postContext;
-  int miniPostContextId;
-
-  factory EventManager() {
-    return _eventManager ??= EventManager._();
-  }
-
-  EventManager._() {
+  EventService() {
     _userActiveListState = ListState.NOT_LOADED_YET;
     _userInactiveListState = ListState.NOT_LOADED_YET;
     _activeHopautsListState = ListState.NOT_LOADED_YET;
@@ -64,7 +59,7 @@ class EventManager with ChangeNotifier {
 
   Future<void> fetchUserActiveEvents() async {
     setUserActiveListState(ListState.LOADING);
-    var response = await _repoLocator.posts.getUserActive();
+    var response = await getIt<PostRepository>().getUserActive();
     if (response != null) {
       _userActiveList = [...response];
       _userActiveList.sort((a, b) => a.startTime.compareTo(b.startTime));
@@ -75,7 +70,7 @@ class EventManager with ChangeNotifier {
 
   Future<void> fetchUserInactiveEvents() async {
     setUserInactiveListState(ListState.LOADING);
-    var response = await _repoLocator.posts.getUserInactive();
+    var response = await getIt<PostRepository>().getUserInactive();
     if (response != null) {
       _userInactiveList = [...response];
     }
@@ -85,7 +80,7 @@ class EventManager with ChangeNotifier {
 
   Future<void> fetchActiveHopauts() async {
     setActiveHopautsListState(ListState.LOADING);
-    var response = await _repoLocator.events.getAttending();
+    var response = await getIt<EventRepository>().getAttending();
     if (response != null) {
       _activeHopauts = [...response];
       _activeHopauts.sort((a, b) => a.startTime.compareTo(b.startTime));
@@ -96,7 +91,7 @@ class EventManager with ChangeNotifier {
 
   Future<void> fetchInactiveHopauts() async {
     setInactiveHopautsListState(ListState.LOADING);
-    var response = await _repoLocator.events.getAttended();
+    var response = await getIt<EventRepository>().getAttended();
     if (response != null) {
       _inactiveHopauts = [...response];
     }
@@ -124,34 +119,34 @@ class EventManager with ChangeNotifier {
   }
 
   void setPostContext(Post post) {
-    postContext = post;
+    _postContext = post;
   }
 
-  void setMiniPostContext(int id){
-    miniPostContextId = id;
+  void setMiniPostContext(int id) {
+    _miniPostContextId = id;
   }
 
-  Post get getPostContext {
-    return postContext;
-  }
+  Post get postContext => _postContext;
+
+  int get miniPostContextId => _miniPostContextId;
 
   void setPostDescription(String text) {
-    postContext.event.description = text;
+    _postContext.event.description = text;
     notifyListeners();
   }
 
   void setPostTags(List<String> text) {
-    postContext.tags = text;
+    _postContext.tags = text;
     notifyListeners();
   }
 
   void setPostTitle(String text) {
-    postContext.event.title = text;
+    _postContext.event.title = text;
     notifyListeners();
   }
 
   void setPostRequirements(String text) {
-    postContext.event.requirements = text;
+    _postContext.event.requirements = text;
     notifyListeners();
   }
 

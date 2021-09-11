@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/forms/blocs/registration.dart';
 import 'package:hopaut/presentation/widgets/buttons/gradient_box_decoration.dart';
@@ -9,9 +10,9 @@ import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
 import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
 import 'package:hopaut/presentation/widgets/loadingPopup.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';
 import 'package:hopaut/presentation/widgets/text/text.dart';
+import 'package:hopaut/services/authentication_service.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -141,7 +142,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   void attemptRegister(String email, String password) async {
     showLoadingDialog();
     bool registrationResult =
-        await GetIt.I.get<AuthService>().register(email, password);
+        await getIt<AuthenticationService>().register(email, password);
 
     if (registrationResult) {
       Application.router.navigateTo(context, '/login', clearStack: true);

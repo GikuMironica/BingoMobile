@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/data/repositories/post_repository.dart';
-import 'package:hopaut/presentation/widgets/text/subtitle.dart';
-import 'package:hopaut/services/event_manager/event_manager.dart';
+import 'package:hopaut/services/event_service.dart';
 
 class DeleteEventDialog extends StatefulWidget {
   final int postId;
@@ -28,13 +26,17 @@ class _DeleteEventDialogState extends State<DeleteEventDialog> {
           'Delete Event',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 10,),
-        Text(widget.postTitle, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          widget.postTitle,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
         RichText(
           text: TextSpan(
             style: TextStyle(fontSize: 14, color: Colors.black),
-            text:
-            'Once you confirm, this event will be deleted.',
+            text: 'Once you confirm, this event will be deleted.',
           ),
         ),
         SizedBox(
@@ -52,24 +54,26 @@ class _DeleteEventDialogState extends State<DeleteEventDialog> {
                         style: TextStyle(color: Colors.white)),
                     color: Colors.red,
                     onPressed: () async {
-                      bool deleteRes = await PostRepository().delete(widget.postId);
-                      if(deleteRes){
-                        Fluttertoast.showToast(msg: 'Event deletion successful');
-                        GetIt.I.get<EventManager>().removeUserEvent(widget.postId, widget.isActive);
+                      bool deleteRes =
+                          await PostRepository().delete(widget.postId);
+                      if (deleteRes) {
+                        Fluttertoast.showToast(
+                            msg: 'Event deletion successful');
+                        getIt<EventService>()
+                            .removeUserEvent(widget.postId, widget.isActive);
                         Navigator.pop(context, deleteRes);
-                      }else{
+                      } else {
                         Fluttertoast.showToast(msg: 'Unable to delete event');
                       }
                     }),
               ),
               ButtonTheme(
-                minWidth: 122,
-                child: RaisedButton(
-                    child: Text('Cancel',
-                        style: TextStyle(color: Colors.black54)),
-                    color: Colors.grey[350],
-                    onPressed: () => Application.router.pop(context))
-              ),
+                  minWidth: 122,
+                  child: RaisedButton(
+                      child: Text('Cancel',
+                          style: TextStyle(color: Colors.black54)),
+                      color: Colors.grey[350],
+                      onPressed: () => Application.router.pop(context))),
             ],
           ),
         )

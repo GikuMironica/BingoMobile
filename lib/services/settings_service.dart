@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:injectable/injectable.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SettingsManager with ChangeNotifier {
-  static SettingsManager _settingsManager;
+@lazySingleton
+class SettingsService with ChangeNotifier {
   PackageInfo _packageInfo;
   SharedPreferences _preferences;
 
@@ -11,18 +12,15 @@ class SettingsManager with ChangeNotifier {
 
   bool pushNotifications = true;
 
-  factory SettingsManager(){
-    return _settingsManager ??= SettingsManager._();
-  }
-
-  SettingsManager._(){
+  SettingsService() {
     getPackageInfo();
     getSharedPreferences();
   }
 
   void getSharedPreferences() async {
     _preferences = await SharedPreferences.getInstance();
-    pushNotifications = _preferences.getBool('HA_PUSH_NOTIFICATIONS') ?? pushNotifications;
+    pushNotifications =
+        _preferences.getBool('HA_PUSH_NOTIFICATIONS') ?? pushNotifications;
   }
 
   void getPackageInfo() async {

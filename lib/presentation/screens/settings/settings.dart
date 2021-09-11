@@ -8,8 +8,8 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
-import 'package:hopaut/services/services.dart';
+import 'package:hopaut/services/authentication_service.dart';
+import 'package:hopaut/services/settings_service.dart';
 import 'package:provider/provider.dart';
 import 'delete_account.dart';
 
@@ -100,7 +100,7 @@ class _SettingsState extends State<Settings> {
                             ),
                             Text('Notifications',
                                 style: TextStyle(color: Colors.black54)),
-                            Consumer<SettingsManager>(
+                            Consumer<SettingsService>(
                               builder: (context, settingsMgr, child) =>
                                   ListTile(
                                 contentPadding: EdgeInsets.zero,
@@ -145,12 +145,17 @@ class _SettingsState extends State<Settings> {
                                 trailing: Icon(Icons.exit_to_app),
                                 onTap: () async {
                                   setState(() => widget.logoutStatus = true);
-                                  await GetIt.I.get<AuthService>().logout().then((v){
-                                    Future.delayed(Duration(seconds: 1), () => Application.router.navigateTo(
-                                        context, '/login',
-                                        transition: TransitionType.fadeIn,
-                                    replace: true,
-                                    clearStack: true));
+                                  await GetIt.I
+                                      .get<AuthenticationService>()
+                                      .logout()
+                                      .then((v) {
+                                    Future.delayed(
+                                        Duration(seconds: 1),
+                                        () => Application.router.navigateTo(
+                                            context, '/login',
+                                            transition: TransitionType.fadeIn,
+                                            replace: true,
+                                            clearStack: true));
                                   });
                                 }),
                             MergeSemantics(
@@ -197,7 +202,7 @@ class _SettingsState extends State<Settings> {
                               'HopAut',
                               style: TextStyle(color: Colors.white),
                             ),
-                            Consumer<SettingsManager>(
+                            Consumer<SettingsService>(
                               builder: (_, settingsMgr, child) => Text(
                                   'version ${settingsMgr.appVersion}',
                                   style: TextStyle(
