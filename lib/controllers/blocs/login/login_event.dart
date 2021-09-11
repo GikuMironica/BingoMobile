@@ -76,7 +76,19 @@ class LoginClicked extends LoginEvent {
 class FacebookLoginClicked extends LoginEvent {
   @override
   Stream<LoginState> handleEvent(BaseState state) async*{
-    throw UnimplementedError();
+    LoginState loginState = state;
+
+    yield loginState.copyWith(formStatus: LoginSubmitted());
+    try{
+      bool result = await authService.loginWithFb();
+      if(result)
+        yield loginState.copyWith(formStatus: SubmissionSuccess());
+      else
+        // TODO - Translations
+        yield loginState.copyWith(formStatus: SubmissionFailed("Error, something went wrong"));
+    } catch(e){
+      yield loginState.copyWith(formStatus: SubmissionFailed(e));
+    }
   }
 }
 

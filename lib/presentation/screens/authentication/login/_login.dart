@@ -7,7 +7,7 @@
 // import 'package:hopaut/presentation/forms/blocs/login.dart';
 // import 'package:hopaut/presentation/widgets/buttons/login_button.dart';
 // import 'package:hopaut/presentation/widgets/buttons/basic_button.dart';
-// import 'package:hopaut/presentation/widgets/buttons/facebook_login_button.dart';
+// import 'package:hopaut/presentation/widgets/buttons/facebook_button.dart';
 // import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 // import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
 // import 'package:hopaut/presentation/widgets/inputs/password_input.dart';

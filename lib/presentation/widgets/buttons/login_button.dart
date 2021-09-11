@@ -8,7 +8,7 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:fluro/fluro.dart';
 
 
-Widget login_button(BuildContext context, dynamic state, GlobalKey<FormState> formKey){
+Widget loginButton(BuildContext context, dynamic state, GlobalKey<FormState> formKey){
     if (state.formStatus is SubmissionSuccess){
       Future.delayed(Duration.zero, (){
         Application.router.navigateTo(context, '/home',
