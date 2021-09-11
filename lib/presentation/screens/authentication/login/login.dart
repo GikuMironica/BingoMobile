@@ -61,34 +61,42 @@ class _LoginPageState extends State<LoginPage> {
                 )
               ]
             ),
-          ),BlocBuilder<LoginBloc, LoginState>(
-              builder: (context, state){
-                return Visibility(
-                  visible: state.formStatus is LoginSubmitted,
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                    child: Dialog(
-                      elevation: 0,
-                      backgroundColor: Colors.white.withOpacity(0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children:[
-                          CircularProgressIndicator()
-                        ]
-                      ),
-                    )
-                  ),
-                );
-              }
           ),
-          Expanded(
-            child: Container(
-              child: Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: noAccountYetPrompt(context)
-              )
-            ),
+          BlocBuilder<LoginBloc, LoginState>(
+            builder: (context, state){
+              return Visibility(
+                visible: state.formStatus is LoginSubmitted,
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                  child: Dialog(
+                    elevation: 0,
+                    backgroundColor: Colors.white.withOpacity(0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:[
+                        CircularProgressIndicator()
+                      ]
+                    ),
+                  )
+                ),
+              );
+            }
           ),
+          BlocBuilder<LoginBloc, LoginState>(
+            builder: (context, state) {
+              return Expanded(
+                child: Container(
+                  child: Visibility(
+                    visible: state.formStatus is! LoginSubmitted,
+                    child: Align(
+                      alignment: FractionalOffset.bottomCenter,
+                      child: noAccountYetPrompt(context)
+                    ),
+                  )
+                ),
+              );
+            }
+          )
         ]
       );
   }
