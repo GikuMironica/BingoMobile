@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 
-@lazySingleton
+@singleton
 class DateFormatterService {
   DateFormat _dateFormat;
   DateFormat _dateTimeFormat;

@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-@lazySingleton
+@singleton
 class SettingsService with ChangeNotifier {
   PackageInfo _packageInfo;
   SharedPreferences _preferences;

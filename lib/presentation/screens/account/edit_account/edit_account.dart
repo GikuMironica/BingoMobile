@@ -2,7 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/config/routes/router.dart';
+import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/presentation/widgets/profile_picture/profile_picture.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
 import 'package:hopaut/services/authentication_service.dart';

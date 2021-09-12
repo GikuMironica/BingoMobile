@@ -21,7 +21,7 @@ class AnnouncementRepository extends Repository {
   Future<bool> create(AnnouncementMessage announcement) async {
     Map<String, dynamic> payload = {
       'PostId': announcement.postId,
-      'Message': announcement.text
+      'Message': announcement.message
     };
 
     try {
@@ -37,7 +37,7 @@ class AnnouncementRepository extends Repository {
   /// Can be updated only by event host.
   Future<bool> update(AnnouncementMessage announcement) async {
     Map<String, dynamic> payload = {
-      'Message': announcement.text,
+      'Message': announcement.message,
     };
 
     try {

@@ -15,9 +15,11 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 @lazySingleton
 class AuthenticationService with ChangeNotifier {
   final SecureStorageService _secureStorageService;
+  final DioService _dioService;
+  final EventService _eventService;
+
   final UserRepository _userRepository;
   final AuthenticationRepository _authenticationRepository;
-  final EventService _eventService;
 
   Identity _identity;
   User _user;
@@ -27,8 +29,9 @@ class AuthenticationService with ChangeNotifier {
   AuthenticationService()
       : _secureStorageService = getIt<SecureStorageService>(),
         _userRepository = getIt<UserRepository>(),
-        _authenticationRepository = getIt<AuthenticationRepository>(),
-        _eventService = getIt<EventService>();
+        _dioService = getIt<DioService>(),
+        _eventService = getIt<EventService>(),
+        _authenticationRepository = getIt<AuthenticationRepository>();
 
   Identity get currentIdentity => _identity;
 
@@ -55,7 +58,7 @@ class AuthenticationService with ChangeNotifier {
     if (user == null) {
       refreshUser();
     }
-    getIt<DioService>().setBearerToken(data['Token']);
+    _dioService.setBearerToken(data['Token']);
   }
 
   User get user => _user;
@@ -69,8 +72,10 @@ class AuthenticationService with ChangeNotifier {
   }
 
   Future<void> setOneSignalParams() async {
-    await OneSignal.shared.setSubscription(true);
-    await OneSignal.shared.setExternalUserId(currentIdentity.id);
+    await Future.wait({
+      OneSignal.shared.setSubscription(true),
+      OneSignal.shared.setExternalUserId(currentIdentity.id)
+    });
     oneSignalSettings = true;
   }
 
@@ -132,7 +137,7 @@ class AuthenticationService with ChangeNotifier {
   Future<void> logout() async {
     await Hive.box('auth').delete('identity');
     _secureStorageService.deleteAll();
-    getIt<DioService>().removeBearerToken();
+    _dioService.removeBearerToken();
 
     _eventService.reset();
     setIdentity(null);

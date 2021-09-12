@@ -2,11 +2,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:injectable/injectable.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-@lazySingleton
+@singleton
 class LocationService {
   Position _currentPosition;
 
-  LocationService() {}
+  LocationService() {
+    getCurrentLocation();
+  }
 
   Position get currentPosition => _currentPosition;
 

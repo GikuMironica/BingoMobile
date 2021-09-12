@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:mime_type/mime_type.dart';
 import 'package:http_parser/http_parser.dart';
 
-Future<Map<String, dynamic>> MultiPartUpdatedPost(
+Future<Map<String, dynamic>> multiPartUpdatedPost(
     Map<String, dynamic> data) async {
   String mimeType = mimeFromExtension('webp');
   String mimee = mimeType.split('/')[0];
