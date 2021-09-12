@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:io';
+import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/post_repository.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/services/event_service.dart';
-import 'package:hopaut/utils/image_conversion.dart';
+import 'package:hopaut/services/event_manager/event_manager.dart';
+import 'package:hopaut/services/image_conversion.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditPostPictures extends StatefulWidget {
@@ -22,7 +22,7 @@ class _EditPostPicturesState extends State<EditPostPictures> {
   Post _oldPost;
   final imagePicker = ImagePicker();
 
-  List<String> _pictures = [null, null, null];
+  List<String> _pictures = [null,null,null];
   List<bool> _picturesSelected = [false, false, false];
   List<MemoryImage> _pictureFiles = [null, null, null];
   List<String> _networkImages;
@@ -31,7 +31,7 @@ class _EditPostPicturesState extends State<EditPostPictures> {
   @override
   void initState() {
     // TODO: implement initState
-    _oldPost = getIt<EventService>().postContext;
+    _oldPost = GetIt.I.get<EventManager>().getPostContext;
     _picturesSelected = [false, false, false];
     _networkImages = _oldPost.pictureUrls();
     _newPost = {
@@ -51,12 +51,11 @@ class _EditPostPicturesState extends State<EditPostPictures> {
         _oldPost.pictures.add(null);
       }
     }
-    if (_networkImages.length != 3) {
-      while (_networkImages.length != 3) {
+    if (_networkImages.length != 3){
+      while(_networkImages.length != 3){
         _networkImages.add(null);
       }
-    }
-    ;
+    };
     _remainingImagesGuids = _oldPost.pictures;
     super.initState();
   }
@@ -65,13 +64,13 @@ class _EditPostPicturesState extends State<EditPostPictures> {
     int idx = 1;
     List<String> _remainingImagesPayload = [];
     _remainingImagesGuids.forEach((element) {
-      if (element != null) {
+      if(element != null){
         _remainingImagesPayload.add(element);
       }
     });
     _newPost['RemainingImagesGuids'] = _remainingImagesPayload;
     _pictures.forEach((element) {
-      if (element != null) {
+      if(element != null) {
         _newPost['Picture$idx'] = element;
         idx++;
       }
@@ -215,8 +214,7 @@ class _EditPostPicturesState extends State<EditPostPictures> {
               decoration: BoxDecoration(
                   image: DecorationImage(
                 fit: BoxFit.cover,
-                image: _networkImages[index] != null
-                    ? NetworkImage(_networkImages[index])
+                image: _networkImages[index] != null ? NetworkImage(_networkImages[index])
                     : _pictureFiles[index],
               )),
             ),

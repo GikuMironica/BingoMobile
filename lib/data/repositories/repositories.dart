@@ -1,0 +1,10 @@
+export 'announcement_repository.dart';
+export 'event_repository.dart';
+export 'identity_repository.dart';
+export 'participant_repository.dart';
+export 'post_repository.dart';
+export 'profile_repository.dart';
+export 'ratings_repository.dart';
+export 'report_repository.dart';
+export 'tags_repository.dart';
+export 'user_repository.dart';

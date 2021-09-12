@@ -3,13 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/announcement.dart';
-import 'package:hopaut/data/repositories/announcement_repository.dart';
 import 'package:hopaut/presentation/widgets/announcements/index_child.dart';
 import 'package:hopaut/presentation/widgets/buttons/gradient_box_decoration.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
+import 'package:hopaut/services/services.dart';
 
 class AnnouncementsIndex extends StatefulWidget {
   @override
@@ -21,9 +20,9 @@ class _AnnouncementsIndexState extends State<AnnouncementsIndex> {
   bool announcementsLoaded = false;
 
   Future<List<Announcement>> getAnnouncements() async {
-    if (announcementsList == null) {
-      final inboxList = await getIt<AnnouncementRepository>().getInbox();
-      final outboxList = await getIt<AnnouncementRepository>().getOutbox();
+    if(announcementsList == null){
+      final inboxList = await GetIt.I.get<RepoLocator>().announcements.getInbox();
+      final outboxList = await GetIt.I.get<RepoLocator>().announcements.getOutbox();
       announcementsList = [...inboxList, ...outboxList];
     } else {
       announcementsList = [];
@@ -44,13 +43,9 @@ class _AnnouncementsIndexState extends State<AnnouncementsIndex> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Announcements'),
-        leading: IconButton(
-          icon: HATheme.backButton,
-          onPressed: () => Application.router.pop(context),
-        ),
+        leading: IconButton(icon: HATheme.backButton, onPressed: () => Application.router.pop(context),),
         actions: [
-          IconButton(
-              icon: Icon(Icons.tune, color: Colors.white70), onPressed: () {})
+          IconButton(icon: Icon(Icons.tune, color: Colors.white70))
         ],
         elevation: 0,
         flexibleSpace: Container(
@@ -60,16 +55,11 @@ class _AnnouncementsIndexState extends State<AnnouncementsIndex> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(),
-        onPressed: () => Application.router.navigateTo(
-            context, '/announcements/user_list',
-            transition: TransitionType.fadeIn),
+        onPressed: () => Application.router.navigateTo(context, '/announcements/user_list', transition: TransitionType.fadeIn),
         child: Container(
           width: 76,
           height: 76,
-          child: Icon(
-            Icons.add,
-            size: 40,
-          ),
+          child: Icon(Icons.add, size: 40,),
           decoration: gradientBoxDecoration(),
         ),
       ),
@@ -103,21 +93,20 @@ class _AnnouncementsIndexState extends State<AnnouncementsIndex> {
             //     ),
             //   ),
             // ),
-            SizedBox(
-              height: 16,
-            ),
-            announcementsLoaded
-                ? ListView.builder(
-                    itemCount: announcementsList.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) => InkWell(
-                          child: IndexChild(
-                            announcement: announcementsList[index],
-                          ),
-                          onTap: () => Application.router.navigateTo(context,
-                              '/announcements/${announcementsList[index].postId}'),
-                        ))
-                : CupertinoActivityIndicator(),
+            SizedBox(height: 16,),
+            announcementsLoaded ? ListView.builder(
+              itemCount: announcementsList.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) => InkWell(
+                child: IndexChild(
+                  announcement: announcementsList[index],
+                ),
+                onTap: () => Application.router.navigateTo(
+                    context,
+                    '/announcements/${announcementsList[index].postId}'
+                ),
+              )
+            ) : CupertinoActivityIndicator(),
           ],
         ),
       ),

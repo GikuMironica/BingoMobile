@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/data/repositories/authentication_repository.dart';
 import 'package:hopaut/presentation/forms/blocs/change_password.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/services/authentication_service.dart';
+import 'package:hopaut/services/services.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   @override
@@ -16,6 +16,7 @@ class ChangePasswordPage extends StatefulWidget {
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final ChangePasswordBloc _changePasswordBloc = ChangePasswordBloc();
   TextEditingController _currentPassController = TextEditingController();
+
 
   @override
   void dispose() {
@@ -82,9 +83,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      topLeft: Radius.circular(30)),
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30)),
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -95,7 +94,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       RichText(
                         text: TextSpan(
                             text:
-                                'If you have forgotten your password, you can log out and request a ',
+                            'If you have forgotten your password, you can log out and request a ',
                             style: TextStyle(color: Colors.grey),
                             children: [
                               TextSpan(text: 'Password Reset'),
@@ -109,7 +108,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         controller: _currentPassController,
                         obscureText: true,
                         decoration: InputDecoration(
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            floatingLabelBehavior:
+                            FloatingLabelBehavior.always,
                             alignLabelWithHint: true,
                             suffixIcon: Icon(
                               Icons.lock_outline,
@@ -137,7 +137,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           obscureText: true,
                           decoration: InputDecoration(
                               floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
+                              FloatingLabelBehavior.always,
                               alignLabelWithHint: true,
                               suffixIcon: Icon(
                                 Icons.lock_outline,
@@ -168,7 +168,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           obscureText: true,
                           decoration: InputDecoration(
                               floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
+                              FloatingLabelBehavior.always,
                               alignLabelWithHint: true,
                               suffixIcon: Icon(
                                 Icons.lock_outline,
@@ -220,13 +220,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             child: StreamBuilder<bool>(
                               stream: _changePasswordBloc.passwordsAreValid,
                               builder: (ctx, snapshot) => MaterialButton(
-                                onPressed: snapshot.hasData
-                                    ? () async {
-                                        doPasswordChange(
-                                            _currentPassController.text,
-                                            _changePasswordBloc.password);
-                                      }
-                                    : () {},
+                                onPressed: snapshot.hasData ? () async {
+                                  doPasswordChange(_currentPassController.text, _changePasswordBloc.password);
+                                } : () {},
                                 elevation: 100,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(80.0)),
@@ -259,15 +255,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   }
 
   void doPasswordChange(String currentPassword, String newPassword) async {
-    bool passChangeRes = await getIt<AuthenticationRepository>().changePassword(
-        email: getIt<AuthenticationService>().user.email,
+    bool passChangeRes = await await GetIt.I.get<RepoLocator>().identity.changePassword(
+        email: GetIt.I.get<AuthService>().user.email,
         oldPassword: currentPassword,
         newPassword: newPassword);
 
-    if (passChangeRes) {
+    if(passChangeRes){
       Application.router.pop(context);
       Fluttertoast.showToast(msg: "Password change successful");
-    } else {
+    }else{
       Fluttertoast.showToast(msg: "Password changing failed");
     }
   }

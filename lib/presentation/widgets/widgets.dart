@@ -1,9 +1,9 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hopaut/config/injection.dart';
-import 'package:hopaut/services/authentication_service.dart';
+import 'package:hopaut/services/auth_service/auth_service.dart';
 import '../../config/routes/application.dart';
 
 Widget makeTitle({String title}) {
@@ -83,56 +83,25 @@ Widget accountAlreadyPrompt(BuildContext context) {
   ]);
 }
 
-Widget forgotPassword(BuildContext context) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.end,
-    children: [
-      FlatButton(
-        padding: EdgeInsets.zero,
-        onPressed: () {
-          Application.router.navigateTo(context, '/registration',
+Widget noAccountYetPrompt(BuildContext context) {
+  return Column(children: <Widget>[
+    FlatButton(
+      onPressed: () {
+        Application.router.navigateTo(context, '/registration',
             replace: true,
             transition: TransitionType.fadeIn,
             transitionDuration: Duration());
-        },
-        child: Text(
-          // TODO - Translations
-          'Forgot password?',
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            color: Colors.pink,
-            fontSize: 12
-          ),
-          textAlign: TextAlign.end,
-        ),
-      )
-    ],
-  );
-}
-
-Widget noAccountYetPrompt(BuildContext context){
-  return FlatButton(
-   onPressed: () {
-     Application.router.navigateTo(context, '/registration',
-       replace: true,
-       transition: TransitionType.fadeIn,
-       transitionDuration: Duration());
-   },
-    child:
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Don\'t have an account yet? '),
-          Text(
-            'Sign up',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Colors.pink
-            )
-          )
-        ],
-      )
-  );
+      },
+      child:
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+        Text('Don\'t have an account yet? '),
+        Text(
+          'Sign up',
+          style: TextStyle(fontWeight: FontWeight.w500, color: Colors.pink),
+        )
+      ]),
+    )
+  ]);
 }
 
 Widget authActionButton({String text, BuildContext context}) {
@@ -160,7 +129,8 @@ Widget authActionButton({String text, BuildContext context}) {
     ),
     child: MaterialButton(
       onPressed: () async {
-        await getIt<AuthenticationService>()
+        await GetIt.I
+            .get<AuthService>()
             .loginWithEmail('cixi@getnada.com', 'Trevor13')
             .then((value) => Application.router.navigateTo(context, '/account'))
             .catchError(() => Fluttertoast.showToast(msg: 'Unable to login'));

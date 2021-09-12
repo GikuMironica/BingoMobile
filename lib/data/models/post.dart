@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/config/injection.dart';
-import 'package:hopaut/services/date_formatter_service.dart';
+import 'package:hopaut/services/date_formatter.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
 
@@ -31,22 +31,22 @@ class Post {
 
   Post(
       {this.id,
-      this.postTime,
-      this.eventTime,
-      this.endTime,
-      this.activeFlag,
-      this.location,
-      this.userId,
-      this.hostRating,
-      this.isAttending,
-      this.availableSlots,
-      this.event,
-      this.repeatablePropertyDataId,
-      this.voucherDataId,
-      this.announcementsDataId,
-      this.attendanceDataId,
-      this.pictures,
-      this.tags});
+        this.postTime,
+        this.eventTime,
+        this.endTime,
+        this.activeFlag,
+        this.location,
+        this.userId,
+        this.hostRating,
+        this.isAttending,
+        this.availableSlots,
+        this.event,
+        this.repeatablePropertyDataId,
+        this.voucherDataId,
+        this.announcementsDataId,
+        this.attendanceDataId,
+        this.pictures,
+        this.tags});
 
   Post.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
@@ -54,8 +54,9 @@ class Post {
     eventTime = json['EventTime'];
     endTime = json['EndTime'];
     activeFlag = json['ActiveFlag'];
-    location =
-        json['Location'] != null ? Location.fromJson(json['Location']) : null;
+    location = json['Location'] != null
+        ? Location.fromJson(json['Location'])
+        : null;
     userId = json['UserId'];
     hostRating = json['HostRating'];
     isAttending = json['IsAttending'];
@@ -102,47 +103,32 @@ class Post {
       data['Event.EntrancePrice'] = this.event.entrancePrice;
       data['Event.EventType'] = this.event.eventType;
     }
-    if (pictures.isNotEmpty) {
+    if(pictures.isNotEmpty){
       String mimeType = mimeFromExtension('webp');
       String mimee = mimeType.split('/')[0];
       String type = mimeType.split('/')[1];
-      if (pictures[0] != null)
-        data['Picture1'] = await MultipartFile.fromFile(
-            File(pictures[0]).absolute.path,
-            filename: '0.webp',
-            contentType: MediaType(mimee, type));
-      if (pictures[1] != null)
-        data['Picture2'] = await MultipartFile.fromFile(
-            File(pictures[1]).absolute.path,
-            filename: '1.webp',
-            contentType: MediaType(mimee, type));
-      if (pictures[2] != null)
-        data['Picture3'] = await MultipartFile.fromFile(
-            File(pictures[2]).absolute.path,
-            filename: '2.webp',
-            contentType: MediaType(mimee, type));
+      if(pictures[0] != null) data['Picture1'] = await MultipartFile.fromFile(File(pictures[0]).absolute.path, filename: '0.webp', contentType: MediaType(mimee, type));
+      if(pictures[1] != null) data['Picture2'] = await MultipartFile.fromFile(File(pictures[1]).absolute.path, filename: '1.webp', contentType: MediaType(mimee, type));
+      if(pictures[2] != null) data['Picture3'] = await MultipartFile.fromFile(File(pictures[2]).absolute.path, filename: '2.webp', contentType: MediaType(mimee, type));
     }
     data['Tags'] = this.tags ?? null;
     return data;
   }
 
-  String get timeRange =>
-      getIt<DateFormatterService>().formatTimeRange(eventTime, endTime);
-  double get entryPrice =>
-      event.entrancePrice != 0.0 ? event.entrancePrice : null;
+  String get timeRange => GetIt.I.get<DateFormatter>().formatTimeRange(eventTime, endTime);
+  double get entryPrice => event.entrancePrice != 0.0 ? event.entrancePrice : null;
 
   List<String> pictureUrls() {
     List<String> pics = List();
-    for (String picture in pictures) {
-      if (picture != null) pics.add("${WEB.IMAGES}/$picture.webp");
+    for (String picture in pictures){
+
+      if(picture != null) pics.add("${WEB.IMAGES}/$picture.webp");
     }
     return pics;
   }
 
-  DateTime get startTimeAsDateTime =>
-      DateTime.fromMillisecondsSinceEpoch(eventTime * 1000);
-  DateTime get endTimeAsDateTime =>
-      DateTime.fromMillisecondsSinceEpoch(endTime * 1000);
+  DateTime get startTimeAsDateTime => DateTime.fromMillisecondsSinceEpoch(eventTime * 1000);
+  DateTime get endTimeAsDateTime => DateTime.fromMillisecondsSinceEpoch(endTime * 1000);
 
   String get hostRatingAsString => hostRating.toStringAsFixed(2);
 
@@ -150,15 +136,15 @@ class Post {
     this.event.title = string;
   }
 
-  void setLocation(Location location) {
+  void setLocation(Location location){
     this.location = location;
   }
 
-  void setEndTime(int int) {
+  void setEndTime(int int){
     this.endTime = int;
   }
 
-  void setStartTime(int int) {
+  void setStartTime(int int){
     this.eventTime = int;
   }
 }

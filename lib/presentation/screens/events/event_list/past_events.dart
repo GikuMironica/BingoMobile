@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hopaut/config/injection.dart';
+import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
-import 'package:hopaut/services/event_service.dart';
+import 'package:hopaut/services/event_manager/event_manager.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
@@ -13,14 +17,13 @@ class PastEventsList extends StatefulWidget {
 }
 
 class _PastEventsListState extends State<PastEventsList> {
-  EventService eventManager;
+  EventManager eventManager;
   bool _isLoading = false;
 
   @override
   void initState() {
-    if (getIt<EventService>().userInactiveListState ==
-        ListState.NOT_LOADED_YET) {
-      getIt<EventService>().fetchUserInactiveEvents();
+    if(GetIt.I.get<EventManager>().userInactiveListState == ListState.NOT_LOADED_YET) {
+      GetIt.I.get<EventManager>().fetchUserInactiveEvents();
     }
     super.initState();
   }
@@ -38,50 +41,41 @@ class _PastEventsListState extends State<PastEventsList> {
   }
 
   Widget _buildList() {
-    return Consumer<EventService>(
+    return Consumer<EventManager>(
       builder: (context, eventManager, child) {
-        if (eventManager.userInactiveListState == ListState.LOADING) {
+        if(eventManager.userInactiveListState == ListState.LOADING){
           return Center(
             child: CupertinoActivityIndicator(),
           );
         } else {
-          if (eventManager.userInactiveListState == ListState.IDLE) {
+          if(eventManager.userInactiveListState == ListState.IDLE){
             if (eventManager.userInactiveList.isNotEmpty) {
               return SafeArea(
                 top: false,
                 bottom: false,
                 child: CustomScrollView(
                   primary: true,
-                  slivers: [
-                    SliverOverlapInjector(
-                      // This is the flip side of the SliverOverlapAbsorber
-                      // above.
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          context),
-                    ),
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                  slivers: [SliverOverlapInjector(
+                    // This is the flip side of the SliverOverlapAbsorber
+                    // above.
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                  ),
+                    SliverPadding(padding: EdgeInsets.symmetric(vertical: 16.0),
                       sliver: SliverFixedExtentList(
                         itemExtent: 136,
                         delegate: SliverChildBuilderDelegate(
-                          (ctx, index) => InkWell(
-                            onTap: () => pushNewScreen(context,
-                                screen: EventPage(
-                                  postId: eventManager
-                                      .userInactiveList[index].postId,
-                                ),
+                              (ctx, index) => InkWell(
+                            onTap: () => pushNewScreen(
+                                context,
+                                screen: EventPage(postId: eventManager.userInactiveList[index].postId,),
                                 withNavBar: false,
-                                pageTransitionAnimation:
-                                    PageTransitionAnimation.fade),
-                            child: MiniPostCard(
-                              miniPost: eventManager.userInactiveList[index],
-                            ),
+                                pageTransitionAnimation: PageTransitionAnimation.fade),
+                            child: MiniPostCard(miniPost: eventManager.userInactiveList[index],),
                           ),
                           childCount: eventManager.userInactiveList.length,
                         ),
-                      ),
-                    ),
-                  ],
+                      ),),],
                 ),
               );
             } else {

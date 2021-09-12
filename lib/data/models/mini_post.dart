@@ -1,8 +1,9 @@
+import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/event_types.dart';
-import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/post.dart';
-import 'package:hopaut/services/date_formatter_service.dart';
+import 'package:hopaut/services/date_formatter.dart';
+import 'package:intl/intl.dart';
 
 class MiniPost {
   int postId;
@@ -24,23 +25,23 @@ class MiniPost {
 
   MiniPost(
       {this.postId,
-      this.postType,
-      this.thumbnail,
-      this.address,
-      this.title,
-      this.hostRating,
-      this.latitude,
-      this.longitude,
-      this.repteatableEnabled,
-      this.frequency,
-      this.vouchersEnabled,
-      this.postTime,
-      this.startTime,
-      this.endTime,
-      this.entracePrice,
-      this.slots});
+        this.postType,
+        this.thumbnail,
+        this.address,
+        this.title,
+        this.hostRating,
+        this.latitude,
+        this.longitude,
+        this.repteatableEnabled,
+        this.frequency,
+        this.vouchersEnabled,
+        this.postTime,
+        this.startTime,
+        this.endTime,
+        this.entracePrice,
+        this.slots});
 
-  MiniPost.fromPost(Post post) {
+  MiniPost.fromPost(Post post){
     postId = post.id;
     postType = post.event.eventType;
     address = post.location.address;
@@ -96,13 +97,9 @@ class MiniPost {
   }
 
   String get type => eventTypes[postType];
-  String get getStartTime =>
-      getIt<DateFormatterService>().formatDateTime(startTime);
-  DateTime get getPostTimeAsDT =>
-      DateTime.fromMillisecondsSinceEpoch(postTime * 1000);
-  DateTime get getStartTimeAsDT =>
-      DateTime.fromMillisecondsSinceEpoch(startTime * 1000);
-  DateTime get getEndTimeAsDT =>
-      DateTime.fromMillisecondsSinceEpoch(endTime * 1000);
+  String get getStartTime => GetIt.I.get<DateFormatter>().formatDateTime(startTime);
+  DateTime get getPostTimeAsDT => DateTime.fromMillisecondsSinceEpoch(postTime * 1000);
+  DateTime get getStartTimeAsDT => DateTime.fromMillisecondsSinceEpoch(startTime * 1000);
+  DateTime get getEndTimeAsDT => DateTime.fromMillisecondsSinceEpoch(endTime * 1000);
   String get thumbnailUrl => '${WEB.IMAGES}/$thumbnail.webp';
 }

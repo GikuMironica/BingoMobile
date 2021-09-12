@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/post_repository.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/services/event_service.dart';
+import 'package:hopaut/services/event_manager/event_manager.dart';
 
 class EditPostRequirements extends StatefulWidget {
   @override
@@ -25,7 +24,7 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
 
   @override
   void initState() {
-    _oldPost = getIt<EventService>().postContext;
+    _oldPost = GetIt.I.get<EventManager>().getPostContext;
     _newPost = {
       'EndTime': _oldPost.endTime,
       'EventTime': _oldPost.eventTime,
@@ -41,12 +40,11 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
 
   void submitNewRequirements() async {
     if (_oldPost.event.requirements != _requirementsController.text.trim()) {
-      _newPost['Requirements'] = _requirementsController.text.trim().length == 0
-          ? nullRequirements
-          : _requirementsController.text.trim();
+      _newPost['Requirements'] = _requirementsController.text.trim().length == 0 ?  nullRequirements : _requirementsController.text.trim();
       bool res = await PostRepository().update(_oldPost.id, _newPost);
       if (res) {
-        getIt<EventService>()
+        GetIt.I
+            .get<EventManager>()
             .setPostRequirements(_requirementsController.text.trim());
         Fluttertoast.showToast(msg: 'Event Requirements updated');
         Application.router.pop(context);

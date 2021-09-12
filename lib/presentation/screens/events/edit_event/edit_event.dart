@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/paid_event_types.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/widgets/clock_icons.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
-import 'package:hopaut/services/event_service.dart';
+import 'package:hopaut/services/event_manager/event_manager.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class EditEventPage extends StatefulWidget {
@@ -23,7 +23,7 @@ class _EditEventPageState extends State<EditEventPage> {
   @override
   void initState() {
     // TODO: implement initState
-    post = getIt<EventService>().postContext;
+    post = GetIt.I.get<EventManager>().postContext;
     switch (post.event.eventType) {
       case 1:
         _paidEventType = PaidEventType.HOUSE_PARTY;

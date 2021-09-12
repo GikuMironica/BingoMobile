@@ -3,7 +3,7 @@ import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_account.dart';
 import 'package:hopaut/presentation/screens/settings/settings.dart';
 import 'package:hopaut/presentation/widgets/profile_picture/profile_picture.dart';
-import 'package:hopaut/services/authentication_service.dart';
+import 'package:hopaut/services/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +18,7 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     var _size = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Stack(children: [
           Container(
@@ -75,25 +75,27 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Widget userFullName() {
-    return Consumer<AuthenticationService>(
+    return Consumer<AuthService>(
       builder: (context, auth, child) => Text(
-        // TODO - Null exception
-        auth.user.fullName ?? "Name Surname",
+        auth.user.fullName,
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
       ),
     );
   }
 
   Widget userDescription() {
-    return Consumer<AuthenticationService>(
+    return Consumer<AuthService>(
       builder: (context, auth, child) => Visibility(
         visible: auth.user.description != null,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(auth.user.description ?? "empty",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey[500])),
+            Text(
+              auth.user.description??"empty",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey[500]
+              )),
           ],
         ),
       ),
@@ -101,18 +103,16 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Widget accountInformation() {
-    return Consumer<AuthenticationService>(
+    return Consumer<AuthService>(
       builder: (context, auth, child) => ListView(
         primary: false,
         shrinkWrap: true,
         children: [
           ListTile(
-            // TODO - Translations
             title: Text('Email'),
             subtitle: Text(auth.user.email),
           ),
           ListTile(
-            // TODO - Translations
             title: Text('Member since'),
             subtitle: Text(auth.user.dateRegistered),
           )
@@ -125,21 +125,17 @@ class _AccountPageState extends State<AccountPage> {
     return ListView(
       primary: false,
       shrinkWrap: true,
-
       children: [
         ListTile(
-          onTap: () => pushNewScreen(context,
-              screen: EditAccountPage(), withNavBar: false),
+          onTap: () => pushNewScreen(context, screen: EditAccountPage(), withNavBar: false),
           leading: Icon(MdiIcons.pencil),
           title: Align(
-            // TODO - Translations
               alignment: Alignment(-1.15, 0), child: Text('Edit Profile')),
         ),
         ListTile(
           onTap: () =>
               pushNewScreen(context, screen: Settings(), withNavBar: false),
           leading: Icon(Icons.settings),
-          // TODO - Translations
           title: Align(alignment: Alignment(-1.15, 0), child: Text('Settings')),
         ),
       ],

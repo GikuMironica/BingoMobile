@@ -4,13 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/models/profile.dart';
-import 'package:hopaut/data/repositories/event_repository.dart';
-import 'package:hopaut/data/repositories/post_repository.dart';
-import 'package:hopaut/data/repositories/profile_repository.dart';
 import 'package:hopaut/presentation/screens/events/delete_event/delete_event.dart';
 import 'package:hopaut/presentation/screens/events/participation_list.dart';
 import 'package:hopaut/presentation/screens/report/report_event.dart';
@@ -25,9 +21,8 @@ import 'package:hopaut/presentation/widgets/event_page/event_requirements.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/image_screen/image_screen.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
-import 'package:hopaut/services/authentication_service.dart';
-import 'package:hopaut/services/date_formatter_service.dart';
-import 'package:hopaut/services/event_service.dart';
+import 'package:hopaut/services/date_formatter.dart';
+import 'package:hopaut/services/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
@@ -74,10 +69,10 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   }
 
   Future<void> getDetails() async {
-    post = await getIt<PostRepository>().get(postId);
-    host = await getIt<ProfileRepository>().get(post.userId);
-    participants = await getIt<PostRepository>().getAttendees(postId);
-    isHost = post.userId == getIt<AuthenticationService>().user.id;
+    post = await GetIt.I.get<RepoLocator>().posts.get(postId);
+    host = await GetIt.I.get<RepoLocator>().profiles.get(post.userId);
+    participants = await GetIt.I.get<RepoLocator>().posts.getAttendees(postId);
+    isHost = post.userId == GetIt.I.get<AuthService>().user.id;
     isAttending = post.isAttending;
     isActiveEvent = post.activeFlag == 1;
   }
@@ -93,7 +88,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   }
 
   void attendEvent() async {
-    bool attendResponse = await getIt<EventRepository>().attend(postId);
+    bool attendResponse =
+        await GetIt.I.get<RepoLocator>().events.attend(postId);
     if (attendResponse) {
       setState(() {
         isAttending = true;
@@ -102,7 +98,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   }
 
   void unattendEvent() async {
-    bool unattendResponse = await getIt<EventRepository>().unAttend(postId);
+    bool unattendResponse =
+        await GetIt.I.get<RepoLocator>().events.unAttend(postId);
     if (unattendResponse) {
       setState(() {
         isAttending = false;
@@ -118,7 +115,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
         .then((value) => setState(() => postIsLoaded = true))
         .then((value) {
       checkForImages();
-      getIt<EventService>().setPostContext(post);
+      GetIt.I.get<EventManager>().setPostContext(post);
     });
     super.initState();
 
@@ -320,7 +317,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                       SizedBox(height: 8),
                       Divider(),
                       EventDetails(
-                        date: getIt<DateFormatterService>()
+                        date: GetIt.I
+                            .get<DateFormatter>()
                             .formatDate(post.eventTime),
                         time: post.timeRange,
                         price: post.event.entrancePrice,
@@ -330,7 +328,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                       Divider(),
                       SizedBox(height: 16),
                       EventDescription(isHost
-                          ? Provider.of<EventService>(context)
+                          ? Provider.of<EventManager>(context)
                               .postContext
                               .event
                               .description
@@ -486,7 +484,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   void dispose() {
     _scrollController?.dispose();
     _animationController?.dispose();
-    GetIt.I.get<EventService>().setPostContext(null);
+    GetIt.I.get<EventManager>().setPostContext(null);
 
     super.dispose();
   }
