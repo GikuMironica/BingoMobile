@@ -15,7 +15,7 @@ import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/services/dio_service.dart';
 import 'package:hopaut/services/event_service.dart';
-import 'package:hopaut/services/secure_sotrage_service.dart';
+import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:hopaut/services/settings_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +29,7 @@ void main() async {
   configureDependencies();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  // TODO - store app id in config file
   await OneSignal.shared.init("fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
       iOSSettings: {
         OSiOSSettings.autoPrompt: false,
@@ -47,9 +48,10 @@ void main() async {
 
       Map<String, dynamic> _data = data.map((a, b) => MapEntry(a as String, b));
       authenticationService.setIdentity(Identity.fromJson(_data));
-      if (secureStorageService.read(key: 'token') != null) {
+      String token = await secureStorageService.read(key: 'token');
+      if (token != null) {
         dioService
-            .setBearerToken(await secureStorageService.read(key: 'token'));
+            .setBearerToken(token);
         await authenticationService.refreshToken();
         await authenticationService.refreshUser();
       }
@@ -72,6 +74,7 @@ class _HopAutState extends State<HopAut> {
 
   @override
   void initState() {
+    // initialize Fluro router
     router = FluroRouter();
     Routes.configureRoutes(router);
     Application.router = router;
@@ -117,11 +120,7 @@ class _HopAutState extends State<HopAut> {
 
     return GestureDetector(
       onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus &&
-            currentFocus.focusedChild != null) {
-          currentFocus.focusedChild.unfocus();
-        }
+        FocusManager.instance.primaryFocus?.unfocus();
       },
       child: MultiProvider(
         providers: [

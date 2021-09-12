@@ -14,6 +14,7 @@ class Routes {
   static String editAccountName = editAccount + '/name';
   static String editAccountDescription = editAccount + '/description';
   static String changePassword = '/change_password';
+  static String forgotPassword = '/forgot_password';
   static String termsOfServices = '/tos';
   static String settings = '/settings';
   static String privacyPolicy = '/privacy_policy';
@@ -53,6 +54,7 @@ class Routes {
     router.define(editAccountPicture, handler: editAccountPictureHandler);
     router.define(settings, handler: settingsHandler);
     router.define(changePassword, handler: changePasswordHandler);
+    router.define(forgotPassword, handler: forgotPasswordHandler);
     router.define(termsOfServices, handler: tosHandler);
     router.define(privacyPolicy, handler: ppHandler);
 

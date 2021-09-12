@@ -9,6 +9,7 @@ import 'package:hopaut/presentation/screens/account/edit_account/edit_profile_pi
 import 'package:hopaut/presentation/screens/announcements/announcement_screen.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
+import 'package:hopaut/presentation/screens/authentication/forgot_password/forgot_password.dart';
 import 'package:hopaut/presentation/screens/events/create_event/create_event.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/description.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/edit_event.dart';
@@ -77,6 +78,12 @@ var changePasswordHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return ChangePasswordPage();
 });
+
+var forgotPasswordHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+      return ForgotPasswordPage();
+    });
+
 
 var eventPageHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -157,10 +164,10 @@ var announcementScreen = new Handler(
 
 var tosHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return WebvPage('Terms of Services', 'https://hopaut.com/');
+  return WebvPage('Terms of Services', 'https://hopaut.com/legal/terms');
 });
 
 var ppHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return WebvPage('Terms of Services', 'https://hopaut.com/');
+  return WebvPage('Privacy Policy', 'https://hopaut.com/legal/privacy');
 });

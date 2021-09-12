@@ -4,7 +4,7 @@ import 'package:hopaut/data/repositories/repository.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:hopaut/services/secure_sotrage_service.dart';
+import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 
@@ -58,7 +58,6 @@ class AuthenticationRepository extends Repository {
     FacebookLogin facebookLogin = FacebookLogin();
     FacebookLoginResult _facebookLoginResult =
         await facebookLogin.logIn(['email']);
-
     switch (_facebookLoginResult.status) {
       case FacebookLoginStatus.error:
         logger.e('Facebook Error');
@@ -85,8 +84,8 @@ class AuthenticationRepository extends Repository {
   Future<Map<String, dynamic>> refresh(
       String token, String refreshToken) async {
     final Map<String, dynamic> payload = {
-      'token': _secureStorageService.read(key: 'token'),
-      'refreshToken': await _secureStorageService.read(key: 'refreshToken')
+      'token': token ?? await _secureStorageService.read(key: 'token'),
+      'refreshToken': refreshToken ?? await _secureStorageService.read(key: 'refreshToken')
     };
     try {
       Response response = await dio.post(API.REFRESH, data: payload);

@@ -23,7 +23,7 @@ import '../services/dio_service.dart' as _i7;
 import '../services/event_service.dart' as _i9;
 import '../services/location_service.dart' as _i10;
 import '../services/logging_service.dart' as _i11;
-import '../services/secure_sotrage_service.dart' as _i17;
+import '../services/secure_storage_service.dart' as _i17;
 import '../services/settings_service.dart'
     as _i18; // ignore_for_file: unnecessary_lambdas
 
