@@ -21,6 +21,7 @@ import 'package:provider/provider.dart';
 import 'controllers/login_page/login_page_controller.dart';
 import 'init.dart';
 import 'package:flutter/material.dart' hide Router;
+import 'dart:io' show Platform;
 
 void main() async {
   await init();
@@ -33,11 +34,6 @@ Future<void> init() async {
   configureDependencies();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   // TODO - store app id in config file
-  await OneSignal.shared.init("fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
-      iOSSettings: {
-        OSiOSSettings.autoPrompt: false,
-        OSiOSSettings.inAppLaunchUrl: false
-      });
   try {
     await Future.wait([
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
@@ -92,10 +88,12 @@ class _HopAutState extends State<HopAut> {
   }
 
   Future<void> initPlatformState() async {
+    if (Platform.isIOS) {
+      await OneSignal.shared
+          .promptUserForPushNotificationPermission(fallbackToSettings: true);
+    }
     OneSignal.shared
         .setInFocusDisplayType(OSNotificationDisplayType.notification);
-    await OneSignal.shared
-        .promptUserForPushNotificationPermission(fallbackToSettings: true);
     OneSignal.shared
         .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
       setState(() {
