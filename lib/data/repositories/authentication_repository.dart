@@ -52,7 +52,6 @@ class AuthenticationRepository extends Repository {
     FacebookLogin facebookLogin = FacebookLogin();
     FacebookLoginResult _facebookLoginResult =
         await facebookLogin.logIn(['email']);
-
     switch (_facebookLoginResult.status) {
       case FacebookLoginStatus.error:
         logger.e('Facebook Error');

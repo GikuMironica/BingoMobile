@@ -7,7 +7,7 @@ import 'package:hopaut/data/repositories/authentication_repository.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/services/dio_service.dart';
 import 'package:hopaut/services/event_service.dart';
-import 'package:hopaut/services/secure_sotrage_service.dart';
+import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -41,11 +41,10 @@ class AuthenticationService with ChangeNotifier {
   }
 
   Future<void> writeTokenToKeychain({String token, String refreshToken}) async {
-    await _secureStorageService.fss.write(key: 'token', value: token);
-    print('Access token written to keychain');
-    await _secureStorageService.fss
-        .write(key: 'refreshToken', value: refreshToken);
-    print('Refresh token written to keychain');
+    await Future.wait([
+      _secureStorageService.write(key: 'token', value: token),
+      _secureStorageService.write(key: 'refreshToken', value: refreshToken)
+    ]);
   }
 
   Future<void> applyToken(Map<String, dynamic> data) async {
@@ -55,10 +54,7 @@ class AuthenticationService with ChangeNotifier {
     await writeTokenToKeychain(
         token: data['Token'], refreshToken: data['RefreshToken']);
     setIdentity(Identity.fromJson(parsedData));
-    if (user == null) {
-      refreshUser();
-    }
-    _dioService.setBearerToken(data['Token']);
+    getIt<DioService>().setBearerToken(data['Token']);
   }
 
   User get user => _user;
@@ -67,15 +63,15 @@ class AuthenticationService with ChangeNotifier {
     final User user = await _userRepository.get(_identity.id);
     setUser(user);
     if (!oneSignalSettings) {
-      await setOneSignalParams();
+      setOneSignalParams();
     }
   }
 
   Future<void> setOneSignalParams() async {
-    await Future.wait({
+    await Future.wait([
       OneSignal.shared.setSubscription(true),
       OneSignal.shared.setExternalUserId(currentIdentity.id)
-    });
+    ]);
     oneSignalSettings = true;
   }
 
@@ -99,13 +95,16 @@ class AuthenticationService with ChangeNotifier {
     return false;
   }
 
-  Future<void> loginWithFb() async {
+  Future<bool> loginWithFb() async {
     Map<String, dynamic> _fbResult =
         await _authenticationRepository.loginWithFacebook();
-    if (_fbResult.containsKey('Token')) {
+    bool hasToken = _fbResult?.containsKey('Token') ?? false;
+    if (hasToken) {
       lock = true;
       await applyToken(_fbResult);
+      return true;
     }
+    return false;
   }
 
   Future<void> refreshToken() async {
@@ -113,8 +112,10 @@ class AuthenticationService with ChangeNotifier {
       if (DateTime.now()
           .isAfter(DateTime.fromMillisecondsSinceEpoch(_identity.expiry))) {
         print('Refreshing Token');
+        // TODO - jwttoken is read twice on startup
         final token = await _secureStorageService.read(key: 'token');
         final refreshToken =
+            // TODO - refreshtoke is read twice on startup
             await _secureStorageService.read(key: 'refreshToken');
         Map<String, dynamic> _refreshResult =
             await _authenticationRepository.refresh(token, refreshToken);
@@ -143,8 +144,10 @@ class AuthenticationService with ChangeNotifier {
     setIdentity(null);
     setUser(null);
     if (oneSignalSettings) {
-      await OneSignal.shared.removeExternalUserId();
-      await OneSignal.shared.setSubscription(false);
+      await Future.wait([
+        OneSignal.shared.removeExternalUserId(),
+        OneSignal.shared.setSubscription(false)
+      ]);
       oneSignalSettings = false;
     }
   }

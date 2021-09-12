@@ -18,7 +18,7 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     var _size = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: SingleChildScrollView(
         child: Stack(children: [
           Container(
@@ -77,7 +77,8 @@ class _AccountPageState extends State<AccountPage> {
   Widget userFullName() {
     return Consumer<AuthenticationService>(
       builder: (context, auth, child) => Text(
-        auth.user.fullName,
+        // TODO - Null exception
+        auth.user.fullName ?? "Name Surname",
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
       ),
     );
@@ -106,10 +107,12 @@ class _AccountPageState extends State<AccountPage> {
         shrinkWrap: true,
         children: [
           ListTile(
+            // TODO - Translations
             title: Text('Email'),
             subtitle: Text(auth.user.email),
           ),
           ListTile(
+            // TODO - Translations
             title: Text('Member since'),
             subtitle: Text(auth.user.dateRegistered),
           )
@@ -122,18 +125,21 @@ class _AccountPageState extends State<AccountPage> {
     return ListView(
       primary: false,
       shrinkWrap: true,
+
       children: [
         ListTile(
           onTap: () => pushNewScreen(context,
               screen: EditAccountPage(), withNavBar: false),
           leading: Icon(MdiIcons.pencil),
           title: Align(
+            // TODO - Translations
               alignment: Alignment(-1.15, 0), child: Text('Edit Profile')),
         ),
         ListTile(
           onTap: () =>
               pushNewScreen(context, screen: Settings(), withNavBar: false),
           leading: Icon(Icons.settings),
+          // TODO - Translations
           title: Align(alignment: Alignment(-1.15, 0), child: Text('Settings')),
         ),
       ],

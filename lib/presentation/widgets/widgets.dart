@@ -83,25 +83,56 @@ Widget accountAlreadyPrompt(BuildContext context) {
   ]);
 }
 
-Widget noAccountYetPrompt(BuildContext context) {
-  return Column(children: <Widget>[
-    FlatButton(
-      onPressed: () {
-        Application.router.navigateTo(context, '/registration',
+Widget forgotPassword(BuildContext context) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.end,
+    children: [
+      FlatButton(
+        padding: EdgeInsets.zero,
+        onPressed: () {
+          Application.router.navigateTo(context, '/registration',
             replace: true,
             transition: TransitionType.fadeIn,
             transitionDuration: Duration());
-      },
-      child:
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-        Text('Don\'t have an account yet? '),
-        Text(
-          'Sign up',
-          style: TextStyle(fontWeight: FontWeight.w500, color: Colors.pink),
-        )
-      ]),
-    )
-  ]);
+        },
+        child: Text(
+          // TODO - Translations
+          'Forgot password?',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: Colors.pink,
+            fontSize: 12
+          ),
+          textAlign: TextAlign.end,
+        ),
+      )
+    ],
+  );
+}
+
+Widget noAccountYetPrompt(BuildContext context){
+  return FlatButton(
+   onPressed: () {
+     Application.router.navigateTo(context, '/registration',
+       replace: true,
+       transition: TransitionType.fadeIn,
+       transitionDuration: Duration());
+   },
+    child:
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Don\'t have an account yet? '),
+          Text(
+            'Sign up',
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: Colors.pink
+            )
+          )
+        ],
+      )
+  );
 }
 
 Widget authActionButton({String text, BuildContext context}) {
