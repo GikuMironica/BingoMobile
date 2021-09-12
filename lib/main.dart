@@ -29,6 +29,7 @@ void main() async {
   configureDependencies();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  // TODO - store app id in config file
   await OneSignal.shared.init("fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
       iOSSettings: {
         OSiOSSettings.autoPrompt: false,
@@ -47,9 +48,10 @@ void main() async {
 
       Map<String, dynamic> _data = data.map((a, b) => MapEntry(a as String, b));
       authenticationService.setIdentity(Identity.fromJson(_data));
-      if (secureStorageService.read(key: 'token') != null) {
+      String token = await secureStorageService.read(key: 'token');
+      if (token != null) {
         dioService
-            .setBearerToken(await secureStorageService.read(key: 'token'));
+            .setBearerToken(token);
         await authenticationService.refreshToken();
         await authenticationService.refreshUser();
       }

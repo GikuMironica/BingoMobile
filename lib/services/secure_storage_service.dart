@@ -8,7 +8,7 @@ class SecureStorageService {
 
   SecureStorageService() : _flutterSecureStorage = FlutterSecureStorage();
 
-  FlutterSecureStorage get fss => _flutterSecureStorage;
+  FlutterSecureStorage get fss=> _flutterSecureStorage;
 
   /// Read a value from a key.
   Future<String> read({@required String key}) async {

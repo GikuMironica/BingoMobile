@@ -6,7 +6,6 @@ import 'package:get_it/get_it.dart';
 import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
 
 abstract class LoginEvent extends BaseEvent{
-
   AuthenticationService authService = GetIt.I.get<AuthenticationService>();
 }
 
@@ -56,16 +55,14 @@ class LoginClicked extends LoginEvent {
   @override
   Stream<LoginState> handleEvent(BaseState state) async*{
     LoginState loginState = state;
-
     yield loginState.copyWith(formStatus: LoginSubmitted());
     try{
       bool result =
         await authService.loginWithEmail(loginState.username.trim(), loginState.password.trim());
-      if(result)
-        yield loginState.copyWith(formStatus: SubmissionSuccess());
-      else
-        // TODO - Translations
-        yield loginState.copyWith(formStatus: SubmissionFailed("Invalid Credentials"));
+        yield result
+          ? loginState.copyWith(formStatus: SubmissionSuccess())
+          // TODO- Translation
+          : loginState.copyWith(formStatus: SubmissionFailed("Invalid Credentials"));
     } catch(e){
       yield loginState.copyWith(formStatus: SubmissionFailed(e));
     }
@@ -77,15 +74,13 @@ class FacebookLoginClicked extends LoginEvent {
   @override
   Stream<LoginState> handleEvent(BaseState state) async*{
     LoginState loginState = state;
-
     yield loginState.copyWith(formStatus: LoginSubmitted());
     try{
       bool result = await authService.loginWithFb();
-      if(result)
-        yield loginState.copyWith(formStatus: SubmissionSuccess());
-      else
-        // TODO - Translations
-        yield loginState.copyWith(formStatus: SubmissionFailed("Error, something went wrong"));
+        yield result
+          ? loginState.copyWith(formStatus: SubmissionSuccess())
+          // TODO - Translations
+          : loginState.copyWith(formStatus: SubmissionFailed("Error, something went wrong"));
     } catch(e){
       yield loginState.copyWith(formStatus: SubmissionFailed(e));
     }
