@@ -10,6 +10,7 @@ import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/services/settings_service.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'delete_account.dart';
 
@@ -23,6 +24,12 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+
+  @override
+  void initState() {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,11 +206,12 @@ class _SettingsState extends State<Settings> {
                         child: Column(
                           children: <Widget>[
                             Text(
-                              'HopAut',
+                              'Hopaut',
                               style: TextStyle(color: Colors.white),
                             ),
                             Consumer<SettingsService>(
                               builder: (_, settingsMgr, child) => Text(
+                                  // TODO - await SettingService Initialization -> leads to null app version
                                   'version ${settingsMgr.appVersion}',
                                   style: TextStyle(
                                       color: Colors.white.withOpacity(0.8))),
@@ -257,6 +265,10 @@ class _SettingsState extends State<Settings> {
       ),
     );
   }
+
+  // Future<PackageInfo> getAppVersion(SettingsService settingsService) async {
+  //   return await settingsService.appVersion;
+  // }
 
   @override
   void dispose() {

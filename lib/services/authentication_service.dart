@@ -94,11 +94,12 @@ class AuthenticationService with ChangeNotifier {
 
   Future<bool> loginWithFb() async {
     Map<String, dynamic> _fbResult =
-    await _authenticationRepository.loginWithFacebook();
+      await _authenticationRepository.loginWithFacebook();
     bool hasToken = _fbResult?.containsKey('Token') ?? false;
     if (hasToken) {
       lock = true;
       await applyToken(_fbResult);
+      return true;
     }
     return false;
   }
