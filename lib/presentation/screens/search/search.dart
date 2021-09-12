@@ -1,12 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/search_page_controller/search_page_controller.dart';
+import 'package:hopaut/data/models/event_type.dart';
 import 'package:hopaut/data/models/mini_post.dart';
-import 'package:hopaut/services/location_manager/location_manager.dart';
+import 'package:hopaut/services/location_service.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void initState() {
-    GetIt.I.get<LocationManager>().getCurrentLocation();
+    getIt<LocationService>().getCurrentLocation();
     super.initState();
   }
 
@@ -38,9 +39,8 @@ class _SearchPageState extends State<SearchPage> {
           size: 16,
         ),
         onPressed: () => controller.mapController.camera.lookAtPoint(
-            GeoCoordinates(
-                GetIt.I.get<LocationManager>().currentPosition.latitude,
-                GetIt.I.get<LocationManager>().currentPosition.longitude)),
+            GeoCoordinates(getIt<LocationService>().currentPosition.latitude,
+                getIt<LocationService>().currentPosition.longitude)),
       ),
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -203,42 +203,59 @@ class _SearchPageState extends State<SearchPage> {
                             scrollDirection: Axis.horizontal,
                             children: [
                               _filterEventType(
-                                type: 'House Party',
-                                value: con.searchQuery.houseParty,
-                                onTap: (v) => con.filterToggleHouseParty(),
-                              ),
+                                  type: 'House Party',
+                                  value: con.searchQuery
+                                      .eventTypes[EventType.houseParty],
+                                  onTap: (v) => con.filterToggleEventType(
+                                      EventType.houseParty)),
                               _filterEventType(
                                   type: 'Bar',
-                                  value: con.searchQuery.bar,
-                                  onTap: (v) => con.filterToggleBar()),
+                                  value:
+                                      con.searchQuery.eventTypes[EventType.bar],
+                                  onTap: (v) =>
+                                      con.filterToggleEventType(EventType.bar)),
                               _filterEventType(
                                   type: 'Club',
-                                  value: con.searchQuery.club,
-                                  onTap: (v) => con.filterToggleClub()),
+                                  value: con
+                                      .searchQuery.eventTypes[EventType.club],
+                                  onTap: (v) => con
+                                      .filterToggleEventType(EventType.club)),
                               _filterEventType(
                                   type: 'Street Party',
-                                  value: con.searchQuery.streetParty,
-                                  onTap: (v) => con.filterToggleStreetParty()),
+                                  value: con.searchQuery
+                                      .eventTypes[EventType.streetParty],
+                                  onTap: (v) => con.filterToggleEventType(
+                                      EventType.streetParty)),
                               _filterEventType(
                                   type: 'Bicycle Meet',
-                                  value: con.searchQuery.bicycleMeet,
-                                  onTap: (v) => con.filterToggleBicycleMeet()),
+                                  value: con.searchQuery
+                                      .eventTypes[EventType.bicycleMeet],
+                                  onTap: (v) => con.filterToggleEventType(
+                                      EventType.bicycleMeet)),
                               _filterEventType(
                                   type: 'Biker Meet',
-                                  value: con.searchQuery.bikerMeet,
-                                  onTap: (v) => con.filterToggleBikerMeet()),
+                                  value: con.searchQuery
+                                      .eventTypes[EventType.bikerMeet],
+                                  onTap: (v) => con.filterToggleEventType(
+                                      EventType.bikerMeet)),
                               _filterEventType(
                                   type: 'Car Meet',
-                                  value: con.searchQuery.carMeet,
-                                  onTap: (v) => con.filterToggleCarMeet()),
+                                  value: con.searchQuery
+                                      .eventTypes[EventType.carMeet],
+                                  onTap: (v) => con.filterToggleEventType(
+                                      EventType.carMeet)),
                               _filterEventType(
                                   type: 'Marathon',
-                                  value: con.searchQuery.marathon,
-                                  onTap: (v) => con.filterToggleMarathon()),
+                                  value: con.searchQuery
+                                      .eventTypes[EventType.marathon],
+                                  onTap: (v) => con.filterToggleEventType(
+                                      EventType.marathon)),
                               _filterEventType(
                                   type: 'Other',
-                                  value: con.searchQuery.other,
-                                  onTap: (v) => con.filterToggleOthers()),
+                                  value: con
+                                      .searchQuery.eventTypes[EventType.other],
+                                  onTap: (v) => con
+                                      .filterToggleEventType(EventType.other)),
                             ],
                           ),
                         ),

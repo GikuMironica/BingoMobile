@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/location.dart' as HopautLocation;
-import 'package:hopaut/services/location_manager/location_manager.dart';
+import 'package:hopaut/services/location_service.dart';
 
 enum SearchResultState {
   IDLE,
@@ -15,7 +15,7 @@ enum SearchResultState {
 }
 
 class MapLocationController extends ChangeNotifier {
-  LocationManager locationManager = GetIt.I.get<LocationManager>();
+  LocationService locationManager = getIt<LocationService>();
   HereMapController _hereMapController;
   SearchEngine _searchEngine;
   SearchResultState searchResultState;

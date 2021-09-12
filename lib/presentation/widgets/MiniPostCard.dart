@@ -84,7 +84,7 @@ class MiniPostCard extends StatelessWidget {
                       ),
                       FittedBox(
                           child: Text(
-                        miniPost.address,
+                        miniPost.address ?? "Unspecified",
                         style: TextStyle(
                             color: Color(0xFF747686),
                             fontSize: 11,

@@ -1,82 +1,85 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/data/models/mini_post.dart';
-import 'package:hopaut/data/models/multipart/updated_post.dart';
+import 'package:hopaut/data/models/updated_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
-import 'package:hopaut/services/dio_service/dio_service.dart';
-import 'package:hopaut/services/logging_service/logging_service.dart';
+import 'package:hopaut/data/repositories/repository.dart';
+import 'package:injectable/injectable.dart';
 
 import '../models/post.dart';
 
-class PostRepository {
-  Logger _logger = GetIt.I.get<LoggingService>().getLogger(PostRepository);
-  Dio _dio = GetIt.I.get<DioService>().dio;
-  String _endpoint = API.POSTS;
+@lazySingleton
+class PostRepository extends Repository {
+  final String _endpoint = API.POSTS;
+
+  PostRepository() : super();
+
   /// Get Post by Id
   Future<Post> get(int postId) async {
     try {
-      Response response =
-          await _dio.get('$_endpoint/$postId');
+      Response response = await dio.get('$_endpoint/$postId');
 
       if (response.statusCode == 200) {
         return Post.fromJson(response.data['Data']);
       }
     } on DioError catch (e) {
-      _logger.e(e.message);
+      logger.e(e.message);
     }
+    return null;
   }
 
   /// Update Post
   Future<bool> update(int postId, Map<String, dynamic> newValues) async {
     try {
-      FormData _data = FormData.fromMap(await MultiPartUpdatedPost(newValues));
-      _dio.options.headers.addAll({
+      FormData data = FormData.fromMap(await multiPartUpdatedPost(newValues));
+      dio.options.headers.addAll({
         Headers.contentTypeHeader: 'multipart/form-data',
       });
-      Response response = await _dio.post(
-          '$_endpoint/$postId',
-          data: _data,);
+      Response response = await dio.post(
+        '$_endpoint/$postId',
+        data: data,
+      );
       return response.statusCode == 200;
     } on DioError catch (e) {
-      _logger.e(e.response.statusMessage);
+      logger.e(e.response.statusMessage);
       return false;
     } finally {
-      _dio.options.headers.addAll({Headers.contentTypeHeader : 'application/json'});
+      dio.options.headers
+          .addAll({Headers.contentTypeHeader: 'application/json'});
     }
   }
 
   Future<Map<String, dynamic>> getAttendees(int postId) async {
     try {
-      Response response = await _dio.get('${API.PARTICIPANTS}?PostId=$postId');
+      Response response = await dio.get('${API.PARTICIPANTS}?PostId=$postId');
       if (response.statusCode == 200) {
         return response.data['Data'];
-      } else {
-        return {};
       }
-    } on DioError catch (e) {}
+    } on DioError catch (e) {
+      logger.e(e.response.statusMessage);
+    }
+    return {};
   }
 
   /// Delete Post
   Future<bool> delete(int postId) async {
     try {
-      Response response = await _dio.delete('$_endpoint/$postId');
+      Response response = await dio.delete('$_endpoint/$postId');
       if (response.statusCode == 204) {
         return true;
       }
     } on DioError catch (e) {
-      _logger.e(e.message);
-      return false;
+      logger.e(e.message);
     }
+    return false;
   }
 
   /// Get the user's active hosted events
   Future<List<MiniPost>> getUserActive() async {
     try {
-      Response response =
-          await _dio.get(API.MY_ACTIVE);
+      Response response = await dio.get(API.MY_ACTIVE);
       if (response.statusCode == 200) {
         if (response.data is Map<String, dynamic>) {
           Iterable iterable = response.data['Data'];
@@ -84,15 +87,15 @@ class PostRepository {
         }
       }
     } on DioError catch (e) {
-      _logger.e(e.message);
+      logger.e(e.message);
     }
+    return null;
   }
 
   /// Get user's inactive hosted events.
   Future<List<MiniPost>> getUserInactive() async {
     try {
-      Response response =
-          await _dio.get(API.MY_INACTIVE);
+      Response response = await dio.get(API.MY_INACTIVE);
       if (response.statusCode == 200) {
         if (response.data is Map<String, dynamic>) {
           Iterable iterable = response.data['Data'];
@@ -100,22 +103,24 @@ class PostRepository {
         }
       }
     } on DioError catch (e) {
-      _logger.e(e.message);
+      logger.e(e.message);
     }
+    return null;
   }
 
   /// Search for posts.
   Future<List<MiniPost>> search(SearchQuery searchQuery) async {
     try {
-      Response response = await _dio.get('$_endpoint?${searchQuery.toString()}');
+      Response response = await dio.get('$_endpoint?${searchQuery.toString()}');
 
       if (response.data is Map<String, dynamic>) {
         Iterable iterable = response.data['Data'];
         return iterable.map((e) => MiniPost.fromJson(e)).toList();
       }
     } on DioError catch (e) {
-      _logger.e(e.message);
+      logger.e(e.message);
     }
+    return null;
   }
 
   /// Endpoint for creating a post.
@@ -124,8 +129,7 @@ class PostRepository {
   Future<MiniPost> create(Post post, List images) async {
     try {
       FormData _data = FormData.fromMap(await post.toMultipartJson());
-      Response response = await _dio.post(
-          _endpoint,
+      Response response = await dio.post(_endpoint,
           data: _data,
           options: Options(headers: {
             '${HttpHeaders.contentTypeHeader}': 'multipart/form-data'
@@ -135,7 +139,8 @@ class PostRepository {
         return post;
       }
     } on DioError catch (e) {
-      _logger.e(e.response.statusMessage);
+      logger.e(e.response.statusMessage);
     }
+    return null;
   }
 }

@@ -10,19 +10,21 @@ import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/currencies.dart';
 import 'package:hopaut/config/event_types.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/paid_event_types.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/config/routes/router.dart';
+import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/data/models/event.dart';
 import 'package:hopaut/data/models/location.dart' as PostLocation;
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/post.dart';
-import 'package:hopaut/data/repositories/repositories.dart';
+import 'package:hopaut/data/repositories/post_repository.dart';
+import 'package:hopaut/data/repositories/tag_repository.dart';
 import 'package:hopaut/presentation/widgets/currency_icons.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
-import 'package:hopaut/services/image_conversion.dart';
-import 'package:hopaut/services/services.dart';
+import 'package:hopaut/services/event_service.dart';
+import 'package:hopaut/utils/image_conversion.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../widgets/inputs/event_drop_down.dart';
@@ -36,13 +38,11 @@ class CreateEventForm extends StatefulWidget {
 class _CreateEventFormState extends State<CreateEventForm> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   Post _post;
-  SearchEngine _searchEngine;
   final imagePicker = ImagePicker();
   bool _submitButtonDisabled = false;
 
   final List<String> _currencyList = List();
 
-  DateTime _eventStart;
   PaidEventType _paidEventType = PaidEventType.NONE;
   List<String> _eventList = List();
   List<bool> _picturesSelected;
@@ -129,7 +129,6 @@ class _CreateEventFormState extends State<CreateEventForm> {
         location: PostLocation.Location(),
         tags: List(),
         pictures: [null, null, null]);
-    _searchEngine = SearchEngine();
     eventTypes.forEach((key, value) => _eventList.add(value));
     currencies.forEach((key, value) => _currencyList.add(value));
     _picturesSelected = [false, false, false];
@@ -454,7 +453,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                       .replaceAll(RegExp(r" "), '-');
                   if (pattern.length > 2) {
                     List<String> tagResultList =
-                        await TagsRepository().get(pattern: pattern);
+                        await getIt<TagRepository>().get(pattern: pattern);
                     if (tagResultList.isNotEmpty) {
                       if (pattern == tagResultList.first) {
                         tagResultList.removeAt(0);
@@ -492,13 +491,11 @@ class _CreateEventFormState extends State<CreateEventForm> {
             MaterialButton(
               onPressed: !_submitButtonDisabled
                   ? () async {
-                      MiniPost postRes = await GetIt.I
-                          .get<RepoLocator>()
-                          .posts
-                          .create(_post, []);
+                      MiniPost postRes =
+                          await getIt<PostRepository>().create(_post, []);
                       setState(() => _submitButtonDisabled = true);
                       if (postRes != null) {
-                        GetIt.I.get<EventManager>().addUserActive(postRes);
+                        getIt<EventService>().addUserActive(postRes);
                         Application.router.navigateTo(
                             context, '/event/${postRes.postId}',
                             replace: true);

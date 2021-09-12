@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-const double defaultBorderRadius = 20.0;
-
+const double defaultBorderRadius = 4;
 
 class StretchableButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -23,49 +22,28 @@ class StretchableButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        var contents = List<Widget>.from(children);
-
-        if (constraints.minWidth == 0) {
-          contents.add(SizedBox.shrink());
-        } else {
-          contents.add(Spacer());
-        }
-
-        BorderSide bs;
-        if (buttonBorderColor != null) {
-          bs = BorderSide(
-            color: buttonBorderColor,
-          );
-        } else {
-          bs = BorderSide.none;
-        }
-
-        return Container(
-          padding: EdgeInsets.all(buttonPadding),
-          decoration: BoxDecoration(
+    return Container(
+      padding: EdgeInsets.all(buttonPadding),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(borderRadius),
+      ),
+      child: ButtonTheme(
+        minWidth: 200,
+        height: 50.0,
+        child: RaisedButton(
+          elevation: 10,
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
-            ),
-          child: ButtonTheme(
-            minWidth: 200,
-            height: 50.0,
-            child: RaisedButton(
-              elevation: 10,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius),
-            ),
-            onPressed: onPressed,
-            color: buttonColor,
-            splashColor: splashColor,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: contents,
-            ),
           ),
+          onPressed: onPressed,
+          color: buttonColor,
+          splashColor: splashColor,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: this.children,
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

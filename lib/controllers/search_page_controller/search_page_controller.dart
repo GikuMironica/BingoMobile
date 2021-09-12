@@ -7,12 +7,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/data/models/event_type.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
+import 'package:hopaut/data/repositories/post_repository.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
-import 'package:hopaut/services/location_manager/location_manager.dart';
-import 'package:hopaut/services/repo_locator/repo_locator.dart';
+import 'package:hopaut/services/location_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -51,7 +53,7 @@ class SearchPageController extends ChangeNotifier {
 
   BuildContext context;
 
-  LocationManager _locationManager = GetIt.I.get<LocationManager>();
+  LocationService _locationManager = getIt<LocationService>();
 
   List<Widget> get cardList => _cardList;
 
@@ -109,7 +111,7 @@ class SearchPageController extends ChangeNotifier {
     searchQuery.latitude = _locationManager.currentPosition.latitude;
     if (_filterToggled) toggleFilter();
 
-    _searchResults = await GetIt.I.get<RepoLocator>().posts.search(searchQuery);
+    _searchResults = await getIt<PostRepository>().search(searchQuery);
     if (_searchResults != null) {
       setPageState(SearchPageState.HAS_SEARCH_RESULTS);
       buildMiniPostCards();
@@ -179,8 +181,8 @@ class SearchPageController extends ChangeNotifier {
             MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
         const double distanceToEarthInMeters = 3000;
         GeoCoordinates geoCoordinates = GeoCoordinates(
-            GetIt.I.get<LocationManager>().currentPosition.latitude,
-            GetIt.I.get<LocationManager>().currentPosition.longitude);
+            getIt<LocationService>().currentPosition.latitude,
+            getIt<LocationService>().currentPosition.longitude);
         _hereMapController.camera
             .lookAtPointWithDistance(geoCoordinates, distanceToEarthInMeters);
         GeoCircle geoCircle = GeoCircle(geoCoordinates, 15000);
@@ -203,48 +205,8 @@ class SearchPageController extends ChangeNotifier {
     });
   }
 
-  void filterToggleBar() {
-    searchQuery.bar = !searchQuery.bar;
-    notifyListeners();
-  }
-
-  void filterToggleClub() {
-    searchQuery.club = !searchQuery.club;
-    notifyListeners();
-  }
-
-  void filterToggleHouseParty() {
-    searchQuery.houseParty = !searchQuery.houseParty;
-    notifyListeners();
-  }
-
-  void filterToggleStreetParty() {
-    searchQuery.houseParty = !searchQuery.houseParty;
-    notifyListeners();
-  }
-
-  void filterToggleBicycleMeet() {
-    searchQuery.bicycleMeet = !searchQuery.bicycleMeet;
-    notifyListeners();
-  }
-
-  void filterToggleBikerMeet() {
-    searchQuery.bikerMeet = !searchQuery.bikerMeet;
-    notifyListeners();
-  }
-
-  void filterToggleCarMeet() {
-    searchQuery.carMeet = !searchQuery.carMeet;
-    notifyListeners();
-  }
-
-  void filterToggleMarathon() {
-    searchQuery.marathon = !searchQuery.marathon;
-    notifyListeners();
-  }
-
-  void filterToggleOthers() {
-    searchQuery.other = !searchQuery.other;
+  void filterToggleEventType(EventType eventType) {
+    searchQuery.eventTypes[eventType] = !searchQuery.eventTypes[eventType];
     notifyListeners();
   }
 
