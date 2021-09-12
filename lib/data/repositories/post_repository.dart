@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/data/models/mini_post.dart';
-import 'package:hopaut/data/models/multipart/updated_post.dart';
+import 'package:hopaut/data/models/updated_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:injectable/injectable.dart';
@@ -33,7 +33,7 @@ class PostRepository extends Repository {
   /// Update Post
   Future<bool> update(int postId, Map<String, dynamic> newValues) async {
     try {
-      FormData data = FormData.fromMap(await MultiPartUpdatedPost(newValues));
+      FormData data = FormData.fromMap(await multiPartUpdatedPost(newValues));
       dio.options.headers.addAll({
         Headers.contentTypeHeader: 'multipart/form-data',
       });

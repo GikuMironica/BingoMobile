@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/data/models/event_type.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/data/repositories/post_repository.dart';
@@ -179,7 +180,6 @@ class SearchPageController extends ChangeNotifier {
         _hereMapController.mapScene.setLayerState(
             MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
         const double distanceToEarthInMeters = 3000;
-        await getIt<LocationService>().getCurrentLocation();
         GeoCoordinates geoCoordinates = GeoCoordinates(
             getIt<LocationService>().currentPosition.latitude,
             getIt<LocationService>().currentPosition.longitude);
@@ -205,48 +205,8 @@ class SearchPageController extends ChangeNotifier {
     });
   }
 
-  void filterToggleBar() {
-    searchQuery.bar = !searchQuery.bar;
-    notifyListeners();
-  }
-
-  void filterToggleClub() {
-    searchQuery.club = !searchQuery.club;
-    notifyListeners();
-  }
-
-  void filterToggleHouseParty() {
-    searchQuery.houseParty = !searchQuery.houseParty;
-    notifyListeners();
-  }
-
-  void filterToggleStreetParty() {
-    searchQuery.streetParty = !searchQuery.streetParty;
-    notifyListeners();
-  }
-
-  void filterToggleBicycleMeet() {
-    searchQuery.bicycleMeet = !searchQuery.bicycleMeet;
-    notifyListeners();
-  }
-
-  void filterToggleBikerMeet() {
-    searchQuery.bikerMeet = !searchQuery.bikerMeet;
-    notifyListeners();
-  }
-
-  void filterToggleCarMeet() {
-    searchQuery.carMeet = !searchQuery.carMeet;
-    notifyListeners();
-  }
-
-  void filterToggleMarathon() {
-    searchQuery.marathon = !searchQuery.marathon;
-    notifyListeners();
-  }
-
-  void filterToggleOthers() {
-    searchQuery.other = !searchQuery.other;
+  void filterToggleEventType(EventType eventType) {
+    searchQuery.eventTypes[eventType] = !searchQuery.eventTypes[eventType];
     notifyListeners();
   }
 

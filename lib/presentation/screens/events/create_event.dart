@@ -13,7 +13,7 @@ import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/paid_event_types.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/config/routes/router.dart';
+import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/data/models/event.dart';
 import 'package:hopaut/data/models/location.dart' as PostLocation;
 import 'package:hopaut/data/models/mini_post.dart';
@@ -38,13 +38,11 @@ class CreateEventForm extends StatefulWidget {
 class _CreateEventFormState extends State<CreateEventForm> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   Post _post;
-  SearchEngine _searchEngine;
   final imagePicker = ImagePicker();
   bool _submitButtonDisabled = false;
 
   final List<String> _currencyList = List();
 
-  DateTime _eventStart;
   PaidEventType _paidEventType = PaidEventType.NONE;
   List<String> _eventList = List();
   List<bool> _picturesSelected;
@@ -131,7 +129,6 @@ class _CreateEventFormState extends State<CreateEventForm> {
         location: PostLocation.Location(),
         tags: List(),
         pictures: [null, null, null]);
-    _searchEngine = SearchEngine();
     eventTypes.forEach((key, value) => _eventList.add(value));
     currencies.forEach((key, value) => _currencyList.add(value));
     _picturesSelected = [false, false, false];

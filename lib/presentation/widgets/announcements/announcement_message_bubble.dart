@@ -34,7 +34,7 @@ class _AnnouncementMessageBubbleState extends State<AnnouncementMessageBubble> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(widget.announcementMessage.text),
+            Text(widget.announcementMessage.message),
             SizedBox(
               height: 4,
             ),

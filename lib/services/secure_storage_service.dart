@@ -2,7 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 
-@lazySingleton
+@singleton
 class SecureStorageService {
   final FlutterSecureStorage _flutterSecureStorage;
 

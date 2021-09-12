@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:collection';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/config/routes/router.dart';
+import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/controllers/search_page_controller/search_page_controller.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
@@ -24,10 +23,14 @@ import 'init.dart';
 import 'package:flutter/material.dart' hide Router;
 
 void main() async {
+  await init();
+  runApp(HopAut());
+}
+
+Future<void> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   SdkContext.init(IsolateOrigin.main);
   configureDependencies();
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   // TODO - store app id in config file
   await OneSignal.shared.init("fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
@@ -36,7 +39,15 @@ void main() async {
         OSiOSSettings.inAppLaunchUrl: false
       });
   try {
-    await Hive.initFlutter();
+    await Future.wait([
+      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
+      OneSignal.shared.init("fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
+          iOSSettings: {
+            OSiOSSettings.autoPrompt: false,
+            OSiOSSettings.inAppLaunchUrl: false
+          }),
+      Hive.initFlutter()
+    ]);
     var authBox = await Hive.openBox('auth');
 
     final LinkedHashMap<dynamic, dynamic> data = authBox.get('identity');
@@ -50,8 +61,7 @@ void main() async {
       authenticationService.setIdentity(Identity.fromJson(_data));
       String token = await secureStorageService.read(key: 'token');
       if (token != null) {
-        dioService
-            .setBearerToken(token);
+        dioService.setBearerToken(token);
         await authenticationService.refreshToken();
         await authenticationService.refreshUser();
       }
@@ -59,7 +69,6 @@ void main() async {
   } on HiveError catch (err) {
     print('Authbox not found');
   }
-  runApp(HopAut());
 }
 
 class HopAut extends StatefulWidget {
@@ -93,25 +102,6 @@ class _HopAutState extends State<HopAut> {
         nextRoute = result.notification.payload.additionalData['event'];
       });
     });
-    if (getIt<AuthenticationService>().currentIdentity != null) {
-      await OneSignal.shared.setSubscription(true);
-      await OneSignal.shared
-          .setExternalUserId(getIt<AuthenticationService>().currentIdentity.id);
-    } else {
-      await OneSignal.shared.setSubscription(false);
-    }
-  }
-
-  Future<void> refreshTokenTask() async {
-    if (getIt<SecureStorageService>().read(key: 'token') != null) {
-      await getIt<AuthenticationService>().refreshToken();
-      getIt<DioService>().dio.options.headers[HttpHeaders.authorizationHeader] =
-          'bearer ${await getIt<SecureStorageService>().read(key: 'token')}';
-      print("Bearer token applied");
-      if (getIt<AuthenticationService>().user == null) {
-        await getIt<AuthenticationService>().refreshUser();
-      }
-    }
   }
 
   @override

@@ -15,9 +15,11 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 @lazySingleton
 class AuthenticationService with ChangeNotifier {
   final SecureStorageService _secureStorageService;
+  final DioService _dioService;
+  final EventService _eventService;
+
   final UserRepository _userRepository;
   final AuthenticationRepository _authenticationRepository;
-  final EventService _eventService;
 
   Identity _identity;
   User _user;
@@ -27,8 +29,9 @@ class AuthenticationService with ChangeNotifier {
   AuthenticationService()
       : _secureStorageService = getIt<SecureStorageService>(),
         _userRepository = getIt<UserRepository>(),
-        _authenticationRepository = getIt<AuthenticationRepository>(),
-        _eventService = getIt<EventService>();
+        _dioService = getIt<DioService>(),
+        _eventService = getIt<EventService>(),
+        _authenticationRepository = getIt<AuthenticationRepository>();
 
   Identity get currentIdentity => _identity;
 
@@ -60,7 +63,7 @@ class AuthenticationService with ChangeNotifier {
     final User user = await _userRepository.get(_identity.id);
     setUser(user);
     if (!oneSignalSettings) {
-      await setOneSignalParams();
+      setOneSignalParams();
     }
   }
 
@@ -82,7 +85,7 @@ class AuthenticationService with ChangeNotifier {
   /// Triggers Identity Repository -> [IdentityRepository.login()]
   Future<bool> loginWithEmail(String email, String password) async {
     Map<String, dynamic> _loginResult =
-    await _authenticationRepository.login(email: email, password: password);
+        await _authenticationRepository.login(email: email, password: password);
     if (_loginResult is Map<String, dynamic>) {
       if (_loginResult.containsKey('Token')) {
         await applyToken(_loginResult);
@@ -94,7 +97,7 @@ class AuthenticationService with ChangeNotifier {
 
   Future<bool> loginWithFb() async {
     Map<String, dynamic> _fbResult =
-      await _authenticationRepository.loginWithFacebook();
+        await _authenticationRepository.loginWithFacebook();
     bool hasToken = _fbResult?.containsKey('Token') ?? false;
     if (hasToken) {
       lock = true;
@@ -112,10 +115,10 @@ class AuthenticationService with ChangeNotifier {
         // TODO - jwttoken is read twice on startup
         final token = await _secureStorageService.read(key: 'token');
         final refreshToken =
-          // TODO - refreshtoke is read twice on startup
-          await _secureStorageService.read(key: 'refreshToken');
+            // TODO - refreshtoke is read twice on startup
+            await _secureStorageService.read(key: 'refreshToken');
         Map<String, dynamic> _refreshResult =
-        await _authenticationRepository.refresh(token, refreshToken);
+            await _authenticationRepository.refresh(token, refreshToken);
         if (_refreshResult.containsKey('Token')) {
           print('Token successfully refreshed');
           await applyToken(_refreshResult);
@@ -135,7 +138,7 @@ class AuthenticationService with ChangeNotifier {
   Future<void> logout() async {
     await Hive.box('auth').delete('identity');
     _secureStorageService.deleteAll();
-    getIt<DioService>().removeBearerToken();
+    _dioService.removeBearerToken();
 
     _eventService.reset();
     setIdentity(null);
