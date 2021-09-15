@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
@@ -47,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -61,26 +60,6 @@ class _LoginPageState extends State<LoginPage> {
                 )
               ]
             ),
-          ),
-          BlocBuilder<LoginBloc, LoginState>(
-            builder: (context, state){
-              return Visibility(
-                visible: state.formStatus is LoginSubmitted,
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                  child: Dialog(
-                    elevation: 0,
-                    backgroundColor: Colors.white.withOpacity(0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:[
-                        CircularProgressIndicator()
-                      ]
-                    ),
-                  )
-                ),
-              );
-            }
           ),
           BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state) {
@@ -122,28 +101,59 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 16,
             ),
+
             BlocBuilder<LoginBloc, LoginState>(
               builder:(context, state){
                 return passwordInputField(context, state);
               }
             ),
             forgotPassword(context),
+            BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state){
+                  return state.formStatus is LoginSubmitted
+                      ? _circularProgressIndicator()
+                      : _loginButtons();
+                }
+            ),
             SizedBox(height: 32),
-            BlocBuilder<LoginBloc, LoginState>(
-                builder: (context, state){
-                  return loginButton(context, state, _formKey);
-                }
-            ),
-            SizedBox(height: 10),
-            BlocBuilder<LoginBloc, LoginState>(
-                builder: (context, state){
-                  return facebookButton(context, state);
-                }
-            ),
+
           ],
         )
       ),
     );
   }
 
+  Widget _circularProgressIndicator(){
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+      child: Dialog(
+        elevation: 0,
+        backgroundColor: Colors.white.withOpacity(0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:[
+            CircularProgressIndicator()
+          ]
+        ),
+      )
+    );
+  }
+
+  Widget _loginButtons() {
+    return Column(
+      children: [
+        BlocBuilder<LoginBloc, LoginState>(
+            builder: (context, state){
+              return loginButton(context, state, _formKey);
+            }
+        ),
+        SizedBox(height: 10),
+        BlocBuilder<LoginBloc, LoginState>(
+            builder: (context, state){
+              return facebookButton(context, state);
+            }
+        ),
+      ]
+    );
+  }
 }

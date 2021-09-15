@@ -4,6 +4,7 @@ import 'package:hopaut/controllers/blocs/login/login_state.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
+import 'package:hopaut/data/domain/login_result.dart';
 
 abstract class LoginEvent extends BaseEvent{
   AuthenticationService authService = GetIt.I.get<AuthenticationService>();
@@ -55,16 +56,18 @@ class LoginClicked extends LoginEvent {
   @override
   Stream<LoginState> handleEvent(BaseState state) async*{
     LoginState loginState = state;
+    LoginResult result;
     yield loginState.copyWith(formStatus: LoginSubmitted());
     try{
-      bool result =
+       result =
         await authService.loginWithEmail(loginState.username.trim(), loginState.password.trim());
-        yield result
+        yield result.isSuccessful
           ? loginState.copyWith(formStatus: SubmissionSuccess())
           // TODO- Translation
-          : loginState.copyWith(formStatus: SubmissionFailed("Invalid Credentials"));
+          : loginState.copyWith(formStatus: SubmissionFailed(result.data["Error"]));
     } catch(e){
-      yield loginState.copyWith(formStatus: SubmissionFailed(e));
+      // TODO - translations
+      yield loginState.copyWith(formStatus: SubmissionFailed("Internal error"));
     }
   }
 }

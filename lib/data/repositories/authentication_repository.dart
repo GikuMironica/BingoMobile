@@ -1,6 +1,5 @@
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/data/repositories/repository.dart';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:injectable/injectable.dart';
@@ -22,9 +21,12 @@ class AuthenticationRepository extends Repository {
         data: payload,
       );
     } on DioError catch (e) {
-      if (e.response != null) {
-        print(e.response.data.toString());
+      if (e.response?.statusCode == 400 && e.response.data["FailReason"]==2) {
+        // TODO - translation
+        Map<String, String> result = {"Error": "Invalid username or password"};
+        return result;
       }
+      // TODO - Handle use case where email not confirmed or account blocked due to the amount of tries
     }
     return response.data;
   }
@@ -39,6 +41,7 @@ class AuthenticationRepository extends Repository {
         API.REGISTER,
         data: payload,
       );
+      // TODO - Handle use case if email was already used
     } on DioError catch (e) {
       if (e.response != null) {
         logger.e(e.response.data.toString());

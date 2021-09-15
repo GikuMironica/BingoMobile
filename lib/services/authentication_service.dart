@@ -11,6 +11,7 @@ import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:hopaut/data/domain/login_result.dart';
 
 @lazySingleton
 class AuthenticationService with ChangeNotifier {
@@ -59,20 +60,26 @@ class AuthenticationService with ChangeNotifier {
 
   User get user => _user;
 
-  Future<void> refreshUser() async {
+  Future<void> refreshUser(bool notificationsAllowed) async {
     final User user = await _userRepository.get(_identity.id);
     setUser(user);
     if (!oneSignalSettings) {
-      setOneSignalParams();
+      await setOneSignalParams(notificationsAllowed ?? false);
     }
   }
 
-  Future<void> setOneSignalParams() async {
+  Future<void> setOneSignalParams(bool notificationsAllowed) async {
+    notificationsAllowed
+        ? await getPermissions(notificationsAllowed)
+        : oneSignalSettings = false;
+  }
+
+  Future<void> getPermissions(bool notificationsAllowed) async{
     await Future.wait([
       OneSignal.shared.setSubscription(true),
       OneSignal.shared.setExternalUserId(currentIdentity.id)
     ]);
-    oneSignalSettings = true;
+    oneSignalSettings = notificationsAllowed;
   }
 
   void setUser(User user) {
@@ -83,16 +90,17 @@ class AuthenticationService with ChangeNotifier {
   /// Log the user in.
   ///
   /// Triggers Identity Repository -> [IdentityRepository.login()]
-  Future<bool> loginWithEmail(String email, String password) async {
+  Future<LoginResult> loginWithEmail(String email, String password) async {
     Map<String, dynamic> _loginResult =
         await _authenticationRepository.login(email: email, password: password);
     if (_loginResult is Map<String, dynamic>) {
       if (_loginResult.containsKey('Token')) {
         await applyToken(_loginResult);
-        return true;
+        return LoginResult(isSuccessful: true);
       }
     }
-    return false;
+    // TODO - Refactor to return Result Object with Bool and Error if exists
+    return LoginResult(isSuccessful: false, data: _loginResult);
   }
 
   Future<bool> loginWithFb() async {
@@ -115,7 +123,7 @@ class AuthenticationService with ChangeNotifier {
         // TODO - jwttoken is read twice on startup
         final token = await _secureStorageService.read(key: 'token');
         final refreshToken =
-            // TODO - refreshtoke is read twice on startup
+            // TODO - refresh toke is read twice on startup
             await _secureStorageService.read(key: 'refreshToken');
         Map<String, dynamic> _refreshResult =
             await _authenticationRepository.refresh(token, refreshToken);
