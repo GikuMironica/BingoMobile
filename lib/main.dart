@@ -35,6 +35,7 @@ Future<void> init() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   // TODO - store app id in config file
   try {
+    bool areNotificationsAllowed = true;
     await Future.wait([
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
       OneSignal.shared.init("fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
@@ -42,7 +43,11 @@ Future<void> init() async {
             OSiOSSettings.autoPrompt: false,
             OSiOSSettings.inAppLaunchUrl: false
           }),
-      Hive.initFlutter()
+      Hive.initFlutter(),
+      // TODO - fix notification prompt.
+      OneSignal.shared
+        .promptUserForPushNotificationPermission(fallbackToSettings: true)
+        .then((result) => areNotificationsAllowed = result)
     ]);
     var authBox = await Hive.openBox('auth');
 
@@ -59,7 +64,7 @@ Future<void> init() async {
       if (token != null) {
         dioService.setBearerToken(token);
         await authenticationService.refreshToken();
-        await authenticationService.refreshUser();
+        await authenticationService.refreshUser(areNotificationsAllowed);
       }
     }
   } on HiveError catch (err) {
@@ -88,15 +93,12 @@ class _HopAutState extends State<HopAut> {
   }
 
   Future<void> initPlatformState() async {
-    if (Platform.isIOS) {
-      await OneSignal.shared
-          .promptUserForPushNotificationPermission(fallbackToSettings: true);
-    }
     OneSignal.shared
         .setInFocusDisplayType(OSNotificationDisplayType.notification);
     OneSignal.shared
         .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
       setState(() {
+        // TODO - Test if it will redirect to event
         nextRoute = result.notification.payload.additionalData['event'];
       });
     });

@@ -59,20 +59,26 @@ class AuthenticationService with ChangeNotifier {
 
   User get user => _user;
 
-  Future<void> refreshUser() async {
+  Future<void> refreshUser(bool notificationsAllowed) async {
     final User user = await _userRepository.get(_identity.id);
     setUser(user);
     if (!oneSignalSettings) {
-      setOneSignalParams();
+      await setOneSignalParams(notificationsAllowed);
     }
   }
 
-  Future<void> setOneSignalParams() async {
+  Future<void> setOneSignalParams(bool notificationsAllowed) async {
+    notificationsAllowed
+        ? await getPermissions(notificationsAllowed)
+        : oneSignalSettings = false;
+  }
+
+  Future<void> getPermissions(bool notificationsAllowed) async{
     await Future.wait([
       OneSignal.shared.setSubscription(true),
       OneSignal.shared.setExternalUserId(currentIdentity.id)
     ]);
-    oneSignalSettings = true;
+    oneSignalSettings = notificationsAllowed;
   }
 
   void setUser(User user) {
@@ -115,7 +121,7 @@ class AuthenticationService with ChangeNotifier {
         // TODO - jwttoken is read twice on startup
         final token = await _secureStorageService.read(key: 'token');
         final refreshToken =
-            // TODO - refreshtoke is read twice on startup
+            // TODO - refresh toke is read twice on startup
             await _secureStorageService.read(key: 'refreshToken');
         Map<String, dynamic> _refreshResult =
             await _authenticationRepository.refresh(token, refreshToken);
