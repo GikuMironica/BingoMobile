@@ -11,6 +11,7 @@ import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:hopaut/data/domain/login_result.dart';
 
 @lazySingleton
 class AuthenticationService with ChangeNotifier {
@@ -63,7 +64,7 @@ class AuthenticationService with ChangeNotifier {
     final User user = await _userRepository.get(_identity.id);
     setUser(user);
     if (!oneSignalSettings) {
-      await setOneSignalParams(notificationsAllowed);
+      await setOneSignalParams(notificationsAllowed ?? false);
     }
   }
 
@@ -89,17 +90,17 @@ class AuthenticationService with ChangeNotifier {
   /// Log the user in.
   ///
   /// Triggers Identity Repository -> [IdentityRepository.login()]
-  Future<bool> loginWithEmail(String email, String password) async {
+  Future<LoginResult> loginWithEmail(String email, String password) async {
     Map<String, dynamic> _loginResult =
         await _authenticationRepository.login(email: email, password: password);
     if (_loginResult is Map<String, dynamic>) {
       if (_loginResult.containsKey('Token')) {
         await applyToken(_loginResult);
-        return true;
+        return LoginResult(isSuccessful: true);
       }
     }
     // TODO - Refactor to return Result Object with Bool and Error if exists
-    return false;
+    return LoginResult(isSuccessful: false, data: _loginResult);
   }
 
   Future<bool> loginWithFb() async {

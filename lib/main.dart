@@ -18,7 +18,6 @@ import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:hopaut/services/settings_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
-import 'controllers/login_page/login_page_controller.dart';
 import 'init.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'dart:io' show Platform;
@@ -120,10 +119,6 @@ class _HopAutState extends State<HopAut> {
               create: (context) => getIt<EventService>()),
           ChangeNotifierProvider<SettingsService>(
               create: (context) => getIt<SettingsService>()),
-          ChangeNotifierProvider<LoginPageController>(
-            create: (_) => LoginPageController(),
-            lazy: true,
-          ),
           ChangeNotifierProvider<SearchPageController>(
             create: (_) => SearchPageController(),
             lazy: true,
