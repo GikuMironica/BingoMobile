@@ -21,9 +21,12 @@ class AuthenticationRepository extends Repository {
         API.LOGIN,
         data: payload,
       );
+      // TODO - Handle use case where email not confirmed or account blocked due to the ammount of tries
     } on DioError catch (e) {
       if (e.response != null) {
-        print(e.response.data.toString());
+        dynamic error = e.response.data.values.toList();
+        Map<String, String> result = {"Error": error};
+        return result;
       }
     }
     return response.data;
@@ -39,6 +42,7 @@ class AuthenticationRepository extends Repository {
         API.REGISTER,
         data: payload,
       );
+      // TODO - Handle use case if email was already used
     } on DioError catch (e) {
       if (e.response != null) {
         logger.e(e.response.data.toString());

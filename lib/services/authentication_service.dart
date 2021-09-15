@@ -98,6 +98,7 @@ class AuthenticationService with ChangeNotifier {
         return true;
       }
     }
+    // TODO - Refactor to return Result Object with Bool and Error if exists
     return false;
   }
 

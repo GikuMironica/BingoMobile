@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -65,20 +65,20 @@ class _LoginPageState extends State<LoginPage> {
           BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state){
               return Visibility(
-                visible: state.formStatus is LoginSubmitted,
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                  child: Dialog(
-                    elevation: 0,
-                    backgroundColor: Colors.white.withOpacity(0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:[
-                        CircularProgressIndicator()
-                      ]
-                    ),
-                  )
-                ),
+                visible: state.formStatus is LoginSubmitted ,
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                    child: Dialog(
+                      elevation: 0,
+                      backgroundColor: Colors.white.withOpacity(0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children:[
+                          CircularProgressIndicator()
+                        ]
+                      ),
+                    )
+                  ),
               );
             }
           ),
