@@ -2,20 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/presentation/screens/events/create_event.dart';
 import 'package:hopaut/presentation/screens/events/event_list/past_events_list.dart';
 import 'package:hopaut/presentation/widgets/hopaut_app_bar.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 import 'active_events_list.dart';
 
-class EventList extends StatefulWidget {
-  @override
-  _EventListState createState() => _EventListState();
-}
-
-class _EventListState extends State<EventList> {
+class EventList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> _tabs = ['Current', 'Past']; // TODO: translate(maybe)

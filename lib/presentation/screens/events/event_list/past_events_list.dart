@@ -5,12 +5,7 @@ import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
 import 'package:hopaut/providers/event_provider.dart';
 import 'package:provider/provider.dart';
 
-class PastEventsList extends StatefulWidget {
-  @override
-  _PastEventsListState createState() => _PastEventsListState();
-}
-
-class _PastEventsListState extends State<PastEventsList> {
+class PastEventsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(
