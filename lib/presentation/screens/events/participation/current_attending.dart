@@ -16,7 +16,7 @@ class _CurrentAttendingListState extends State<CurrentAttendingList> {
   @override
   void initState() {
     if (getIt<EventService>().activeHopautsListState ==
-        ListState.NOT_LOADED_YET) {
+        EventListState.NotYetLoaded) {
       getIt<EventService>().fetchActiveHopauts();
     }
     super.initState();
@@ -30,12 +30,13 @@ class _CurrentAttendingListState extends State<CurrentAttendingList> {
   Widget _buildList(BuildContext context) {
     return Consumer<EventService>(
       builder: (context, eventManager, child) {
-        if (eventManager.activeHopautsListState == ListState.LOADING) {
+        if (eventManager.activeHopautsListState ==
+            EventListState.NotYetLoaded) {
           return Center(
             child: CupertinoActivityIndicator(),
           );
         } else {
-          if (eventManager.activeHopautsListState == ListState.IDLE) {
+          if (eventManager.activeHopautsListState == EventListState.Idle) {
             return eventManager.activeHopauts.isNotEmpty
                 ? ListView.builder(
                     itemBuilder: (context, index) => InkWell(

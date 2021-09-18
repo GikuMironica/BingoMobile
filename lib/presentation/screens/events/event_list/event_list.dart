@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
+import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/screens/events/create_event.dart';
-import 'package:hopaut/presentation/screens/events/event_list/past_events.dart';
+import 'package:hopaut/presentation/screens/events/event_list/past_events_list.dart';
 import 'package:hopaut/presentation/widgets/hopaut_app_bar.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-import 'user_active_list.dart';
+import 'active_events_list.dart';
 
 class EventList extends StatefulWidget {
   @override
@@ -17,29 +17,16 @@ class EventList extends StatefulWidget {
 
 class _EventListState extends State<EventList> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final List<String> _tabs = ['Current', 'Past'];
+    final List<String> _tabs = ['Current', 'Past']; // TODO: translate(maybe)
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        heroTag: 'create-event',
-        child: Icon(Icons.add, color: Colors.white, size: 24),
-        backgroundColor: HATheme.HOPAUT_PINK,
-        onPressed: () async => pushNewScreen(context,
-            screen: CreateEventForm(),
-            withNavBar: false,
-            pageTransitionAnimation: PageTransitionAnimation.cupertino),
-      ),
+          heroTag: 'create-event',
+          child: Icon(Icons.add, color: Colors.white, size: 24),
+          backgroundColor: HATheme.HOPAUT_PINK,
+          onPressed: () async {
+            Application.router.navigateTo(context, '/create-event');
+          }),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
       extendBodyBehindAppBar: false,
@@ -54,7 +41,7 @@ class _EventListState extends State<EventList> {
               sliver: MultiSliver(
                 children: [
                   HopAutAppBar(
-                    title: 'Events List',
+                    title: 'Events List', // TODO: translation
                     actions: <Widget>[
                       IconButton(
                         icon: SvgPicture.asset(
@@ -63,13 +50,8 @@ class _EventListState extends State<EventList> {
                           height: 24,
                         ),
                         onPressed: () async {
-                          pushNewScreen(
-                            context,
-                            screen: AnnouncementsIndex(),
-                            withNavBar: false,
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.cupertino,
-                          );
+                          Application.router
+                              .navigateTo(context, '/announcements');
                         },
                       )
                     ],
@@ -94,7 +76,7 @@ class _EventListState extends State<EventList> {
             ),
           ],
           body: TabBarView(children: <Widget>[
-            UserActiveList(),
+            ActiveEventsList(),
             PastEventsList(),
           ]),
         ),

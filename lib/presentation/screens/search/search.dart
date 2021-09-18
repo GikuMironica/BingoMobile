@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:hopaut/config/injection.dart';
-import 'package:hopaut/controllers/search_page_controller/search_page_controller.dart';
+import 'package:hopaut/providers/search_page_controller.dart';
 import 'package:hopaut/data/models/event_type.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/services/location_service.dart';

@@ -10,7 +10,7 @@ import 'package:hopaut/presentation/screens/announcements/announcement_screen.da
 import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
 import 'package:hopaut/presentation/screens/authentication/forgot_password/forgot_password.dart';
-import 'package:hopaut/presentation/screens/events/create_event/create_event.dart';
+import 'package:hopaut/presentation/screens/events/create_event.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/description.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/edit_event.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/location/map.dart';
@@ -81,9 +81,8 @@ var changePasswordHandler = new Handler(
 
 var forgotPasswordHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-      return ForgotPasswordPage();
-    });
-
+  return ForgotPasswordPage();
+});
 
 var eventPageHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -97,7 +96,7 @@ var rateEventHandler = new Handler(
 
 var createEventHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return CreateEventPage();
+  return CreateEventForm();
 });
 
 var editEventHandler = new Handler(

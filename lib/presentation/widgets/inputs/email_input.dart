@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hopaut/controllers/blocs/login/login_event.dart';
-import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
+import 'package:hopaut/providers/blocs/login/login_event.dart';
+import 'package:hopaut/providers/blocs/login/login_bloc.dart';
 
 Widget emailInputField(BuildContext context, dynamic state) {
   return TextFormField(
     validator: (value) =>
-    // TODO - Translation
-    state.isValidEmail ? null : 'Please input a valid email',
+        // TODO - Translation
+        state.isValidEmail ? null : 'Please input a valid email',
     onChanged: (value) =>
-        context.read<LoginBloc>().add(
-            LoginUsernameChanged(username: value)
-        ),
+        context.read<LoginBloc>().add(LoginUsernameChanged(username: value)),
     decoration: InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
       enabledBorder: OutlineInputBorder(
@@ -29,9 +27,8 @@ Widget emailInputField(BuildContext context, dynamic state) {
         Icons.mail_outline,
         color: Colors.black,
       ),
-      focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey)
-      ),
+      focusedBorder:
+          OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
       labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
     ),
   );
@@ -60,9 +57,8 @@ StreamBuilder<String> emailInput(bloc) {
           Icons.mail_outline,
           color: Colors.black,
         ),
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey)
-        ),
+        focusedBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
         labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
       ),
     ),

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
@@ -19,7 +18,7 @@ class _InactiveAttendedEventsListState
   @override
   void initState() {
     if (getIt<EventService>().inactiveHopautsListState ==
-        ListState.NOT_LOADED_YET) {
+        EventListState.NotYetLoaded) {
       getIt<EventService>().fetchInactiveHopauts();
     }
     super.initState();
@@ -33,12 +32,12 @@ class _InactiveAttendedEventsListState
   Widget _buildList(BuildContext context) {
     return Consumer<EventService>(
       builder: (context, eventManager, child) {
-        if (eventManager.inactiveHopautsListState == ListState.LOADING) {
+        if (eventManager.inactiveHopautsListState == EventListState.Loading) {
           return Center(
             child: CupertinoActivityIndicator(),
           );
         } else {
-          if (eventManager.inactiveHopautsListState == ListState.IDLE) {
+          if (eventManager.inactiveHopautsListState == EventListState.Idle) {
             return eventManager.inactiveHopauts.isNotEmpty
                 ? ListView.builder(
                     itemBuilder: (context, index) => InkWell(

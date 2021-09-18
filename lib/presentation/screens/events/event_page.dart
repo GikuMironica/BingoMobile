@@ -11,7 +11,7 @@ import 'package:hopaut/data/models/profile.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/data/repositories/post_repository.dart';
 import 'package:hopaut/data/repositories/profile_repository.dart';
-import 'package:hopaut/presentation/screens/events/delete_event/delete_event.dart';
+import 'package:hopaut/presentation/screens/events/delete_event.dart';
 import 'package:hopaut/presentation/screens/events/participation_list.dart';
 import 'package:hopaut/presentation/screens/report/report_event.dart';
 import 'package:hopaut/presentation/widgets/buttons/event_attend_button.dart';

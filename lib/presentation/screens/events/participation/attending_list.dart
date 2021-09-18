@@ -14,16 +14,6 @@ class AttendingList extends StatefulWidget {
 
 class _AttendingListState extends State<AttendingList> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: false,
@@ -42,7 +32,7 @@ class _AttendingListState extends State<AttendingList> {
                     height: 24,
                   ),
                   onPressed: () async {
-                    Application.router.navigateTo(context, '/create-event');
+                    Application.router.navigateTo(context, '/announcements');
                   },
                 )
               ],

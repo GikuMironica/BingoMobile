@@ -41,6 +41,7 @@ class Routes {
     router.notFoundHandler = Handler(
         handlerFunc: (BuildContext ctx, Map<String, List<String>> params) {
       print('Error: Route not found');
+      return null;
     });
 
     router.define(root, handler: rootHandler);
@@ -50,7 +51,8 @@ class Routes {
     router.define(account, handler: accountHandler);
     router.define(editAccount, handler: editAccountHandler);
     router.define(editAccountName, handler: editAccountNameHandler);
-    router.define(editAccountDescription, handler: editAccountDescriptionHandler);
+    router.define(editAccountDescription,
+        handler: editAccountDescriptionHandler);
     router.define(editAccountPicture, handler: editAccountPictureHandler);
     router.define(settings, handler: settingsHandler);
     router.define(changePassword, handler: changePasswordHandler);

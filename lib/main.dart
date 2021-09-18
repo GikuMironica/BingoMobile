@@ -8,7 +8,7 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
-import 'package:hopaut/controllers/search_page_controller/search_page_controller.dart';
+import 'package:hopaut/providers/search_page_controller.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
 import 'package:hopaut/services/authentication_service.dart';
@@ -18,7 +18,8 @@ import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:hopaut/services/settings_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
-import 'controllers/login_page/login_page_controller.dart';
+import 'providers/login_page_controller.dart';
+import 'providers/event_provider.dart';
 import 'init.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'dart:io' show Platform;
@@ -124,6 +125,10 @@ class _HopAutState extends State<HopAut> {
           ),
           ChangeNotifierProvider<SearchPageController>(
             create: (_) => SearchPageController(),
+            lazy: true,
+          ),
+          ChangeNotifierProvider<EventProvider>(
+            create: (_) => EventProvider(eventService: getIt<EventService>()),
             lazy: true,
           )
         ],

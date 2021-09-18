@@ -6,27 +6,27 @@ import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/data/repositories/post_repository.dart';
 import 'package:injectable/injectable.dart';
 
-enum ListState { IDLE, LOADING, NOT_LOADED_YET }
+enum EventListState { Idle, Loading, NotYetLoaded }
 
 @singleton
 class EventService with ChangeNotifier {
-  ListState _userActiveListState;
-  ListState _userInactiveListState;
-  ListState _activeHopautsListState;
-  ListState _inactiveHopautsListState;
+  EventListState _userActiveListState;
+  EventListState _userInactiveListState;
+  EventListState _activeHopautsListState;
+  EventListState _inactiveHopautsListState;
 
   List<MiniPost> _userActiveList;
   List<MiniPost> _userInactiveList;
   List<MiniPost> _activeHopauts;
   List<MiniPost> _inactiveHopauts;
 
-  ListState get userActiveListState => _userActiveListState;
+  EventListState get userActiveListState => _userActiveListState;
 
-  ListState get userInactiveListState => _userInactiveListState;
+  EventListState get userInactiveListState => _userInactiveListState;
 
-  ListState get activeHopautsListState => _activeHopautsListState;
+  EventListState get activeHopautsListState => _activeHopautsListState;
 
-  ListState get inactiveHopautsListState => _inactiveHopautsListState;
+  EventListState get inactiveHopautsListState => _inactiveHopautsListState;
 
   List<MiniPost> get userActiveList => _userActiveList;
 
@@ -34,10 +34,10 @@ class EventService with ChangeNotifier {
   int _miniPostContextId;
 
   EventService() {
-    _userActiveListState = ListState.NOT_LOADED_YET;
-    _userInactiveListState = ListState.NOT_LOADED_YET;
-    _activeHopautsListState = ListState.NOT_LOADED_YET;
-    _inactiveHopautsListState = ListState.NOT_LOADED_YET;
+    _userActiveListState = EventListState.NotYetLoaded;
+    _userInactiveListState = EventListState.NotYetLoaded;
+    _activeHopautsListState = EventListState.NotYetLoaded;
+    _inactiveHopautsListState = EventListState.NotYetLoaded;
 
     _userInactiveList = <MiniPost>[];
     _userActiveList = <MiniPost>[];
@@ -45,57 +45,57 @@ class EventService with ChangeNotifier {
     _inactiveHopauts = <MiniPost>[];
   }
 
-  void setUserActiveListState(ListState listState) =>
+  void setUserActiveListState(EventListState listState) =>
       _userActiveListState = listState;
 
-  void setUserInactiveListState(ListState listState) =>
+  void setUserInactiveListState(EventListState listState) =>
       _userInactiveListState = listState;
 
-  void setActiveHopautsListState(ListState listState) =>
+  void setActiveHopautsListState(EventListState listState) =>
       _activeHopautsListState = listState;
 
-  void setInactiveHopautsListState(ListState listState) =>
+  void setInactiveHopautsListState(EventListState listState) =>
       _inactiveHopautsListState = listState;
 
   Future<void> fetchUserActiveEvents() async {
-    setUserActiveListState(ListState.LOADING);
+    setUserActiveListState(EventListState.Loading);
     var response = await getIt<PostRepository>().getUserActive();
     if (response != null) {
       _userActiveList = [...response];
       _userActiveList.sort((a, b) => a.startTime.compareTo(b.startTime));
     }
-    setUserActiveListState(ListState.IDLE);
+    setUserActiveListState(EventListState.Idle);
     notifyListeners();
   }
 
   Future<void> fetchUserInactiveEvents() async {
-    setUserInactiveListState(ListState.LOADING);
+    setUserInactiveListState(EventListState.Loading);
     var response = await getIt<PostRepository>().getUserInactive();
     if (response != null) {
       _userInactiveList = [...response];
     }
-    setUserInactiveListState(ListState.IDLE);
+    setUserInactiveListState(EventListState.Idle);
     notifyListeners();
   }
 
   Future<void> fetchActiveHopauts() async {
-    setActiveHopautsListState(ListState.LOADING);
+    setActiveHopautsListState(EventListState.Loading);
     var response = await getIt<EventRepository>().getAttending();
     if (response != null) {
       _activeHopauts = [...response];
       _activeHopauts.sort((a, b) => a.startTime.compareTo(b.startTime));
     }
-    setActiveHopautsListState(ListState.IDLE);
+    setActiveHopautsListState(EventListState.Idle);
     notifyListeners();
   }
 
   Future<void> fetchInactiveHopauts() async {
-    setInactiveHopautsListState(ListState.LOADING);
+    setInactiveHopautsListState(EventListState.Loading);
     var response = await getIt<EventRepository>().getAttended();
     if (response != null) {
       _inactiveHopauts = [...response];
     }
-    setInactiveHopautsListState(ListState.IDLE);
+    setInactiveHopautsListState(EventListState.Idle);
     notifyListeners();
   }
 
@@ -107,10 +107,10 @@ class EventService with ChangeNotifier {
   }
 
   void reset() {
-    setActiveHopautsListState(ListState.NOT_LOADED_YET);
-    setInactiveHopautsListState(ListState.NOT_LOADED_YET);
-    setUserActiveListState(ListState.NOT_LOADED_YET);
-    setUserInactiveListState(ListState.NOT_LOADED_YET);
+    setActiveHopautsListState(EventListState.NotYetLoaded);
+    setInactiveHopautsListState(EventListState.NotYetLoaded);
+    setUserActiveListState(EventListState.NotYetLoaded);
+    setUserInactiveListState(EventListState.NotYetLoaded);
     _userActiveList.clear();
     _userInactiveList.clear();
     _activeHopauts.clear();
