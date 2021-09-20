@@ -50,10 +50,11 @@ class AuthenticationService with ChangeNotifier {
 
   Future<void> applyToken(Map<String, dynamic> data) async {
     final Map<String, dynamic> parsedData = Jwt.parseJwt(data['Token']);
-    await Hive.box('auth').put('identity', parsedData);
+    await Future.wait([
+      Hive.box('auth').put('identity', parsedData),
+      writeTokenToKeychain(token: data['Token'], refreshToken: data['RefreshToken'])
+    ]);
 
-    await writeTokenToKeychain(
-        token: data['Token'], refreshToken: data['RefreshToken']);
     setIdentity(Identity.fromJson(parsedData));
     getIt<DioService>().setBearerToken(data['Token']);
   }
@@ -64,22 +65,15 @@ class AuthenticationService with ChangeNotifier {
     final User user = await _userRepository.get(_identity.id);
     setUser(user);
     if (!oneSignalSettings) {
-      await setOneSignalParams(notificationsAllowed ?? false);
+      await initializeOneSignalSubscription(notificationsAllowed ?? false);
     }
   }
 
-  Future<void> setOneSignalParams(bool notificationsAllowed) async {
+  Future<void> initializeOneSignalSubscription(bool notificationsAllowed) async{
     notificationsAllowed
-        ? await getPermissions(notificationsAllowed)
-        : oneSignalSettings = false;
-  }
-
-  Future<void> getPermissions(bool notificationsAllowed) async{
-    await Future.wait([
-      OneSignal.shared.setSubscription(true),
-      OneSignal.shared.setExternalUserId(currentIdentity.id)
-    ]);
-    oneSignalSettings = notificationsAllowed;
+      ? await Future.wait([OneSignal.shared.setSubscription(notificationsAllowed),
+          OneSignal.shared.setExternalUserId(currentIdentity.id)])
+      : oneSignalSettings = notificationsAllowed;
   }
 
   void setUser(User user) {
@@ -121,10 +115,8 @@ class AuthenticationService with ChangeNotifier {
           .isAfter(DateTime.fromMillisecondsSinceEpoch(_identity.expiry))) {
         print('Refreshing Token');
         // TODO - jwttoken is read twice on startup
-        final token = await _secureStorageService.read(key: 'token');
-        final refreshToken =
-            // TODO - refresh toke is read twice on startup
-            await _secureStorageService.read(key: 'refreshToken');
+        dynamic token = await _secureStorageService.read(key: 'token');
+        dynamic refreshToken = await _secureStorageService.read(key: 'refreshToken');
         Map<String, dynamic> _refreshResult =
             await _authenticationRepository.refresh(token, refreshToken);
         if (_refreshResult.containsKey('Token')) {

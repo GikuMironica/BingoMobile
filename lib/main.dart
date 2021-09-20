@@ -45,8 +45,8 @@ Future<void> init() async {
       Hive.initFlutter(),
       // TODO - fix notification prompt.
       OneSignal.shared
-        .promptUserForPushNotificationPermission(fallbackToSettings: true)
-        .then((result) => areNotificationsAllowed = result)
+          .promptUserForPushNotificationPermission(fallbackToSettings: true)
+          .then((result) => areNotificationsAllowed = result)
     ]);
     var authBox = await Hive.openBox('auth');
 
