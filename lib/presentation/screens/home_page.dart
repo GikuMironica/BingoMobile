@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/screens/account/account_page/account_page.dart';
-import 'package:hopaut/presentation/screens/events/event_list/event_list.dart';
-import 'package:hopaut/presentation/screens/events/participation/attending_list.dart';
+import 'package:hopaut/presentation/screens/events/event_list_page.dart';
 import 'package:hopaut/presentation/screens/search/search.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -71,8 +70,8 @@ class _HomePageState extends State<HomePage> {
   List<Widget> _buildScreens() {
     return [
       SearchPage(),
-      EventList(),
-      AttendingList(),
+      EventListPage("Events List", true), //TODO: translation
+      EventListPage("Attending Events List", false), //TODO: translation
       AccountPage(),
     ];
   }

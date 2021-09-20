@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get_it/get_it.dart';
 import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/currencies.dart';
@@ -18,14 +17,15 @@ import 'package:hopaut/data/models/event.dart';
 import 'package:hopaut/data/models/location.dart' as PostLocation;
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/post.dart';
-import 'package:hopaut/data/repositories/post_repository.dart';
+import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/data/repositories/tag_repository.dart';
 import 'package:hopaut/presentation/widgets/currency_icons.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
-import 'package:hopaut/services/event_service.dart';
+import 'package:hopaut/providers/event_provider.dart';
 import 'package:hopaut/utils/image_conversion.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/inputs/event_drop_down.dart';
 import '../../widgets/inputs/event_text_field.dart';
@@ -147,370 +147,373 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: decorationGradient(),
+    return Consumer<EventProvider>(builder: (context, provider, child) {
+      return Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          flexibleSpace: Container(
+            decoration: decorationGradient(),
+          ),
+          leading: IconButton(
+              icon: HATheme.backButton,
+              onPressed: () => Application.router.pop(context)),
+          title: Text('Create Event'),
         ),
-        leading: IconButton(
-            icon: HATheme.backButton,
-            onPressed: () => Application.router.pop(context)),
-        title: Text('Create Event'),
-      ),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        physics: ClampingScrollPhysics(),
-        padding: EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Subtitle(label: 'Pictures'),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                InkWell(
-                  onTap: () async {
-                    await setImage(0);
-                  },
-                  child: Card(
-                    elevation: 3,
-                    child: Container(
-                      width: 96,
-                      height: 96,
-                      color: Colors.grey[200],
-                      child: getImage(0),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () async {
-                    await setImage(1);
-                  },
-                  child: Card(
-                    elevation: 3,
-                    child: Container(
+        body: SingleChildScrollView(
+          controller: _scrollController,
+          physics: ClampingScrollPhysics(),
+          padding: EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Subtitle(label: 'Pictures'),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  InkWell(
+                    onTap: () async {
+                      await setImage(0);
+                    },
+                    child: Card(
+                      elevation: 3,
+                      child: Container(
                         width: 96,
                         height: 96,
                         color: Colors.grey[200],
-                        child: getImage(1)),
+                        child: getImage(0),
+                      ),
+                    ),
                   ),
-                ),
-                InkWell(
-                  onTap: () async {
-                    await setImage(2);
-                  },
-                  child: Card(
-                    elevation: 3,
-                    child: Container(
-                        decoration: BoxDecoration(
+                  InkWell(
+                    onTap: () async {
+                      await setImage(1);
+                    },
+                    child: Card(
+                      elevation: 3,
+                      child: Container(
+                          width: 96,
+                          height: 96,
                           color: Colors.grey[200],
-                        ),
-                        width: 96,
-                        height: 96,
-                        child: getImage(2)),
+                          child: getImage(1)),
+                    ),
                   ),
+                  InkWell(
+                    onTap: () async {
+                      await setImage(2);
+                    },
+                    child: Card(
+                      elevation: 3,
+                      child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                          ),
+                          width: 96,
+                          height: 96,
+                          child: getImage(2)),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Subtitle(label: 'Event Title'),
+              ),
+              EventTextField(
+                  onChanged: (v) => _post.setTitle(v),
+                  textHint: 'Event Title',
+                  inputFormatter: [
+                    LengthLimitingTextInputFormatter(50),
+                  ]),
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Subtitle(label: 'Event Type'),
+              ),
+              DropDownWidget<String>(
+                onChanged: (String v) {
+                  _post.event.eventType = eventTypes.keys.firstWhere(
+                      (element) => eventTypes[element] == v,
+                      orElse: () => null);
+                  setState(() {
+                    switch (_post.event.eventType) {
+                      case 1:
+                        _post.event.currency = 0;
+                        _paidEventType = PaidEventType.HOUSE_PARTY;
+                        break;
+                      case 2:
+                        _post.event.currency = 0;
+                        _paidEventType = PaidEventType.CLUB;
+                        break;
+                      case 3:
+                        _post.event.currency = 0;
+                        _paidEventType = PaidEventType.BAR;
+                        break;
+                      default:
+                        _post.event.currency = null;
+                        _paidEventType = PaidEventType.NONE;
+                        break;
+                    }
+                  });
+                },
+                list: _eventList,
+                hintText: 'Event Type',
+                validator: (v) => _post.event.eventType == null
+                    ? 'Event Type is required'
+                    : null,
+                onSaved: (v) {},
+              ),
+              if (_paidEventType == PaidEventType.HOUSE_PARTY)
+                housePartySlots(),
+              if (_paidEventType != PaidEventType.NONE) entrancePrice(),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Subtitle(label: 'Event Location'),
+              ),
+              InkWell(
+                onTap: () => Application.router
+                    .navigateTo(context, Routes.searchByMap)
+                    .then((value) => setState(
+                        () => _post.location = value as PostLocation.Location)),
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(12.0),
+                  height: 48,
+                  margin: EdgeInsets.only(bottom: 24.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(_post.location?.address ?? ''),
+                  // child: TypeAheadFormField(
+                  //   textFieldConfiguration: TextFieldConfiguration(
+                  //       keyboardType: TextInputType.text,
+                  //       controller: this._locationController,
+                  //       decoration: InputDecoration(
+                  //           contentPadding: EdgeInsets.all(12.0),
+                  //           hintText: 'Event Address',
+                  //           border: InputBorder.none)),
+                  //   suggestionsCallback: (pattern) async {
+                  //     if (pattern.length > 2) {
+                  //       List suggestionList = [];
+                  //       _searchEngine.searchByText(
+                  //           TextQuery.withCircleArea(
+                  //               pattern,
+                  //               GeoCircle(
+                  //                   GeoCoordinates(
+                  //                       GetIt.I
+                  //                           .get<LocationManager>()
+                  //                           .currentPosition
+                  //                           .latitude,
+                  //                       GetIt.I
+                  //                           .get<LocationManager>()
+                  //                           .currentPosition
+                  //                           .longitude),
+                  //                   50000)),
+                  //           SearchOptions(LanguageCode.deDe, 50),
+                  //           (e, List<Place> suggestion) =>
+                  //               suggestion.forEach((element) {
+                  //                 if ([
+                  //                   PlaceType.street,
+                  //                   PlaceType.poi,
+                  //                   PlaceType.unit,
+                  //                   PlaceType.houseNumber
+                  //                 ].contains(element.type)) {
+                  //                   if (element.address.streetName.isNotEmpty)
+                  //                     suggestionList.add(addressParser(element));
+                  //                 }
+                  //               }));
+                  //       await Future.delayed(Duration(seconds: 1));
+                  //       return suggestionList;
+                  //     }
+                  //     return null;
+                  //   },
+                  //   itemBuilder: (context, suggestion) {
+                  //     return ListTile(
+                  //       title: Text(suggestion['EntityName']),
+                  //       subtitle: Text(((suggestion['Address'] != '')
+                  //               ? '${suggestion['Address']}, '
+                  //               : '') +
+                  //           '${suggestion['Region']} ${suggestion['City']}'),
+                  //     );
+                  //   },
+                  //   transitionBuilder: (context, suggestionsBox, controller) {
+                  //     return suggestionsBox;
+                  //   },
+                  //   onSuggestionSelected: (suggestion) {
+                  //     print(suggestion);
+                  //     _post.setLocation(PostLocation.Location.fromJson(suggestion));
+                  //     this._locationController.text = suggestion['Address'] !=
+                  //             suggestion['EntityName']
+                  //         ? '${suggestion['EntityName']}, ${suggestion['Address']}, ${suggestion['Region']} ${suggestion['City']}'
+                  //         : '${suggestion['EntityName']}, ${suggestion['Region']} ${suggestion['City']}';
+                  //   },
+                  //   hideOnEmpty: true,
+                  //   validator: (value) =>
+                  //       value.isEmpty ? 'Please confirm an address' : null,
+                  // ),
                 ),
-              ],
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Divider(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Subtitle(label: 'Event Title'),
-            ),
-            EventTextField(
-                onChanged: (v) => _post.setTitle(v),
-                textHint: 'Event Title',
-                inputFormatter: [
-                  LengthLimitingTextInputFormatter(50),
-                ]),
-            Divider(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Subtitle(label: 'Event Type'),
-            ),
-            DropDownWidget<String>(
-              onChanged: (String v) {
-                _post.event.eventType = eventTypes.keys.firstWhere(
-                    (element) => eventTypes[element] == v,
-                    orElse: () => null);
-                setState(() {
-                  switch (_post.event.eventType) {
-                    case 1:
-                      _post.event.currency = 0;
-                      _paidEventType = PaidEventType.HOUSE_PARTY;
-                      break;
-                    case 2:
-                      _post.event.currency = 0;
-                      _paidEventType = PaidEventType.CLUB;
-                      break;
-                    case 3:
-                      _post.event.currency = 0;
-                      _paidEventType = PaidEventType.BAR;
-                      break;
-                    default:
-                      _post.event.currency = null;
-                      _paidEventType = PaidEventType.NONE;
-                      break;
-                  }
-                });
-              },
-              list: _eventList,
-              hintText: 'Event Type',
-              validator: (v) => _post.event.eventType == null
-                  ? 'Event Type is required'
-                  : null,
-              onSaved: (v) {},
-            ),
-            if (_paidEventType == PaidEventType.HOUSE_PARTY) housePartySlots(),
-            if (_paidEventType != PaidEventType.NONE) entrancePrice(),
-            Divider(),
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Subtitle(label: 'Event Location'),
-            ),
-            InkWell(
-              onTap: () => Application.router
-                  .navigateTo(context, Routes.searchByMap)
-                  .then((value) => setState(
-                      () => _post.location = value as PostLocation.Location)),
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(12.0),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Subtitle(label: 'Event Time'),
+              ),
+              EventTextField(
+                  onChanged: (v) => _post.eventTime = int.tryParse(v),
+                  textHint: 'Start Time',
+                  textInputType: TextInputType.number,
+                  inputFormatter: [
+                    LengthLimitingTextInputFormatter(50),
+                  ]),
+              Divider(
+                height: 1,
+                color: Colors.black38,
+              ),
+              EventTextField(
+                  onChanged: (v) => _post.endTime = int.tryParse(v),
+                  textHint: 'End Time',
+                  textInputType: TextInputType.number,
+                  inputFormatter: [
+                    LengthLimitingTextInputFormatter(50),
+                  ]),
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Subtitle(label: 'Event Description'),
+              ),
+              EventTextField(
+                onChanged: (v) => _post.event.description = v.trim(),
+                height: 144.0,
+                expand: true,
+                textHint: 'Event Description',
+                maxChars: 3000,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Subtitle(label: 'Event Requirements'),
+              ),
+              EventTextField(
+                onChanged: (v) => _post.event.requirements = v.trim(),
+                height: 144.0,
+                expand: true,
+                textHint: 'Event Requirements (Optional)',
+              ),
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Subtitle(label: 'Tags'),
+                    Text(
+                      'You are able to add up to 5 tags.',
+                      style: TextStyle(color: Colors.black87),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2.0),
+                child: Wrap(
+                  spacing: 8.0,
+                  runSpacing: 4.0,
+                  children: tagWidgets.toList(),
+                ),
+              ),
+              Container(
                 height: 48,
                 margin: EdgeInsets.only(bottom: 24.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: _post.tags.length >= 5
+                      ? Colors.grey[400]
+                      : Colors.grey[200],
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(_post.location?.address ?? ''),
-                // child: TypeAheadFormField(
-                //   textFieldConfiguration: TextFieldConfiguration(
-                //       keyboardType: TextInputType.text,
-                //       controller: this._locationController,
-                //       decoration: InputDecoration(
-                //           contentPadding: EdgeInsets.all(12.0),
-                //           hintText: 'Event Address',
-                //           border: InputBorder.none)),
-                //   suggestionsCallback: (pattern) async {
-                //     if (pattern.length > 2) {
-                //       List suggestionList = [];
-                //       _searchEngine.searchByText(
-                //           TextQuery.withCircleArea(
-                //               pattern,
-                //               GeoCircle(
-                //                   GeoCoordinates(
-                //                       GetIt.I
-                //                           .get<LocationManager>()
-                //                           .currentPosition
-                //                           .latitude,
-                //                       GetIt.I
-                //                           .get<LocationManager>()
-                //                           .currentPosition
-                //                           .longitude),
-                //                   50000)),
-                //           SearchOptions(LanguageCode.deDe, 50),
-                //           (e, List<Place> suggestion) =>
-                //               suggestion.forEach((element) {
-                //                 if ([
-                //                   PlaceType.street,
-                //                   PlaceType.poi,
-                //                   PlaceType.unit,
-                //                   PlaceType.houseNumber
-                //                 ].contains(element.type)) {
-                //                   if (element.address.streetName.isNotEmpty)
-                //                     suggestionList.add(addressParser(element));
-                //                 }
-                //               }));
-                //       await Future.delayed(Duration(seconds: 1));
-                //       return suggestionList;
-                //     }
-                //     return null;
-                //   },
-                //   itemBuilder: (context, suggestion) {
-                //     return ListTile(
-                //       title: Text(suggestion['EntityName']),
-                //       subtitle: Text(((suggestion['Address'] != '')
-                //               ? '${suggestion['Address']}, '
-                //               : '') +
-                //           '${suggestion['Region']} ${suggestion['City']}'),
-                //     );
-                //   },
-                //   transitionBuilder: (context, suggestionsBox, controller) {
-                //     return suggestionsBox;
-                //   },
-                //   onSuggestionSelected: (suggestion) {
-                //     print(suggestion);
-                //     _post.setLocation(PostLocation.Location.fromJson(suggestion));
-                //     this._locationController.text = suggestion['Address'] !=
-                //             suggestion['EntityName']
-                //         ? '${suggestion['EntityName']}, ${suggestion['Address']}, ${suggestion['Region']} ${suggestion['City']}'
-                //         : '${suggestion['EntityName']}, ${suggestion['Region']} ${suggestion['City']}';
-                //   },
-                //   hideOnEmpty: true,
-                //   validator: (value) =>
-                //       value.isEmpty ? 'Please confirm an address' : null,
-                // ),
-              ),
-            ),
-            Divider(),
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Subtitle(label: 'Event Time'),
-            ),
-            EventTextField(
-                onChanged: (v) => _post.eventTime = int.tryParse(v),
-                textHint: 'Start Time',
-                textInputType: TextInputType.number,
-                inputFormatter: [
-                  LengthLimitingTextInputFormatter(50),
-                ]),
-            Divider(
-              height: 1,
-              color: Colors.black38,
-            ),
-            EventTextField(
-                onChanged: (v) => _post.endTime = int.tryParse(v),
-                textHint: 'End Time',
-                textInputType: TextInputType.number,
-                inputFormatter: [
-                  LengthLimitingTextInputFormatter(50),
-                ]),
-            Divider(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Subtitle(label: 'Event Description'),
-            ),
-            EventTextField(
-              onChanged: (v) => _post.event.description = v.trim(),
-              height: 144.0,
-              expand: true,
-              textHint: 'Event Description',
-              maxChars: 3000,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Subtitle(label: 'Event Requirements'),
-            ),
-            EventTextField(
-              onChanged: (v) => _post.event.requirements = v.trim(),
-              height: 144.0,
-              expand: true,
-              textHint: 'Event Requirements (Optional)',
-            ),
-            Divider(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Subtitle(label: 'Tags'),
-                  Text(
-                    'You are able to add up to 5 tags.',
-                    style: TextStyle(color: Colors.black87),
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2.0),
-              child: Wrap(
-                spacing: 8.0,
-                runSpacing: 4.0,
-                children: tagWidgets.toList(),
-              ),
-            ),
-            Container(
-              height: 48,
-              margin: EdgeInsets.only(bottom: 24.0),
-              decoration: BoxDecoration(
-                color: _post.tags.length >= 5
-                    ? Colors.grey[400]
-                    : Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: TypeAheadFormField(
-                hideOnError: false,
-                hideOnEmpty: true,
-                textFieldConfiguration: TextFieldConfiguration(
-                    enabled: _post.tags.length >= 5 ? false : true,
-                    keyboardType: TextInputType.text,
-                    controller: this._tagsController,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(12.0),
-                        hintText: 'Add tags',
-                        border: InputBorder.none)),
-                suggestionsCallback: (pattern) async {
-                  List<String> suggestionList = [];
-                  pattern = pattern
-                      .replaceAll(RegExp(r"[^\s\w]"), '')
-                      .replaceAll(RegExp(r" "), '-');
-                  if (pattern.length > 2) {
-                    List<String> tagResultList =
-                        await getIt<TagRepository>().get(pattern: pattern);
-                    if (tagResultList.isNotEmpty) {
-                      if (pattern == tagResultList.first) {
-                        tagResultList.removeAt(0);
+                child: TypeAheadFormField(
+                  hideOnError: false,
+                  hideOnEmpty: true,
+                  textFieldConfiguration: TextFieldConfiguration(
+                      enabled: _post.tags.length >= 5 ? false : true,
+                      keyboardType: TextInputType.text,
+                      controller: this._tagsController,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(12.0),
+                          hintText: 'Add tags',
+                          border: InputBorder.none)),
+                  suggestionsCallback: (pattern) async {
+                    List<String> suggestionList = [];
+                    pattern = pattern
+                        .replaceAll(RegExp(r"[^\s\w]"), '')
+                        .replaceAll(RegExp(r" "), '-');
+                    if (pattern.length > 2) {
+                      List<String> tagResultList =
+                          await getIt<TagRepository>().get(pattern: pattern);
+                      if (tagResultList.isNotEmpty) {
+                        if (pattern == tagResultList.first) {
+                          tagResultList.removeAt(0);
+                        }
                       }
+                      suggestionList = [pattern, ...tagResultList];
+                      _post.tags.forEach((element) {
+                        if (pattern == element) suggestionList.removeAt(0);
+                      });
                     }
-                    suggestionList = [pattern, ...tagResultList];
-                    _post.tags.forEach((element) {
-                      if (pattern == element) suggestionList.removeAt(0);
-                    });
-                  }
-                  return suggestionList;
-                },
-                itemBuilder: (context, suggestion) {
-                  return ListTile(
-                    title: Text(suggestion),
-                  );
-                },
-                transitionBuilder: (context, suggestionsBox, controller) {
-                  return suggestionsBox;
-                },
-                onSuggestionSelected: (suggestion) {
-                  _post.tags.contains(suggestion)
-                      ? null
-                      : setState(() => _post.tags.add(suggestion));
-                  this._tagsController.clear();
-                },
+                    return suggestionList;
+                  },
+                  itemBuilder: (context, suggestion) {
+                    return ListTile(
+                      title: Text(suggestion),
+                    );
+                  },
+                  transitionBuilder: (context, suggestionsBox, controller) {
+                    return suggestionsBox;
+                  },
+                  onSuggestionSelected: (suggestion) {
+                    _post.tags.contains(suggestion)
+                        ? null
+                        : setState(() => _post.tags.add(suggestion));
+                    this._tagsController.clear();
+                  },
+                ),
               ),
-            ),
-            RaisedButton(
-              onPressed: () async {
-                print(await _post.toJson());
-              },
-              child: Text('log toJson'),
-            ),
-            MaterialButton(
-              onPressed: !_submitButtonDisabled
-                  ? () async {
-                      MiniPost postRes =
-                          await getIt<PostRepository>().create(_post, []);
-                      setState(() => _submitButtonDisabled = true);
-                      if (postRes != null) {
-                        getIt<EventService>().addUserActive(postRes);
-                        Application.router.navigateTo(
-                            context, '/event/${postRes.postId}',
-                            replace: true);
-                      } else {
-                        setState(() => _submitButtonDisabled = false);
-                        Fluttertoast.showToast(msg: "Unable to create event");
+              RaisedButton(
+                onPressed: () {
+                  print(_post.toJson());
+                },
+                child: Text('log toJson'),
+              ),
+              MaterialButton(
+                onPressed: !_submitButtonDisabled
+                    ? () async {
+                        MiniPost postRes =
+                            await getIt<EventRepository>().create(_post, []);
+                        setState(() => _submitButtonDisabled = true);
+                        if (postRes != null) {
+                          provider.addEvent(postRes);
+                          Application.router.navigateTo(
+                              context, '/event/${postRes.postId}',
+                              replace: true);
+                        } else {
+                          setState(() => _submitButtonDisabled = false);
+                          Fluttertoast.showToast(msg: "Unable to create event");
+                        }
                       }
-                    }
-                  : () {},
-              child: Ink(child: Container(child: Text('Save'))),
-            )
-          ],
+                    : () {},
+                child: Ink(child: Container(child: Text('Save'))),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Column entrancePrice() {

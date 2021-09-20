@@ -19,9 +19,8 @@ import 'package:hopaut/presentation/screens/events/edit_event/requirements.dart'
 import 'package:hopaut/presentation/screens/events/edit_event/tags.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/time.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/title.dart';
-import 'package:hopaut/presentation/screens/events/event_list/event_list.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
-import 'package:hopaut/presentation/screens/events/rate_event/rate_event.dart';
+import 'package:hopaut/presentation/screens/events/rate_event.dart';
 import 'package:hopaut/presentation/screens/home_page.dart';
 import 'package:hopaut/presentation/screens/authentication/login/login.dart';
 import 'package:hopaut/presentation/screens/authentication/register/register.dart';
@@ -102,11 +101,6 @@ var createEventHandler = new Handler(
 var editEventHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return EditEventPage();
-});
-
-var eventListHandler = new Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return EventList();
 });
 
 var editEventDescriptionHandler = new Handler(

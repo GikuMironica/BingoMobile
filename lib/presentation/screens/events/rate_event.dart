@@ -5,7 +5,8 @@ import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/repositories/rating_repository.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/services/event_service.dart';
+import 'package:hopaut/providers/event_provider.dart';
+import 'package:provider/provider.dart';
 
 class RateEvent extends StatefulWidget {
   final int postId;
@@ -28,66 +29,68 @@ class _RateEventState extends State<RateEvent> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Application.router.pop(context),
+    return Consumer<EventProvider>(builder: (context, provider, child) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Application.router.pop(context),
+          ),
+          title: Text('Rate Event'),
+          flexibleSpace: Container(
+            decoration: decorationGradient(),
+          ),
         ),
-        title: Text('Rate Event'),
-        flexibleSpace: Container(
-          decoration: decorationGradient(),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: ListView(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          children: <Widget>[
-            SizedBox(
-              height: 24,
-            ),
-            StarRating(
-              onChanged: (index) {
-                setState(() {
-                  rating = index;
-                });
-              },
-              value: rating,
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 24.0),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: ListView(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            children: <Widget>[
+              SizedBox(
+                height: 24,
               ),
-              child: TextField(
-                controller: ratingController,
-                maxLines: 6,
-                onChanged: (value) {},
-                inputFormatters: [LengthLimitingTextInputFormatter(500)],
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(12.0),
-                  border: InputBorder.none,
+              StarRating(
+                onChanged: (index) {
+                  setState(() {
+                    rating = index;
+                  });
+                },
+                value: rating,
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 24.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: TextField(
+                  controller: ratingController,
+                  maxLines: 6,
+                  onChanged: (value) {},
+                  inputFormatters: [LengthLimitingTextInputFormatter(500)],
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(12.0),
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
-            ),
-            RaisedButton(
-              child: Text('Submit Rating'),
-              onPressed: () async =>
-                  getIt<RatingRepository>().create(_generatePayload()),
-            ),
-          ],
+              RaisedButton(
+                child: Text('Submit Rating'),
+                onPressed: () async => getIt<RatingRepository>()
+                    .create(_generatePayload(provider)),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
-  Map<String, dynamic> _generatePayload() {
+  Map<String, dynamic> _generatePayload(EventProvider provider) {
     Map<String, dynamic> ratingPayload = {
       'rate': rating,
-      'userId': getIt<EventService>().postContext.userId,
+      'userId': provider.postContext.userId,
       'postId': widget.postId,
       'feedback': ratingController.text.trim()
     };

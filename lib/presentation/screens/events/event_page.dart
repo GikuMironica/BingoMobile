@@ -9,7 +9,6 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/models/profile.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
-import 'package:hopaut/data/repositories/post_repository.dart';
 import 'package:hopaut/data/repositories/profile_repository.dart';
 import 'package:hopaut/presentation/screens/events/delete_event.dart';
 import 'package:hopaut/presentation/screens/events/participation_list.dart';
@@ -25,9 +24,9 @@ import 'package:hopaut/presentation/widgets/event_page/event_requirements.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/image_screen/image_screen.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
+import 'package:hopaut/providers/event_provider.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/services/date_formatter_service.dart';
-import 'package:hopaut/services/event_service.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
@@ -74,9 +73,9 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   }
 
   Future<void> getDetails() async {
-    post = await getIt<PostRepository>().get(postId);
+    post = await getIt<EventRepository>().get(postId);
     host = await getIt<ProfileRepository>().get(post.userId);
-    participants = await getIt<PostRepository>().getAttendees(postId);
+    participants = await getIt<EventRepository>().getAttendees(postId);
     isHost = post.userId == getIt<AuthenticationService>().user.id;
     isAttending = post.isAttending;
     isActiveEvent = post.activeFlag == 1;
@@ -93,7 +92,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   }
 
   void attendEvent() async {
-    bool attendResponse = await getIt<EventRepository>().attend(postId);
+    bool attendResponse = await getIt<EventRepository>()
+        .changeAttendanceStatus(postId, API.ATTEND);
     if (attendResponse) {
       setState(() {
         isAttending = true;
@@ -102,7 +102,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   }
 
   void unattendEvent() async {
-    bool unattendResponse = await getIt<EventRepository>().unAttend(postId);
+    bool unattendResponse = await getIt<EventRepository>()
+        .changeAttendanceStatus(postId, API.UNATTEND);
     if (unattendResponse) {
       setState(() {
         isAttending = false;
@@ -114,12 +115,6 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   void initState() {
     // TODO: We need to call the event details here.
 
-    getDetails()
-        .then((value) => setState(() => postIsLoaded = true))
-        .then((value) {
-      checkForImages();
-      getIt<EventService>().setPostContext(post);
-    });
     super.initState();
 
     _scrollController = ScrollController();
@@ -149,344 +144,358 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return !postIsLoaded
-        ? Scaffold(
-            body: Container(),
-          )
-        : Scaffold(
-            floatingActionButton: Visibility(
-              visible:
-                  (!isHost && DateTime.now().isBefore(post.endTimeAsDateTime)),
-              child: EventAttendButton(
-                context: context,
-                isAttending: isAttending,
-                animationController: _animationController,
-                onPressed:
-                    isAttending ? () => unattendEvent() : () => attendEvent(),
+    return Consumer<EventProvider>(builder: (context, provider, child) {
+      getDetails()
+          .then((value) => setState(() => postIsLoaded = true))
+          .then((value) {
+        checkForImages();
+        provider.setPostContext(post);
+      });
+      return !postIsLoaded
+          ? Scaffold(
+              body: Container(),
+            )
+          : Scaffold(
+              floatingActionButton: Visibility(
+                visible: (!isHost &&
+                    DateTime.now().isBefore(post.endTimeAsDateTime)),
+                child: EventAttendButton(
+                  context: context,
+                  isAttending: isAttending,
+                  animationController: _animationController,
+                  onPressed:
+                      isAttending ? () => unattendEvent() : () => attendEvent(),
+                ),
               ),
-            ),
-            body: CustomScrollView(
-              controller: _scrollController,
-              slivers: <Widget>[
-                SliverAppBar(
-                  pinned: true,
-                  floating: true,
-                  expandedHeight: 200,
-                  flexibleSpace: HopAutBackgroundContainer(
-                    height: 250,
-                    child: FlexibleSpaceBar(
-                      collapseMode: CollapseMode.parallax,
-                      background: Carousel(
-                        images: postHasPictures
-                            ? _postImages
-                            : [
-                                AssetImage('assets/images/bg_placeholder.jpg'),
-                              ],
-                        dotSize: 4.0,
-                        dotSpacing: 15.0,
-                        dotColor: Colors.white70,
-                        indicatorBgPadding: 16.0,
-                        dotBgColor: Colors.transparent,
-                        moveIndicatorFromBottom: 240.0,
-                        noRadiusForIndicator: true,
-                        autoplay: false,
-                        animationDuration: Duration(milliseconds: 500),
-                        dotPosition: DotPosition.bottomRight,
-                        onImageTap: (value) => pushNewScreen(context,
-                            screen: ImageScreen(
-                              imageUrls: post.pictureUrls(),
-                              startingIndex: value,
-                            ),
-                            withNavBar: false),
+              body: CustomScrollView(
+                controller: _scrollController,
+                slivers: <Widget>[
+                  SliverAppBar(
+                    pinned: true,
+                    floating: true,
+                    expandedHeight: 200,
+                    flexibleSpace: HopAutBackgroundContainer(
+                      height: 250,
+                      child: FlexibleSpaceBar(
+                        collapseMode: CollapseMode.parallax,
+                        background: Carousel(
+                          images: postHasPictures
+                              ? _postImages
+                              : [
+                                  AssetImage(
+                                      'assets/images/bg_placeholder.jpg'),
+                                ],
+                          dotSize: 4.0,
+                          dotSpacing: 15.0,
+                          dotColor: Colors.white70,
+                          indicatorBgPadding: 16.0,
+                          dotBgColor: Colors.transparent,
+                          moveIndicatorFromBottom: 240.0,
+                          noRadiusForIndicator: true,
+                          autoplay: false,
+                          animationDuration: Duration(milliseconds: 500),
+                          dotPosition: DotPosition.bottomRight,
+                          onImageTap: (value) => pushNewScreen(context,
+                              screen: ImageScreen(
+                                imageUrls: post.pictureUrls(),
+                                startingIndex: value,
+                              ),
+                              withNavBar: false),
+                        ),
                       ),
                     ),
-                  ),
-                  elevation: 0,
-                  leading: IconButton(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    icon: HATheme.backButton,
-                    onPressed: () => Application.router.pop(context),
-                  ),
-                  actions: <Widget>[
-                    Visibility(
-                      visible: isHost && isActiveEvent,
-                      child: IconButton(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        icon: Icon(Icons.edit),
-                        onPressed: () {
-                          Application.router.navigateTo(context, '/edit-event');
-                        },
-                      ),
-                    ),
-                    IconButton(
+                    elevation: 0,
+                    leading: IconButton(
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
-                      icon: Icon(Icons.share),
-                      onPressed: () {},
-                    )
-                  ],
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.all(16.0),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate([
-                      // TODO Break into another component
-                      Text(
-                        post.event.title,
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: <Widget>[
-                          SizedBox(
-                            width: 1,
-                          ),
-                          Text(
-                            post.event.type,
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Icon(
-                            MdiIcons.circleSmall,
-                            color: Colors.black54,
-                            size: 11,
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Text(
-                            '${post.location.address}, ${post.location.city}',
-                            overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyle(fontSize: 14, color: Colors.black54),
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: Colors.pink[100],
-                            child: Icon(MdiIcons.mapMarkerOutline,
-                                size: 18, color: Colors.pink),
-                            radius: 14,
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          InkWell(
-                            onTap: () => showDialog(
-                              context: context,
-                              builder: (BuildContext context) => ProfileDialog(
-                                profile: host,
-                              ),
-                            ),
-                            child: hostDetails(
-                              hostName: host.getFullName,
-                              hostInitials: host.getInitials,
-                              hostImage: host.getProfilePicture,
-                              rating: post.hostRating,
-                            ),
-                          ),
-                          Container(
-                            width: 36,
-                            height: 36,
-                            child: Visibility(
-                              visible: isHost,
-                              child: InkWell(
-                                  onTap: () async => pushNewScreen(context,
-                                      screen: ParticipationList(
-                                        postId: post.id,
-                                        postTitle: post.event.title,
-                                        postType: post.event.eventType,
-                                      ),
-                                      withNavBar: false),
-                                  child: EventParticipants(participants)),
-                              replacement: EventParticipants(participants),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Divider(),
-                      EventDetails(
-                        date: getIt<DateFormatterService>()
-                            .formatDate(post.eventTime),
-                        time: post.timeRange,
-                        price: post.event.entrancePrice,
-                        priceCurrency: 'EUR',
-                        slots: '${post.availableSlots} / ${post.event.slots}',
-                      ),
-                      Divider(),
-                      SizedBox(height: 16),
-                      EventDescription(isHost
-                          ? Provider.of<EventService>(context)
-                              .postContext
-                              .event
-                              .description
-                          : post.event.description ??
-                              'No description for this event yet'),
-                      Visibility(
-                        visible: ((post.event.requirements != null) &&
-                            (post.event.requirements?.length != 0)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(height: 32),
-                            EventRequirements(post.event.requirements),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Visibility(
-                        visible: post.tags.isNotEmpty,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Divider(),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 16, bottom: 8),
-                              child: Subtitle(label: 'Tags'),
-                            ),
-                            Wrap(
-                              spacing: 8.0,
-                              runSpacing: 4.0,
-                              children: tagWidgets.toList(),
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(),
-                      Visibility(
-                        visible: !isHost &&
-                            isAttending &&
-                            DateTime.now().isAfter(post.startTimeAsDateTime),
-                        child: InkWell(
-                          onTap: () => Application.router
-                              .navigateTo(context, '/rate-event/$postId'),
-                          child: ListTile(
-                              contentPadding: EdgeInsets.symmetric(vertical: 4),
-                              leading: Icon(Icons.star),
-                              title: Align(
-                                child: Text('Rate event'),
-                                alignment: Alignment(-1.17, 0),
-                              )),
-                        ),
-                      ),
-                      Visibility(
-                        visible: !isHost &&
-                            DateTime.now().isBefore(post.endTimeAsDateTime),
-                        child: VisibilityDetector(
-                          key: attendCellKey,
-                          onVisibilityChanged: (visibility) {
-                            if (visibility.visibleFraction > 0.3) {
-                              setState(() => attendCellVisible = true);
-                            } else {
-                              setState(() => attendCellVisible = false);
-                            }
-                          },
-                          child: InkWell(
-                            onTap: isAttending
-                                ? () => unattendEvent()
-                                : () => attendEvent(),
-                            child: ListTile(
-                              contentPadding: EdgeInsets.symmetric(vertical: 4),
-                              leading: isAttending
-                                  ? Icon(MdiIcons.accountMinus)
-                                  : Icon(MdiIcons.accountPlus),
-                              title: Align(
-                                child: Text(
-                                    isAttending ? 'Not Interested?' : 'Attend'),
-                                alignment: Alignment(-1.2, 0),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: !isHost,
-                        child: ListTile(
-                            onTap: () => showDialog(
-                                context: context,
-                                builder: (BuildContext context) => CustomDialog(
-                                      pageWidget: ReportEvent(),
-                                    )),
-                            contentPadding: EdgeInsets.symmetric(vertical: 4),
-                            leading: Icon(MdiIcons.alertCircleOutline),
-                            title: Align(
-                              child: Text('Report this event'),
-                              alignment: Alignment(-1.2, 0),
-                            )),
-                      ),
+                      icon: HATheme.backButton,
+                      onPressed: () => Application.router.pop(context),
+                    ),
+                    actions: <Widget>[
                       Visibility(
                         visible: isHost && isActiveEvent,
-                        child: InkWell(
-                          onTap: () {
+                        child: IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
                             Application.router
                                 .navigateTo(context, '/edit-event');
                           },
+                        ),
+                      ),
+                      IconButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        icon: Icon(Icons.share),
+                        onPressed: () {},
+                      )
+                    ],
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.all(16.0),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate([
+                        // TODO Break into another component
+                        Text(
+                          post.event.title,
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              width: 1,
+                            ),
+                            Text(
+                              post.event.type,
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Icon(
+                              MdiIcons.circleSmall,
+                              color: Colors.black54,
+                              size: 11,
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Text(
+                              '${post.location.address}, ${post.location.city}',
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 14, color: Colors.black54),
+                            ),
+                            SizedBox(
+                              width: 16,
+                            ),
+                            CircleAvatar(
+                              backgroundColor: Colors.pink[100],
+                              child: Icon(MdiIcons.mapMarkerOutline,
+                                  size: 18, color: Colors.pink),
+                              radius: 14,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            InkWell(
+                              onTap: () => showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    ProfileDialog(
+                                  profile: host,
+                                ),
+                              ),
+                              child: hostDetails(
+                                hostName: host.getFullName,
+                                hostInitials: host.getInitials,
+                                hostImage: host.getProfilePicture,
+                                rating: post.hostRating,
+                              ),
+                            ),
+                            Container(
+                              width: 36,
+                              height: 36,
+                              child: Visibility(
+                                visible: isHost,
+                                child: InkWell(
+                                    onTap: () async => pushNewScreen(context,
+                                        screen: ParticipationList(
+                                          postId: post.id,
+                                          postTitle: post.event.title,
+                                          postType: post.event.eventType,
+                                        ),
+                                        withNavBar: false),
+                                    child: EventParticipants(participants)),
+                                replacement: EventParticipants(participants),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Divider(),
+                        EventDetails(
+                          date: getIt<DateFormatterService>()
+                              .formatDate(post.eventTime),
+                          time: post.timeRange,
+                          price: post.event.entrancePrice,
+                          priceCurrency: 'EUR',
+                          slots: '${post.availableSlots} / ${post.event.slots}',
+                        ),
+                        Divider(),
+                        SizedBox(height: 16),
+                        EventDescription(isHost
+                            ? provider.postContext.event.description
+                            : post.event.description ??
+                                'No description for this event yet'),
+                        Visibility(
+                          visible: ((post.event.requirements != null) &&
+                              (post.event.requirements?.length != 0)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(height: 32),
+                              EventRequirements(post.event.requirements),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Visibility(
+                          visible: post.tags.isNotEmpty,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Divider(),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 16, bottom: 8),
+                                child: Subtitle(label: 'Tags'),
+                              ),
+                              Wrap(
+                                spacing: 8.0,
+                                runSpacing: 4.0,
+                                children: tagWidgets.toList(),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(),
+                        Visibility(
+                          visible: !isHost &&
+                              isAttending &&
+                              DateTime.now().isAfter(post.startTimeAsDateTime),
+                          child: InkWell(
+                            onTap: () => Application.router
+                                .navigateTo(context, '/rate-event/$postId'),
+                            child: ListTile(
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 4),
+                                leading: Icon(Icons.star),
+                                title: Align(
+                                  child: Text('Rate event'),
+                                  alignment: Alignment(-1.17, 0),
+                                )),
+                          ),
+                        ),
+                        Visibility(
+                          visible: !isHost &&
+                              DateTime.now().isBefore(post.endTimeAsDateTime),
+                          child: VisibilityDetector(
+                            key: attendCellKey,
+                            onVisibilityChanged: (visibility) {
+                              if (visibility.visibleFraction > 0.3) {
+                                setState(() => attendCellVisible = true);
+                              } else {
+                                setState(() => attendCellVisible = false);
+                              }
+                            },
+                            child: InkWell(
+                              onTap: isAttending
+                                  ? () => unattendEvent()
+                                  : () => attendEvent(),
+                              child: ListTile(
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 4),
+                                leading: isAttending
+                                    ? Icon(MdiIcons.accountMinus)
+                                    : Icon(MdiIcons.accountPlus),
+                                title: Align(
+                                  child: Text(isAttending
+                                      ? 'Not Interested?'
+                                      : 'Attend'),
+                                  alignment: Alignment(-1.2, 0),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: !isHost,
                           child: ListTile(
+                              onTap: () => showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      CustomDialog(
+                                        pageWidget: ReportEvent(),
+                                      )),
                               contentPadding: EdgeInsets.symmetric(vertical: 4),
-                              leading: Icon(Icons.edit),
+                              leading: Icon(MdiIcons.alertCircleOutline),
                               title: Align(
-                                child: Text('Edit this event'),
+                                child: Text('Report this event'),
                                 alignment: Alignment(-1.2, 0),
                               )),
                         ),
-                      ),
-                      Visibility(
-                        visible: isHost,
-                        child: ListTile(
-                            onTap: () async {
-                              bool res = false;
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => CustomDialog(
-                                        pageWidget: DeleteEventDialog(
-                                          postId: post.id,
-                                          postTitle: post.event.title,
-                                          isActive: isActiveEvent,
-                                        ),
-                                      )).then((value) => value == true
-                                  ? Application.router.pop(context)
-                                  : null);
+                        Visibility(
+                          visible: isHost && isActiveEvent,
+                          child: InkWell(
+                            onTap: () {
+                              Application.router
+                                  .navigateTo(context, '/edit-event');
                             },
-                            contentPadding: EdgeInsets.symmetric(vertical: 4),
-                            leading: Icon(MdiIcons.delete),
-                            title: Align(
-                              child: Text('Delete this event'),
-                              alignment: Alignment(-1.2, 0),
-                            )),
-                      ),
-                    ]),
-                  ),
-                )
-              ],
-            ),
-          );
+                            child: ListTile(
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 4),
+                                leading: Icon(Icons.edit),
+                                title: Align(
+                                  child: Text('Edit this event'),
+                                  alignment: Alignment(-1.2, 0),
+                                )),
+                          ),
+                        ),
+                        Visibility(
+                          visible: isHost,
+                          child: ListTile(
+                              onTap: () async {
+                                bool res = false;
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => CustomDialog(
+                                          pageWidget: DeleteEventDialog(
+                                            postId: post.id,
+                                            postTitle: post.event.title,
+                                            isActive: isActiveEvent,
+                                          ),
+                                        )).then((value) => value == true
+                                    ? Application.router.pop(context)
+                                    : null);
+                              },
+                              contentPadding: EdgeInsets.symmetric(vertical: 4),
+                              leading: Icon(MdiIcons.delete),
+                              title: Align(
+                                child: Text('Delete this event'),
+                                alignment: Alignment(-1.2, 0),
+                              )),
+                        ),
+                      ]),
+                    ),
+                  )
+                ],
+              ),
+            );
+    });
   }
 
   @override
   void dispose() {
     _scrollController?.dispose();
     _animationController?.dispose();
-    GetIt.I.get<EventService>().setPostContext(null);
+    //todo: figure out if this is needed and why:
+    //GetIt.I.get<EventService>().setPostContext(null);
 
     super.dispose();
   }

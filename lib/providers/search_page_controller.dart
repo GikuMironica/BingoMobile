@@ -4,14 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get_it/get_it.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/event_type.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
-import 'package:hopaut/data/repositories/post_repository.dart';
+import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
 import 'package:hopaut/services/location_service.dart';
@@ -29,6 +28,8 @@ enum SearchPageState {
 enum MapState { LOADING, LOADED }
 
 class SearchPageController extends ChangeNotifier {
+  final EventRepository _eventRepository;
+
   SearchPageState _pageState;
   MapState _mapState;
 
@@ -63,7 +64,7 @@ class SearchPageController extends ChangeNotifier {
   SearchPageState get pageState => _pageState;
   bool get hasFocus => _hasFocus;
 
-  SearchPageController() {
+  SearchPageController() : _eventRepository = getIt<EventRepository>() {
     init();
   }
 
@@ -111,7 +112,7 @@ class SearchPageController extends ChangeNotifier {
     searchQuery.latitude = _locationManager.currentPosition.latitude;
     if (_filterToggled) toggleFilter();
 
-    _searchResults = await getIt<PostRepository>().search(searchQuery);
+    _searchResults = await _eventRepository.search(searchQuery);
     if (_searchResults != null) {
       setPageState(SearchPageState.HAS_SEARCH_RESULTS);
       buildMiniPostCards();

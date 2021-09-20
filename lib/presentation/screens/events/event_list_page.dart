@@ -2,24 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/presentation/screens/events/event_list/past_events_list.dart';
+import 'package:hopaut/presentation/screens/events/event_list_view.dart';
 import 'package:hopaut/presentation/widgets/hopaut_app_bar.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-import 'active_events_list.dart';
+class EventListPage extends StatelessWidget {
+  String _title;
+  bool _isMyEvents;
+  List<String> _listTypes;
 
-class EventList extends StatelessWidget {
+  EventListPage(String title, bool isMyEvents) {
+    _title = title;
+    _isMyEvents = isMyEvents;
+    _listTypes = isMyEvents
+        ? [API.MY_ACTIVE, API.MY_INACTIVE]
+        : [API.ATTENDING_ACTIVE, API.ATTENDED_INACTIVE];
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<String> _tabs = ['Current', 'Past']; // TODO: translate(maybe)
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-          heroTag: 'create-event',
-          child: Icon(Icons.add, color: Colors.white, size: 24),
-          backgroundColor: HATheme.HOPAUT_PINK,
-          onPressed: () async {
-            Application.router.navigateTo(context, '/create-event');
-          }),
+      floatingActionButton: _isMyEvents
+          ? FloatingActionButton(
+              heroTag: 'create-event',
+              child: Icon(Icons.add, color: Colors.white, size: 24),
+              backgroundColor: HATheme.HOPAUT_PINK,
+              onPressed: () async {
+                Application.router.navigateTo(context, '/create-event');
+              })
+          : Container(),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
       extendBodyBehindAppBar: false,
@@ -34,7 +46,7 @@ class EventList extends StatelessWidget {
               sliver: MultiSliver(
                 children: [
                   HopAutAppBar(
-                    title: 'Events List', // TODO: translation
+                    title: _title,
                     actions: <Widget>[
                       IconButton(
                         icon: SvgPicture.asset(
@@ -69,8 +81,8 @@ class EventList extends StatelessWidget {
             ),
           ],
           body: TabBarView(children: <Widget>[
-            ActiveEventsList(),
-            PastEventsList(),
+            EventsListView(_listTypes[0]),
+            EventsListView(_listTypes[1])
           ]),
         ),
       ),

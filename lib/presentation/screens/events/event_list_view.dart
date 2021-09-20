@@ -1,21 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/data/models/event_list.dart';
 import 'package:hopaut/providers/event_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
 
-class ActiveEventsList extends StatelessWidget {
+class EventsListView extends StatelessWidget {
+  String _listType;
+
+  EventsListView(this._listType);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
-      provider.fetchUserActiveEvents();
+      provider.fetchEventList(_listType);
 
-      return provider.isUserActiveListLoading()
+      return provider.eventsMap[_listType].state == EventListState.loading
           ? Center(
               child: CupertinoActivityIndicator(),
             )
-          : provider.isUserActiveListIdle() && !provider.isUserActiveListEmpty()
+          : provider.eventsMap[_listType].state == EventListState.idle &&
+                  provider.eventsMap[_listType].events.isNotEmpty
               ? SafeArea(
                   top: false,
                   bottom: false,
@@ -36,15 +42,18 @@ class ActiveEventsList extends StatelessWidget {
                             (ctx, index) => InkWell(
                               onTap: () async {
                                 provider.setMiniPostContext(index);
-                                int id = provider.getActivePostId(index);
+                                int id = provider
+                                    .eventsMap[_listType].events[index].postId;
                                 await Application.router
                                     .navigateTo(context, '/event/$id');
                               },
                               child: MiniPostCard(
-                                miniPost: provider.getActiveMiniPost(index),
+                                miniPost:
+                                    provider.eventsMap[_listType].events[index],
                               ),
                             ),
-                            childCount: provider.getActiveMiniPostsCount(),
+                            childCount:
+                                provider.eventsMap[_listType].events.length,
                           ),
                         ),
                       ),

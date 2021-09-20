@@ -13,11 +13,11 @@ import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/services/dio_service.dart';
-import 'package:hopaut/services/event_service.dart';
 import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:hopaut/services/settings_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'data/repositories/event_repository.dart';
 import 'providers/login_page_controller.dart';
 import 'providers/event_provider.dart';
 import 'init.dart';
@@ -115,8 +115,6 @@ class _HopAutState extends State<HopAut> {
         providers: [
           ChangeNotifierProvider<AuthenticationService>(
               create: (context) => getIt<AuthenticationService>()),
-          ChangeNotifierProvider<EventService>(
-              create: (context) => getIt<EventService>()),
           ChangeNotifierProvider<SettingsService>(
               create: (context) => getIt<SettingsService>()),
           ChangeNotifierProvider<LoginPageController>(
@@ -128,7 +126,8 @@ class _HopAutState extends State<HopAut> {
             lazy: true,
           ),
           ChangeNotifierProvider<EventProvider>(
-            create: (_) => EventProvider(eventService: getIt<EventService>()),
+            create: (_) =>
+                EventProvider(eventRepository: getIt<EventRepository>()),
             lazy: true,
           )
         ],

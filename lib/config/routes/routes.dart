@@ -31,7 +31,6 @@ class Routes {
   static String editEventRequirements = '/edit-event/requirements';
   static String editEventPictures = '/edit-event/pictures';
   static String editEventTime = '/edit-event/time';
-  static String eventList = '/event-list';
   // -- ANNOUNCEMENTS ---------------------------------------------------------
   static String announcements = '/announcements';
   static String announcementById = '/announcements/:id';
@@ -61,7 +60,6 @@ class Routes {
     router.define(privacyPolicy, handler: ppHandler);
 
     // EVENT
-    router.define(eventList, handler: eventListHandler);
     router.define(event, handler: eventPageHandler);
     router.define(createEvent, handler: createEventHandler);
     router.define(editEvent, handler: editEventHandler);
