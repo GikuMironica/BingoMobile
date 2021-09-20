@@ -27,6 +27,16 @@ class AuthenticationRepository extends Repository {
         return result;
       }
       // TODO - Handle use case where email not confirmed or account blocked due to the amount of tries
+      if (e.response?.statusCode == 403 && e.response.data["FailReason"]==0){
+        // TODO - translation
+        Map<String, String> result = {"Error": "Please confirm your email"};
+        return result;
+      }
+      if (e.response?.statusCode == 403 && e.response.data["FailReason"]==1){
+        // TODO - translation
+        Map<String, String> result = {"Error": "Too many invalid login attempts, try again later."};
+        return result;
+      }
     }
     return response.data;
   }
