@@ -3,57 +3,45 @@ import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
 import 'package:hopaut/controllers/blocs/login/login_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-Widget passwordInputField(BuildContext context, dynamic state){
+Widget passwordInputField(BuildContext context, dynamic state) {
   return TextFormField(
     validator: (value) =>
-      // TODO - Translation
-      state.isValidPassword ? null : 'Please input your password',
+        // TODO - Translation
+        state.isValidPassword ? null : 'Please input your password',
     onChanged: (value) =>
-      context.read<LoginBloc>().add(
-          LoginPasswordChanged(password:value)
-      ),
+        context.read<LoginBloc>().add(LoginPasswordChanged(password: value)),
     obscureText: state.obscureText,
     decoration: InputDecoration(
-      floatingLabelBehavior: FloatingLabelBehavior.always,
-      alignLabelWithHint: true,
-      suffixIcon: GestureDetector(
-        onTap: () async{
-          FocusManager.instance.primaryFocus.unfocus();
-          context.read<LoginBloc>().add(ShowPasswordClicked(obscureText: state.obscureText));
-          FocusManager.instance.primaryFocus.unfocus();
-          // TODO - Don't pop up keyboard on tap of 'Show password button'
-            // at this point state is still not updated.
-            // await Future<void>.delayed(
-            //     const Duration(seconds: 3), () => {
-            //       context.read<LoginBloc>().add(ShowPasswordClicked(obscureText: state.obscureText))
-            //     }
-            // );
-        },
-        child: Icon(
-          Icons.remove_red_eye_outlined,
-          color: Colors.black,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        alignLabelWithHint: true,
+        suffixIcon: GestureDetector(
+          onTap: () async {
+            FocusManager.instance.primaryFocus.unfocus();
+            context
+                .read<LoginBloc>()
+                .add(ShowPasswordClicked(obscureText: state.obscureText));
+            FocusManager.instance.primaryFocus.unfocus();
+          },
+          child: Icon(
+            Icons.remove_red_eye_outlined,
+            color: Colors.black,
+          ),
         ),
-      ),
-      isDense: true,
-      labelText: 'Password',
-      hintText: 'Enter a password',
-      hintStyle: TextStyle(color: Colors.grey[400]),
-      contentPadding:
-      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey[400]),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey),
-      ),
-      labelStyle:
-      TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
-      border: const OutlineInputBorder()
-      ),
-    );
+        isDense: true,
+        labelText: 'Password',
+        hintText: 'Enter a password',
+        hintStyle: TextStyle(color: Colors.grey[400]),
+        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey[400]),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+        labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+        border: const OutlineInputBorder()),
+  );
 }
-
-
 
 // TODO - replace this implementation with the one from above in the other components using it (Forgot Password)
 /// Password Input Box
@@ -61,84 +49,82 @@ Widget passwordInputField(BuildContext context, dynamic state){
 /// [bloc] is the Bloc that contains [bloc.passwordChanged]
 /// [_obscureText] must contain obscuring the password
 /// [t] is the function that toggles _obscureText
-StreamBuilder<String> displayPasswordInput(bloc, bool _obscureText, Function t) {
+StreamBuilder<String> displayPasswordInput(
+    bloc, bool _obscureText, Function t) {
   return StreamBuilder<String>(
     stream: bloc.passwordValid,
-    builder: (ctx, snapshot) =>
-        TextField(
-          onChanged: bloc.passwordChanged,
-          obscureText: _obscureText,
-          decoration: InputDecoration(
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              alignLabelWithHint: true,
-              suffixIcon: GestureDetector(
-                onTap: () {
-                  t();
-                  Future<void>.delayed(
-                      const Duration(seconds: 3), () => t());
-                },
-                child: Icon(
-                  _obscureText ? Icons.lock_outline : Icons.lock_open,
-                  color: Colors.black,
-                ),
-              ),
-              isDense: true,
-              labelText: 'Password',
-              errorText: snapshot.error,
-              errorMaxLines: 3,
-              hintText: 'Enter a password',
-              hintStyle: TextStyle(color: Colors.grey[400]),
-              contentPadding:
+    builder: (ctx, snapshot) => TextField(
+      onChanged: bloc.passwordChanged,
+      obscureText: _obscureText,
+      decoration: InputDecoration(
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          alignLabelWithHint: true,
+          suffixIcon: GestureDetector(
+            onTap: () {
+              t();
+              Future<void>.delayed(const Duration(seconds: 3), () => t());
+            },
+            child: Icon(
+              _obscureText ? Icons.lock_outline : Icons.lock_open,
+              color: Colors.black,
+            ),
+          ),
+          isDense: true,
+          labelText: 'Password',
+          errorText: snapshot.error,
+          errorMaxLines: 3,
+          hintText: 'Enter a password',
+          hintStyle: TextStyle(color: Colors.grey[400]),
+          contentPadding:
               const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400]),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              labelStyle:
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey[400]),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+          labelStyle:
               TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
-              border: const OutlineInputBorder()),
-        ),
+          border: const OutlineInputBorder()),
+    ),
   );
 }
 
-StreamBuilder<String> displayConfirmPasswordInput(bloc, bool _obscureText, Function t) {
+StreamBuilder<String> displayConfirmPasswordInput(
+    bloc, bool _obscureText, Function t) {
   return StreamBuilder<String>(
     stream: bloc.confirmPassValid,
-    builder: (ctx, snapshot) =>
-        TextField(
-          onChanged: bloc.confirmPassChanged,
-          obscureText: _obscureText,
-          decoration: InputDecoration(
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              alignLabelWithHint: true,
-              suffixIcon: GestureDetector(
-                onTap: () {
-                  t();
-                  Future<void>.delayed(
-                      const Duration(seconds: 3), () => t());
-                },
-                child: Icon(
-                  _obscureText ? Icons.lock_outline : Icons.lock_open,
-                  color: Colors.black,
-                ),
-              ),
-              isDense: true,
-              labelText: 'Confirm Password',
-              errorText: snapshot.error,
-              errorMaxLines: 2,
-              contentPadding:
+    builder: (ctx, snapshot) => TextField(
+      onChanged: bloc.confirmPassChanged,
+      obscureText: _obscureText,
+      decoration: InputDecoration(
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          alignLabelWithHint: true,
+          suffixIcon: GestureDetector(
+            onTap: () {
+              t();
+              Future<void>.delayed(const Duration(seconds: 3), () => t());
+            },
+            child: Icon(
+              _obscureText ? Icons.lock_outline : Icons.lock_open,
+              color: Colors.black,
+            ),
+          ),
+          isDense: true,
+          labelText: 'Confirm Password',
+          errorText: snapshot.error,
+          errorMaxLines: 2,
+          contentPadding:
               const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400]),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              labelStyle:
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey[400]),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+          labelStyle:
               TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
-              border: const OutlineInputBorder()),
-        ),
+          border: const OutlineInputBorder()),
+    ),
   );
 }
