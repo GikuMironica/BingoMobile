@@ -3,13 +3,16 @@ import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
 import 'package:hopaut/controllers/blocs/login/login_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-Widget passwordInputField(BuildContext context, dynamic state) {
+Widget passwordInputField({
+  @required BuildContext context,
+  @required dynamic state,
+  @required void Function(String) onChange,
+}) {
   return TextFormField(
     validator: (value) =>
         // TODO - Translation
         state.isValidPassword ? null : 'Please input your password',
-    onChanged: (value) =>
-        context.read<LoginBloc>().add(LoginPasswordChanged(password: value)),
+    onChanged: onChange,
     obscureText: state.obscureText,
     decoration: InputDecoration(
         floatingLabelBehavior: FloatingLabelBehavior.always,

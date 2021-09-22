@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hopaut/controllers/blocs/login/login_event.dart';
-import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
 
-Widget emailInputField(BuildContext context, dynamic state) {
+Widget emailInputField({
+  @required BuildContext context,
+  @required dynamic state,
+  @required void Function(String) onChange,
+}) {
   return TextFormField(
     validator: (value) =>
         // TODO - Translation
         state.isValidEmail ? null : 'Please input a valid email',
-    onChanged: (value) =>
-        context.read<LoginBloc>().add(LoginUsernameChanged(username: value)),
+    onChanged: onChange,
     decoration: InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
       enabledBorder: OutlineInputBorder(
