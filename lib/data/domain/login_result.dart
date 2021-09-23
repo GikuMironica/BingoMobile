@@ -1,6 +1,6 @@
-class LoginResult{
+class AuthResult{
   bool isSuccessful;
   dynamic data;
 
-  LoginResult({this.isSuccessful, this.data});
+  AuthResult({this.isSuccessful, this.data});
 }

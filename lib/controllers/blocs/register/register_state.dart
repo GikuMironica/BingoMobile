@@ -7,8 +7,10 @@ class RegisterState extends BaseState{
   final RegExp _pwdRule = RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
 
   //validators
-  bool get isValidEmail => EmailValidator.validate(username.trim());
-  bool get isValidPassword => password.isNotEmpty && _pwdRule.hasMatch(password);
+  bool get isEmailValid => EmailValidator.validate(username.trim());
+  bool get isPasswordValid => password.isNotEmpty && _pwdRule.hasMatch(password);
+  bool get isConfirmPasswordValid => password.isNotEmpty && _pwdRule.hasMatch(confirmPassword);
+  bool get passwordsMatch => password == confirmPassword;
 
   final String username;
   final String password;

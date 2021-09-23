@@ -55,7 +55,7 @@ class LoginClicked extends LoginEvent {
   @override
   Stream<LoginState> handleEvent(BaseState state) async* {
     LoginState loginState = state;
-    LoginResult result;
+    AuthResult result;
     yield loginState.copyWith(formStatus: LoginSubmitted());
     try {
       result = await authService.loginWithEmail(

@@ -8,7 +8,7 @@ Widget emailInputField({
   return TextFormField(
     validator: (value) =>
         // TODO - Translation
-        state.isValidEmail ? null : 'Please input a valid email',
+        state.isEmailValid ? null : 'Please input a valid email',
     onChanged: onChange,
     decoration: InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),

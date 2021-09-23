@@ -92,17 +92,17 @@ class AuthenticationService with ChangeNotifier {
   /// Log the user in.
   ///
   /// Triggers Identity Repository -> [IdentityRepository.login()]
-  Future<LoginResult> loginWithEmail(String email, String password) async {
+  Future<AuthResult> loginWithEmail(String email, String password) async {
     Map<String, dynamic> _loginResult =
         await _authenticationRepository.login(email: email, password: password);
     if (_loginResult is Map<String, dynamic>) {
       if (_loginResult.containsKey('Token')) {
         await applyToken(_loginResult);
-        return LoginResult(isSuccessful: true);
+        return AuthResult(isSuccessful: true);
       }
     }
     // TODO - Refactor to return Result Object with Bool and Error if exists
-    return LoginResult(isSuccessful: false, data: _loginResult);
+    return AuthResult(isSuccessful: false, data: _loginResult);
   }
 
   Future<bool> loginWithFb() async {
@@ -138,8 +138,8 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 
-  Future<bool> register(String email, String password) async {
-    bool _registrationResult = await _authenticationRepository.register(
+  Future<AuthResult> register(String email, String password) async {
+    AuthResult _registrationResult = await _authenticationRepository.register(
         email: email, password: password);
     return _registrationResult;
   }

@@ -11,7 +11,7 @@ Widget passwordInputField({
   return TextFormField(
     validator: (value) =>
         // TODO - Translation
-        state.isValidPassword ? null : 'Please input your password',
+        state.isPasswordValid ? null : 'Please input your password',
     onChanged: onChange,
     obscureText: state.obscureText,
     decoration: InputDecoration(
