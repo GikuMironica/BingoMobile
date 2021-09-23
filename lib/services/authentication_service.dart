@@ -52,7 +52,8 @@ class AuthenticationService with ChangeNotifier {
     final Map<String, dynamic> parsedData = Jwt.parseJwt(data['Token']);
     await Future.wait([
       Hive.box('auth').put('identity', parsedData),
-      writeTokenToKeychain(token: data['Token'], refreshToken: data['RefreshToken'])
+      writeTokenToKeychain(
+          token: data['Token'], refreshToken: data['RefreshToken'])
     ]);
 
     setIdentity(Identity.fromJson(parsedData));
@@ -62,18 +63,25 @@ class AuthenticationService with ChangeNotifier {
   User get user => _user;
 
   Future<void> refreshUser(bool notificationsAllowed) async {
-    final User user = await _userRepository.get(_identity.id);
+    List<dynamic> allResult = await Future.wait([
+      _userRepository.get(_identity.id),
+      !oneSignalSettings
+          ? initializeOneSignalSubscription(notificationsAllowed ?? false)
+          : null
+    ]);
+    User user = allResult.first;
     setUser(user);
-    if (!oneSignalSettings) {
-      await initializeOneSignalSubscription(notificationsAllowed ?? false);
-    }
   }
 
-  Future<void> initializeOneSignalSubscription(bool notificationsAllowed) async{
-    notificationsAllowed
-      ? await Future.wait([OneSignal.shared.setSubscription(notificationsAllowed),
-          OneSignal.shared.setExternalUserId(currentIdentity.id)])
-      : oneSignalSettings = notificationsAllowed;
+  Future<void> initializeOneSignalSubscription(
+      bool notificationsAllowed) async {
+    if (notificationsAllowed) {
+      await Future.wait([
+        OneSignal.shared.setSubscription(notificationsAllowed),
+        OneSignal.shared.setExternalUserId(currentIdentity.id)
+      ]);
+      oneSignalSettings = true;
+    }
   }
 
   void setUser(User user) {
@@ -116,7 +124,8 @@ class AuthenticationService with ChangeNotifier {
         print('Refreshing Token');
         // TODO - jwttoken is read twice on startup
         dynamic token = await _secureStorageService.read(key: 'token');
-        dynamic refreshToken = await _secureStorageService.read(key: 'refreshToken');
+        dynamic refreshToken =
+            await _secureStorageService.read(key: 'refreshToken');
         Map<String, dynamic> _refreshResult =
             await _authenticationRepository.refresh(token, refreshToken);
         if (_refreshResult.containsKey('Token')) {
