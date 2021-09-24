@@ -50,7 +50,7 @@ Widget displayLogoIcon(BuildContext ctx) {
   );
 }*/
 
-Widget forgotPasswordPrompt(Function function, bool loginMode) {
+/*Widget forgotPasswordPrompt(Function function, bool loginMode) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
@@ -61,26 +61,24 @@ Widget forgotPasswordPrompt(Function function, bool loginMode) {
       ),
     ],
   );
-}
+}*/
 
 Widget accountAlreadyPrompt(BuildContext context) {
-  return Column(children: <Widget>[
-    FlatButton(
-        onPressed: () {
-          Application.router.navigateTo(context, '/login',
-              replace: true,
-              transition: TransitionType.fadeIn,
-              transitionDuration: Duration());
-        },
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-          Text('Already have an account? '),
-          Text(
-            'Login',
-            style: TextStyle(fontWeight: FontWeight.w500, color: Colors.pink),
-          )
-        ])),
-  ]);
+  return FlatButton(
+      onPressed: () {
+        Application.router.navigateTo(context, '/login',
+            replace: true,
+            transition: TransitionType.fadeIn,
+            transitionDuration: Duration());
+      },
+      child:
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+        Text('Already have an account? '),
+        Text(
+          'Login',
+          style: TextStyle(fontWeight: FontWeight.w500, color: Colors.pink),
+        )
+      ]));
 }
 
 Widget forgotPassword(BuildContext context) {
@@ -135,6 +133,7 @@ Widget noAccountYetPrompt(BuildContext context){
   );
 }
 
+/*
 Widget authActionButton({String text, BuildContext context}) {
   return Container(
     width: 200,
@@ -181,3 +180,4 @@ Widget authActionButton({String text, BuildContext context}) {
     ),
   );
 }
+*/

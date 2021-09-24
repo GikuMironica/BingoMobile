@@ -68,7 +68,7 @@ class UnobscureConfirmPasswordClicked extends RegisterEvent {
   @override
   Stream<RegisterState> handleEvent(BaseState state) async* {
     RegisterState registerState = state;
-    yield registerState.copyWith(passwordObscureText: !confirmPasswordObscureText);
+    yield registerState.copyWith(confirmPasswordObscureText: !confirmPasswordObscureText);
   }
 }
 

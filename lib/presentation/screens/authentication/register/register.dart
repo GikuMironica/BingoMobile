@@ -13,12 +13,12 @@ import 'package:hopaut/presentation/widgets/logo/logo.dart';
 import 'package:hopaut/presentation/widgets/text/text.dart';
 import 'package:hopaut/services/authentication_service.dart';
 
-class RegistrationPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _RegistrationPageState extends State<RegisterPage> {
   RegistrationBloc _registrationBloc = RegistrationBloc();
   bool _obscureText = true;
 

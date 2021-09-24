@@ -8,6 +8,7 @@ Widget passwordInputField({
   @required bool isStateValid,
   @required bool isTextObscured,
   @required void Function(String) onChange,
+  @required void Function() onObscureTap,
 }) {
   return TextFormField(
     validator: (value) =>
@@ -19,12 +20,9 @@ Widget passwordInputField({
         floatingLabelBehavior: FloatingLabelBehavior.always,
         alignLabelWithHint: true,
         suffixIcon: GestureDetector(
-          onTap: () async {
+          onTap: () {
             FocusManager.instance.primaryFocus.unfocus();
-            context
-                .read<LoginBloc>()
-                .add(ShowPasswordClicked(obscureText: isTextObscured));
-            FocusManager.instance.primaryFocus.unfocus();
+            onObscureTap();
           },
           child: Icon(
             Icons.remove_red_eye_outlined,

@@ -1,12 +1,14 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
+import 'package:hopaut/controllers/blocs/login/login_event.dart';
 import 'package:hopaut/controllers/blocs/register/register_bloc.dart';
 import 'package:hopaut/controllers/blocs/register/register_event.dart';
 import 'package:hopaut/controllers/blocs/register/register_page_status.dart';
 import 'package:hopaut/controllers/blocs/register/register_state.dart';
 import 'package:hopaut/presentation/widgets/animations.dart';
+import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
 import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';
@@ -24,6 +26,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: SafeArea(
+          child: Container(
+            child: BlocProvider(
+              create: (context) => RegisterBloc(),
+              child: _registerView(),
+            ),
+          ),
+        ),
+      )
     );
   }
 
@@ -31,7 +44,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Padding(
         padding: const EdgeInsets.all(24),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center, children: [
           HopautLogo(),
           SizedBox(height: 32),
           // TODO - Translation
@@ -49,7 +63,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 visible: state.formStatus is! RegisterSubmitted,
                 child: Align(
                     alignment: FractionalOffset.bottomCenter,
-                    // TODO - goback login
                     child: accountAlreadyPrompt(context)),
               )),
         );
@@ -81,20 +94,39 @@ class _RegistrationPageState extends State<RegistrationPage> {
               SizedBox(
                 height: 16,
               ),
-             /* BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+              BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
                 return passwordInputField(
                     context: context,
+                    isTextObscured: state.passwordObscureText,
                     isStateValid: state.isPasswordValid,
+                    onObscureTap: () => context.read<RegisterBloc>()
+                      .add(UnobscurePasswordClicked(passwordObscureText: state.passwordObscureText)),
                     onChange: (value) => context
-                        .read<LoginBloc>()
-                        .add(LoginPasswordChanged(password: value)));
+                        .read<RegisterBloc>()
+                        .add(RegisterPasswordChanged(password: value)));
               }),
-              forgotPassword(context),
-              BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-                return state.formStatus is LoginSubmitted
+              SizedBox(
+                height: 16,
+              ),
+              BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+                return passwordInputField(
+                    context: context,
+                    isTextObscured: state.confirmPasswordObscureText,
+                    isStateValid: state.isConfirmPasswordValid,
+                    onObscureTap: () => context.read<RegisterBloc>()
+                      .add(UnobscureConfirmPasswordClicked(confirmPasswordObscureText: state.confirmPasswordObscureText)),
+                    onChange: (value) => context
+                        .read<RegisterBloc>()
+                        .add(RegisterPasswordChanged(password: value)));
+              }),
+              SizedBox(
+                height: 16,
+              ),
+              BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+                return state.formStatus is RegisterSubmitted
                     ? _circularProgressIndicator()
-                    : _loginButtons();
-              }),*/
+                    : _registerButton();
+              }),
               SizedBox(height: 32),
             ],
           )),
@@ -102,7 +134,22 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   Widget _registerButton() {
-    return Container();
+    return Container(
+        child: BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+        return authButton(
+          label: 'Register',
+          context: context,
+          isStateValid: state.formStatus is SubmissionSuccess,
+          navigateTo: '/login',
+          onPressed: state.formStatus is RegisterSubmitted
+            ? () {}
+            : () => {
+              if (_formKey.currentState.validate()) {
+                context.read<RegisterBloc>().add(new RegisterClicked())
+              }
+          });
+        })
+    );
   }
 
   Widget _circularProgressIndicator() {

@@ -10,6 +10,7 @@ import 'package:hopaut/presentation/screens/announcements/announcement_screen.da
 import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
 import 'package:hopaut/presentation/screens/authentication/forgot_password.dart';
+import 'package:hopaut/presentation/screens/authentication/register.dart';
 import 'package:hopaut/presentation/screens/events/create_event/create_event.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/description.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/edit_event.dart';
@@ -24,7 +25,6 @@ import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/screens/events/rate_event/rate_event.dart';
 import 'package:hopaut/presentation/screens/home_page.dart';
 import 'package:hopaut/presentation/screens/authentication/login.dart';
-import 'package:hopaut/presentation/screens/authentication/register/register.dart';
 import 'package:hopaut/presentation/screens/settings/change_password.dart';
 import 'package:hopaut/presentation/screens/settings/settings.dart';
 import 'package:hopaut/presentation/widgets/webview_widget.dart';

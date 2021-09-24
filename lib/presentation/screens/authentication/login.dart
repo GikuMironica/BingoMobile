@@ -4,10 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
 import 'package:hopaut/controllers/blocs/login/login_state.dart';
 import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
+import 'package:hopaut/controllers/blocs/register/register_bloc.dart';
 import 'package:hopaut/presentation/widgets/buttons/facebook_button.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
 import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
-import 'package:hopaut/presentation/widgets/buttons/login_button.dart';
+import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';
 import 'package:hopaut/presentation/widgets/text/text.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
@@ -46,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           HopautLogo(),
           SizedBox(height: 32),
+          // TODO - Translate
           H1(text: "Login"),
           SizedBox(height: 32),
           Padding(
@@ -57,11 +59,11 @@ class _LoginPageState extends State<LoginPage> {
         return Expanded(
           child: Container(
               child: Visibility(
-            visible: state.formStatus is! LoginSubmitted,
-            child: Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: noAccountYetPrompt(context)),
-          )),
+              visible: state.formStatus is! LoginSubmitted,
+              child: Align(
+                  alignment: FractionalOffset.bottomCenter,
+                  child: noAccountYetPrompt(context)),
+            )),
         );
       })
     ]);
@@ -96,6 +98,8 @@ class _LoginPageState extends State<LoginPage> {
                     context: context,
                     isTextObscured: state.obscureText,
                     isStateValid: state.isValidPassword,
+                    onObscureTap: () => context.read<RegisterBloc>()
+                        .add(ShowPasswordClicked(obscureText: state.obscureText)),
                     onChange: (value) => context
                         .read<LoginBloc>()
                         .add(LoginPasswordChanged(password: value)));
@@ -106,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                     ? _circularProgressIndicator()
                     : _loginButtons();
               }),
-              SizedBox(height: 32),
+              // SizedBox(height: 32),
             ],
           )),
     );
@@ -129,10 +133,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget _loginButtons() {
     return Column(children: [
       BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-        return loginButton(
+        return authButton(
           label: 'Login',
           context: context,
           isStateValid: state.formStatus is SubmissionSuccess,
+          navigateTo: '/home',
           onPressed: state.formStatus is LoginSubmitted
               ? () {}
               : () => {
