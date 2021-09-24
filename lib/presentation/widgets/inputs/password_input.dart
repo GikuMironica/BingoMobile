@@ -5,15 +5,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 Widget passwordInputField({
   @required BuildContext context,
-  @required dynamic state,
+  @required bool isStateValid,
+  @required bool isTextObscured,
   @required void Function(String) onChange,
 }) {
   return TextFormField(
     validator: (value) =>
         // TODO - Translation
-        state.isPasswordValid ? null : 'Please input your password',
+        isStateValid ? null : 'Please input your password',
     onChanged: onChange,
-    obscureText: state.obscureText,
+    obscureText: isTextObscured,
     decoration: InputDecoration(
         floatingLabelBehavior: FloatingLabelBehavior.always,
         alignLabelWithHint: true,
@@ -22,7 +23,7 @@ Widget passwordInputField({
             FocusManager.instance.primaryFocus.unfocus();
             context
                 .read<LoginBloc>()
-                .add(ShowPasswordClicked(obscureText: state.obscureText));
+                .add(ShowPasswordClicked(obscureText: isTextObscured));
             FocusManager.instance.primaryFocus.unfocus();
           },
           child: Icon(
@@ -31,6 +32,7 @@ Widget passwordInputField({
           ),
         ),
         isDense: true,
+        // TODO - Translate
         labelText: 'Password',
         hintText: 'Enter a password',
         hintStyle: TextStyle(color: Colors.grey[400]),

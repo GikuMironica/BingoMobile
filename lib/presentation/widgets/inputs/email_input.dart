@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 Widget emailInputField({
   @required BuildContext context,
-  @required dynamic state,
+  @required bool isStateValid,
   @required void Function(String) onChange,
 }) {
   return TextFormField(
     validator: (value) =>
         // TODO - Translation
-        state.isEmailValid ? null : 'Please input a valid email',
+      isStateValid ? null : 'Please input a valid email',
     onChanged: onChange,
     decoration: InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),

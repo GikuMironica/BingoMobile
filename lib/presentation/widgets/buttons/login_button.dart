@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'gradient_box_decoration.dart';
-import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hopaut/controllers/blocs/login/login_event.dart';
-import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:fluro/fluro.dart';
 
 
-Widget loginButton(BuildContext context, dynamic state, GlobalKey<FormState> formKey){
-    if (state.formStatus is SubmissionSuccess){
+Widget loginButton({
+  @required String label,
+  @required BuildContext context,
+  @required bool isStateValid,
+  @required void Function() onPressed
+}) {
+    if (isStateValid){
       Future.delayed(Duration.zero, (){
         Application.router.navigateTo(context, '/home',
         replace: true,
@@ -26,14 +27,10 @@ Widget loginButton(BuildContext context, dynamic state, GlobalKey<FormState> for
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
           ),
-          onPressed: state.formStatus is LoginSubmitted ? null : () {
-            if (formKey.currentState.validate()){
-              context.read<LoginBloc>().add(new LoginClicked());
-            }
-          },
+          onPressed: onPressed,
           // TODO - Translation
           child: Text(
-            'Login',
+            label,
             style: TextStyle(
               fontSize: 20,
               color: Colors.white,

@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
               BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
                 return emailInputField(
                     context: context,
-                    state: state,
+                    isStateValid: state.isValidEmail,
                     onChange: (value) => context
                         .read<LoginBloc>()
                         .add(LoginUsernameChanged(username: value)));
@@ -94,7 +94,8 @@ class _LoginPageState extends State<LoginPage> {
               BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
                 return passwordInputField(
                     context: context,
-                    state: state,
+                    isTextObscured: state.obscureText,
+                    isStateValid: state.isValidPassword,
                     onChange: (value) => context
                         .read<LoginBloc>()
                         .add(LoginPasswordChanged(password: value)));
@@ -123,10 +124,22 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
+  // In case of fail in login page (not rendered login btn)
+  // check commit 55069dd047971f1b54b09fbefe00cfc9b08a6916 to rollback
   Widget _loginButtons() {
     return Column(children: [
       BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-        return loginButton(context, state, _formKey);
+        return loginButton(
+          label: 'Login',
+          context: context,
+          isStateValid: state.formStatus is SubmissionSuccess,
+          onPressed: state.formStatus is LoginSubmitted
+              ? () {}
+              : () => {
+                if (_formKey.currentState.validate()) {
+                  context.read<LoginBloc>().add(new LoginClicked())
+            }
+          });
       }),
       SizedBox(height: 10),
       BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
@@ -134,4 +147,5 @@ class _LoginPageState extends State<LoginPage> {
       }),
     ]);
   }
+
 }

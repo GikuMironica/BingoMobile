@@ -139,8 +139,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   void attemptRegister(String email, String password) async {
-    showLoadingDialog();
-    bool registrationResult =
+   /* showLoadingDialog();
+     bool registrationResult =
         await getIt<AuthenticationService>().register(email, password);
 
     if (registrationResult) {
@@ -148,7 +148,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       Fluttertoast.showToast(msg: "Check your email for a confirmation");
     } else {
       Fluttertoast.showToast(msg: "Unable to register");
-    }
+    }*/
   }
 
   @override

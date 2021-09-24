@@ -26,8 +26,8 @@ Widget displayLogoIcon(BuildContext ctx) {
     ),
   );
 }
-
-Widget displayEmailInput() {
+// TODO - Delete
+/*Widget displayEmailInput() {
   return TextField(
     obscureText: false,
     decoration: InputDecoration(
@@ -48,7 +48,7 @@ Widget displayEmailInput() {
         labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
         border: const OutlineInputBorder()),
   );
-}
+}*/
 
 Widget forgotPasswordPrompt(Function function, bool loginMode) {
   return Row(
