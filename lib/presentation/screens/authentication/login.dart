@@ -1,6 +1,8 @@
 import 'dart:ui';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
 import 'package:hopaut/controllers/blocs/login/login_state.dart';
 import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
@@ -56,10 +58,18 @@ class _LoginPageState extends State<LoginPage> {
         ]),
       ),
       BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+        if (state.formStatus is SubmissionSuccess){
+          Future.delayed(Duration.zero, (){
+            Application.router.navigateTo(context, '/home',
+                replace: true,
+                clearStack: true,
+                transition: TransitionType.fadeIn);
+          });
+        }
         return Expanded(
           child: Container(
               child: Visibility(
-              visible: state.formStatus is! LoginSubmitted,
+              visible: state.formStatus is Idle,
               child: Align(
                   alignment: FractionalOffset.bottomCenter,
                   child: noAccountYetPrompt(context)),
@@ -100,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                     isStateValid: state.isValidPassword,
                     // TODO - Translation
                     validationMessage: "Please input your password",
-                    onObscureTap: () => context.read<RegisterBloc>()
+                    onObscureTap: () => context.read<LoginBloc>()
                         .add(ShowPasswordClicked(obscureText: state.obscureText)),
                     onChange: (value) => context
                         .read<LoginBloc>()
@@ -109,7 +119,8 @@ class _LoginPageState extends State<LoginPage> {
               forgotPassword(context),
               BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
                 return state.formStatus is LoginSubmitted
-                    ? _circularProgressIndicator()
+                    || state.formStatus is SubmissionSuccess
+                    ? circularProgressIndicator()
                     : _loginButtons();
               }),
               // SizedBox(height: 32),
@@ -118,20 +129,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _circularProgressIndicator() {
-    return BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-        child: Dialog(
-          elevation: 0,
-          backgroundColor: Colors.white.withOpacity(0),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [CircularProgressIndicator()]),
-        ));
-  }
-
-  // In case of fail in login page (not rendered login btn)
-  // check commit 55069dd047971f1b54b09fbefe00cfc9b08a6916 to rollback
   Widget _loginButtons() {
     return Column(children: [
       BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
@@ -139,7 +136,6 @@ class _LoginPageState extends State<LoginPage> {
           label: 'Login',
           context: context,
           isStateValid: state.formStatus is SubmissionSuccess,
-          navigateTo: '/home',
           onPressed: state.formStatus is LoginSubmitted
               ? () {}
               : () => {

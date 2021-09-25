@@ -9,16 +9,7 @@ Widget authButton({
   @required BuildContext context,
   @required bool isStateValid,
   @required void Function() onPressed,
-  @required String navigateTo
 }) {
-    if (isStateValid){
-      Future.delayed(Duration.zero, (){
-        Application.router.navigateTo(context, navigateTo,
-        replace: true,
-        clearStack: true,
-        transition: TransitionType.fadeIn);
-      });
-    }
     return Container(
         width: 200,
         height: 50.0,

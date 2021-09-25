@@ -9,7 +9,7 @@ class RegisterState extends BaseState{
   //validators
   bool get isEmailValid => EmailValidator.validate(username.trim());
   bool get isPasswordValid => password.isNotEmpty && _pwdRule.hasMatch(password);
-  bool get isConfirmPasswordValid => password.isNotEmpty && _pwdRule.hasMatch(confirmPassword) && passwordsMatch;
+  bool get isConfirmPasswordValid => confirmPassword.isNotEmpty && passwordsMatch;
   bool get passwordsMatch => password == confirmPassword;
 
   final String username;
@@ -39,7 +39,7 @@ class RegisterState extends BaseState{
     return RegisterState(
       username: username ?? this.username,
       password: password ?? this.password,
-      confirmPassword: confirmPassword ?? this.password,
+      confirmPassword: confirmPassword ?? this.confirmPassword,
       passwordObscureText: passwordObscureText ?? this.passwordObscureText,
       confirmPasswordObscureText: confirmPasswordObscureText ?? this.confirmPasswordObscureText,
       formStatus: formStatus ?? this.formStatus,

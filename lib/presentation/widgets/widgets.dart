@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import '../../config/routes/application.dart';
@@ -94,3 +96,14 @@ Widget noAccountYetPrompt(BuildContext context){
   );
 }
 
+Widget circularProgressIndicator() {
+  return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+      child: Dialog(
+        elevation: 0,
+        backgroundColor: Colors.white.withOpacity(0),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [CircularProgressIndicator()]),
+      ));
+}

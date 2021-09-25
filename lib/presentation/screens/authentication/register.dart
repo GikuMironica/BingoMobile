@@ -97,10 +97,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     context: context,
                     isTextObscured: state.passwordObscureText,
                     isStateValid: state.isPasswordValid,
+                    // TODO - Translate
                     validationMessage:
                       "Password must be at least 8 characters length,"+
-                          " must contain upper, lower case letters "+
-                          "and digits",
+                          " must contain upper, lower case letters"+
+                          " and digits",
                     onObscureTap: () => context.read<RegisterBloc>()
                       .add(UnobscurePasswordClicked(passwordObscureText: state.passwordObscureText)),
                     onChange: (value) => context
@@ -113,6 +114,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
                 return passwordInputField(
                     context: context,
+                    // TODO - Translate
                     validationMessage: "Passwords don't match",
                     isTextObscured: state.confirmPasswordObscureText,
                     isStateValid: state.isConfirmPasswordValid,
@@ -120,14 +122,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       .add(UnobscureConfirmPasswordClicked(confirmPasswordObscureText: state.confirmPasswordObscureText)),
                     onChange: (value) => context
                         .read<RegisterBloc>()
-                        .add(RegisterPasswordChanged(password: value)));
+                        .add(RegisterConfirmPasswordChanged(confirmPassword: value)));
               }),
               SizedBox(
                 height: 16,
               ),
               BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
                 return state.formStatus is RegisterSubmitted
-                    ? _circularProgressIndicator()
+                  || state.formStatus is SubmissionSuccess
+                    ? circularProgressIndicator()
                     : _registerButton();
               }),
               SizedBox(height: 32),
@@ -140,10 +143,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return Container(
         child: BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
         return authButton(
+          // TODO - Translate
           label: 'Register',
           context: context,
           isStateValid: state.formStatus is SubmissionSuccess,
-          navigateTo: '/login',
           onPressed: state.formStatus is RegisterSubmitted
             ? () {}
             : () => {
@@ -155,15 +158,4 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 
-  Widget _circularProgressIndicator() {
-    return BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-        child: Dialog(
-          elevation: 0,
-          backgroundColor: Colors.white.withOpacity(0),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [CircularProgressIndicator()]),
-        ));
-  }
 }
