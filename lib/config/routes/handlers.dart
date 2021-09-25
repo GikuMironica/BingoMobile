@@ -27,6 +27,7 @@ import 'package:hopaut/presentation/screens/home_page.dart';
 import 'package:hopaut/presentation/screens/authentication/login.dart';
 import 'package:hopaut/presentation/screens/settings/change_password.dart';
 import 'package:hopaut/presentation/screens/settings/settings.dart';
+import 'package:hopaut/presentation/widgets/fullscreen_dialog.dart';
 import 'package:hopaut/presentation/widgets/webview_widget.dart';
 
 var rootHandler = new Handler(
@@ -38,6 +39,11 @@ var homeHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return HomePage();
 });
+
+var fullscreenDialogHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+      return FullscreenDialog();
+    });
 
 var accountHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {

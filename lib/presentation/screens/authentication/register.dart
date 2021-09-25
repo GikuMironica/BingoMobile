@@ -1,12 +1,15 @@
 import 'dart:ui';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/blocs/register/register_bloc.dart';
 import 'package:hopaut/controllers/blocs/register/register_event.dart';
 import 'package:hopaut/controllers/blocs/register/register_page_status.dart';
 import 'package:hopaut/controllers/blocs/register/register_state.dart';
 import 'package:hopaut/presentation/widgets/animations.dart';
 import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
+import 'package:hopaut/presentation/widgets/fullscreen_dialog.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
 import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';
@@ -55,10 +58,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
         ]),
       ),
       BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+        if (state.formStatus is SubmissionSuccess){
+          Future.delayed(Duration.zero, (){
+            // Application.router.navigateTo(context, '/fullscreen_dialog',
+            //     replace: false
+            // );
+            Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (BuildContext context, _, __) =>
+                    FullscreenDialog()));
+          });
+        }
         return Expanded(
           child: Container(
               child: Visibility(
-                visible: state.formStatus is! RegisterSubmitted,
+                visible: state.formStatus is Idle,
                 child: Align(
                     alignment: FractionalOffset.bottomCenter,
                     child: accountAlreadyPrompt(context)),
@@ -129,7 +143,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
               BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
                 return state.formStatus is RegisterSubmitted
-                  || state.formStatus is SubmissionSuccess
                     ? circularProgressIndicator()
                     : _registerButton();
               }),
