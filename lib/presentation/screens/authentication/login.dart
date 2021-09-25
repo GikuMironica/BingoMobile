@@ -98,6 +98,8 @@ class _LoginPageState extends State<LoginPage> {
                     context: context,
                     isTextObscured: state.obscureText,
                     isStateValid: state.isValidPassword,
+                    // TODO - Translation
+                    validationMessage: "Please input your password",
                     onObscureTap: () => context.read<RegisterBloc>()
                         .add(ShowPasswordClicked(obscureText: state.obscureText)),
                     onChange: (value) => context

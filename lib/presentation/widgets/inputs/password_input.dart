@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
-import 'package:hopaut/controllers/blocs/login/login_event.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 Widget passwordInputField({
   @required BuildContext context,
   @required bool isStateValid,
   @required bool isTextObscured,
+  @required String validationMessage,
   @required void Function(String) onChange,
   @required void Function() onObscureTap,
 }) {
   return TextFormField(
     validator: (value) =>
         // TODO - Translation
-        isStateValid ? null : 'Please input your password',
+        isStateValid ? null : validationMessage,
     onChanged: onChange,
     obscureText: isTextObscured,
     decoration: InputDecoration(
@@ -32,6 +30,7 @@ Widget passwordInputField({
         isDense: true,
         // TODO - Translate
         labelText: 'Password',
+        errorMaxLines: 3,
         hintText: 'Enter a password',
         hintStyle: TextStyle(color: Colors.grey[400]),
         contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),

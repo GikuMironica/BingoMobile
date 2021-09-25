@@ -1,7 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/init.dart';
-import 'package:hopaut/presentation/screens/account/account_page/account_page.dart';
+import 'package:hopaut/presentation/screens/account/account_page.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_account.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_description.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_name.dart';

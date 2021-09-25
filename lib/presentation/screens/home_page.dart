@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/presentation/screens/account/account_page/account_page.dart';
+import 'package:hopaut/presentation/screens/account/account_page.dart';
 import 'package:hopaut/presentation/screens/events/event_list/event_list.dart';
 import 'package:hopaut/presentation/screens/events/participation/attending_list.dart';
 import 'package:hopaut/presentation/screens/search/search.dart';

@@ -1,8 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
-import 'package:hopaut/controllers/blocs/login/login_event.dart';
 import 'package:hopaut/controllers/blocs/register/register_bloc.dart';
 import 'package:hopaut/controllers/blocs/register/register_event.dart';
 import 'package:hopaut/controllers/blocs/register/register_page_status.dart';
@@ -99,6 +97,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     context: context,
                     isTextObscured: state.passwordObscureText,
                     isStateValid: state.isPasswordValid,
+                    validationMessage:
+                      "Password must be at least 8 characters length,"+
+                          " must contain upper, lower case letters "+
+                          "and digits",
                     onObscureTap: () => context.read<RegisterBloc>()
                       .add(UnobscurePasswordClicked(passwordObscureText: state.passwordObscureText)),
                     onChange: (value) => context
@@ -111,6 +113,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
                 return passwordInputField(
                     context: context,
+                    validationMessage: "Passwords don't match",
                     isTextObscured: state.confirmPasswordObscureText,
                     isStateValid: state.isConfirmPasswordValid,
                     onObscureTap: () => context.read<RegisterBloc>()
