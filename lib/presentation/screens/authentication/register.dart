@@ -27,6 +27,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: SafeArea(
@@ -51,6 +52,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           SizedBox(height: 32),
           // TODO - Translation
           H1(text: "Register"),
+          subHeader(text: "Create new account"),
           SizedBox(height: 32),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 48),
@@ -59,12 +61,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ),
       BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
         if (state.formStatus is SubmissionSuccess){
-          Future.delayed(Duration.zero, (){
-            Navigator.of(context).push(PageRouteBuilder(
-                opaque: false,
-                pageBuilder: (BuildContext context, _, __) =>
-                    FullscreenDialog()));
-          });
+          _showFullscreenDialog(context);
         }
         return Expanded(
           child: Container(
@@ -105,6 +102,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
               BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
                 return passwordInputField(
+                    // TODO - Translate
+                    hint: "Enter a password",
                     context: context,
                     isTextObscured: state.passwordObscureText,
                     isStateValid: state.isPasswordValid,
@@ -124,6 +123,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
               BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
                 return passwordInputField(
+                    // TODO - Translate
+                    hint: "Confirm password",
                     context: context,
                     // TODO - Translate
                     validationMessage: "Passwords don't match",
@@ -166,6 +167,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
           });
         })
     );
+  }
+
+  _showFullscreenDialog(BuildContext context) {
+    Future.delayed(Duration.zero, ()
+    {
+      Navigator.of(context).push(
+          PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (BuildContext context, _, __) =>
+              // TODO - Translate
+              FullscreenDialog(
+                asset: 'assets/icons/confirm_email.png',
+                header: 'Success!',
+                message: 'Please check your email. You will get soon an email confirmation link.',
+                buttonText: 'Back to login',
+                route: '/login',
+              )));
+    });
   }
 
 }

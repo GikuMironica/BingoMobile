@@ -24,6 +24,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Container(
           height: MediaQuery.of(context).size.height,
           child: SafeArea(
@@ -47,7 +48,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           SizedBox(height: 32),
           // TODO - Translate
           H1(text: "Forgot Password?"),
-          SizedBox(height: 32),
+          SizedBox(height: 10),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 48),
               child: _forgotPasswordForm())
@@ -55,12 +56,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       ),
       BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(builder: (context, state) {
         if (state.formStatus is SubmissionSuccess){
-          Future.delayed(Duration.zero, (){
-            Navigator.of(context).push(PageRouteBuilder(
-                opaque: false,
-                pageBuilder: (BuildContext context, _, __) =>
-                    FullscreenDialog()));
-          });
+          _showFullscreenDialog();
         }
         return Expanded(
           child: Container(
@@ -88,6 +84,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           key: _formKey,
           child: Column(
             children: [
+              text(text: "Enter the email associated with your account and we'll send"
+                  " an email with instructions to reset your password."),
+              SizedBox(height: 32),
               BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(builder: (context, state) {
                 return emailInputField(
                     context: context,
@@ -97,7 +96,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         .add(UsernameChanged(username: value)));
               }),
               SizedBox(
-                height: 16,
+                height: 32,
               ),
               BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(builder: (context, state) {
                 return state.formStatus is RequestSubmitted
@@ -128,6 +127,21 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             });
       }),
     ]);
+  }
+
+  _showFullscreenDialog() {
+    Future.delayed(Duration.zero, (){
+      Navigator.of(context).push(PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (BuildContext context, _, __) =>
+              FullscreenDialog(
+                asset: 'assets/icons/forgot_password.png',
+                header: 'Check your email',
+                message: 'We have sent a password recover instructions to your email.',
+                buttonText: 'Back to login',
+                route: '/login',
+              )));
+    });
   }
 }
 

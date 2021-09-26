@@ -10,3 +10,22 @@ Text H1({String text}) {
     ),
   );
 }
+
+Text subHeader({String text}) {
+  return Text(text,
+      maxLines: 3,
+      style: TextStyle(
+        fontSize: 20
+      )
+  );
+}
+
+Text text({String text}) {
+  return Text(text,
+      maxLines: 3,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          fontSize: 14
+      )
+  );
+}

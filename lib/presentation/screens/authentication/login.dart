@@ -50,7 +50,8 @@ class _LoginPageState extends State<LoginPage> {
           HopautLogo(),
           SizedBox(height: 32),
           // TODO - Translate
-          H1(text: "Login"),
+          H1(text: "Welcome!"),
+          subHeader(text: "Login to continue"),
           SizedBox(height: 32),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 48),
@@ -105,6 +106,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
                 return passwordInputField(
+                    // TODO - Translate
+                    hint: "Enter a password",
                     context: context,
                     isTextObscured: state.obscureText,
                     isStateValid: state.isValidPassword,

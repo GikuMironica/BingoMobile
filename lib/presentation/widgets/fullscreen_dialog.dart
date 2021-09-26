@@ -4,6 +4,20 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 
 class FullscreenDialog extends StatelessWidget {
+  final String asset;
+  final String header;
+  final String message;
+  final String buttonText;
+  final String route;
+
+  FullscreenDialog({
+    @required this.asset,
+    @required this.header,
+    @required this.message,
+    @required this.buttonText,
+    @required this.route
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,13 +32,13 @@ class FullscreenDialog extends StatelessWidget {
           children: [
             SizedBox(height: 20,),
             Image.asset(
-              'assets/icons/confirm_email.png',
+              asset,
               height: 300,
               width: double.infinity,
             ),
             SizedBox(height: 20,),
             Text(
-              'Success!',
+              header,
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -35,8 +49,7 @@ class FullscreenDialog extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
               child: Text(
-                // TODO - Translation
-                'Please check your email. You will get soon an email confirmation link.',
+                message,
                 maxLines: 3,
                 style: TextStyle(
                     color: Colors.grey,
@@ -50,7 +63,7 @@ class FullscreenDialog extends StatelessWidget {
               onTap: (){
                 Future.delayed(Duration.zero, (){
                   Application.router.navigateTo(
-                      context, '/login',
+                      context, route,
                       replace: true,
                       transition: TransitionType.fadeIn,
                       clearStack: true,
@@ -67,8 +80,7 @@ class FullscreenDialog extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    // TODO - Translate
-                    'Back to login',
+                    buttonText,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,

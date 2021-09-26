@@ -5,6 +5,7 @@ Widget passwordInputField({
   @required bool isStateValid,
   @required bool isTextObscured,
   @required String validationMessage,
+  @required String hint,
   @required void Function(String) onChange,
   @required void Function() onObscureTap,
 }) {
@@ -31,7 +32,7 @@ Widget passwordInputField({
         // TODO - Translate
         labelText: 'Password',
         errorMaxLines: 3,
-        hintText: 'Enter a password',
+        hintText: hint,
         hintStyle: TextStyle(color: Colors.grey[400]),
         contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
         enabledBorder: OutlineInputBorder(
