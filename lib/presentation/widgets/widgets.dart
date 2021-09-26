@@ -51,7 +51,7 @@ Widget forgotPassword(BuildContext context) {
       FlatButton(
         padding: EdgeInsets.zero,
         onPressed: () {
-          Application.router.navigateTo(context, '/registration',
+          Application.router.navigateTo(context, '/forgot_password',
             replace: true,
             transition: TransitionType.fadeIn,
             transitionDuration: Duration());

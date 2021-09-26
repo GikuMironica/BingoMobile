@@ -60,9 +60,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
       BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
         if (state.formStatus is SubmissionSuccess){
           Future.delayed(Duration.zero, (){
-            // Application.router.navigateTo(context, '/fullscreen_dialog',
-            //     replace: false
-            // );
             Navigator.of(context).push(PageRouteBuilder(
                 opaque: false,
                 pageBuilder: (BuildContext context, _, __) =>

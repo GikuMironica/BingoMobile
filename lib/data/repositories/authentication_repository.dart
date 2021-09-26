@@ -108,7 +108,6 @@ class AuthenticationRepository extends Repository {
     final Map<String, dynamic> payload = {'email': email};
     try {
       Response response = await dio.post(API.FORGOT_PASSWORD, data: payload);
-
       return (response.statusCode == 200);
     } on DioError catch (e) {
       logger.e(e.message);

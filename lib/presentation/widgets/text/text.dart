@@ -4,7 +4,7 @@ Text H1({String text}) {
   return Text(
     text,
     style: TextStyle(
-      fontFamily: "Courier",
+      fontFamily: "Raleway",
       fontSize: 32,
       fontWeight: FontWeight.bold,
     ),

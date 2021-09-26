@@ -88,7 +88,7 @@ var changePasswordHandler = new Handler(
 var forgotPasswordHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
       return ForgotPasswordPage();
-    });
+});
 
 
 var eventPageHandler = new Handler(

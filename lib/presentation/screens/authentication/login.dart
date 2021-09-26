@@ -133,6 +133,7 @@ class _LoginPageState extends State<LoginPage> {
     return Column(children: [
       BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
         return authButton(
+          // TODO - translate
           label: 'Login',
           context: context,
           isStateValid: state.formStatus is SubmissionSuccess,
