@@ -6,6 +6,7 @@ Widget emailInputField({
   @required void Function(String) onChange,
 }) {
   return TextFormField(
+    autovalidateMode: AutovalidateMode.onUserInteraction,
     validator: (value) =>
         // TODO - Translation
       isStateValid ? null : 'Please input a valid email',

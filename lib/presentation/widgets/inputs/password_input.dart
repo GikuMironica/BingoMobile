@@ -13,6 +13,7 @@ Widget passwordInputField({
     validator: (value) =>
         // TODO - Translation
         isStateValid ? null : validationMessage,
+    autovalidateMode: AutovalidateMode.onUserInteraction,
     onChanged: onChange,
     obscureText: isTextObscured,
     decoration: InputDecoration(
