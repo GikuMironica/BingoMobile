@@ -161,6 +161,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           onPressed: state.formStatus is RegisterSubmitted
             ? () {}
             : () => {
+              FocusManager.instance.primaryFocus.unfocus(),
               if (_formKey.currentState.validate()) {
                 context.read<RegisterBloc>().add(new RegisterClicked())
               }

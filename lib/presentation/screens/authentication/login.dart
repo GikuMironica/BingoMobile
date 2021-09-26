@@ -143,12 +143,26 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: state.formStatus is LoginSubmitted
               ? () {}
               : () => {
+              FocusManager.instance.primaryFocus.unfocus(),
                 if (_formKey.currentState.validate()) {
                   context.read<LoginBloc>().add(new LoginClicked())
             }
           });
       }),
-      SizedBox(height: 10),
+      SizedBox(height: 10,),
+      Row(
+          children: <Widget>[
+            Expanded(
+                child: Divider()
+            ),
+            // TODO translate
+            Text(" Or continue with "),
+            Expanded(
+                child: Divider()
+            ),
+          ]
+      ),
+      SizedBox(height: 10,),
       BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
         return facebookButton(context, state);
       }),

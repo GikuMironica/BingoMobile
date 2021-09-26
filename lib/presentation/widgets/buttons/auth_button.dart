@@ -11,7 +11,7 @@ Widget authButton({
   @required void Function() onPressed,
 }) {
     return Container(
-        width: 200,
+        width: MediaQuery.of(context).size.width,
         height: 50.0,
         decoration: gradientBoxDecoration(),
         child: MaterialButton(
