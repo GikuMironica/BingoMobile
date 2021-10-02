@@ -5,7 +5,6 @@ const double defaultBorderRadius = 4;
 class StretchableButton extends StatelessWidget {
   final VoidCallback onPressed;
   final double borderRadius;
-  final double buttonPadding;
   final Color buttonColor, splashColor;
   final Color buttonBorderColor;
   final List<Widget> children;
@@ -17,18 +16,16 @@ class StretchableButton extends StatelessWidget {
     this.splashColor,
     this.buttonBorderColor,
     this.onPressed,
-    this.buttonPadding,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(buttonPadding),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: ButtonTheme(
-        minWidth: 200,
+        minWidth: MediaQuery.of(context).size.width,
         height: 50.0,
         child: RaisedButton(
           elevation: 10,

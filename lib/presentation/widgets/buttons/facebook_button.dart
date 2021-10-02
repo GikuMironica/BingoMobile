@@ -26,7 +26,6 @@ Widget facebookButton(BuildContext context, dynamic state){
     onPressed: state.formStatus is LoginSubmitted ? null : () {
       context.read<LoginBloc>().add(new FacebookLoginClicked());
     },
-    buttonPadding: 8.0,
     children: <Widget>[
       // Facebook doesn't provide strict sizes, so this is a good
       // estimate of their examples within documentation.

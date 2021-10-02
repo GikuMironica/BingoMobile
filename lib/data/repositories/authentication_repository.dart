@@ -1,4 +1,5 @@
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/data/domain/login_result.dart';
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -42,7 +43,7 @@ class AuthenticationRepository extends Repository {
   }
 
   /// Registers a user with the system.
-  Future<bool> register(
+  Future<AuthResult> register(
       {@required String email, @required String password}) async {
     final Map<String, dynamic> payload = {'email': email, 'password': password};
     Response response;
@@ -51,14 +52,15 @@ class AuthenticationRepository extends Repository {
         API.REGISTER,
         data: payload,
       );
-      // TODO - Handle use case if email was already used
     } on DioError catch (e) {
-      if (e.response != null) {
-        logger.e(e.response.data.toString());
-        return false;
+      // TODO - Handle use case if email was already used
+      if (e.response?.statusCode == 400) {
+        // TODO - translation
+        return AuthResult(isSuccessful: false, data: {"Error": "An account with this email already exists."});
       }
+
     }
-    return (response.statusCode == 200);
+    return AuthResult(isSuccessful: true, data: response.data["data"]);
   }
 
   Future<Map<String, dynamic>> loginWithFacebook() async {
@@ -106,7 +108,6 @@ class AuthenticationRepository extends Repository {
     final Map<String, dynamic> payload = {'email': email};
     try {
       Response response = await dio.post(API.FORGOT_PASSWORD, data: payload);
-
       return (response.statusCode == 200);
     } on DioError catch (e) {
       logger.e(e.message);

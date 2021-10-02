@@ -1,7 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/init.dart';
-import 'package:hopaut/presentation/screens/account/account_page/account_page.dart';
+import 'package:hopaut/presentation/screens/account/account_page.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_account.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_description.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_name.dart';
@@ -9,7 +9,8 @@ import 'package:hopaut/presentation/screens/account/edit_account/edit_profile_pi
 import 'package:hopaut/presentation/screens/announcements/announcement_screen.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
-import 'package:hopaut/presentation/screens/authentication/forgot_password/forgot_password.dart';
+import 'package:hopaut/presentation/screens/authentication/forgot_password.dart';
+import 'package:hopaut/presentation/screens/authentication/register.dart';
 import 'package:hopaut/presentation/screens/events/create_event/create_event.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/description.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/edit_event.dart';
@@ -23,10 +24,10 @@ import 'package:hopaut/presentation/screens/events/event_list/event_list.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/screens/events/rate_event/rate_event.dart';
 import 'package:hopaut/presentation/screens/home_page.dart';
-import 'package:hopaut/presentation/screens/authentication/login/login.dart';
-import 'package:hopaut/presentation/screens/authentication/register/register.dart';
+import 'package:hopaut/presentation/screens/authentication/login.dart';
 import 'package:hopaut/presentation/screens/settings/change_password.dart';
 import 'package:hopaut/presentation/screens/settings/settings.dart';
+import 'package:hopaut/presentation/widgets/fullscreen_dialog.dart';
 import 'package:hopaut/presentation/widgets/webview_widget.dart';
 
 var rootHandler = new Handler(
@@ -38,6 +39,11 @@ var homeHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return HomePage();
 });
+
+var fullscreenDialogHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+      return FullscreenDialog();
+    });
 
 var accountHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -82,7 +88,7 @@ var changePasswordHandler = new Handler(
 var forgotPasswordHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
       return ForgotPasswordPage();
-    });
+});
 
 
 var eventPageHandler = new Handler(

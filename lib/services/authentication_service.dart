@@ -50,10 +50,12 @@ class AuthenticationService with ChangeNotifier {
 
   Future<void> applyToken(Map<String, dynamic> data) async {
     final Map<String, dynamic> parsedData = Jwt.parseJwt(data['Token']);
-    await Hive.box('auth').put('identity', parsedData);
+    await Future.wait([
+      Hive.box('auth').put('identity', parsedData),
+      writeTokenToKeychain(
+          token: data['Token'], refreshToken: data['RefreshToken'])
+    ]);
 
-    await writeTokenToKeychain(
-        token: data['Token'], refreshToken: data['RefreshToken']);
     setIdentity(Identity.fromJson(parsedData));
     getIt<DioService>().setBearerToken(data['Token']);
   }
@@ -61,25 +63,25 @@ class AuthenticationService with ChangeNotifier {
   User get user => _user;
 
   Future<void> refreshUser(bool notificationsAllowed) async {
-    final User user = await _userRepository.get(_identity.id);
-    setUser(user);
-    if (!oneSignalSettings) {
-      await setOneSignalParams(notificationsAllowed ?? false);
-    }
-  }
-
-  Future<void> setOneSignalParams(bool notificationsAllowed) async {
-    notificationsAllowed
-        ? await getPermissions(notificationsAllowed)
-        : oneSignalSettings = false;
-  }
-
-  Future<void> getPermissions(bool notificationsAllowed) async{
-    await Future.wait([
-      OneSignal.shared.setSubscription(true),
-      OneSignal.shared.setExternalUserId(currentIdentity.id)
+    List<dynamic> allResult = await Future.wait([
+      _userRepository.get(_identity.id),
+      !oneSignalSettings
+          ? initializeOneSignalSubscription(notificationsAllowed ?? false)
+          : null
     ]);
-    oneSignalSettings = notificationsAllowed;
+    User user = allResult.first;
+    setUser(user);
+  }
+
+  Future<void> initializeOneSignalSubscription(
+      bool notificationsAllowed) async {
+    if (notificationsAllowed) {
+      await Future.wait([
+        OneSignal.shared.setSubscription(notificationsAllowed),
+        OneSignal.shared.setExternalUserId(currentIdentity.id)
+      ]);
+      oneSignalSettings = true;
+    }
   }
 
   void setUser(User user) {
@@ -90,17 +92,17 @@ class AuthenticationService with ChangeNotifier {
   /// Log the user in.
   ///
   /// Triggers Identity Repository -> [IdentityRepository.login()]
-  Future<LoginResult> loginWithEmail(String email, String password) async {
+  Future<AuthResult> loginWithEmail(String email, String password) async {
     Map<String, dynamic> _loginResult =
         await _authenticationRepository.login(email: email, password: password);
     if (_loginResult is Map<String, dynamic>) {
       if (_loginResult.containsKey('Token')) {
         await applyToken(_loginResult);
-        return LoginResult(isSuccessful: true);
+        return AuthResult(isSuccessful: true);
       }
     }
     // TODO - Refactor to return Result Object with Bool and Error if exists
-    return LoginResult(isSuccessful: false, data: _loginResult);
+    return AuthResult(isSuccessful: false, data: _loginResult);
   }
 
   Future<bool> loginWithFb() async {
@@ -121,9 +123,8 @@ class AuthenticationService with ChangeNotifier {
           .isAfter(DateTime.fromMillisecondsSinceEpoch(_identity.expiry))) {
         print('Refreshing Token');
         // TODO - jwttoken is read twice on startup
-        final token = await _secureStorageService.read(key: 'token');
-        final refreshToken =
-            // TODO - refresh toke is read twice on startup
+        dynamic token = await _secureStorageService.read(key: 'token');
+        dynamic refreshToken =
             await _secureStorageService.read(key: 'refreshToken');
         Map<String, dynamic> _refreshResult =
             await _authenticationRepository.refresh(token, refreshToken);
@@ -137,8 +138,8 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 
-  Future<bool> register(String email, String password) async {
-    bool _registrationResult = await _authenticationRepository.register(
+  Future<AuthResult> register(String email, String password) async {
+    AuthResult _registrationResult = await _authenticationRepository.register(
         email: email, password: password);
     return _registrationResult;
   }
