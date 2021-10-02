@@ -7,7 +7,6 @@ import 'package:hopaut/controllers/blocs/register/register_bloc.dart';
 import 'package:hopaut/controllers/blocs/register/register_event.dart';
 import 'package:hopaut/controllers/blocs/register/register_page_status.dart';
 import 'package:hopaut/controllers/blocs/register/register_state.dart';
-import 'package:hopaut/presentation/widgets/animations.dart';
 import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/fullscreen_dialog.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
@@ -144,7 +143,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ? circularProgressIndicator()
                     : _registerButton();
               }),
-              SizedBox(height: 32),
+              SizedBox(
+                height: 16,
+              ),
+              privacyPolicyAndTerms(context: context, actionText: 'By signing up'),
             ],
           )),
     );
@@ -155,7 +157,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         child: BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
         return authButton(
           // TODO - Translate
-          label: 'Register',
+          label: 'Sign Up',
           context: context,
           isStateValid: state.formStatus is SubmissionSuccess,
           onPressed: state.formStatus is RegisterSubmitted

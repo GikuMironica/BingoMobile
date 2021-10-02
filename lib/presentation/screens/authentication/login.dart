@@ -15,7 +15,6 @@ import 'package:hopaut/presentation/widgets/logo/logo.dart';
 import 'package:hopaut/presentation/widgets/text/text.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/controllers/blocs/login/login_event.dart';
-import 'package:hopaut/presentation/widgets/animations.dart';
 
 class LoginPage extends StatefulWidget {
   @override

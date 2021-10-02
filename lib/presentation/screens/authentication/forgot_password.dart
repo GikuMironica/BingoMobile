@@ -4,7 +4,6 @@ import 'package:hopaut/controllers/blocs/forgot_password/forgotpassword_bloc.dar
 import 'package:hopaut/controllers/blocs/forgot_password/forgotpassword_event.dart';
 import 'package:hopaut/controllers/blocs/forgot_password/forgotpassword_state.dart';
 import 'package:hopaut/controllers/blocs/forgot_password/forgotpassword_status.dart';
-import 'package:hopaut/presentation/widgets/animations.dart';
 import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/fullscreen_dialog.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
