@@ -1,9 +1,9 @@
-
 import 'package:email_validator/email_validator.dart';
-import 'package:hopaut/controllers/blocs/base_state.dart';
-import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
 
-class LoginState extends BaseState{
+import '../base_state.dart';
+import 'login_page_status.dart';
+
+class LoginState extends BaseState {
   //validators
   bool get isValidEmail => EmailValidator.validate(username.trim());
   bool get isValidPassword => password.isNotEmpty;
@@ -25,7 +25,7 @@ class LoginState extends BaseState{
     String password,
     bool obscureText,
     LoginPageStatus formStatus,
-  }){
+  }) {
     return LoginState(
       username: username ?? this.username,
       password: password ?? this.password,

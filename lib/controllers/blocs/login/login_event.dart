@@ -1,10 +1,11 @@
-import 'package:hopaut/controllers/blocs/base_event.dart';
-import 'package:hopaut/controllers/blocs/base_state.dart';
-import 'package:hopaut/controllers/blocs/login/login_state.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
 import 'package:hopaut/data/domain/login_result.dart';
+
+import '../base_event.dart';
+import '../base_state.dart';
+import 'login_state.dart';
 
 abstract class LoginEvent extends BaseEvent {
   AuthenticationService authService = GetIt.I.get<AuthenticationService>();

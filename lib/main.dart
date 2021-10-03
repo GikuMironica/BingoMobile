@@ -8,16 +8,18 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
-import 'package:hopaut/controllers/search_page_controller/search_page_controller.dart';
+import 'package:hopaut/data/repositories/tag_repository.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/services/dio_service.dart';
-import 'package:hopaut/services/event_service.dart';
 import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:hopaut/services/settings_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'controllers/providers/search_page_controller.dart';
+import 'data/repositories/event_repository.dart';
+import 'controllers/providers/event_provider.dart';
 import 'init.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'dart:io' show Platform;
@@ -115,12 +117,16 @@ class _HopAutState extends State<HopAut> {
         providers: [
           ChangeNotifierProvider<AuthenticationService>(
               create: (context) => getIt<AuthenticationService>()),
-          ChangeNotifierProvider<EventService>(
-              create: (context) => getIt<EventService>()),
           ChangeNotifierProvider<SettingsService>(
               create: (context) => getIt<SettingsService>()),
           ChangeNotifierProvider<SearchPageController>(
             create: (_) => SearchPageController(),
+            lazy: true,
+          ),
+          ChangeNotifierProvider<EventProvider>(
+            create: (_) => EventProvider(
+                eventRepository: getIt<EventRepository>(),
+                tagRepository: getIt<TagRepository>()),
             lazy: true,
           )
         ],

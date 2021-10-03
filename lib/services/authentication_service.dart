@@ -6,7 +6,6 @@ import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/authentication_repository.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/services/dio_service.dart';
-import 'package:hopaut/services/event_service.dart';
 import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -17,7 +16,6 @@ import 'package:hopaut/data/domain/login_result.dart';
 class AuthenticationService with ChangeNotifier {
   final SecureStorageService _secureStorageService;
   final DioService _dioService;
-  final EventService _eventService;
 
   final UserRepository _userRepository;
   final AuthenticationRepository _authenticationRepository;
@@ -31,7 +29,6 @@ class AuthenticationService with ChangeNotifier {
       : _secureStorageService = getIt<SecureStorageService>(),
         _userRepository = getIt<UserRepository>(),
         _dioService = getIt<DioService>(),
-        _eventService = getIt<EventService>(),
         _authenticationRepository = getIt<AuthenticationRepository>();
 
   Identity get currentIdentity => _identity;
@@ -149,7 +146,7 @@ class AuthenticationService with ChangeNotifier {
     _secureStorageService.deleteAll();
     _dioService.removeBearerToken();
 
-    _eventService.reset();
+    // _eventService.reset(); TODO: figure it out
     setIdentity(null);
     setUser(null);
     if (oneSignalSettings) {

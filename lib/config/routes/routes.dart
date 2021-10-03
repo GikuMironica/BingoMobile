@@ -32,7 +32,6 @@ class Routes {
   static String editEventRequirements = '/edit-event/requirements';
   static String editEventPictures = '/edit-event/pictures';
   static String editEventTime = '/edit-event/time';
-  static String eventList = '/event-list';
   // -- ANNOUNCEMENTS ---------------------------------------------------------
   static String announcements = '/announcements';
   static String announcementById = '/announcements/:id';
@@ -42,6 +41,7 @@ class Routes {
     router.notFoundHandler = Handler(
         handlerFunc: (BuildContext ctx, Map<String, List<String>> params) {
       print('Error: Route not found');
+      return null;
     });
 
     router.define(root, handler: rootHandler);
@@ -52,7 +52,8 @@ class Routes {
     router.define(account, handler: accountHandler);
     router.define(editAccount, handler: editAccountHandler);
     router.define(editAccountName, handler: editAccountNameHandler);
-    router.define(editAccountDescription, handler: editAccountDescriptionHandler);
+    router.define(editAccountDescription,
+        handler: editAccountDescriptionHandler);
     router.define(editAccountPicture, handler: editAccountPictureHandler);
     router.define(settings, handler: settingsHandler);
     router.define(changePassword, handler: changePasswordHandler);
@@ -61,7 +62,6 @@ class Routes {
     router.define(privacyPolicy, handler: ppHandler);
 
     // EVENT
-    router.define(eventList, handler: eventListHandler);
     router.define(event, handler: eventPageHandler);
     router.define(createEvent, handler: createEventHandler);
     router.define(editEvent, handler: editEventHandler);

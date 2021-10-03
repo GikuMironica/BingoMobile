@@ -7,7 +7,7 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/services/dio_service.dart';
-import 'package:hopaut/utils/image_conversion.dart';
+import 'package:hopaut/utils/image_utilities.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'dart:io';

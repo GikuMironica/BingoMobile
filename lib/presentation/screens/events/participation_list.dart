@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/repositories/participant_repository.dart';
@@ -15,7 +16,7 @@ import 'package:hopaut/presentation/screens/events/request_list.dart';
 class ParticipationList extends StatefulWidget {
   final int postId;
   final String postTitle;
-  final int postType;
+  final EventType postType;
 
   ParticipationList({this.postId, this.postTitle, this.postType});
 

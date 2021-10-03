@@ -1,7 +1,7 @@
-
 import 'package:email_validator/email_validator.dart';
-import 'package:hopaut/controllers/blocs/base_state.dart';
-import 'package:hopaut/controllers/blocs/forgot_password/forgotpassword_status.dart';
+
+import '../base_state.dart';
+import 'forgotpassword_status.dart';
 
 class ForgotPasswordState extends BaseState {
   //validators
@@ -10,10 +10,7 @@ class ForgotPasswordState extends BaseState {
   final String username;
   ForgotPasswordStatus formStatus;
 
-  ForgotPasswordState({
-    this.username = '',
-    this.formStatus = const Idle()
-  });
+  ForgotPasswordState({this.username = '', this.formStatus = const Idle()});
 
   ForgotPasswordState copyWith({
     String username,

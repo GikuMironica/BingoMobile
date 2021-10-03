@@ -11,7 +11,6 @@ import 'package:hopaut/presentation/screens/announcements/announcements_index.da
 import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
 import 'package:hopaut/presentation/screens/authentication/forgot_password.dart';
 import 'package:hopaut/presentation/screens/authentication/register.dart';
-import 'package:hopaut/presentation/screens/events/create_event/create_event.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/description.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/edit_event.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/location/map.dart';
@@ -20,9 +19,9 @@ import 'package:hopaut/presentation/screens/events/edit_event/requirements.dart'
 import 'package:hopaut/presentation/screens/events/edit_event/tags.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/time.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/title.dart';
-import 'package:hopaut/presentation/screens/events/event_list/event_list.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
-import 'package:hopaut/presentation/screens/events/rate_event/rate_event.dart';
+import 'package:hopaut/presentation/screens/events/rate_event.dart';
+import 'package:hopaut/presentation/screens/events/replace/replace_event_page.dart';
 import 'package:hopaut/presentation/screens/home_page.dart';
 import 'package:hopaut/presentation/screens/authentication/login.dart';
 import 'package:hopaut/presentation/screens/settings/change_password.dart';
@@ -42,8 +41,8 @@ var homeHandler = new Handler(
 
 var fullscreenDialogHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-      return FullscreenDialog();
-    });
+  return FullscreenDialog();
+});
 
 var accountHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -87,9 +86,8 @@ var changePasswordHandler = new Handler(
 
 var forgotPasswordHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-      return ForgotPasswordPage();
+  return ForgotPasswordPage();
 });
-
 
 var eventPageHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -103,17 +101,12 @@ var rateEventHandler = new Handler(
 
 var createEventHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return CreateEventPage();
+  return ReplaceEventPage();
 });
 
 var editEventHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return EditEventPage();
-});
-
-var eventListHandler = new Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return EventList();
 });
 
 var editEventDescriptionHandler = new Handler(

@@ -9,7 +9,7 @@ Widget emailInputField({
     autovalidateMode: AutovalidateMode.onUserInteraction,
     validator: (value) =>
         // TODO - Translation
-      isStateValid ? null : 'Please input a valid email',
+        isStateValid ? null : 'Please input a valid email',
     onChanged: onChange,
     decoration: InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
@@ -34,4 +34,3 @@ Widget emailInputField({
     ),
   );
 }
-

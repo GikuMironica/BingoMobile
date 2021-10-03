@@ -1,5 +1,4 @@
 import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/services/date_formatter_service.dart';
@@ -42,12 +41,12 @@ class MiniPost {
 
   MiniPost.fromPost(Post post) {
     postId = post.id;
-    postType = post.event.eventType;
-    address = post.location.address;
+    postType = post.event.eventType.index;
+    //address = post.location.address; TODO: fix address
     title = post.event.title;
     hostRating = post.hostRating;
-    latitude = post.location.latitude;
-    longitude = post.location.longitude;
+    //latitude = post.location.latitude;
+    //longitude = post.location.longitude;
     postTime = post.postTime;
     startTime = post.eventTime;
     endTime = post.endTime;
@@ -95,7 +94,6 @@ class MiniPost {
     return data;
   }
 
-  String get type => eventTypes[postType];
   String get getStartTime =>
       getIt<DateFormatterService>().formatDateTime(startTime);
   DateTime get getPostTimeAsDT =>
