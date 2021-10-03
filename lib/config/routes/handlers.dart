@@ -10,7 +10,6 @@ import 'package:hopaut/presentation/screens/announcements/announcement_screen.da
 import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
 import 'package:hopaut/presentation/screens/authentication/forgot_password/forgot_password.dart';
-import 'package:hopaut/presentation/screens/events/create_event.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/description.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/edit_event.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/location/map.dart';
@@ -21,6 +20,7 @@ import 'package:hopaut/presentation/screens/events/edit_event/time.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/title.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/screens/events/rate_event.dart';
+import 'package:hopaut/presentation/screens/events/replace/replace_event_page.dart';
 import 'package:hopaut/presentation/screens/home_page.dart';
 import 'package:hopaut/presentation/screens/authentication/login/login.dart';
 import 'package:hopaut/presentation/screens/authentication/register/register.dart';
@@ -95,7 +95,7 @@ var rateEventHandler = new Handler(
 
 var createEventHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return CreateEventForm();
+  return ReplaceEventPage();
 });
 
 var editEventHandler = new Handler(

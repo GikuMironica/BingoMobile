@@ -70,8 +70,10 @@ class _HomePageState extends State<HomePage> {
   List<Widget> _buildScreens() {
     return [
       SearchPage(),
-      EventListPage("Events List", true), //TODO: translation
-      EventListPage("Attending Events List", false), //TODO: translation
+      EventListPage(title: "Events List", isMyEvents: true), //TODO: translation
+      EventListPage(
+          title: "Attending Events List",
+          isMyEvents: false), //TODO: translation
       AccountPage(),
     ];
   }

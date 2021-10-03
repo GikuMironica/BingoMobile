@@ -9,7 +9,7 @@ import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/providers/event_provider.dart';
-import 'package:hopaut/utils/image_conversion.dart';
+import 'package:hopaut/utils/image_utilities.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -88,7 +88,7 @@ class _EditPostPicturesState extends State<EditPostPictures> {
         }
       }
 
-      _remainingImagesGuids = _oldPost.pictures;
+      //_remainingImagesGuids = _oldPost.pictures;
       return Scaffold(
         appBar: AppBar(
           elevation: 0,

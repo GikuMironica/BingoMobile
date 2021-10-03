@@ -7,23 +7,19 @@ import 'package:hopaut/presentation/widgets/hopaut_app_bar.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class EventListPage extends StatelessWidget {
-  String _title;
-  bool _isMyEvents;
-  List<String> _listTypes;
+  final String title;
+  final bool isMyEvents;
 
-  EventListPage(String title, bool isMyEvents) {
-    _title = title;
-    _isMyEvents = isMyEvents;
-    _listTypes = isMyEvents
-        ? [API.MY_ACTIVE, API.MY_INACTIVE]
-        : [API.ATTENDING_ACTIVE, API.ATTENDED_INACTIVE];
-  }
+  EventListPage({this.title, this.isMyEvents});
 
   @override
   Widget build(BuildContext context) {
-    final List<String> _tabs = ['Current', 'Past']; // TODO: translate(maybe)
+    final List<String> listTypes = isMyEvents
+        ? [API.MY_ACTIVE, API.MY_INACTIVE]
+        : [API.ATTENDING_ACTIVE, API.ATTENDED_INACTIVE];
+    final List<String> tabs = ['Current', 'Past']; // TODO: translate(maybe)
     return Scaffold(
-      floatingActionButton: _isMyEvents
+      floatingActionButton: isMyEvents
           ? FloatingActionButton(
               heroTag: 'create-event',
               child: Icon(Icons.add, color: Colors.white, size: 24),
@@ -46,7 +42,7 @@ class EventListPage extends StatelessWidget {
               sliver: MultiSliver(
                 children: [
                   HopAutAppBar(
-                    title: _title,
+                    title: title,
                     actions: <Widget>[
                       IconButton(
                         icon: SvgPicture.asset(
@@ -67,7 +63,7 @@ class EventListPage extends StatelessWidget {
                         indicatorColor: HATheme.HOPAUT_PINK,
                         labelColor: Colors.white,
                         unselectedLabelColor: Colors.white70,
-                        tabs: _tabs
+                        tabs: tabs
                             .map((e) => Tab(
                                   text: e,
                                 ))
@@ -81,8 +77,8 @@ class EventListPage extends StatelessWidget {
             ),
           ],
           body: TabBarView(children: <Widget>[
-            EventsListView(_listTypes[0]),
-            EventsListView(_listTypes[1])
+            EventsListView(listType: listTypes[0]),
+            EventsListView(listType: listTypes[1])
           ]),
         ),
       ),

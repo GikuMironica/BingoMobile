@@ -6,17 +6,21 @@ import 'package:hopaut/data/models/event_list.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
+import 'package:hopaut/data/repositories/tag_repository.dart';
 
 enum EventProviderStatus { Idle, Loading, Error }
 
 class EventProvider extends ChangeNotifier {
   EventRepository _eventRepository;
+  TagRepository _tagRepository;
   HashMap<String, EventList> _eventsMap;
   Post _postContext;
   int _miniPostContextId;
 
-  EventProvider({EventRepository eventRepository}) {
+  EventProvider(
+      {EventRepository eventRepository, TagRepository tagRepository}) {
     _eventRepository = eventRepository;
+    _tagRepository = tagRepository;
     _initEventMap();
   }
 
@@ -47,11 +51,15 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  void addEvent(MiniPost event) {
+  // TODO: Make to submethods for create and update
+  Future<MiniPost> createOrUpdateEvent(Post post) async {
     if (_eventsMap[API.MY_ACTIVE] != null) {
-      _eventsMap[API.MY_ACTIVE].events.insert(0, event);
-      notifyListeners();
+      await _eventRepository.create(post);
+      MiniPost miniPost = MiniPost.fromPost(post);
+      _eventsMap[API.MY_ACTIVE].events.insert(0, miniPost);
+      return miniPost;
     }
+    return null;
   }
 
   void removeEvent(int id) {
@@ -61,6 +69,27 @@ class EventProvider extends ChangeNotifier {
           .removeWhere((event) => event.postId == id);
       notifyListeners();
     }
+  }
+
+  Future<List<String>> getTagSuggestions(
+      String pattern, List<String> currentTags) async {
+    List<String> suggestionList = [];
+    pattern = pattern
+        .replaceAll(RegExp(r"[^\s\w]"), '')
+        .replaceAll(RegExp(r" "), '-');
+    if (pattern.length > 2) {
+      List<String> tagResultList = await _tagRepository.get(pattern);
+      if (tagResultList.isNotEmpty && pattern == tagResultList.first) {
+        tagResultList.removeAt(0);
+      }
+      suggestionList = [pattern, ...tagResultList];
+      currentTags.forEach((tag) {
+        if (pattern == tag) {
+          suggestionList.removeAt(0);
+        }
+      });
+    }
+    return suggestionList;
   }
 
   void setPostDescription(String text) {

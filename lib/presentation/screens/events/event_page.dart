@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/data/models/picture.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/models/profile.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
@@ -84,9 +85,9 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   void checkForImages() {
     if (post.pictures.length != 0) {
       postHasPictures = true;
-      for (String picture in post.pictures) {
-        _postImages
-            .add(CachedNetworkImageProvider('${WEB.IMAGES}/$picture.webp'));
+      for (Picture picture in post.pictures) {
+        _postImages.add(
+            CachedNetworkImageProvider('${WEB.IMAGES}/${picture.path}.webp'));
       }
     }
   }
@@ -252,7 +253,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                               width: 1,
                             ),
                             Text(
-                              post.event.type,
+                              post.event.eventType.toString(),
                             ),
                             SizedBox(
                               width: 4,

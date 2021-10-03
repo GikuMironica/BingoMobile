@@ -9,7 +9,7 @@ class TagRepository extends Repository {
 
   TagRepository() : super();
 
-  Future<List<String>> get({String pattern}) async {
+  Future<List<String>> get(String pattern) async {
     try {
       Response response = await dio.get('$_endpoint/$pattern');
       if (response.statusCode == 200) {

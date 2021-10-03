@@ -7,21 +7,21 @@ import 'package:provider/provider.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
 
 class EventsListView extends StatelessWidget {
-  String _listType;
+  final String listType;
 
-  EventsListView(this._listType);
+  EventsListView({this.listType});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
-      provider.fetchEventList(_listType);
+      provider.fetchEventList(listType);
 
-      return provider.eventsMap[_listType].state == EventListState.loading
+      return provider.eventsMap[listType].state == EventListState.loading
           ? Center(
               child: CupertinoActivityIndicator(),
             )
-          : provider.eventsMap[_listType].state == EventListState.idle &&
-                  provider.eventsMap[_listType].events.isNotEmpty
+          : provider.eventsMap[listType].state == EventListState.idle &&
+                  provider.eventsMap[listType].events.isNotEmpty
               ? SafeArea(
                   top: false,
                   bottom: false,
@@ -43,17 +43,17 @@ class EventsListView extends StatelessWidget {
                               onTap: () async {
                                 provider.setMiniPostContext(index);
                                 int id = provider
-                                    .eventsMap[_listType].events[index].postId;
+                                    .eventsMap[listType].events[index].postId;
                                 await Application.router
                                     .navigateTo(context, '/event/$id');
                               },
                               child: MiniPostCard(
                                 miniPost:
-                                    provider.eventsMap[_listType].events[index],
+                                    provider.eventsMap[listType].events[index],
                               ),
                             ),
                             childCount:
-                                provider.eventsMap[_listType].events.length,
+                                provider.eventsMap[listType].events.length,
                           ),
                         ),
                       ),

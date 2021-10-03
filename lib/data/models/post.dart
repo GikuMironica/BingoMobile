@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/data/models/picture.dart';
 import 'package:hopaut/services/date_formatter_service.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
@@ -26,7 +28,7 @@ class Post {
   int voucherDataId;
   int announcementsDataId;
   int attendanceDataId;
-  List<String> pictures;
+  List<Picture> pictures;
   List<String> tags;
 
   Post(
@@ -46,7 +48,17 @@ class Post {
       this.announcementsDataId,
       this.attendanceDataId,
       this.pictures,
-      this.tags});
+      this.tags}) {
+    if (pictures == null) {
+      pictures = [null, null, null];
+    }
+    if (event == null) {
+      event = Event();
+    }
+    if (tags == null) {
+      tags = List<String>();
+    }
+  }
 
   Post.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
@@ -100,7 +112,7 @@ class Post {
       data['Event.Title'] = this.event.title;
       data['Event.Currency'] = this.event.currency;
       data['Event.EntrancePrice'] = this.event.entrancePrice;
-      data['Event.EventType'] = this.event.eventType;
+      data['Event.EventType'] = this.event.eventType.index;
     }
     if (pictures.isNotEmpty) {
       String mimeType = mimeFromExtension('webp');
@@ -108,17 +120,17 @@ class Post {
       String type = mimeType.split('/')[1];
       if (pictures[0] != null)
         data['Picture1'] = await MultipartFile.fromFile(
-            File(pictures[0]).absolute.path,
+            File(pictures[0].path).absolute.path,
             filename: '0.webp',
             contentType: MediaType(mimee, type));
       if (pictures[1] != null)
         data['Picture2'] = await MultipartFile.fromFile(
-            File(pictures[1]).absolute.path,
+            File(pictures[1].path).absolute.path,
             filename: '1.webp',
             contentType: MediaType(mimee, type));
       if (pictures[2] != null)
         data['Picture3'] = await MultipartFile.fromFile(
-            File(pictures[2]).absolute.path,
+            File(pictures[2].path).absolute.path,
             filename: '2.webp',
             contentType: MediaType(mimee, type));
     }
@@ -133,8 +145,8 @@ class Post {
 
   List<String> pictureUrls() {
     List<String> pics = List();
-    for (String picture in pictures) {
-      if (picture != null) pics.add("${WEB.IMAGES}/$picture.webp");
+    for (Picture picture in pictures) {
+      if (picture != null) pics.add("${WEB.IMAGES}/${picture.path}.webp");
     }
     return pics;
   }
@@ -160,5 +172,13 @@ class Post {
 
   void setStartTime(int int) {
     this.eventTime = int;
+  }
+
+  void setPicture(Picture picture, int index) {
+    pictures[index] = picture;
+  }
+
+  void removePicture(int index) {
+    pictures[index] = null;
   }
 }

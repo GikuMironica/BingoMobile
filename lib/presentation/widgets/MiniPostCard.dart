@@ -68,7 +68,7 @@ class MiniPostCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        miniPost.type,
+                        miniPost.postType.toString(),
                         style:
                             TextStyle(color: Color(0xFF9A9DB2), fontSize: 11),
                       ),

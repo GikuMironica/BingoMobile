@@ -27,7 +27,7 @@ class EventRepository extends Repository {
     return null;
   }
 
-  Future<MiniPost> create(Post post, List images) async {
+  Future<MiniPost> create(Post post) async {
     try {
       FormData _data = FormData.fromMap(await post.toMultipartJson());
       Response response = await dio.post(API.POSTS,

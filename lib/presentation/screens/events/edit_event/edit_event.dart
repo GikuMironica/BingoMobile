@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/config/injection.dart';
-import 'package:hopaut/config/paid_event_types.dart';
+import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/widgets/clock_icons.dart';
@@ -19,7 +18,7 @@ class EditEventPage extends StatefulWidget {
 class _EditEventPageState extends State<EditEventPage> {
   bool _userIsHost;
   Post post;
-  PaidEventType _paidEventType = PaidEventType.NONE;
+  EventType _paidEventType;
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +27,15 @@ class _EditEventPageState extends State<EditEventPage> {
     // TODO: Create an Error page that allows the user to return to the home page.
     return Consumer<EventProvider>(builder: (context, provider, child) {
       post = provider.postContext;
-      switch (post.event.eventType) {
+      switch (post.event.eventType.index) {
         case 1:
-          _paidEventType = PaidEventType.HOUSE_PARTY;
+          _paidEventType = EventType.houseParty;
           break;
         case 2:
-          _paidEventType = PaidEventType.CLUB;
+          _paidEventType = EventType.club;
           break;
         case 3:
-          _paidEventType = PaidEventType.BAR;
+          _paidEventType = EventType.bar;
           break;
         default:
           break;
@@ -91,7 +90,7 @@ class _EditEventPageState extends State<EditEventPage> {
               ),
               Divider(),
               Visibility(
-                visible: _paidEventType == PaidEventType.HOUSE_PARTY,
+                visible: _paidEventType == EventType.houseParty,
                 child: Column(
                   children: <Widget>[
                     ListTile(
@@ -103,7 +102,7 @@ class _EditEventPageState extends State<EditEventPage> {
                 ),
               ),
               Visibility(
-                visible: _paidEventType != PaidEventType.NONE,
+                visible: _paidEventType != null,
                 child: Column(
                   children: <Widget>[
                     ListTile(

@@ -126,7 +126,7 @@ class _EditPostTagsState extends State<EditPostTags> {
                           .replaceAll(RegExp(r" "), '-');
                       if (pattern.length > 2) {
                         List<String> tagResultList =
-                            await getIt<TagRepository>().get(pattern: pattern);
+                            await getIt<TagRepository>().get(pattern);
                         if (tagResultList.isNotEmpty) {
                           if (pattern == tagResultList.first) {
                             tagResultList.removeAt(0);

@@ -1,7 +1,6 @@
 import 'dart:collection';
+import 'package:hopaut/config/event_types.dart';
 import 'package:recase/recase.dart';
-
-import 'event_type.dart';
 
 class SearchQuery {
   double latitude;

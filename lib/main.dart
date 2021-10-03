@@ -8,6 +8,7 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
+import 'package:hopaut/data/repositories/tag_repository.dart';
 import 'package:hopaut/providers/search_page_controller.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
@@ -126,8 +127,9 @@ class _HopAutState extends State<HopAut> {
             lazy: true,
           ),
           ChangeNotifierProvider<EventProvider>(
-            create: (_) =>
-                EventProvider(eventRepository: getIt<EventRepository>()),
+            create: (_) => EventProvider(
+                eventRepository: getIt<EventRepository>(),
+                tagRepository: getIt<TagRepository>()),
             lazy: true,
           )
         ],
