@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:hopaut/providers/blocs/login/login_bloc.dart';
-import 'package:hopaut/providers/blocs/login/login_event.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-Widget passwordInputField(BuildContext context, dynamic state) {
+Widget passwordInputField({
+  @required BuildContext context,
+  @required bool isStateValid,
+  @required bool isTextObscured,
+  @required String validationMessage,
+  @required String hint,
+  @required void Function(String) onChange,
+  @required void Function() onObscureTap,
+}) {
   return TextFormField(
     validator: (value) =>
         // TODO - Translation
-        state.isValidPassword ? null : 'Please input your password',
-    onChanged: (value) =>
-        context.read<LoginBloc>().add(LoginPasswordChanged(password: value)),
-    obscureText: state.obscureText,
+        isStateValid ? null : validationMessage,
+    autovalidateMode: AutovalidateMode.onUserInteraction,
+    onChanged: onChange,
+    obscureText: isTextObscured,
     decoration: InputDecoration(
         floatingLabelBehavior: FloatingLabelBehavior.always,
         alignLabelWithHint: true,
         suffixIcon: GestureDetector(
-          onTap: () async {
+          onTap: () {
             FocusManager.instance.primaryFocus.unfocus();
-            context
-                .read<LoginBloc>()
-                .add(ShowPasswordClicked(obscureText: state.obscureText));
-            FocusManager.instance.primaryFocus.unfocus();
-            // TODO - Don't pop up keyboard on tap of 'Show password button'
-            // at this point state is still not updated.
-            // await Future<void>.delayed(
-            //     const Duration(seconds: 3), () => {
-            //       context.read<LoginBloc>().add(ShowPasswordClicked(obscureText: state.obscureText))
-            //     }
-            // );
+            onObscureTap();
           },
           child: Icon(
             Icons.remove_red_eye_outlined,
@@ -35,8 +30,10 @@ Widget passwordInputField(BuildContext context, dynamic state) {
           ),
         ),
         isDense: true,
+        // TODO - Translate
         labelText: 'Password',
-        hintText: 'Enter a password',
+        errorMaxLines: 3,
+        hintText: hint,
         hintStyle: TextStyle(color: Colors.grey[400]),
         contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
         enabledBorder: OutlineInputBorder(

@@ -1,6 +1,6 @@
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/data/domain/login_result.dart';
 import 'package:hopaut/data/repositories/repository.dart';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:injectable/injectable.dart';
@@ -22,15 +22,28 @@ class AuthenticationRepository extends Repository {
         data: payload,
       );
     } on DioError catch (e) {
-      if (e.response != null) {
-        print(e.response.data.toString());
+      if (e.response?.statusCode == 400 && e.response.data["FailReason"]==2) {
+        // TODO - translation
+        Map<String, String> result = {"Error": "Invalid username or password"};
+        return result;
+      }
+      // TODO - Handle use case where email not confirmed or account blocked due to the amount of tries
+      if (e.response?.statusCode == 403 && e.response.data["FailReason"]==0){
+        // TODO - translation
+        Map<String, String> result = {"Error": "Please confirm your email"};
+        return result;
+      }
+      if (e.response?.statusCode == 403 && e.response.data["FailReason"]==1){
+        // TODO - translation
+        Map<String, String> result = {"Error": "Too many invalid login attempts, try again later."};
+        return result;
       }
     }
     return response.data;
   }
 
   /// Registers a user with the system.
-  Future<bool> register(
+  Future<AuthResult> register(
       {@required String email, @required String password}) async {
     final Map<String, dynamic> payload = {'email': email, 'password': password};
     Response response;
@@ -40,12 +53,14 @@ class AuthenticationRepository extends Repository {
         data: payload,
       );
     } on DioError catch (e) {
-      if (e.response != null) {
-        logger.e(e.response.data.toString());
-        return false;
+      // TODO - Handle use case if email was already used
+      if (e.response?.statusCode == 400) {
+        // TODO - translation
+        return AuthResult(isSuccessful: false, data: {"Error": "An account with this email already exists."});
       }
+
     }
-    return (response.statusCode == 200);
+    return AuthResult(isSuccessful: true, data: response.data["data"]);
   }
 
   Future<Map<String, dynamic>> loginWithFacebook() async {
@@ -93,7 +108,6 @@ class AuthenticationRepository extends Repository {
     final Map<String, dynamic> payload = {'email': email};
     try {
       Response response = await dio.post(API.FORGOT_PASSWORD, data: payload);
-
       return (response.statusCode == 200);
     } on DioError catch (e) {
       logger.e(e.message);

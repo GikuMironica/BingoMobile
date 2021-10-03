@@ -7,7 +7,7 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/providers/event_provider.dart';
+import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/services/date_formatter_service.dart';
 import 'package:provider/provider.dart';
 

@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
-import 'package:hopaut/providers/event_provider.dart';
+import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:provider/provider.dart';
 
 class DeleteEventDialog extends StatefulWidget {

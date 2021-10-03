@@ -8,7 +8,7 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/providers/event_provider.dart';
+import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/utils/image_utilities.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';

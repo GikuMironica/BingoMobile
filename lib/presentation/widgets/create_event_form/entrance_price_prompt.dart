@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hopaut/providers/event_provider.dart';
+import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:provider/provider.dart';
 
 class EntrancePricePrompt extends StatefulWidget {

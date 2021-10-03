@@ -8,6 +8,7 @@ class Routes {
   static String search = '/search';
   static String login = '/login';
   static String registration = '/registration';
+  static String fullscreenDialog = '/fullscreen_dialog';
   static String account = '/account';
   static String editAccount = account + '/edit';
   static String editAccountPicture = editAccount + '/picture';
@@ -47,6 +48,7 @@ class Routes {
     router.define(home, handler: homeHandler);
     router.define(login, handler: loginHandler);
     router.define(registration, handler: registrationHandler);
+    router.define(fullscreenDialog, handler: fullscreenDialogHandler);
     router.define(account, handler: accountHandler);
     router.define(editAccount, handler: editAccountHandler);
     router.define(editAccountName, handler: editAccountNameHandler);

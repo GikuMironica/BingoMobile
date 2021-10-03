@@ -2,9 +2,9 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hopaut/providers/blocs/login/login_bloc.dart';
-import 'package:hopaut/providers/blocs/login/login_event.dart';
-import 'package:hopaut/providers/blocs/login/login_page_status.dart';
+import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
+import 'package:hopaut/controllers/blocs/login/login_event.dart';
+import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
 import 'stretchable_button.dart';
 
 Widget facebookButton(BuildContext context, dynamic state) {
@@ -24,7 +24,6 @@ Widget facebookButton(BuildContext context, dynamic state) {
         : () {
             context.read<LoginBloc>().add(new FacebookLoginClicked());
           },
-    buttonPadding: 8.0,
     children: <Widget>[
       // Facebook doesn't provide strict sizes, so this is a good
       // estimate of their examples within documentation.

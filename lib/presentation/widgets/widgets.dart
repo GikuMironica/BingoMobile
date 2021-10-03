@@ -1,10 +1,12 @@
+import 'dart:ui';
+import 'package:hopaut/config/constants/web.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:fluro/fluro.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get_it/get_it.dart';
-import 'package:hopaut/config/injection.dart';
-import 'package:hopaut/services/authentication_service.dart';
 import '../../config/routes/application.dart';
+import 'package:hopaut/config/constants/theme.dart';
+
 
 Widget makeTitle({String title}) {
   return Text(
@@ -27,60 +29,23 @@ Widget displayLogoIcon(BuildContext ctx) {
   );
 }
 
-Widget displayEmailInput() {
-  return TextField(
-    obscureText: false,
-    decoration: InputDecoration(
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        alignLabelWithHint: true,
-        suffixIcon: Icon(
-          Icons.mail_outline,
-          color: Colors.black,
-        ),
-        isDense: true,
-        labelText: 'Email',
-        hintText: 'Enter your email',
-        hintStyle: TextStyle(color: Colors.grey[400]),
-        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey[400]),
-        ),
-        labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
-        border: const OutlineInputBorder()),
-  );
-}
-
-Widget forgotPasswordPrompt(Function function, bool loginMode) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      FlatButton(
-        child: Text(
-            loginMode ? 'Forgot Password?' : 'Already know your password?'),
-        onPressed: function,
-      ),
-    ],
-  );
-}
-
 Widget accountAlreadyPrompt(BuildContext context) {
-  return Column(children: <Widget>[
-    FlatButton(
-        onPressed: () {
-          Application.router.navigateTo(context, '/login',
-              replace: true,
-              transition: TransitionType.fadeIn,
-              transitionDuration: Duration());
-        },
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-          Text('Already have an account? '),
-          Text(
-            'Login',
-            style: TextStyle(fontWeight: FontWeight.w500, color: Colors.pink),
-          )
-        ])),
-  ]);
+  return FlatButton(
+      onPressed: () {
+        Application.router.navigateTo(context, '/login',
+            replace: true,
+            transition: TransitionType.fadeIn,
+            transitionDuration: Duration());
+      },
+      child:
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            // TODO - Translate
+        Text('Already have an account? '),
+        Text(
+          'Login',
+          style: TextStyle(fontWeight: FontWeight.w500, color: Colors.pink),
+        )
+      ]));
 }
 
 Widget forgotPassword(BuildContext context) {
@@ -90,7 +55,7 @@ Widget forgotPassword(BuildContext context) {
       FlatButton(
         padding: EdgeInsets.zero,
         onPressed: () {
-          Application.router.navigateTo(context, '/registration',
+          Application.router.navigateTo(context, '/forgot_password',
             replace: true,
             transition: TransitionType.fadeIn,
             transitionDuration: Duration());
@@ -122,6 +87,7 @@ Widget noAccountYetPrompt(BuildContext context){
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // TODO - Translation
           Text('Don\'t have an account yet? '),
           Text(
             'Sign up',
@@ -135,49 +101,67 @@ Widget noAccountYetPrompt(BuildContext context){
   );
 }
 
-Widget authActionButton({String text, BuildContext context}) {
-  return Container(
-    width: 200,
-    height: 50.0,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(20.0),
-      gradient: RadialGradient(
-        center: const Alignment(-0.6, -4), // near the top right
-        radius: 3.5,
-        colors: [
-          const Color(0xFFffbe6a), // yellow sun
-          const Color(0xFFed2f65), // blue sky
-        ],
-        stops: [0.3, 1.0],
-      ),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.17),
-          offset: Offset(2.5, 7),
-          blurRadius: 7,
-        ),
+Widget circularProgressIndicator() {
+  return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+      child: Dialog(
+        elevation: 0,
+        backgroundColor: Colors.white.withOpacity(0),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [CircularProgressIndicator()]),
+      ));
+}
+
+void showSnackBar(BuildContext context, String message) {
+  Scaffold.of(context).showSnackBar(
+      SnackBar(
+          content:
+          Text(
+            message,
+            textAlign: TextAlign.center,
+          ),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
+          backgroundColor: HATheme.HOPAUT_PINK
+      )
+  );
+}
+
+Widget privacyPolicyAndTerms({BuildContext context, String actionText}) {
+  TextStyle defaultStyle = TextStyle(color: Colors.grey, fontSize: 14.0);
+  TextStyle linkStyle = TextStyle(color: Colors.pink);
+  return RichText(
+    text: TextSpan(
+      style: defaultStyle,
+      children: <TextSpan>[
+        // TODO - translation
+        TextSpan(text: '$actionText, you agree to our \n'),
+        TextSpan(
+            text: 'Privacy Policy',
+            style: linkStyle,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () async{
+                await _launchURL(url: WEB.PRIVACY_POLICY);
+              }),
+        TextSpan(text: ' and '),
+        TextSpan(
+            text: 'Terms & Conditions',
+            style: linkStyle,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () async{
+                await _launchURL(url: WEB.TERMS_SERVICES);
+              }),
       ],
     ),
-    child: MaterialButton(
-      onPressed: () async {
-        await getIt<AuthenticationService>()
-            .loginWithEmail('cixi@getnada.com', 'Trevor13')
-            .then((value) => Application.router.navigateTo(context, '/account'))
-            .catchError(() => Fluttertoast.showToast(msg: 'Unable to login'));
-      },
-      elevation: 100,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
-      padding: EdgeInsets.all(0.0),
-      child: Ink(
-        child: Container(
-          alignment: Alignment.center,
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, color: Colors.white),
-          ),
-        ),
-      ),
-    ),
   );
+}
+
+_launchURL({String url, BuildContext context}) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    // TODO - translate
+    showSnackBar(context, "Couldn't connect to $url");
+  }
 }

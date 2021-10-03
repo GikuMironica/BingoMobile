@@ -10,6 +10,7 @@ import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:hopaut/data/domain/login_result.dart';
 
 @lazySingleton
 class AuthenticationService with ChangeNotifier {
@@ -46,30 +47,38 @@ class AuthenticationService with ChangeNotifier {
 
   Future<void> applyToken(Map<String, dynamic> data) async {
     final Map<String, dynamic> parsedData = Jwt.parseJwt(data['Token']);
-    await Hive.box('auth').put('identity', parsedData);
+    await Future.wait([
+      Hive.box('auth').put('identity', parsedData),
+      writeTokenToKeychain(
+          token: data['Token'], refreshToken: data['RefreshToken'])
+    ]);
 
-    await writeTokenToKeychain(
-        token: data['Token'], refreshToken: data['RefreshToken']);
     setIdentity(Identity.fromJson(parsedData));
     getIt<DioService>().setBearerToken(data['Token']);
   }
 
   User get user => _user;
 
-  Future<void> refreshUser() async {
-    final User user = await _userRepository.get(_identity.id);
+  Future<void> refreshUser(bool notificationsAllowed) async {
+    List<dynamic> allResult = await Future.wait([
+      _userRepository.get(_identity.id),
+      !oneSignalSettings
+          ? initializeOneSignalSubscription(notificationsAllowed ?? false)
+          : null
+    ]);
+    User user = allResult.first;
     setUser(user);
-    if (!oneSignalSettings) {
-      setOneSignalParams();
-    }
   }
 
-  Future<void> setOneSignalParams() async {
-    await Future.wait([
-      OneSignal.shared.setSubscription(true),
-      OneSignal.shared.setExternalUserId(currentIdentity.id)
-    ]);
-    oneSignalSettings = true;
+  Future<void> initializeOneSignalSubscription(
+      bool notificationsAllowed) async {
+    if (notificationsAllowed) {
+      await Future.wait([
+        OneSignal.shared.setSubscription(notificationsAllowed),
+        OneSignal.shared.setExternalUserId(currentIdentity.id)
+      ]);
+      oneSignalSettings = true;
+    }
   }
 
   void setUser(User user) {
@@ -80,16 +89,17 @@ class AuthenticationService with ChangeNotifier {
   /// Log the user in.
   ///
   /// Triggers Identity Repository -> [IdentityRepository.login()]
-  Future<bool> loginWithEmail(String email, String password) async {
+  Future<AuthResult> loginWithEmail(String email, String password) async {
     Map<String, dynamic> _loginResult =
         await _authenticationRepository.login(email: email, password: password);
     if (_loginResult is Map<String, dynamic>) {
       if (_loginResult.containsKey('Token')) {
         await applyToken(_loginResult);
-        return true;
+        return AuthResult(isSuccessful: true);
       }
     }
-    return false;
+    // TODO - Refactor to return Result Object with Bool and Error if exists
+    return AuthResult(isSuccessful: false, data: _loginResult);
   }
 
   Future<bool> loginWithFb() async {
@@ -110,9 +120,8 @@ class AuthenticationService with ChangeNotifier {
           .isAfter(DateTime.fromMillisecondsSinceEpoch(_identity.expiry))) {
         print('Refreshing Token');
         // TODO - jwttoken is read twice on startup
-        final token = await _secureStorageService.read(key: 'token');
-        final refreshToken =
-            // TODO - refreshtoke is read twice on startup
+        dynamic token = await _secureStorageService.read(key: 'token');
+        dynamic refreshToken =
             await _secureStorageService.read(key: 'refreshToken');
         Map<String, dynamic> _refreshResult =
             await _authenticationRepository.refresh(token, refreshToken);
@@ -126,8 +135,8 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 
-  Future<bool> register(String email, String password) async {
-    bool _registrationResult = await _authenticationRepository.register(
+  Future<AuthResult> register(String email, String password) async {
+    AuthResult _registrationResult = await _authenticationRepository.register(
         email: email, password: password);
     return _registrationResult;
   }

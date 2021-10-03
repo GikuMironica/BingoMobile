@@ -6,7 +6,7 @@ import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/widgets/clock_icons.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
-import 'package:hopaut/providers/event_provider.dart';
+import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 

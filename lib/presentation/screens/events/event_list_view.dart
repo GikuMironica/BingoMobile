@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/event_list.dart';
-import 'package:hopaut/providers/event_provider.dart';
+import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
 

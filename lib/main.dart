@@ -9,7 +9,6 @@ import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/data/repositories/tag_repository.dart';
-import 'package:hopaut/providers/search_page_controller.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
 import 'package:hopaut/services/authentication_service.dart';
@@ -18,9 +17,9 @@ import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:hopaut/services/settings_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'controllers/providers/search_page_controller.dart';
 import 'data/repositories/event_repository.dart';
-import 'providers/login_page_controller.dart';
-import 'providers/event_provider.dart';
+import 'controllers/providers/event_provider.dart';
 import 'init.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'dart:io' show Platform;
@@ -37,6 +36,7 @@ Future<void> init() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   // TODO - store app id in config file
   try {
+    bool areNotificationsAllowed = true;
     await Future.wait([
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
       OneSignal.shared.init("fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
@@ -44,7 +44,11 @@ Future<void> init() async {
             OSiOSSettings.autoPrompt: false,
             OSiOSSettings.inAppLaunchUrl: false
           }),
-      Hive.initFlutter()
+      Hive.initFlutter(),
+      // TODO - fix notification prompt.
+      OneSignal.shared
+          .promptUserForPushNotificationPermission(fallbackToSettings: true)
+          .then((result) => areNotificationsAllowed = result),
     ]);
     var authBox = await Hive.openBox('auth');
 
@@ -61,7 +65,7 @@ Future<void> init() async {
       if (token != null) {
         dioService.setBearerToken(token);
         await authenticationService.refreshToken();
-        await authenticationService.refreshUser();
+        await authenticationService.refreshUser(areNotificationsAllowed);
       }
     }
   } on HiveError catch (err) {
@@ -90,15 +94,12 @@ class _HopAutState extends State<HopAut> {
   }
 
   Future<void> initPlatformState() async {
-    if (Platform.isIOS) {
-      await OneSignal.shared
-          .promptUserForPushNotificationPermission(fallbackToSettings: true);
-    }
     OneSignal.shared
         .setInFocusDisplayType(OSNotificationDisplayType.notification);
     OneSignal.shared
         .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
       setState(() {
+        // TODO - Test if it will redirect to event
         nextRoute = result.notification.payload.additionalData['event'];
       });
     });
@@ -118,10 +119,6 @@ class _HopAutState extends State<HopAut> {
               create: (context) => getIt<AuthenticationService>()),
           ChangeNotifierProvider<SettingsService>(
               create: (context) => getIt<SettingsService>()),
-          ChangeNotifierProvider<LoginPageController>(
-            create: (_) => LoginPageController(),
-            lazy: true,
-          ),
           ChangeNotifierProvider<SearchPageController>(
             create: (_) => SearchPageController(),
             lazy: true,

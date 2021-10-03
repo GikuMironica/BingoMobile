@@ -5,7 +5,7 @@ import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
-import 'package:hopaut/providers/search_page_controller.dart';
+import 'package:hopaut/controllers/providers/search_page_controller.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/services/location_service.dart';
 import 'package:ionicons/ionicons.dart';

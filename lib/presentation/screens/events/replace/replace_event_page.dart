@@ -11,7 +11,7 @@ import 'package:hopaut/presentation/screens/events/replace/save_button.dart';
 import 'package:hopaut/presentation/screens/events/replace/tags.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/inputs/event_text_field.dart';
-import 'package:hopaut/providers/event_provider.dart';
+import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'event_type_list.dart';

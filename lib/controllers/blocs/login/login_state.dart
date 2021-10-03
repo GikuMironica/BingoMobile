@@ -1,11 +1,9 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:hopaut/providers/blocs/base_state.dart';
-import 'package:hopaut/providers/blocs/login/login_page_status.dart';
+
+import '../base_state.dart';
+import 'login_page_status.dart';
 
 class LoginState extends BaseState {
-  final RegExp _pwdRule =
-      RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
-
   //validators
   bool get isValidEmail => EmailValidator.validate(username.trim());
   bool get isValidPassword => password.isNotEmpty;

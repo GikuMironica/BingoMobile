@@ -6,7 +6,7 @@ import 'package:hopaut/config/constants/web.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/providers/event_provider.dart';
+import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:provider/provider.dart';
 
 /// Screen to show user his events so he can create announcements
