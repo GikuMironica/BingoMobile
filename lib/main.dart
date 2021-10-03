@@ -13,6 +13,7 @@ import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/services/dio_service.dart';
+import 'package:hopaut/controllers/providers/account_provider.dart';
 import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:hopaut/services/settings_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -122,6 +123,8 @@ class _HopAutState extends State<HopAut> {
               create: (context) => getIt<AuthenticationService>()),
           ChangeNotifierProvider<SettingsService>(
               create: (context) => getIt<SettingsService>()),
+          ChangeNotifierProvider<AccountProvider>(
+              create: (context) => getIt<AccountProvider>()),
           ChangeNotifierProvider<SearchPageController>(
             create: (_) => SearchPageController(),
             lazy: true,

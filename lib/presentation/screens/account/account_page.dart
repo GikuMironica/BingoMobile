@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/theme.dart';
+import 'package:hopaut/controllers/providers/account_provider.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_account.dart';
 import 'package:hopaut/presentation/screens/settings/settings.dart';
 import 'package:hopaut/presentation/widgets/profile_picture/profile_picture.dart';
@@ -14,6 +15,14 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
+  AccountProvider _accountProvider;
+
+  @override
+  void initState() {
+    _accountProvider = Provider.of<AccountProvider>(context, listen: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var _size = MediaQuery.of(context).size;
@@ -75,12 +84,9 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Widget userFullName() {
-    return Consumer<AuthenticationService>(
-      builder: (context, auth, child) => Text(
-        // TODO - Null exception
-        auth.user.fullName ?? "Name Surname",
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-      ),
+    return Text(
+      _accountProvider.currentIdentity.fullName ?? "Name Surname",
+      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
     );
   }
 
@@ -91,7 +97,9 @@ class _AccountPageState extends State<AccountPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(auth.user.description ?? "empty",
+            Text(
+                _accountProvider.currentIdentity.description ??
+                    "Tell people something about you...",
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey[500])),
           ],
@@ -125,15 +133,15 @@ class _AccountPageState extends State<AccountPage> {
     return ListView(
       primary: false,
       shrinkWrap: true,
-
       children: [
         ListTile(
           onTap: () => pushNewScreen(context,
               screen: EditAccountPage(), withNavBar: false),
           leading: Icon(MdiIcons.pencil),
           title: Align(
-            // TODO - Translations
-              alignment: Alignment(-1.15, 0), child: Text('Edit Profile')),
+              // TODO - Translations
+              alignment: Alignment(-1.15, 0),
+              child: Text('Edit Profile')),
         ),
         ListTile(
           onTap: () =>
