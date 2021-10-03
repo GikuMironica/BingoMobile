@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
       ),
       screenTransitionAnimation: ScreenTransitionAnimation(
         // Screen transition animation on change of selected tab.
-        animateTabTransition: false,
+        animateTabTransition: true,
         curve: Curves.ease,
         duration: Duration(milliseconds: 100),
       ),

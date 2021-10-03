@@ -50,8 +50,11 @@ Future<void> init() async {
           .promptUserForPushNotificationPermission(fallbackToSettings: true)
           .then((result) => areNotificationsAllowed = result),
     ]);
-    var authBox = await Hive.openBox('auth');
 
+    SettingsService _settingsService = getIt<SettingsService>();
+    _settingsService.togglePushNotifications(areNotificationsAllowed ?? true);
+    // Hive stores user ID logged in if there is any
+    var authBox = await Hive.openBox('auth');
     final LinkedHashMap<dynamic, dynamic> data = authBox.get('identity');
     if (data != null) {
       AuthenticationService authenticationService =

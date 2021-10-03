@@ -19,6 +19,7 @@ class LocationService {
     } else {
       print("Location permission was not granted.");
       await Permission.location.request();
+      // TODO - show error on deny
       getCurrentLocation();
     }
   }
