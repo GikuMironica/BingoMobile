@@ -28,7 +28,7 @@ class Event {
     title = json['Title'];
     entrancePrice = json['EntrancePrice'];
     requirements = json['Requirements'];
-    eventType = json['EventType'];
+    eventType = EventType.values[int.parse(json['EventType'])];
     currency = json['Currency'];
   }
 
@@ -40,7 +40,7 @@ class Event {
     data['Title'] = this.title;
     data['EntrancePrice'] = this.entrancePrice;
     data['Requirements'] = this.requirements;
-    data['EventType'] = this.eventType;
+    data['EventType'] = this.eventType.index;
     data['Currency'] = this.currency;
     return data;
   }
