@@ -69,8 +69,7 @@ class AuthenticationService with ChangeNotifier {
           ? initializeOneSignalSubscription(notificationsAllowed ?? true)
           : null
     ]);
-    User user = allResult.first;
-    setUser(user);
+    setUser(allResult.first);
   }
 
   Future<void> initializeOneSignalSubscription(
@@ -85,8 +84,10 @@ class AuthenticationService with ChangeNotifier {
   }
 
   void setUser(User user) {
-    _user = user;
-    notifyListeners();
+    if (user != null) {
+      _user = user;
+      notifyListeners();
+    }
   }
 
   /// Log the user in.

@@ -85,6 +85,7 @@ class _AccountPageState extends State<AccountPage> {
 
   Widget userFullName() {
     return Text(
+      // TODO
       _accountProvider.currentIdentity.fullName ?? "Name Surname",
       style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
     );
@@ -117,12 +118,12 @@ class _AccountPageState extends State<AccountPage> {
           ListTile(
             // TODO - Translations
             title: Text('Email'),
-            subtitle: Text(auth.user.email),
+            subtitle: Text(_accountProvider.currentIdentity.email),
           ),
           ListTile(
             // TODO - Translations
             title: Text('Member since'),
-            subtitle: Text(auth.user.dateRegistered),
+            subtitle: Text(_accountProvider.currentIdentity.dateRegistered),
           )
         ],
       ),

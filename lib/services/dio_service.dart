@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:hopaut/config/dio_base_options.dart';
 import 'package:injectable/injectable.dart';
-
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 

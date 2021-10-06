@@ -86,6 +86,9 @@ class FacebookLoginClicked extends LoginEvent {
     yield loginState.copyWith(formStatus: LoginSubmitted());
     try {
       bool result = await authService.loginWithFb();
+      if (result) {
+        await authService.refreshUser(settingsService.pushNotifications);
+      }
       yield result
           ? loginState.copyWith(formStatus: SubmissionSuccess())
           // TODO - Translations
