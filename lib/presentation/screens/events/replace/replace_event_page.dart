@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -11,6 +10,7 @@ import 'package:hopaut/presentation/screens/events/replace/save_button.dart';
 import 'package:hopaut/presentation/screens/events/replace/tags.dart';
 import 'package:hopaut/presentation/screens/events/replace/time_picker.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
+import 'package:hopaut/presentation/widgets/inputs/basic_input_field.dart';
 import 'package:hopaut/presentation/widgets/inputs/event_text_field.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:provider/provider.dart';
@@ -27,8 +27,10 @@ class ReplaceEventPage extends StatefulWidget {
 }
 
 class _ReplaceEventPageState extends State<ReplaceEventPage> {
+  final formKey = GlobalKey<FormState>();
+
   Post post;
-  ScrollController _scrollController = ScrollController(keepScrollOffset: true);
+  ScrollController scrollController = ScrollController(keepScrollOffset: true);
   bool isSaveEnabled = true;
 
   _ReplaceEventPageState({this.post}) {
@@ -51,73 +53,82 @@ class _ReplaceEventPageState extends State<ReplaceEventPage> {
             title: Text('Create Event'), //TODO: translation
           ),
           body: SingleChildScrollView(
-              controller: _scrollController,
+              controller: scrollController,
               physics: ClampingScrollPhysics(),
               padding: EdgeInsets.all(24.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    PictureList(post: post),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Divider(),
-                    EventTextField(
-                        onChanged: (v) => post.setTitle(v),
-                        title: "Event Title", //TODO: translation
-                        textHint: 'Event Title', //TODO: translation
-                        inputFormatter: [
-                          LengthLimitingTextInputFormatter(50),
-                        ]),
-                    Divider(),
-                    EventTypeList(post: post),
-                    Divider(),
-                    LocationButton(post: post),
-                    Divider(),
-                    TimePicker(
-                        onConfirmStart: (startTime) => post.eventTime =
-                            startTime.toUtc().millisecondsSinceEpoch,
-                        onConfirmEnd: (endTime) => post.endTime =
-                            endTime.toUtc().millisecondsSinceEpoch),
-                    EventTextField(
-                      title: "Event Description", //TODO: translation
-                      onChanged: (v) => post.event.description = v.trim(),
-                      height: 144.0,
-                      expand: true,
-                      textHint: 'Event Description', //TODO: translation
-                      maxChars: 3000,
-                    ),
-                    EventTextField(
-                      title: "Event Requirements", //TODO: translation
-                      onChanged: (v) => post.event.requirements = v.trim(),
-                      height: 144.0,
-                      expand: true,
-                      textHint:
-                          'Event Requirements (Optional)', //TODO: translation
-                    ),
-                    Divider(),
-                    Tags(
-                        post: post,
-                        getTagSuggestions: (pattern, currentTags) =>
-                            provider.getTagSuggestions(pattern, currentTags)),
-                    SaveButton(onPressed: () async {
-                      if (isSaveEnabled) {
-                        MiniPost postRes =
-                            await provider.createOrUpdateEvent(post);
-                        setState(() => isSaveEnabled = false);
-                        if (postRes != null) {
-                          Application.router.navigateTo(
-                              context, '/event/${postRes.postId}',
-                              replace: true);
-                        } else {
-                          setState(() => isSaveEnabled = true);
-                          Fluttertoast.showToast(
-                              msg:
-                                  "Unable to create event"); //TODO: translation
-                        }
-                      }
-                    })
-                  ])));
+              child: Form(
+                  key: formKey,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        PictureList(post: post),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Divider(),
+                        BasicInputField(
+                          title: "Event Title", //TODO: translation
+                          hintText: 'Event Title', //TODO: translation
+                          onChanged: (v) => post.setTitle(v),
+                          isValid: (v) {
+                            return v != null && v.length > 0;
+                          },
+                          validationMessage:
+                              "The field must not be empty!", // TODO: translation
+                          initialValue: post.event.title,
+                          maxLength: 30,
+                        ),
+                        Divider(),
+                        EventTypeList(post: post),
+                        Divider(),
+                        LocationButton(post: post),
+                        Divider(),
+                        TimePicker(
+                            onConfirmStart: (startTime) => post.eventTime =
+                                startTime.toUtc().millisecondsSinceEpoch,
+                            onConfirmEnd: (endTime) => post.endTime =
+                                endTime.toUtc().millisecondsSinceEpoch),
+                        EventTextField(
+                          title: "Event Description", //TODO: translation
+                          onChanged: (v) => post.event.description = v.trim(),
+                          height: 144.0,
+                          expand: true,
+                          textHint: 'Event Description', //TODO: translation
+                          maxChars: 3000,
+                        ),
+                        EventTextField(
+                          title: "Event Requirements", //TODO: translation
+                          onChanged: (v) => post.event.requirements = v.trim(),
+                          height: 144.0,
+                          expand: true,
+                          textHint:
+                              'Event Requirements (Optional)', //TODO: translation
+                        ),
+                        Divider(),
+                        Tags(
+                            post: post,
+                            getTagSuggestions: (pattern, currentTags) =>
+                                provider.getTagSuggestions(
+                                    pattern, currentTags)),
+                        SaveButton(onPressed: () async {
+                          if (formKey.currentState.validate() &&
+                              isSaveEnabled) {
+                            MiniPost postRes =
+                                await provider.createOrUpdateEvent(post);
+                            setState(() => isSaveEnabled = false);
+                            if (postRes != null) {
+                              Application.router.navigateTo(
+                                  context, '/event/${postRes.postId}',
+                                  replace: true);
+                            } else {
+                              setState(() => isSaveEnabled = true);
+                              Fluttertoast.showToast(
+                                  msg:
+                                      "Unable to create event"); //TODO: translation
+                            }
+                          }
+                        })
+                      ]))));
     });
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
-import 'package:hopaut/presentation/widgets/inputs/basic_input.dart';
+import 'package:hopaut/presentation/widgets/inputs/basic_input_field.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:hopaut/controllers/providers/account_provider.dart';
@@ -29,6 +29,14 @@ class _EditAccountNameState extends State<EditAccountName> {
   @override
   Widget build(BuildContext context) {
     _accountProvider = Provider.of<AccountProvider>(context, listen: true);
+
+    if (_accountProvider.formStatus is Failed) {
+      // Translation
+      showSnackBar(context, "Internal Error");
+      setState(() {
+        _accountProvider.formStatus = new Idle();
+      });
+    }
     return Scaffold(
       appBar: SimpleAppBar(
         context: context,
@@ -39,46 +47,35 @@ class _EditAccountNameState extends State<EditAccountName> {
             ? null
             : [
                 Container(
-                  child: IconButton(
-                      icon: Icon(Icons.check),
-                      onPressed: () async =>
-                          await _accountProvider.updateUserNameAsync(
-                              _firstNameController.text,
-                              _lastNameController.text,
-                              context)
-                    ),
+                  child: Builder(
+                    builder: (context) => IconButton(
+                        icon: Icon(Icons.check),
+                        onPressed: () async =>
+                            await _accountProvider.updateUserNameAsync(
+                                _firstNameController.text,
+                                _lastNameController.text,
+                                context)),
                   ),
+                )
               ],
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-            padding: EdgeInsets.all(16.0),
-            child: Builder(
-              builder: (context) =>_editProfileForm(context)
-            ),
-        ),
-      )
+            padding: EdgeInsets.all(16.0), child: _editProfileForm()),
+      ),
     );
   }
 
-  Widget _editProfileForm(BuildContext context) {
-    if(_accountProvider.formStatus is Failed){
-      // Translation
-      Future.delayed(Duration.zero, () async {
-        // TODO - translation
-        showSnackBar(context, "Error, Something went wrong");
-      });
-        _accountProvider.formStatus = new Idle();
-    }
+  Widget _editProfileForm() {
     return _accountProvider.formStatus is Submitted
         ? Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        )
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
         : Form(
             key: _formKey,
             child: Column(
@@ -86,26 +83,30 @@ class _EditAccountNameState extends State<EditAccountName> {
               children: [
                 // translation
                 _fieldSpacing(label: 'Name'),
-                valueInput(
+                BasicInputField(
                     maxLength: maxFieldLength,
                     controller: _firstNameController,
-                    isStateValid: _accountProvider.firstNameIsValid,
+                    isValid: (v) {
+                      return _accountProvider.firstNameIsValid;
+                    },
                     // TODO translations
                     validationMessage: "Please provide a valid name.",
                     initialValue: _accountProvider.currentIdentity.firstName,
-                    onChange: (v) => _accountProvider.validateFirstNameChange(
+                    onChanged: (v) => _accountProvider.validateFirstNameChange(
                         v, _firstNameController, maxFieldLength)),
                 // translation
                 Divider(),
                 _fieldSpacing(label: 'Last name'),
-                valueInput(
+                BasicInputField(
                     maxLength: maxFieldLength,
                     controller: _lastNameController,
-                    isStateValid: _accountProvider.lastNameIsValid,
+                    isValid: (v) {
+                      return _accountProvider.lastNameIsValid;
+                    },
                     // TODO translations
                     validationMessage: "Please provide a valid name.",
                     initialValue: _accountProvider.currentIdentity.lastName,
-                    onChange: (v) => _accountProvider.validateLastNameChange(
+                    onChanged: (v) => _accountProvider.validateLastNameChange(
                         v, _lastNameController, maxFieldLength)),
               ],
             ),
