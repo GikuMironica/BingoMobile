@@ -24,11 +24,8 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-
   @override
-  void initState() {
-
-  }
+  void initState() {}
 
   @override
   Widget build(BuildContext context) {
@@ -120,16 +117,16 @@ class _SettingsState extends State<Settings> {
                                   child: CupertinoSwitch(
                                     value: settingsMgr.pushNotifications,
                                     onChanged: (v) =>
-                                        settingsMgr.togglePushNotifications(),
+                                        settingsMgr.togglePushNotifications(v),
                                   ),
                                   replacement: Switch(
                                     value: settingsMgr.pushNotifications,
                                     onChanged: (v) =>
-                                        settingsMgr.togglePushNotifications(),
+                                        settingsMgr.togglePushNotifications(v),
                                   ),
                                 ),
-                                onTap: () =>
-                                    settingsMgr.togglePushNotifications(),
+                                //onTap: () =>
+                                //    settingsMgr.togglePushNotifications(v),
                               ),
                             ),
                             SizedBox(
@@ -194,6 +191,7 @@ class _SettingsState extends State<Settings> {
                             ),
                             Text('Feedback',
                                 style: TextStyle(color: Colors.black54)),
+                            // TODO bug/rating
                             InkWellButton('Leave a Rating', () {}),
                             InkWellButton('Report a bug', () {}),
                           ],

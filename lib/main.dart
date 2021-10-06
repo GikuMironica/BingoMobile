@@ -13,6 +13,7 @@ import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/services/dio_service.dart';
+import 'package:hopaut/controllers/providers/account_provider.dart';
 import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:hopaut/services/settings_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -50,8 +51,11 @@ Future<void> init() async {
           .promptUserForPushNotificationPermission(fallbackToSettings: true)
           .then((result) => areNotificationsAllowed = result),
     ]);
-    var authBox = await Hive.openBox('auth');
 
+    SettingsService _settingsService = getIt<SettingsService>();
+    _settingsService.togglePushNotifications(areNotificationsAllowed ?? true);
+    // Hive stores user ID logged in if there is any
+    var authBox = await Hive.openBox('auth');
     final LinkedHashMap<dynamic, dynamic> data = authBox.get('identity');
     if (data != null) {
       AuthenticationService authenticationService =
@@ -119,6 +123,8 @@ class _HopAutState extends State<HopAut> {
               create: (context) => getIt<AuthenticationService>()),
           ChangeNotifierProvider<SettingsService>(
               create: (context) => getIt<SettingsService>()),
+          ChangeNotifierProvider<AccountProvider>(
+              create: (context) => getIt<AccountProvider>()),
           ChangeNotifierProvider<SearchPageController>(
             create: (_) => SearchPageController(),
             lazy: true,

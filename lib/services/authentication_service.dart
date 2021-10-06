@@ -11,11 +11,13 @@ import 'package:injectable/injectable.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:hopaut/data/domain/login_result.dart';
+import 'package:hopaut/services/settings_service.dart';
 
 @lazySingleton
 class AuthenticationService with ChangeNotifier {
   final SecureStorageService _secureStorageService;
   final DioService _dioService;
+  final SettingsService _settingsService;
 
   final UserRepository _userRepository;
   final AuthenticationRepository _authenticationRepository;
@@ -29,7 +31,8 @@ class AuthenticationService with ChangeNotifier {
       : _secureStorageService = getIt<SecureStorageService>(),
         _userRepository = getIt<UserRepository>(),
         _dioService = getIt<DioService>(),
-        _authenticationRepository = getIt<AuthenticationRepository>();
+        _authenticationRepository = getIt<AuthenticationRepository>(),
+        _settingsService = getIt<SettingsService>();
 
   Identity get currentIdentity => _identity;
 
@@ -63,11 +66,10 @@ class AuthenticationService with ChangeNotifier {
     List<dynamic> allResult = await Future.wait([
       _userRepository.get(_identity.id),
       !oneSignalSettings
-          ? initializeOneSignalSubscription(notificationsAllowed ?? false)
+          ? initializeOneSignalSubscription(notificationsAllowed ?? true)
           : null
     ]);
-    User user = allResult.first;
-    setUser(user);
+    setUser(allResult.first);
   }
 
   Future<void> initializeOneSignalSubscription(
@@ -82,8 +84,10 @@ class AuthenticationService with ChangeNotifier {
   }
 
   void setUser(User user) {
-    _user = user;
-    notifyListeners();
+    if (user != null) {
+      _user = user;
+      notifyListeners();
+    }
   }
 
   /// Log the user in.
@@ -145,8 +149,7 @@ class AuthenticationService with ChangeNotifier {
     await Hive.box('auth').delete('identity');
     _secureStorageService.deleteAll();
     _dioService.removeBearerToken();
-
-    // _eventService.reset(); TODO: figure it out
+    // TODO - clear event list
     setIdentity(null);
     setUser(null);
     if (oneSignalSettings) {

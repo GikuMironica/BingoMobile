@@ -1,5 +1,5 @@
 class API {
-  static const String BASE_URL = 'https://hop-out.com/api/v1';
+  static const String API_ROOT_URL = 'https://hop-out.com/api/v1';
 
   // Identity ------------------------------------------------------------------
   static const String IDENTITY = '/identity';

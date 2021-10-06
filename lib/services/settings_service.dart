@@ -27,8 +27,8 @@ class SettingsService with ChangeNotifier {
     _packageInfo = await PackageInfo.fromPlatform();
   }
 
-  void togglePushNotifications() {
-    pushNotifications = !pushNotifications;
+  void togglePushNotifications(bool value) {
+    pushNotifications = value;
     _preferences.setBool('HA_PUSH_NOTIFICATIONS', pushNotifications);
     notifyListeners();
   }
