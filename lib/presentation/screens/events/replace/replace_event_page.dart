@@ -9,6 +9,7 @@ import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/screens/events/replace/picture_list.dart';
 import 'package:hopaut/presentation/screens/events/replace/save_button.dart';
 import 'package:hopaut/presentation/screens/events/replace/tags.dart';
+import 'package:hopaut/presentation/screens/events/replace/time_picker.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/inputs/event_text_field.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
@@ -74,21 +75,22 @@ class _ReplaceEventPageState extends State<ReplaceEventPage> {
                     Divider(),
                     LocationButton(post: post),
                     Divider(),
-                    EventTextField(
-                        title: "Start Time",
-                        onChanged: (v) => post.eventTime = int.tryParse(v),
-                        textHint: 'Start Time',
-                        textInputType: TextInputType.number,
-                        inputFormatter: [
-                          LengthLimitingTextInputFormatter(50),
-                        ]),
-                    EventTextField(
-                        onChanged: (v) => post.endTime = int.tryParse(v),
-                        textHint: 'End Time',
-                        textInputType: TextInputType.number,
-                        inputFormatter: [
-                          LengthLimitingTextInputFormatter(50),
-                        ]),
+                    TimePicker(),
+                    // EventTextField(
+                    //     title: "Start Time",
+                    //     onChanged: (v) => post.eventTime = int.tryParse(v),
+                    //     textHint: 'Start Time',
+                    //     textInputType: TextInputType.number,
+                    //     inputFormatter: [
+                    //       LengthLimitingTextInputFormatter(50),
+                    //     ]),
+                    // EventTextField(
+                    //     onChanged: (v) => post.endTime = int.tryParse(v),
+                    //     textHint: 'End Time',
+                    //     textInputType: TextInputType.number,
+                    //     inputFormatter: [
+                    //       LengthLimitingTextInputFormatter(50),
+                    //     ]),
                     EventTextField(
                       title: "Event Description",
                       onChanged: (v) => post.event.description = v.trim(),

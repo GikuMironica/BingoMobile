@@ -82,6 +82,7 @@ dependencies:
   get_it: ^5.0.1
   recase: ^3.0.1
   url_launcher: ^5.7.10
+  flutter_datetime_picker: ^1.5.0
 
 
   flutter_cupertino_date_picker:
