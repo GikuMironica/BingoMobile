@@ -29,6 +29,7 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
     return Scaffold(
       appBar: SimpleAppBar(
         context: context,
+        // TODO translation
         text: 'Description',
         actionButtons: [
           IconButton(
@@ -48,6 +49,7 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
             Padding(
               padding: EdgeInsets.only(left: 12),
               child: Text(
+                // TODO translation
                 'Description',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
@@ -66,7 +68,7 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
                 onChanged: (v) {},
                 maxLengthEnforced: true,
                 maxLength: 250,
-                maxLines: 4,
+                maxLines: 8,
                 inputFormatters: [LengthLimitingTextInputFormatter(250)],
                 decoration: InputDecoration(
                   counterText: '',

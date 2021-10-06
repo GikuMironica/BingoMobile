@@ -5,13 +5,10 @@ import 'package:hopaut/services/authentication_service.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
-class AccountProvider extends ChangeNotifier{
-
+class AccountProvider extends ChangeNotifier {
   AuthenticationService _authenticationService;
 
-  AccountProvider() :
-      _authenticationService = getIt<AuthenticationService>();
+  AccountProvider() : _authenticationService = getIt<AuthenticationService>();
 
   User get currentIdentity => _authenticationService.user;
-
 }

@@ -24,6 +24,7 @@ class DioService {
     _dio.interceptors.add(InterceptorsWrapper(
         onResponse: (Response response) => response,
         onError: (DioError error) async {
+          // TODO On 401 auto request refresh end point -> if refresh didn't work -> logout!
           if (error.response?.statusCode == 401) {
             RequestOptions requestOptions = error.response.request;
             if (requestOptions.headers[HttpHeaders.contentTypeHeader] !=
