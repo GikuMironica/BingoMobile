@@ -16,7 +16,7 @@ class LocationButton extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FieldTitle(title: "Event Location"),
+        FieldTitle(title: "Event Location"), //TODO: translation
         InkWell(
           onTap: () => Application.router
               .navigateTo(context, Routes.searchByMap)

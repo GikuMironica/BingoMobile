@@ -25,9 +25,9 @@ class _TagsState extends State<Tags> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Subtitle(label: 'Tags'),
+              Subtitle(label: 'Tags'), //TODO: translation
               Text(
-                'You are able to add up to 5 tags.',
+                'You are able to add up to 5 tags.', //TODO: translation
                 style: TextStyle(color: Colors.black87),
               )
             ],
@@ -64,7 +64,7 @@ class _TagsState extends State<Tags> {
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(12.0),
-                    hintText: 'Add tags',
+                    hintText: 'Add tags', //TODO: translation
                     border: InputBorder.none)),
             suggestionsCallback: (pattern) async {
               return await widget.getTagSuggestions(pattern, widget.post.tags);

@@ -25,47 +25,67 @@ class _TimePickerState extends State<TimePicker> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           FieldTitle(title: "Time"), //TODO: translation
-          FlatButton(
-              onPressed: () async {
+          InkWell(
+            onTap: () async {
+              await DatePicker.showDateTimePicker(context,
+                  showTitleActions: true,
+                  minTime: DateTime.now(),
+                  maxTime: DateTime.now().add(Duration(days: 365)),
+                  onConfirm: (date) {
+                setState(() {
+                  startDate = date;
+                  widget.onConfirmStart(date);
+                  if (endDate != null && startDate.compareTo(endDate) > 0) {
+                    endDate = null;
+                  }
+                });
+              }, currentTime: startDate, locale: LocaleType.en);
+            },
+            child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(12.0),
+                height: 48,
+                margin: EdgeInsets.only(bottom: 24.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  startDate != null
+                      ? dateFormat.format(startDate)
+                      : 'Start Time', // TODO: translation
+                )),
+          ),
+          InkWell(
+            onTap: () async {
+              if (startDate != null) {
                 await DatePicker.showDateTimePicker(context,
                     showTitleActions: true,
-                    minTime: DateTime.now(),
-                    maxTime: DateTime.now().add(Duration(days: 365)),
+                    minTime: startDate.add(Duration(minutes: 1)),
+                    maxTime: startDate.add(Duration(minutes: 1, days: 365)),
                     onConfirm: (date) {
                   setState(() {
-                    startDate = date;
-                    widget.onConfirmStart(date);
+                    endDate = date;
+                    widget.onConfirmEnd(date);
                   });
-                }, currentTime: startDate, locale: LocaleType.en);
-              },
-              child: Text(
-                startDate != null ? dateFormat.format(startDate) : 'Start Time',
-                style: TextStyle(color: Colors.blue),
-              )),
-          FlatButton(
-              onPressed: () async {
-                if (startDate != null) {
-                  print(startDate.add(Duration(minutes: 1)));
-                  await DatePicker.showDateTimePicker(context,
-                      showTitleActions: true,
-                      minTime: startDate.add(Duration(minutes: 1)),
-                      maxTime: startDate.add(Duration(minutes: 1, days: 365)),
-                      onConfirm: (date) {
-                    setState(() {
-                      endDate = date;
-                      widget.onConfirmEnd(date);
-                    });
-                  },
-                      currentTime: startDate.compareTo(endDate) > 0
-                          ? endDate
-                          : startDate.add(Duration(minutes: 1)),
-                      locale: LocaleType.en);
-                }
-              },
-              child: Text(
-                endDate != null ? dateFormat.format(endDate) : 'End Time',
-                style: TextStyle(color: Colors.blue),
-              )),
+                }, currentTime: endDate, locale: LocaleType.en);
+              }
+            },
+            child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(12.0),
+                height: 48,
+                margin: EdgeInsets.only(bottom: 24.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  endDate != null
+                      ? dateFormat.format(endDate)
+                      : 'End Time', // TODO: translation
+                )),
+          ),
         ]);
   }
 }

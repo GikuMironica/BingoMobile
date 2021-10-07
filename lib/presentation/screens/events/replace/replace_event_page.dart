@@ -49,7 +49,7 @@ class _ReplaceEventPageState extends State<ReplaceEventPage> {
             leading: IconButton(
                 icon: HATheme.backButton,
                 onPressed: () => Application.router.pop(context)),
-            title: Text('Create Event'),
+            title: Text('Create Event'), //TODO: translation
           ),
           body: SingleChildScrollView(
               controller: _scrollController,
@@ -65,8 +65,8 @@ class _ReplaceEventPageState extends State<ReplaceEventPage> {
                     Divider(),
                     EventTextField(
                         onChanged: (v) => post.setTitle(v),
-                        title: "Event Title",
-                        textHint: 'Event Title',
+                        title: "Event Title", //TODO: translation
+                        textHint: 'Event Title', //TODO: translation
                         inputFormatter: [
                           LengthLimitingTextInputFormatter(50),
                         ]),
@@ -75,36 +75,26 @@ class _ReplaceEventPageState extends State<ReplaceEventPage> {
                     Divider(),
                     LocationButton(post: post),
                     Divider(),
-                    TimePicker(),
-                    // EventTextField(
-                    //     title: "Start Time",
-                    //     onChanged: (v) => post.eventTime = int.tryParse(v),
-                    //     textHint: 'Start Time',
-                    //     textInputType: TextInputType.number,
-                    //     inputFormatter: [
-                    //       LengthLimitingTextInputFormatter(50),
-                    //     ]),
-                    // EventTextField(
-                    //     onChanged: (v) => post.endTime = int.tryParse(v),
-                    //     textHint: 'End Time',
-                    //     textInputType: TextInputType.number,
-                    //     inputFormatter: [
-                    //       LengthLimitingTextInputFormatter(50),
-                    //     ]),
+                    TimePicker(
+                        onConfirmStart: (startTime) => post.eventTime =
+                            startTime.toUtc().millisecondsSinceEpoch,
+                        onConfirmEnd: (endTime) => post.endTime =
+                            endTime.toUtc().millisecondsSinceEpoch),
                     EventTextField(
-                      title: "Event Description",
+                      title: "Event Description", //TODO: translation
                       onChanged: (v) => post.event.description = v.trim(),
                       height: 144.0,
                       expand: true,
-                      textHint: 'Event Description',
+                      textHint: 'Event Description', //TODO: translation
                       maxChars: 3000,
                     ),
                     EventTextField(
-                      title: "Event Requirements",
+                      title: "Event Requirements", //TODO: translation
                       onChanged: (v) => post.event.requirements = v.trim(),
                       height: 144.0,
                       expand: true,
-                      textHint: 'Event Requirements (Optional)',
+                      textHint:
+                          'Event Requirements (Optional)', //TODO: translation
                     ),
                     Divider(),
                     Tags(
@@ -122,7 +112,9 @@ class _ReplaceEventPageState extends State<ReplaceEventPage> {
                               replace: true);
                         } else {
                           setState(() => isSaveEnabled = true);
-                          Fluttertoast.showToast(msg: "Unable to create event");
+                          Fluttertoast.showToast(
+                              msg:
+                                  "Unable to create event"); //TODO: translation
                         }
                       }
                     })

@@ -19,7 +19,7 @@ class _EventTypeListState extends State<EventTypeList> {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      FieldTitle(title: "Event Type"),
+      FieldTitle(title: "Event Type"), //TODO: translation
       DropDownWidget<String>(
         onChanged: (String v) {
           setState(() {
@@ -29,18 +29,18 @@ class _EventTypeListState extends State<EventTypeList> {
           });
         },
         list: eventTypeStrings.values.toList(),
-        hintText: 'Event Type',
+        hintText: 'Event Type', //TODO: translation
         validator: (v) => widget.post.event.eventType == null
-            ? 'Event Type is required'
+            ? 'Event Type is required' //TODO: translation
             : null,
         onSaved: (v) {},
       ),
       widget.post.event.eventType == EventType.houseParty
           ? EventTextField(
-              title: "Slots",
+              title: "Slots", //TODO: translation
               onChanged: (v) => widget.post.event.slots = int.parse(v),
               textInputType: TextInputType.number,
-              textHint: 'Slots',
+              textHint: 'Slots', //TODO: translation
             )
           : Container(),
       widget.post.event.isPaidEvent()
