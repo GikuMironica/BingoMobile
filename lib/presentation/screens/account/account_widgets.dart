@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hopaut/presentation/screens/account/edit_account/edit_account.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/edit_profile.dart';
 import 'package:hopaut/presentation/screens/settings/settings.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';

@@ -14,6 +14,27 @@ class EditAccountPage extends StatefulWidget {
 }
 
 class _EditAccountPageState extends State<EditAccountPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: SimpleAppBar(
+        // TODO translation
+        text: 'Edit Profile',
+        context: context,
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: ListView.separated(
+          itemBuilder: (ctx, idx) => editAccountMenu[idx],
+          separatorBuilder: (ctx, idx) => Divider(),
+          itemCount: editAccountMenu.length,
+          shrinkWrap: true,
+          primary: false,
+        ),
+      ),
+    );
+  }
+
   List<Widget> editAccountMenu = <Widget>[
     Column(
       children: [
@@ -73,25 +94,4 @@ class _EditAccountPageState extends State<EditAccountPage> {
       ),
     )
   ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: SimpleAppBar(
-        // TODO translation
-        text: 'Edit Profile',
-        context: context,
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: ListView.separated(
-          itemBuilder: (ctx, idx) => editAccountMenu[idx],
-          separatorBuilder: (ctx, idx) => Divider(),
-          itemCount: editAccountMenu.length,
-          shrinkWrap: true,
-          primary: false,
-        ),
-      ),
-    );
-  }
 }

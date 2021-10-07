@@ -65,6 +65,7 @@ class AuthenticationService with ChangeNotifier {
   Future<void> refreshUser(bool notificationsAllowed) async {
     List<dynamic> allResult = await Future.wait([
       _userRepository.get(_identity.id),
+      // On false will be initialized
       !oneSignalSettings
           ? initializeOneSignalSubscription(notificationsAllowed ?? true)
           : null
