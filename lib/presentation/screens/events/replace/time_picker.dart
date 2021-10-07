@@ -27,10 +27,14 @@ class _TimePickerState extends State<TimePicker> {
           FieldTitle(title: "Time"), //TODO: translation
           InkWell(
             onTap: () async {
+              DateTime minTime = DateTime.now().add(Duration(minutes: 15));
+              if (startDate != null && startDate.compareTo(minTime) < 0) {
+                startDate = null;
+              }
               await DatePicker.showDateTimePicker(context,
                   showTitleActions: true,
-                  minTime: DateTime.now(),
-                  maxTime: DateTime.now().add(Duration(days: 365)),
+                  minTime: minTime,
+                  maxTime: DateTime.now().add(Duration(days: 365, minutes: 15)),
                   onConfirm: (date) {
                 setState(() {
                   startDate = date;
@@ -61,8 +65,8 @@ class _TimePickerState extends State<TimePicker> {
               if (startDate != null) {
                 await DatePicker.showDateTimePicker(context,
                     showTitleActions: true,
-                    minTime: startDate.add(Duration(minutes: 1)),
-                    maxTime: startDate.add(Duration(minutes: 1, days: 365)),
+                    minTime: startDate.add(Duration(minutes: 45)),
+                    maxTime: startDate.add(Duration(hours: 12)),
                     onConfirm: (date) {
                   setState(() {
                     endDate = date;

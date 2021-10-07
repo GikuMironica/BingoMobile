@@ -41,7 +41,6 @@ class _ReplaceEventPageState extends State<ReplaceEventPage> {
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(
-          //key: _scaffoldKey,
           appBar: AppBar(
             flexibleSpace: Container(
               decoration: decorationGradient(),
