@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hopaut/controllers/providers/BaseFormStatus.dart';
-import 'package:hopaut/presentation/widgets/inputs/profile_names_input.dart';
+import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/presentation/widgets/inputs/basic_input.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:hopaut/controllers/providers/account_provider.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
@@ -28,8 +29,14 @@ class _EditAccountNameState extends State<EditAccountName> {
   @override
   Widget build(BuildContext context) {
     _accountProvider = Provider.of<AccountProvider>(context, listen: true);
-    _firstNameController.text = _accountProvider.currentIdentity.firstName;
-    _lastNameController.text = _accountProvider.currentIdentity.lastName;
+
+    if(_accountProvider.formStatus is Failed){
+      // Translation
+      showSnackBar(context, "Internal Error");
+      setState(() {
+        _accountProvider.formStatus = new Idle();
+      });
+    }
     return Scaffold(
       appBar: SimpleAppBar(
         context: context,
@@ -39,13 +46,19 @@ class _EditAccountNameState extends State<EditAccountName> {
                 !_accountProvider.firstNameIsValid
             ? null
             : [
-                IconButton(
-                    icon: Icon(Icons.check),
-                    onPressed: () async =>
-                        await _accountProvider.updateUserNameAsync(
-                            _firstNameController.text,
-                            _lastNameController.text,
-                            context))
+                Container(
+                  child: Builder(
+                    builder: (context) =>
+                    IconButton(
+                      icon: Icon(Icons.check),
+                      onPressed: () async =>
+                          await _accountProvider.updateUserNameAsync(
+                              _firstNameController.text,
+                              _lastNameController.text,
+                              context)
+                    ),
+                  ),
+                )
               ],
       ),
       body: Container(
@@ -58,7 +71,13 @@ class _EditAccountNameState extends State<EditAccountName> {
 
   Widget _editProfileForm() {
     return _accountProvider.formStatus is Submitted
-        ? CircularProgressIndicator()
+        ? Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        )
         : Form(
             key: _formKey,
             child: Column(
@@ -72,10 +91,11 @@ class _EditAccountNameState extends State<EditAccountName> {
                     isStateValid: _accountProvider.firstNameIsValid,
                     // TODO translations
                     validationMessage: "Please provide a valid name.",
-                    initialValue: _firstNameController.text,
+                    initialValue: _accountProvider.currentIdentity.firstName,
                     onChange: (v) => _accountProvider.validateFirstNameChange(
                         v, _firstNameController, maxFieldLength)),
                 // translation
+                Divider(),
                 _fieldSpacing(label: 'Last name'),
                 valueInput(
                     maxLength: maxFieldLength,
@@ -83,7 +103,7 @@ class _EditAccountNameState extends State<EditAccountName> {
                     isStateValid: _accountProvider.lastNameIsValid,
                     // TODO translations
                     validationMessage: "Please provide a valid name.",
-                    initialValue: _lastNameController.text,
+                    initialValue: _accountProvider.currentIdentity.lastName,
                     onChange: (v) => _accountProvider.validateLastNameChange(
                         v, _lastNameController, maxFieldLength)),
               ],

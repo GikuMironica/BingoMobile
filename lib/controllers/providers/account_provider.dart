@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/controllers/providers/BaseFormStatus.dart';
+import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:injectable/injectable.dart';
 
@@ -32,17 +33,27 @@ class AccountProvider extends ChangeNotifier {
   Future<void> updateUserNameAsync(
       String firstName, String lastName, BuildContext context) async {
     bool firstNameChanged =
-        currentIdentity.firstName != currentIdentity.firstName;
-    bool lastNameChanged = currentIdentity.lastName != currentIdentity.lastName;
+        currentIdentity.firstName != firstName;
+    bool lastNameChanged = currentIdentity.lastName != lastName
 
-    if (!(firstNameChanged && lastNameChanged)) {
+    if ((!firstNameChanged && !lastNameChanged) || (firstName=="")&&(lastName=="")) {
       Application.router.pop(context);
     } else {
+      formStatus = Submitted();
+      notifyListeners();
       User tempUser = User(firstName: firstName, lastName: lastName);
       User updatedUser =
           await _userRepository.update(currentIdentity.id, tempUser);
-      _authenticationService.setUser(updatedUser);
-      Application.router.pop(context);
+      if(updatedUser==null){
+        formStatus = new Failed();
+        notifyListeners();
+      }else{
+        formStatus = Idle();
+        _authenticationService.setUser(updatedUser);
+        // TODO translate
+        showSuccessSnackBar(context: context, message: "Profile updated");
+        Application.router.pop(context);
+      }
     }
   }
 

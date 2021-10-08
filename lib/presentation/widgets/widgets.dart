@@ -130,7 +130,7 @@ Widget _successIcon() {
   return Image.asset(
     'assets/icons/success.png',
     height: 25,
-    width: double.infinity,
+    width: 25,
   );
 }
 
