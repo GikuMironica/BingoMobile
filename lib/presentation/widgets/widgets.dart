@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import '../../config/routes/application.dart';
 import 'package:hopaut/config/constants/theme.dart';
 
-
 Widget makeTitle({String title}) {
   return Text(
     title,
@@ -39,7 +38,7 @@ Widget accountAlreadyPrompt(BuildContext context) {
       },
       child:
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            // TODO - Translate
+        // TODO - Translate
         Text('Already have an account? '),
         Text(
           'Login',
@@ -56,18 +55,15 @@ Widget forgotPassword(BuildContext context) {
         padding: EdgeInsets.zero,
         onPressed: () {
           Application.router.navigateTo(context, '/forgot_password',
-            replace: true,
-            transition: TransitionType.fadeIn,
-            transitionDuration: Duration());
+              replace: true,
+              transition: TransitionType.fadeIn,
+              transitionDuration: Duration());
         },
         child: Text(
           // TODO - Translations
           'Forgot password?',
           style: TextStyle(
-            fontWeight: FontWeight.w500,
-            color: Colors.pink,
-            fontSize: 12
-          ),
+              fontWeight: FontWeight.w500, color: Colors.pink, fontSize: 12),
           textAlign: TextAlign.end,
         ),
       )
@@ -75,30 +71,23 @@ Widget forgotPassword(BuildContext context) {
   );
 }
 
-Widget noAccountYetPrompt(BuildContext context){
+Widget noAccountYetPrompt(BuildContext context) {
   return FlatButton(
-   onPressed: () {
-     Application.router.navigateTo(context, '/registration',
-       replace: true,
-       transition: TransitionType.fadeIn,
-       transitionDuration: Duration());
-   },
-    child:
-      Row(
+      onPressed: () {
+        Application.router.navigateTo(context, '/registration',
+            replace: true,
+            transition: TransitionType.fadeIn,
+            transitionDuration: Duration());
+      },
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // TODO - Translation
           Text('Don\'t have an account yet? '),
-          Text(
-            'Sign up',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Colors.pink
-            )
-          )
+          Text('Sign up',
+              style: TextStyle(fontWeight: FontWeight.w500, color: Colors.pink))
         ],
-      )
-  );
+      ));
 }
 
 Widget circularProgressIndicator() {
@@ -114,17 +103,34 @@ Widget circularProgressIndicator() {
 }
 
 void showSnackBar(BuildContext context, String message) {
-  Scaffold.of(context).showSnackBar(
-      SnackBar(
-          content:
-          Text(
+  Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(
+        message,
+        textAlign: TextAlign.center,
+      ),
+      behavior: SnackBarBehavior.floating,
+      duration: Duration(seconds: 3),
+      backgroundColor: HATheme.HOPAUT_PINK));
+}
+
+void showSuccessSnackBar({BuildContext context, String message}) {
+  Scaffold.of(context).showSnackBar(SnackBar(
+      content: ListTile(
+          leading: _successIcon(),
+          title: Text(
             message,
             textAlign: TextAlign.center,
-          ),
-          behavior: SnackBarBehavior.floating,
-          duration: Duration(seconds: 2),
-          backgroundColor: HATheme.HOPAUT_PINK
-      )
+          )),
+      behavior: SnackBarBehavior.floating,
+      duration: Duration(seconds: 2),
+      backgroundColor: Colors.white));
+}
+
+Widget _successIcon() {
+  return Image.asset(
+    'assets/icons/success.png',
+    height: 25,
+    width: 25,
   );
 }
 
@@ -141,7 +147,7 @@ Widget privacyPolicyAndTerms({BuildContext context, String actionText}) {
             text: 'Privacy Policy',
             style: linkStyle,
             recognizer: TapGestureRecognizer()
-              ..onTap = () async{
+              ..onTap = () async {
                 await _launchURL(url: WEB.PRIVACY_POLICY);
               }),
         TextSpan(text: ' and '),
@@ -149,7 +155,7 @@ Widget privacyPolicyAndTerms({BuildContext context, String actionText}) {
             text: 'Terms & Conditions',
             style: linkStyle,
             recognizer: TapGestureRecognizer()
-              ..onTap = () async{
+              ..onTap = () async {
                 await _launchURL(url: WEB.TERMS_SERVICES);
               }),
       ],

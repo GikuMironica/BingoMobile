@@ -26,27 +26,25 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        child: SafeArea(
-          child: Container(
-            child: BlocProvider(
-              create: (context) => RegisterBloc(),
-              child: _registerView(),
+        resizeToAvoidBottomInset: false,
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          child: SafeArea(
+            child: Container(
+              child: BlocProvider(
+                create: (context) => RegisterBloc(),
+                child: _registerView(),
+              ),
             ),
           ),
-        ),
-      )
-    );
+        ));
   }
 
   Widget _registerView() {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Padding(
         padding: const EdgeInsets.all(24),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center, children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           HopautLogo(),
           SizedBox(height: 32),
           // TODO - Translation
@@ -59,17 +57,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
         ]),
       ),
       BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
-        if (state.formStatus is SubmissionSuccess){
+        if (state.formStatus is SubmissionSuccess) {
           _showFullscreenDialog(context);
         }
         return Expanded(
           child: Container(
               child: Visibility(
-                visible: state.formStatus is Idle,
-                child: Align(
-                    alignment: FractionalOffset.bottomCenter,
-                    child: accountAlreadyPrompt(context)),
-              )),
+            visible: state.formStatus is Idle,
+            child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: accountAlreadyPrompt(context)),
+          )),
         );
       })
     ]);
@@ -88,7 +86,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
           key: _formKey,
           child: Column(
             children: [
-              BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+              BlocBuilder<RegisterBloc, RegisterState>(
+                  builder: (context, state) {
                 return emailInputField(
                     context: context,
                     isStateValid: state.isEmailValid,
@@ -99,7 +98,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
               SizedBox(
                 height: 16,
               ),
-              BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+              BlocBuilder<RegisterBloc, RegisterState>(
+                  builder: (context, state) {
                 return passwordInputField(
                     // TODO - Translate
                     hint: "Enter a password",
@@ -108,11 +108,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     isStateValid: state.isPasswordValid,
                     // TODO - Translate
                     validationMessage:
-                      "Password must be at least 8 characters length,"+
-                          " must contain upper, lower case letters"+
-                          " and digits",
-                    onObscureTap: () => context.read<RegisterBloc>()
-                      .add(UnobscurePasswordClicked(passwordObscureText: state.passwordObscureText)),
+                        "Password must be at least 8 characters length," +
+                            " must contain upper, lower case letters" +
+                            " and digits",
+                    onObscureTap: () => context.read<RegisterBloc>().add(
+                        UnobscurePasswordClicked(
+                            passwordObscureText: state.passwordObscureText)),
                     onChange: (value) => context
                         .read<RegisterBloc>()
                         .add(RegisterPasswordChanged(password: value)));
@@ -120,7 +121,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
               SizedBox(
                 height: 16,
               ),
-              BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+              BlocBuilder<RegisterBloc, RegisterState>(
+                  builder: (context, state) {
                 return passwordInputField(
                     // TODO - Translate
                     hint: "Confirm password",
@@ -129,16 +131,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     validationMessage: "Passwords don't match",
                     isTextObscured: state.confirmPasswordObscureText,
                     isStateValid: state.isConfirmPasswordValid,
-                    onObscureTap: () => context.read<RegisterBloc>()
-                      .add(UnobscureConfirmPasswordClicked(confirmPasswordObscureText: state.confirmPasswordObscureText)),
-                    onChange: (value) => context
-                        .read<RegisterBloc>()
-                        .add(RegisterConfirmPasswordChanged(confirmPassword: value)));
+                    onObscureTap: () => context.read<RegisterBloc>().add(
+                        UnobscureConfirmPasswordClicked(
+                            confirmPasswordObscureText:
+                                state.confirmPasswordObscureText)),
+                    onChange: (value) => context.read<RegisterBloc>().add(
+                        RegisterConfirmPasswordChanged(
+                            confirmPassword: value)));
               }),
               SizedBox(
                 height: 16,
               ),
-              BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+              BlocBuilder<RegisterBloc, RegisterState>(
+                  builder: (context, state) {
                 return state.formStatus is RegisterSubmitted
                     ? circularProgressIndicator()
                     : _registerButton();
@@ -146,48 +151,46 @@ class _RegistrationPageState extends State<RegistrationPage> {
               SizedBox(
                 height: 16,
               ),
-              privacyPolicyAndTerms(context: context, actionText: 'By signing up'),
+              // TODO - translation
+              privacyPolicyAndTerms(
+                  context: context, actionText: 'By signing up'),
             ],
           )),
     );
   }
 
   Widget _registerButton() {
-    return Container(
-        child: BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
-        return authButton(
+    return Container(child:
+        BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+      return authButton(
           // TODO - Translate
           label: 'Sign Up',
           context: context,
           isStateValid: state.formStatus is SubmissionSuccess,
           onPressed: state.formStatus is RegisterSubmitted
-            ? () {}
-            : () => {
-              FocusManager.instance.primaryFocus.unfocus(),
-              if (_formKey.currentState.validate()) {
-                context.read<RegisterBloc>().add(new RegisterClicked())
-              }
-          });
-        })
-    );
+              ? () {}
+              : () => {
+                    FocusManager.instance.primaryFocus.unfocus(),
+                    if (_formKey.currentState.validate())
+                      {context.read<RegisterBloc>().add(new RegisterClicked())}
+                  });
+    }));
   }
 
   _showFullscreenDialog(BuildContext context) {
-    Future.delayed(Duration.zero, ()
-    {
-      Navigator.of(context).push(
-          PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (BuildContext context, _, __) =>
+    Future.delayed(Duration.zero, () {
+      Navigator.of(context).push(PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (BuildContext context, _, __) =>
               // TODO - Translate
               FullscreenDialog(
                 asset: 'assets/icons/confirm_email.png',
                 header: 'Success!',
-                message: 'Please check your email. You will get soon an email confirmation link.',
+                message:
+                    'Please check your email. You will get soon an email confirmation link.',
                 buttonText: 'Back to login',
                 route: '/login',
               )));
     });
   }
-
 }

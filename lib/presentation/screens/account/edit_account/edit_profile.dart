@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
-import 'package:hopaut/presentation/widgets/profile_picture/profile_picture.dart';
+import 'package:hopaut/presentation/widgets/profile_picture.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +14,27 @@ class EditAccountPage extends StatefulWidget {
 }
 
 class _EditAccountPageState extends State<EditAccountPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: SimpleAppBar(
+        // TODO translation
+        text: 'Edit Profile',
+        context: context,
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: ListView.separated(
+          itemBuilder: (ctx, idx) => editAccountMenu[idx],
+          separatorBuilder: (ctx, idx) => Divider(),
+          itemCount: editAccountMenu.length,
+          shrinkWrap: true,
+          primary: false,
+        ),
+      ),
+    );
+  }
+
   List<Widget> editAccountMenu = <Widget>[
     Column(
       children: [
@@ -31,7 +52,8 @@ class _EditAccountPageState extends State<EditAccountPage> {
                   height: 16,
                 ),
                 Text(
-                  'Change Profile Picture',
+                  // TODO translation
+                  'Change profile picture',
                   style: TextStyle(color: HATheme.HOPAUT_PINK),
                 ),
               ],
@@ -48,6 +70,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
         onTap: () => Application.router.navigateTo(
             context, Routes.editAccountName,
             transition: TransitionType.cupertino),
+        // TODO translation
         title: Text('Name'),
         subtitle: Text(auth.user.fullName),
         trailing: Icon(Icons.arrow_forward_ios),
@@ -58,9 +81,10 @@ class _EditAccountPageState extends State<EditAccountPage> {
         onTap: () => Application.router.navigateTo(
             context, Routes.editAccountDescription,
             transition: TransitionType.cupertino),
+        // TODO translation
         title: Text('Description'),
         subtitle: auth.user.description?.length == null
-            ? Text("empty", style: TextStyle(color: Colors.grey[500]))
+            ? Text("Empty", style: TextStyle(color: Colors.grey[500]))
             : Text(
                 auth.user.description.trim(),
                 maxLines: 1,
@@ -70,24 +94,4 @@ class _EditAccountPageState extends State<EditAccountPage> {
       ),
     )
   ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: SimpleAppBar(
-        text: 'Edit Account',
-        context: context,
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: ListView.separated(
-          itemBuilder: (ctx, idx) => editAccountMenu[idx],
-          separatorBuilder: (ctx, idx) => Divider(),
-          itemCount: editAccountMenu.length,
-          shrinkWrap: true,
-          primary: false,
-        ),
-      ),
-    );
-  }
 }

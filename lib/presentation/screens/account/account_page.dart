@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/controllers/providers/account_provider.dart';
-import 'package:hopaut/presentation/screens/account/edit_account/edit_account.dart';
-import 'package:hopaut/presentation/screens/settings/settings.dart';
-import 'package:hopaut/presentation/widgets/profile_picture/profile_picture.dart';
-import 'package:hopaut/services/authentication_service.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:hopaut/presentation/screens/account/account_widgets.dart';
+import 'package:hopaut/presentation/widgets/profile_picture.dart';
 import 'package:provider/provider.dart';
 
 class AccountPage extends StatefulWidget {
@@ -55,17 +51,17 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 child: Column(
                   children: [
-                    userFullName(),
+                    userFullName(accountProvider: _accountProvider),
                     SizedBox(
                       height: 16,
                     ),
-                    userDescription(),
-                    accountInformation(),
+                    userDescription(accountProvider: _accountProvider),
+                    accountInformation(accountProvider: _accountProvider),
                     Divider(
                       indent: _size.width * 0.2,
                       endIndent: _size.width * 0.2,
                     ),
-                    accountMenu(),
+                    accountMenu(context: context),
                   ],
                 ),
               ),
@@ -80,78 +76,6 @@ class _AccountPageState extends State<AccountPage> {
           )
         ]),
       ),
-    );
-  }
-
-  Widget userFullName() {
-    return Text(
-      // TODO
-      _accountProvider.currentIdentity.fullName ?? "Name Surname",
-      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-    );
-  }
-
-  Widget userDescription() {
-    return Consumer<AuthenticationService>(
-      builder: (context, auth, child) => Visibility(
-        visible: auth.user.description != null,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-                _accountProvider.currentIdentity.description ??
-                    "Tell people something about you...",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey[500])),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget accountInformation() {
-    return Consumer<AuthenticationService>(
-      builder: (context, auth, child) => ListView(
-        primary: false,
-        shrinkWrap: true,
-        children: [
-          ListTile(
-            // TODO - Translations
-            title: Text('Email'),
-            subtitle: Text(_accountProvider.currentIdentity.email),
-          ),
-          ListTile(
-            // TODO - Translations
-            title: Text('Member since'),
-            subtitle: Text(_accountProvider.currentIdentity.dateRegistered),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget accountMenu() {
-    return ListView(
-      primary: false,
-      shrinkWrap: true,
-      children: [
-        ListTile(
-          onTap: () => pushNewScreen(context,
-              screen: EditAccountPage(), withNavBar: false),
-          leading: Icon(MdiIcons.pencil),
-          title: Align(
-              // TODO - Translations
-              alignment: Alignment(-1.15, 0),
-              child: Text('Edit Profile')),
-        ),
-        ListTile(
-          onTap: () =>
-              pushNewScreen(context, screen: Settings(), withNavBar: false),
-          leading: Icon(Icons.settings),
-          // TODO - Translations
-          title: Align(alignment: Alignment(-1.15, 0), child: Text('Settings')),
-        ),
-      ],
     );
   }
 }
