@@ -34,7 +34,7 @@ class AccountProvider extends ChangeNotifier {
       String firstName, String lastName, BuildContext context) async {
     bool firstNameChanged =
         currentIdentity.firstName != firstName;
-    bool lastNameChanged = currentIdentity.lastName != lastName
+    bool lastNameChanged = currentIdentity.lastName != lastName;
 
     if ((!firstNameChanged && !lastNameChanged) || (firstName=="")&&(lastName=="")) {
       Application.router.pop(context);
