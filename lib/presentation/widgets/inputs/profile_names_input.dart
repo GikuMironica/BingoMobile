@@ -7,6 +7,7 @@ Widget valueInput({
   @required String validationMessage,
   @required String initialValue,
   @required void Function(String) onChange,
+  @required int maxLength,
 }) {
   return Stack(
     children: [
@@ -21,7 +22,7 @@ Widget valueInput({
           )),
       TextFormField(
         inputFormatters: [
-          LengthLimitingTextInputFormatter(10),
+          LengthLimitingTextInputFormatter(maxLength),
         ],
         initialValue: initialValue ?? "",
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -31,7 +32,7 @@ Widget valueInput({
         onChanged: onChange,
         maxLines: 1,
         maxLengthEnforced: true,
-        maxLength: 10,
+        maxLength: maxLength,
         decoration: InputDecoration(
           counterText: "",
           isDense: true,

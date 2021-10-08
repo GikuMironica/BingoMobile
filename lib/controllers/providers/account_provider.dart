@@ -12,12 +12,10 @@ class AccountProvider extends ChangeNotifier {
   // validation rules
   static final RegExp _regExp = RegExp(r"^[\p{L} ,.'-]*$",
       caseSensitive: false, unicode: true, dotAll: true);
-  bool firstNameIsValid;
-  bool lastNameIsValid;
 
-  // State related
-  String firstName = '';
-  String lastName = '';
+  // state
+  bool firstNameIsValid = true;
+  bool lastNameIsValid = true;
   BaseFormStatus formStatus;
 
   // Services, repositories and models
@@ -28,17 +26,14 @@ class AccountProvider extends ChangeNotifier {
   AccountProvider() {
     _authenticationService = getIt<AuthenticationService>();
     _userRepository = getIt<UserRepository>();
-    firstName = currentIdentity.firstName;
-    lastName = currentIdentity.lastName;
-    firstNameIsValid = _regExp.hasMatch(firstName) && firstName.isNotEmpty;
-    lastNameIsValid = _regExp.hasMatch(lastName) && lastName.isNotEmpty;
     formStatus = Idle();
   }
 
   Future<void> updateUserNameAsync(
       String firstName, String lastName, BuildContext context) async {
-    bool firstNameChanged = currentIdentity.firstName != firstName;
-    bool lastNameChanged = currentIdentity.lastName != lastName;
+    bool firstNameChanged =
+        currentIdentity.firstName != currentIdentity.firstName;
+    bool lastNameChanged = currentIdentity.lastName != currentIdentity.lastName;
 
     if (!(firstNameChanged && lastNameChanged)) {
       Application.router.pop(context);
@@ -51,13 +46,17 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-  void validateFirstNameChange(String value) {
+  void validateFirstNameChange(
+      String value, TextEditingController controller, int maxLength) {
     firstNameIsValid = _regExp.hasMatch(value) && value.isNotEmpty;
+    controller.text = value.length < maxLength ? value : controller.text;
     notifyListeners();
   }
 
-  void validateLastNameChange(String value) {
+  void validateLastNameChange(
+      String value, TextEditingController controller, int maxLength) {
     lastNameIsValid = _regExp.hasMatch(value) && value.isNotEmpty;
+    controller.text = value.length < maxLength ? value : controller.text;
     notifyListeners();
   }
 }
