@@ -17,11 +17,9 @@ class EditAccountPage extends StatefulWidget {
 }
 
 class _EditAccountPageState extends State<EditAccountPage> {
-  AccountProvider _provider;
 
   @override
   Widget build(BuildContext context) {
-    _provider = Provider.of<AccountProvider>(context, listen:true);
     return Scaffold(
       appBar: SimpleAppBar(
         // TODO translation
@@ -68,9 +66,8 @@ class _EditAccountPageState extends State<EditAccountPage> {
        Consumer<AuthenticationService>(
          builder: (context, auth, child) =>
              ListTile(
-               onTap: () async => {
-                await _navigateToEditNameAndDisplayResult(context)
-               },
+               onTap: () async =>
+                await _navigateAndDisplayResult(context,Routes.editAccountName),
                // TODO translation
                title: Text('Name'),
                subtitle: Text(auth.user.fullName),
@@ -80,9 +77,8 @@ class _EditAccountPageState extends State<EditAccountPage> {
        Consumer<AuthenticationService>(
          builder: (context, auth, child) =>
              ListTile(
-               onTap: () => Application.router.navigateTo(
-                   context, Routes.editAccountDescription,
-                   transition: TransitionType.cupertino),
+               onTap: () async =>
+                  await _navigateAndDisplayResult(context, Routes.editAccountDescription),
                // TODO translation
                title: Text('Description'),
                subtitle: auth.user.description?.length == null
@@ -98,9 +94,9 @@ class _EditAccountPageState extends State<EditAccountPage> {
      ]);
    }
 
-   Future _navigateToEditNameAndDisplayResult(BuildContext context) async{
+   Future _navigateAndDisplayResult(BuildContext context, String routes) async{
     var result = await Application.router.navigateTo(
-        context, Routes.editAccountName,
+        context, routes,
         transition: TransitionType.cupertino);
     if(result is Success)
       showSuccessSnackBar(context: context, message: "Profile updated");

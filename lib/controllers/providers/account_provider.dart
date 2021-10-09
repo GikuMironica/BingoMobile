@@ -17,6 +17,7 @@ class AccountProvider extends ChangeNotifier {
   // state
   bool firstNameIsValid = true;
   bool lastNameIsValid = true;
+  bool descriptionIsValid = true;
   BaseFormStatus formStatus;
 
   // Services, repositories and models
@@ -55,6 +56,30 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> updateDescription(
+      String newDescription, BuildContext context) async {
+    bool descriptionHasChanged =
+        currentIdentity.description != newDescription;
+
+    if (!descriptionHasChanged) {
+      Application.router.pop(context);
+    } else {
+      formStatus = Submitted();
+      notifyListeners();
+      User tempUser = User(description: newDescription);
+      var response = await _userRepository.update(currentIdentity.id, tempUser);
+
+      if (response == null) {
+        formStatus = Failed();
+        notifyListeners();
+      }else{
+        formStatus = Idle();
+        _authenticationService.setUser(response);
+        Application.router.pop(context, Success());
+      }
+    }
+  }
+
   void validateFirstNameChange(
       String value, TextEditingController controller, int maxLength) {
     firstNameIsValid = _regExp.hasMatch(value) && value.isNotEmpty;
@@ -65,6 +90,12 @@ class AccountProvider extends ChangeNotifier {
   void validateLastNameChange(
       String value, TextEditingController controller, int maxLength) {
     lastNameIsValid = _regExp.hasMatch(value) && value.isNotEmpty;
+    controller.text = value.length < maxLength ? value : controller.text;
+    notifyListeners();
+  }
+
+  void validateDescription(String value, TextEditingController controller, int maxLength){
+    descriptionIsValid = value.length<=maxLength;
     controller.text = value.length < maxLength ? value : controller.text;
     notifyListeners();
   }

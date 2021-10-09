@@ -38,15 +38,13 @@ class _EditAccountNameState extends State<EditAccountName> {
                 !_accountProvider.firstNameIsValid
             ? null
             : [
-                Container(
-                  child: IconButton(
-                      icon: Icon(Icons.check),
-                      onPressed: () async =>
-                          await _accountProvider.updateUserNameAsync(
-                              _firstNameController.text,
-                              _lastNameController.text,
-                              context)
-                    ),
+                IconButton(
+                    icon: Icon(Icons.check),
+                    onPressed: () async =>
+                        await _accountProvider.updateUserNameAsync(
+                            _firstNameController.text.trim(),
+                            _lastNameController.text.trim(),
+                            context)
                   ),
               ],
       ),

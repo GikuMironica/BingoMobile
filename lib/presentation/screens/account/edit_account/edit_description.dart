@@ -3,10 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/controllers/providers/account_provider.dart';
+import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
+import 'package:hopaut/presentation/widgets/inputs/text_area_input.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/services/authentication_service.dart';
+import 'package:provider/provider.dart';
 
 class EditAccountDescription extends StatefulWidget {
   @override
@@ -14,32 +19,68 @@ class EditAccountDescription extends StatefulWidget {
 }
 
 class _EditAccountDescriptionState extends State<EditAccountDescription> {
+  AccountProvider _accountProvider;
   TextEditingController _descriptionController;
+  int maxFieldLength;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     _descriptionController = TextEditingController();
-    _descriptionController.text =
-        GetIt.I.get<AuthenticationService>().user.description ?? '';
+    maxFieldLength = 250;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    _accountProvider = Provider.of<AccountProvider>(context, listen: true);
     return Scaffold(
-      appBar: SimpleAppBar(
-        context: context,
-        // TODO translation
-        text: 'Description',
-        actionButtons: [
-          IconButton(
-              icon: Icon(Icons.check),
-              onPressed: () async => updateDescription(
-                  _descriptionController.text.trim(), context))
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        appBar: SimpleAppBar(
+            context: context,
+            // TODO translation
+            text: 'Description',
+            actionButtons: _accountProvider.descriptionIsValid
+            ? [
+                IconButton(
+                  icon: Icon(Icons.check),
+                  onPressed: () async =>
+                      _accountProvider.updateDescription(
+                          _descriptionController.text.trim(), context)
+                )
+              ]
+            : null
+        ),
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(16.0),
+            child: Builder(
+                builder: (context) => _editProfileDescriptionForm(context)
+            ),
+          )
+        )
+    );
+  }
+
+  Widget _editProfileDescriptionForm(BuildContext context) {
+    if(_accountProvider.formStatus is Failed){
+      // Translation
+      Future.delayed(Duration.zero, () async {
+        // TODO - translation
+        showSnackBar(context, "Error, Something went wrong");
+      });
+      _accountProvider.formStatus = new Idle();
+    }
+    return _accountProvider.formStatus is Submitted
+    ? Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      )
+    : Form(
+        key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -57,57 +98,26 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
             SizedBox(
               height: 8,
             ),
-            Container(
-              height: 192.0,
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: TextField(
+            textAreaInput(
+                isStateValid: _accountProvider.descriptionIsValid,
                 controller: _descriptionController,
-                onChanged: (v) {},
-                maxLengthEnforced: true,
-                maxLength: 250,
-                maxLines: 8,
-                inputFormatters: [LengthLimitingTextInputFormatter(250)],
-                decoration: InputDecoration(
-                  counterText: '',
-                  contentPadding: EdgeInsets.all(12.0),
-                  border: InputBorder.none,
-                ),
-              ),
+                initialValue: _accountProvider.currentIdentity.description,
+                maxLength: maxFieldLength,
+                onChange: (v) =>_accountProvider.validateDescription(
+                    v, _descriptionController, maxFieldLength),
+                validationMessage: "Profile description too long"
             )
           ],
         ),
-      ),
-    );
+      );
   }
+
+
 
   @override
   void dispose() {
+    _accountProvider.descriptionIsValid = true;
     _descriptionController.dispose();
     super.dispose();
-  }
-
-  Future<void> updateDescription(
-      String newDescription, BuildContext context) async {
-    bool descriptionHasChanged =
-        getIt<AuthenticationService>().user.description != newDescription;
-
-    if (!descriptionHasChanged) {
-      Application.router.pop(context);
-    } else {
-      final User tempUser = User(
-          firstName: getIt<AuthenticationService>().user.firstName,
-          lastName: getIt<AuthenticationService>().user.lastName,
-          description: newDescription);
-      var response = await getIt<UserRepository>().update(
-          getIt<AuthenticationService>().currentIdentity.userId, tempUser);
-
-      if (response is User) {
-        getIt<AuthenticationService>().setUser(response);
-        Application.router.pop(context);
-      } else {}
-    }
   }
 }
