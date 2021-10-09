@@ -6,6 +6,7 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/picture.dart';
 import 'package:hopaut/services/date_formatter_service.dart';
+import 'package:hopaut/utils/image_utilities.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
 
@@ -50,7 +51,7 @@ class Post {
       this.pictures,
       this.tags}) {
     if (pictures == null) {
-      pictures = [null, null, null];
+      pictures = List<Picture>();
     }
     if (event == null) {
       event = Event();
@@ -174,11 +175,15 @@ class Post {
     this.eventTime = int;
   }
 
-  void setPicture(Picture picture, int index) {
-    pictures[index] = picture;
+  void setPicture(Picture picture, [int index]) async {
+    if (index != null && index < Constraint.pictureMaxCount) {
+      pictures[index] = picture;
+    } else if (pictures.length < Constraint.pictureMaxCount) {
+      pictures.add(picture);
+    }
   }
 
-  void removePicture(int index) {
-    pictures[index] = null;
+  void removePicture(Picture picture) {
+    pictures.remove(picture);
   }
 }

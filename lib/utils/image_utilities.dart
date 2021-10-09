@@ -26,12 +26,15 @@ Future<File> compressToWebp({String source, String target}) async {
   return conversionResult;
 }
 
-Future<Picture> choosePicture(int index) async {
+Future<Picture> choosePicture() async {
   final PickedFile pickedFile =
       await imagePicker.getImage(source: ImageSource.gallery);
-  File file = File(pickedFile.path);
-  File convertedImage = await testCompressAndGetFile(
-      file, "${file.parent.absolute.path}/$index.webp");
-  MemoryImage image = MemoryImage(convertedImage.readAsBytesSync());
-  return Picture(image: image, path: convertedImage.path);
+  if (pickedFile != null) {
+    File file = File(pickedFile.path);
+    File convertedImage =
+        await testCompressAndGetFile(file, "${file.parent.absolute.path}.webp");
+    MemoryImage image = MemoryImage(convertedImage.readAsBytesSync());
+    return Picture(image: image, path: convertedImage.path);
+  }
+  return null;
 }

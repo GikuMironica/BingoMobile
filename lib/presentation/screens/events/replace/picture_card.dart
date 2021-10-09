@@ -1,28 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/data/models/picture.dart';
-import 'package:hopaut/data/models/post.dart';
-import 'package:hopaut/utils/image_utilities.dart';
 
-class PictureCard extends StatefulWidget {
-  final Post post;
-  final int index;
+class PictureCard extends StatelessWidget {
+  final Picture picture;
+  final Function onSet;
+  final Function onRemove;
 
-  PictureCard({this.post, this.index});
+  PictureCard({this.picture, this.onSet, this.onRemove});
 
-  @override
-  _PictureCardState createState() => _PictureCardState();
-}
-
-class _PictureCardState extends State<PictureCard> {
-  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () async {
-        Picture picture = await choosePicture(widget.index);
-
-        setState(() {
-          widget.post.setPicture(picture, widget.index);
-        });
+      onTap: () {
+        onSet();
       },
       child: Card(
         elevation: 3,
@@ -30,22 +19,19 @@ class _PictureCardState extends State<PictureCard> {
             width: 96,
             height: 96,
             color: Colors.grey[200],
-            child: widget.post.pictures[widget.index] == null
-                ? Icon(Icons.add)
-                : Stack(
+            child: picture != null
+                ? Stack(
                     children: <Widget>[
                       Container(
                         decoration: BoxDecoration(
                             image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: widget.post.pictures[widget.index].image,
+                          image: picture.image,
                         )),
                       ),
                       InkWell(
                         onTap: () {
-                          setState(() {
-                            widget.post.removePicture(widget.index);
-                          });
+                          onRemove();
                         },
                         child: Icon(
                           Icons.delete,
@@ -53,7 +39,8 @@ class _PictureCardState extends State<PictureCard> {
                         ),
                       ),
                     ],
-                  )),
+                  )
+                : Icon(Icons.add)),
       ),
     );
   }
