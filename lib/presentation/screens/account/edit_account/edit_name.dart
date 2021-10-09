@@ -29,14 +29,6 @@ class _EditAccountNameState extends State<EditAccountName> {
   @override
   Widget build(BuildContext context) {
     _accountProvider = Provider.of<AccountProvider>(context, listen: true);
-
-    if(_accountProvider.formStatus is Failed){
-      // Translation
-      showSnackBar(context, "Internal Error");
-      setState(() {
-        _accountProvider.formStatus = new Idle();
-      });
-    }
     return Scaffold(
       appBar: SimpleAppBar(
         context: context,
@@ -47,9 +39,7 @@ class _EditAccountNameState extends State<EditAccountName> {
             ? null
             : [
                 Container(
-                  child: Builder(
-                    builder: (context) =>
-                    IconButton(
+                  child: IconButton(
                       icon: Icon(Icons.check),
                       onPressed: () async =>
                           await _accountProvider.updateUserNameAsync(
@@ -58,18 +48,29 @@ class _EditAccountNameState extends State<EditAccountName> {
                               context)
                     ),
                   ),
-                )
               ],
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-            padding: EdgeInsets.all(16.0), child: _editProfileForm()),
-      ),
+            padding: EdgeInsets.all(16.0),
+            child: Builder(
+              builder: (context) =>_editProfileForm(context)
+            ),
+        ),
+      )
     );
   }
 
-  Widget _editProfileForm() {
+  Widget _editProfileForm(BuildContext context) {
+    if(_accountProvider.formStatus is Failed){
+      // Translation
+      Future.delayed(Duration.zero, () async {
+        // TODO - translation
+        showSnackBar(context, "Error, Something went wrong");
+      });
+        _accountProvider.formStatus = new Idle();
+    }
     return _accountProvider.formStatus is Submitted
         ? Container(
           width: MediaQuery.of(context).size.width,
