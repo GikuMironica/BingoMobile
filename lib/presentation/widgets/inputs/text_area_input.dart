@@ -30,7 +30,7 @@ Widget textAreaInput({
         // TODO translation
         isStateValid ? null : validationMessage,
         onChanged: onChange,
-        maxLines: 8,
+        maxLines: 7,
         maxLengthEnforced: true,
         maxLength: maxLength,
         decoration: InputDecoration(

@@ -159,11 +159,10 @@ class _UploadPictureState extends State<UploadPicture> {
                       },
                       child: Row(
                         children: [
-                          Text('Set as Profile Picture'),
-                          SizedBox(
+                          Icon(Icons.check),SizedBox(
                             height: 4,
                           ),
-                          Icon(Icons.check),
+                          Text('Set as Profile Picture'),
                         ],
                       ),
                     )

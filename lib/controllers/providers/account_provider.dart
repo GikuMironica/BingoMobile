@@ -95,8 +95,9 @@ class AccountProvider extends ChangeNotifier {
   }
 
   void validateDescription(String value, TextEditingController controller, int maxLength){
-    descriptionIsValid = value.length<=maxLength;
-    controller.text = value.length < maxLength ? value : controller.text;
+    descriptionIsValid = value.length <= maxLength;
+    controller.text = descriptionIsValid ? value : controller.text;
+    print(controller.text.length);
     notifyListeners();
   }
 }

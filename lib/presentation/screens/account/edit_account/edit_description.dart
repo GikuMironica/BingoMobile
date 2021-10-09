@@ -26,9 +26,13 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
 
   @override
   void initState() {
-    _descriptionController = TextEditingController();
-    maxFieldLength = 250;
     super.initState();
+    _descriptionController = TextEditingController();
+    // on initialize screen, controller text is null even if user has description
+    // dirty fix
+    _descriptionController.text =
+        getIt<AuthenticationService>().user.description;
+    maxFieldLength = 250;
   }
 
   @override
@@ -43,8 +47,8 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
             ? [
                 IconButton(
                   icon: Icon(Icons.check),
-                  onPressed: () async =>
-                      _accountProvider.updateDescription(
+                  onPressed : () async =>
+                      await _accountProvider.updateDescription(
                           _descriptionController.text.trim(), context)
                 )
               ]
@@ -99,13 +103,14 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
               height: 8,
             ),
             textAreaInput(
-                isStateValid: _accountProvider.descriptionIsValid,
-                controller: _descriptionController,
-                initialValue: _accountProvider.currentIdentity.description,
-                maxLength: maxFieldLength,
-                onChange: (v) =>_accountProvider.validateDescription(
-                    v, _descriptionController, maxFieldLength),
-                validationMessage: "Profile description too long"
+              maxLength: maxFieldLength,
+              controller: _descriptionController,
+              isStateValid: _accountProvider.descriptionIsValid,
+              initialValue: _accountProvider.currentIdentity.description,
+              // TODO translation
+              validationMessage: "Profile description too long",
+              onChange: (v) =>_accountProvider.validateDescription(
+                  v, _descriptionController, maxFieldLength),
             )
           ],
         ),
@@ -116,8 +121,8 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
 
   @override
   void dispose() {
+    super.dispose();
     _accountProvider.descriptionIsValid = true;
     _descriptionController.dispose();
-    super.dispose();
   }
 }

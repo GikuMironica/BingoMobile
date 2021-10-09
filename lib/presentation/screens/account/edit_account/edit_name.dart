@@ -70,44 +70,44 @@ class _EditAccountNameState extends State<EditAccountName> {
         _accountProvider.formStatus = new Idle();
     }
     return _accountProvider.formStatus is Submitted
-        ? Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: CircularProgressIndicator(),
+      ? Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      )
+      : Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // translation
+              _fieldSpacing(label: 'Name'),
+              valueInput(
+                  maxLength: maxFieldLength,
+                  controller: _firstNameController,
+                  isStateValid: _accountProvider.firstNameIsValid,
+                  // TODO translations
+                  validationMessage: "Please provide a valid name.",
+                  initialValue: _accountProvider.currentIdentity.firstName,
+                  onChange: (v) => _accountProvider.validateFirstNameChange(
+                      v, _firstNameController, maxFieldLength)),
+              // translation
+              Divider(),
+              _fieldSpacing(label: 'Last name'),
+              valueInput(
+                  maxLength: maxFieldLength,
+                  controller: _lastNameController,
+                  isStateValid: _accountProvider.lastNameIsValid,
+                  initialValue: _accountProvider.currentIdentity.lastName,
+                  // TODO translations
+                  validationMessage: "Please provide a valid name.",
+                  onChange: (v) => _accountProvider.validateLastNameChange(
+                      v, _lastNameController, maxFieldLength)),
+            ],
           ),
-        )
-        : Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // translation
-                _fieldSpacing(label: 'Name'),
-                valueInput(
-                    maxLength: maxFieldLength,
-                    controller: _firstNameController,
-                    isStateValid: _accountProvider.firstNameIsValid,
-                    // TODO translations
-                    validationMessage: "Please provide a valid name.",
-                    initialValue: _accountProvider.currentIdentity.firstName,
-                    onChange: (v) => _accountProvider.validateFirstNameChange(
-                        v, _firstNameController, maxFieldLength)),
-                // translation
-                Divider(),
-                _fieldSpacing(label: 'Last name'),
-                valueInput(
-                    maxLength: maxFieldLength,
-                    controller: _lastNameController,
-                    isStateValid: _accountProvider.lastNameIsValid,
-                    // TODO translations
-                    validationMessage: "Please provide a valid name.",
-                    initialValue: _accountProvider.currentIdentity.lastName,
-                    onChange: (v) => _accountProvider.validateLastNameChange(
-                        v, _lastNameController, maxFieldLength)),
-              ],
-            ),
-          );
+      );
   }
 
   Widget _fieldSpacing({String label}) {
