@@ -114,23 +114,35 @@ void showSnackBar(BuildContext context, String message) {
 }
 
 void showSuccessSnackBar({BuildContext context, String message}) {
-  Scaffold.of(context).showSnackBar(SnackBar(
-      content: ListTile(
+  Scaffold.of(context).showSnackBar(
+    SnackBar(
+      content: Container(
+        height: 30,
+        child: ListTile(
+          visualDensity: VisualDensity(vertical: -4),
           leading: _successIcon(),
+          dense: true,
           title: Text(
             message,
             textAlign: TextAlign.center,
-          )),
+            style: TextStyle(
+              color: HATheme.HOPAUT_PINK,
+              fontSize: 15,
+              fontWeight: FontWeight.bold
+            ),
+          )
+        ),
+      ),
       behavior: SnackBarBehavior.floating,
-      duration: Duration(seconds: 2),
+      duration: Duration(seconds: 30),
       backgroundColor: Colors.white));
 }
 
 Widget _successIcon() {
   return Image.asset(
     'assets/icons/success.png',
-    height: 25,
-    width: 25,
+    height: 30,
+    width: 30,
   );
 }
 

@@ -50,9 +50,7 @@ class AccountProvider extends ChangeNotifier {
       }else{
         formStatus = Idle();
         _authenticationService.setUser(updatedUser);
-        // TODO translate
-        showSuccessSnackBar(context: context, message: "Profile updated");
-        Application.router.pop(context);
+        Application.router.pop(context, Success());
       }
     }
   }
