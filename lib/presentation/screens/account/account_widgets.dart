@@ -7,24 +7,26 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:hopaut/controllers/providers/account_provider.dart';
 
-Widget userFullName({@required AccountProvider accountProvider}) {
-  return Text(
-    // TODO
-    accountProvider.currentIdentity.fullName ?? "Name Surname",
-    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+Widget userFullName() {
+  return Consumer<AuthenticationService>(
+    builder: (context, provider, __) => Text(
+      // TODO
+      provider.user.fullName ?? "Name Surname",
+      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+    ),
   );
 }
 
-Widget userDescription({@required AccountProvider accountProvider}) {
+Widget userDescription() {
   return Consumer<AuthenticationService>(
-    builder: (context, auth, child) => Visibility(
-      visible: auth.user.description != null,
+    builder: (context, provider, child) => Visibility(
+      visible: provider.user.description != null,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
               // TODO translation
-              accountProvider.currentIdentity.description ??
+              provider.user.description ??
                   "Tell people something about you...",
               textAlign: TextAlign.center,
               maxLines: 5,
@@ -35,22 +37,22 @@ Widget userDescription({@required AccountProvider accountProvider}) {
   );
 }
 
-Widget accountInformation({@required AccountProvider accountProvider}) {
+Widget accountInformation() {
   return Consumer<AuthenticationService>(
     //builder: (context, auth, child) => ListView(
     //  primary: false,
     //  shrinkWrap: true,
-    builder: (context, auth, child) => Column(
+    builder: (context, provider, child) => Column(
       children: [
         ListTile(
           // TODO - Translations
           title: Text('Email'),
-          subtitle: Text(accountProvider.currentIdentity.email),
+          subtitle: Text(provider.user.email),
         ),
         ListTile(
           // TODO - Translations
           title: Text('Member since'),
-          subtitle: Text(accountProvider.currentIdentity.dateRegistered),
+          subtitle: Text(provider.user.dateRegistered),
         )
       ],
     ),

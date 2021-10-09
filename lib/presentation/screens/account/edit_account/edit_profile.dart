@@ -20,12 +20,8 @@ class _EditAccountPageState extends State<EditAccountPage> {
   AccountProvider _provider;
 
   @override
-  void initState(){
-    _provider = Provider.of<AccountProvider>(context, listen:false);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    _provider = Provider.of<AccountProvider>(context, listen:true);
     return Scaffold(
       appBar: SimpleAppBar(
         // TODO translation

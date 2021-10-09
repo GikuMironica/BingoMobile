@@ -11,11 +11,9 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  AccountProvider _accountProvider;
 
   @override
   void initState() {
-    _accountProvider = Provider.of<AccountProvider>(context, listen: false);
     super.initState();
   }
 
@@ -51,12 +49,12 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 child: Column(
                   children: [
-                    userFullName(accountProvider: _accountProvider),
+                    userFullName(),
                     SizedBox(
                       height: 16,
                     ),
-                    userDescription(accountProvider: _accountProvider),
-                    accountInformation(accountProvider: _accountProvider),
+                    userDescription(),
+                    accountInformation(),
                     Divider(
                       indent: _size.width * 0.2,
                       endIndent: _size.width * 0.2,

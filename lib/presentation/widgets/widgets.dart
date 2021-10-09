@@ -109,7 +109,7 @@ void showSnackBar(BuildContext context, String message) {
         textAlign: TextAlign.center,
       ),
       behavior: SnackBarBehavior.floating,
-      duration: Duration(seconds: 3),
+      duration: Duration(seconds: 4),
       backgroundColor: HATheme.HOPAUT_PINK));
 }
 
@@ -134,7 +134,7 @@ void showSuccessSnackBar({BuildContext context, String message}) {
         ),
       ),
       behavior: SnackBarBehavior.floating,
-      duration: Duration(seconds: 30),
+      duration: Duration(seconds: 4),
       backgroundColor: Colors.white));
 }
 
