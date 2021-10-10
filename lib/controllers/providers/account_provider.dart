@@ -19,6 +19,7 @@ class AccountProvider extends ChangeNotifier {
   bool lastNameIsValid = true;
   bool descriptionIsValid = true;
   BaseFormStatus formStatus;
+  BaseFormStatus picturesPageStatus;
 
   // Services, repositories and models
   AuthenticationService _authenticationService;
@@ -29,6 +30,7 @@ class AccountProvider extends ChangeNotifier {
     _authenticationService = getIt<AuthenticationService>();
     _userRepository = getIt<UserRepository>();
     formStatus = Idle();
+    picturesPageStatus = Idle();
   }
 
   Future<void> updateUserNameAsync(
@@ -56,7 +58,7 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> updateDescription(
+  Future<void> updateDescriptionAsync(
       String newDescription, BuildContext context) async {
     bool descriptionHasChanged =
         currentIdentity.description != newDescription;
@@ -80,6 +82,15 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> deleteProfilePictureAsync(String userId) async{
+    var response = await _userRepository.deletePicture(userId);
+    currentIdentity.profilePicture = null;
+    _authenticationService.setUser(currentIdentity);
+    notifyListeners();
+    return response;
+  }
+
+  /// State validating methods
   void validateFirstNameChange(
       String value, TextEditingController controller, int maxLength) {
     firstNameIsValid = _regExp.hasMatch(value) && value.isNotEmpty;
@@ -100,4 +111,6 @@ class AccountProvider extends ChangeNotifier {
     print(controller.text.length);
     notifyListeners();
   }
+
+
 }

@@ -48,7 +48,7 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
                 IconButton(
                   icon: Icon(Icons.check),
                   onPressed : () async =>
-                      await _accountProvider.updateDescription(
+                      await _accountProvider.updateDescriptionAsync(
                           _descriptionController.text.trim(), context)
                 )
               ]
