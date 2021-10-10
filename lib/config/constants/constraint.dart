@@ -1,13 +1,6 @@
 class Constraint {
   // Posts ---------------------------------------------------------------------
-<<<<<<< HEAD
-<<<<<<< HEAD
   static const int pictureMaxCount = 3;
-=======
->>>>>>> e3d8000... Rabese
-=======
-  static const int pictureMaxCount = 3;
->>>>>>> ecf4e17... Finished up the date/time picker. Added a max picture count constraint variable Added some TODOs for the translation.
   static const int tagMaxLength = 20;
   static const int tagMaxCount = 5;
   static const int descriptionMaxLength = 200;
