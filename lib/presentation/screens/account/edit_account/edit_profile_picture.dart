@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/controllers/providers/account_provider.dart';
-import 'package:hopaut/presentation/widgets/image_picker.dart';
+import 'package:hopaut/utils/image_picker_deprecated.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/profile_picture.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';

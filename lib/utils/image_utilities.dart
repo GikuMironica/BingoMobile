@@ -22,7 +22,8 @@ Future<File> testCompressAndGetFile(File file, String targetPath) async {
 Future<File> compressToWebp({String source, String target}) async {
   var conversionResult = await FlutterImageCompress.compressAndGetFile(
       source, target,
-      quality: 75, format: CompressFormat.webp);
+      quality: 75,
+      format: CompressFormat.webp);
 
   return conversionResult;
 }
