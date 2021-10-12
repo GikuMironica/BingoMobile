@@ -78,7 +78,11 @@ class Post {
     voucherDataId = json['VoucherDataId'];
     announcementsDataId = json['AnnouncementsDataId'];
     attendanceDataId = json['AttendanceDataId'];
-    pictures = json['Pictures'].cast<String>();
+    List<String> picturePaths = json['Pictures'].cast<String>();
+    pictures = List();
+    picturePaths.forEach((path) {
+      pictures.add(Picture(path));
+    });
     tags = json['Tags'].cast<String>();
   }
 
@@ -88,7 +92,7 @@ class Post {
     data['EndTime'] = this.endTime;
     data['Location'] = this.location.toJson();
     data['Event'] = this.event.toJson();
-    data['Pictures'] = this.pictures;
+    data['Pictures'] = picturePaths();
     data['Tags'] = this.tags ?? null;
     return data;
   }
@@ -144,12 +148,24 @@ class Post {
   double get entryPrice =>
       event.entrancePrice != 0.0 ? event.entrancePrice : null;
 
-  List<String> pictureUrls() {
-    List<String> pics = List();
+  List<String> picturePaths() {
+    List<String> paths = List();
     for (Picture picture in pictures) {
-      if (picture != null) pics.add("${WEB.IMAGES}/${picture.path}.webp");
+      if (picture != null) {
+        paths.add(picture.url);
+      }
     }
-    return pics;
+    return paths;
+  }
+
+  List<String> pictureUrls() {
+    List<String> urls = List();
+    for (Picture picture in pictures) {
+      if (picture != null) {
+        urls.add(picture.url);
+      }
+    }
+    return urls;
   }
 
   DateTime get startTimeAsDateTime =>

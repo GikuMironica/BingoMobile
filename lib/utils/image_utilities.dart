@@ -34,7 +34,7 @@ Future<Picture> choosePicture() async {
     File convertedImage =
         await testCompressAndGetFile(file, "${file.parent.absolute.path}.webp");
     MemoryImage image = MemoryImage(convertedImage.readAsBytesSync());
-    return Picture(image: image, path: convertedImage.path);
+    return Picture(convertedImage.path, image);
   }
   return null;
 }

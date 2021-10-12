@@ -28,8 +28,9 @@ class Event {
     title = json['Title'];
     entrancePrice = json['EntrancePrice'];
     requirements = json['Requirements'];
-    eventType = EventType.values[int.parse(json['EventType'])];
-    currency = json['Currency'];
+    eventType = EventType.values[(json['EventType'])];
+
+    currency = Currency.values[json['Currency']];
   }
 
   Map<String, dynamic> toJson() {
