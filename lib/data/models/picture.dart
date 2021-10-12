@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/config/constants/web.dart';
 
@@ -17,7 +18,7 @@ class Picture {
   }
 
   ImageProvider get image {
-    return _image == null ? NetworkImage(_url) : _image;
+    return _image == null ? CachedNetworkImage(imageUrl: _url,) : _image;
   }
 
   String get path => _path;

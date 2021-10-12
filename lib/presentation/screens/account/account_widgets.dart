@@ -29,7 +29,7 @@ Widget userDescription() {
               provider.user.description ??
                   "Tell people something about you...",
               textAlign: TextAlign.center,
-              maxLines: 5,
+              maxLines: 4,
               style: TextStyle(color: Colors.grey[500])),
         ],
       ),

@@ -17,7 +17,9 @@ class AccountProvider extends ChangeNotifier {
   // state
   bool firstNameIsValid = true;
   bool lastNameIsValid = true;
+  bool descriptionIsValid = true;
   BaseFormStatus formStatus;
+  BaseFormStatus picturesPageStatus;
 
   // Services, repositories and models
   AuthenticationService _authenticationService;
@@ -28,6 +30,7 @@ class AccountProvider extends ChangeNotifier {
     _authenticationService = getIt<AuthenticationService>();
     _userRepository = getIt<UserRepository>();
     formStatus = Idle();
+    picturesPageStatus = Idle();
   }
 
   Future<void> updateUserNameAsync(
@@ -55,6 +58,39 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> updateDescriptionAsync(
+      String newDescription, BuildContext context) async {
+    bool descriptionHasChanged =
+        currentIdentity.description != newDescription;
+
+    if (!descriptionHasChanged) {
+      Application.router.pop(context);
+    } else {
+      formStatus = Submitted();
+      notifyListeners();
+      User tempUser = User(description: newDescription);
+      var response = await _userRepository.update(currentIdentity.id, tempUser);
+
+      if (response == null) {
+        formStatus = Failed();
+        notifyListeners();
+      }else{
+        formStatus = Idle();
+        _authenticationService.setUser(response);
+        Application.router.pop(context, Success());
+      }
+    }
+  }
+
+  Future<bool> deleteProfilePictureAsync(String userId) async{
+    var response = await _userRepository.deletePicture(userId);
+    currentIdentity.profilePicture = null;
+    _authenticationService.setUser(currentIdentity);
+    notifyListeners();
+    return response;
+  }
+
+  /// State validating methods
   void validateFirstNameChange(
       String value, TextEditingController controller, int maxLength) {
     firstNameIsValid = _regExp.hasMatch(value) && value.isNotEmpty;
@@ -68,4 +104,13 @@ class AccountProvider extends ChangeNotifier {
     controller.text = value.length < maxLength ? value : controller.text;
     notifyListeners();
   }
+
+  void validateDescription(String value, TextEditingController controller, int maxLength){
+    descriptionIsValid = value.length <= maxLength;
+    controller.text = descriptionIsValid ? value : controller.text;
+    print(controller.text.length);
+    notifyListeners();
+  }
+
+
 }

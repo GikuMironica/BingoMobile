@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -75,7 +74,10 @@ class _UploadPictureState extends State<UploadPicture> {
                     alignment: Alignment.center,
                     child: Text(
                       'Upload Picture',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16
+                      ),
                     )),
                 SizedBox(
                   height: 32,
@@ -88,10 +90,9 @@ class _UploadPictureState extends State<UploadPicture> {
                       child: Column(
                         children: [
                           SvgPicture.asset(
-                            'assets/icons/svg/camera-outline.svg',
-                            width: 72,
-                            height: 72,
-                            color: Colors.black.withOpacity(0.75),
+                            'assets/icons/svg/event_camera_picture.svg',
+                            width: 90,
+                            height: 90,
                           ),
                           SizedBox(
                             height: 16,
@@ -105,10 +106,9 @@ class _UploadPictureState extends State<UploadPicture> {
                       child: Column(
                         children: [
                           SvgPicture.asset(
-                            'assets/icons/svg/images-outline.svg',
-                            width: 72,
-                            height: 72,
-                            color: Colors.black.withOpacity(0.75),
+                            'assets/icons/svg/gallery_picture.svg',
+                            width: 90,
+                            height: 90,
                           ),
                           SizedBox(
                             height: 16,
@@ -159,11 +159,10 @@ class _UploadPictureState extends State<UploadPicture> {
                       },
                       child: Row(
                         children: [
-                          Text('Set as Profile Picture'),
-                          SizedBox(
+                          Icon(Icons.check),SizedBox(
                             height: 4,
                           ),
-                          Icon(Icons.check),
+                          Text('Set as Profile Picture'),
                         ],
                       ),
                     )
