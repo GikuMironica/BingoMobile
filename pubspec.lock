@@ -337,6 +337,13 @@ packages:
       url: "https://github.com/yasseralsamman/flutter-cupertino-date-picker.git"
     source: git
     version: "1.0.26+2"
+  flutter_datetime_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_datetime_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.5.0"
   flutter_device_locale:
     dependency: transitive
     description:

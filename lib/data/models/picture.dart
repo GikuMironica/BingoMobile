@@ -6,10 +6,14 @@ class Picture {
   String _url;
   ImageProvider _image;
 
-  Picture({String path, ImageProvider image}) {
+  Picture(String path, [ImageProvider image]) {
     _path = path;
     _url = "${WEB.IMAGES}/$_path.webp";
-    _image = image;
+    if (image == null) {
+      _image = NetworkImage(_url);
+    } else {
+      _image = image;
+    }
   }
 
   ImageProvider get image {
@@ -17,4 +21,5 @@ class Picture {
   }
 
   String get path => _path;
+  String get url => _url;
 }

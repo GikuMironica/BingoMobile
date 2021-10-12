@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
-import 'package:hopaut/presentation/widgets/text/subtitle.dart';
 
 class EventTextField extends StatefulWidget {
   final String title;
@@ -42,7 +41,7 @@ class _EventTextFieldState extends State<EventTextField> {
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: TextField(
+          child: TextFormField(
             maxLines: widget.expand ? 6 : 1,
             onChanged: widget.onChanged,
             keyboardType: widget.textInputType,

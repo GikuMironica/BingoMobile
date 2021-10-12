@@ -9,7 +9,7 @@ class SaveButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: onPressed,
-      child: Ink(child: Container(child: Text('Save'))),
+      child: Ink(child: Container(child: Text('Save'))), //TODO: translation
     );
   }
 }
