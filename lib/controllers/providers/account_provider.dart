@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/data/domain/request_result.dart';
 import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
@@ -35,11 +36,11 @@ class AccountProvider extends ChangeNotifier {
 
   Future<void> updateUserNameAsync(
       String firstName, String lastName, BuildContext context) async {
-    bool firstNameChanged =
-        currentIdentity.firstName != firstName;
+    bool firstNameChanged = currentIdentity.firstName != firstName;
     bool lastNameChanged = currentIdentity.lastName != lastName;
 
-    if ((!firstNameChanged && !lastNameChanged) || (firstName=="")&&(lastName=="")) {
+    if ((!firstNameChanged && !lastNameChanged) ||
+        (firstName == "") && (lastName == "")) {
       Application.router.pop(context);
     } else {
       formStatus = Submitted();
@@ -47,10 +48,10 @@ class AccountProvider extends ChangeNotifier {
       User tempUser = User(firstName: firstName, lastName: lastName);
       User updatedUser =
           await _userRepository.update(currentIdentity.id, tempUser);
-      if(updatedUser==null){
+      if (updatedUser == null) {
         formStatus = new Failed();
         notifyListeners();
-      }else{
+      } else {
         formStatus = Idle();
         _authenticationService.setUser(updatedUser);
         Application.router.pop(context, Success());
@@ -60,8 +61,7 @@ class AccountProvider extends ChangeNotifier {
 
   Future<void> updateDescriptionAsync(
       String newDescription, BuildContext context) async {
-    bool descriptionHasChanged =
-        currentIdentity.description != newDescription;
+    bool descriptionHasChanged = currentIdentity.description != newDescription;
 
     if (!descriptionHasChanged) {
       Application.router.pop(context);
@@ -74,7 +74,7 @@ class AccountProvider extends ChangeNotifier {
       if (response == null) {
         formStatus = Failed();
         notifyListeners();
-      }else{
+      } else {
         formStatus = Idle();
         _authenticationService.setUser(response);
         Application.router.pop(context, Success());
@@ -82,12 +82,30 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> deleteProfilePictureAsync(String userId) async{
+  Future<bool> deleteProfilePictureAsync(String userId) async {
     var response = await _userRepository.deletePicture(userId);
     currentIdentity.profilePicture = null;
     _authenticationService.setUser(currentIdentity);
     notifyListeners();
     return response;
+  }
+
+  Future<RequestResult> uploadProfilePictureAsync(
+      String fileAbsolutePath) async {
+    var result = await _userRepository.uploadPicture(currentIdentity.id,
+        imagePath: fileAbsolutePath);
+    if (result.isSuccessful) {
+      if (result.data != null) {
+        User user = result.data;
+        _authenticationService.setUser(user);
+      } else {
+        // TODO Translation, to log
+        return RequestResult(
+            data: null, isSuccessful: false, errorMessage: "An error occurred");
+      }
+    } else {
+      return result;
+    }
   }
 
   /// State validating methods
@@ -105,12 +123,11 @@ class AccountProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void validateDescription(String value, TextEditingController controller, int maxLength){
+  void validateDescription(
+      String value, TextEditingController controller, int maxLength) {
     descriptionIsValid = value.length <= maxLength;
     controller.text = descriptionIsValid ? value : controller.text;
     print(controller.text.length);
     notifyListeners();
   }
-
-
 }
