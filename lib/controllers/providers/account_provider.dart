@@ -112,8 +112,6 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-  void toggleUploadPictureButton() {}
-
   /// State validating methods
   void validateFirstNameChange(
       String value, TextEditingController controller, int maxLength) {

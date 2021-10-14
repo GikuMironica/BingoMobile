@@ -14,7 +14,8 @@ class ProfilePicture extends StatelessWidget {
         child: CircleAvatar(
           backgroundColor: Colors.grey.shade300,
           radius: 72.0,
-          backgroundImage: auth.user.profilePicture == null
+          backgroundImage: auth.user.profilePicture == null ||
+                  (auth.user.profilePicture?.isEmpty != false)
               ? AssetImage('assets/icons/user-avatar.png')
               : CachedNetworkImageProvider(auth.user.getProfilePicture),
         ),

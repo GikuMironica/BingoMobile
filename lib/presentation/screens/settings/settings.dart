@@ -63,6 +63,7 @@ class _SettingsState extends State<Settings> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
+                              // TODO translation
                               'Settings',
                               style: TextStyle(
                                   color: Colors.white,
@@ -102,6 +103,7 @@ class _SettingsState extends State<Settings> {
                             SizedBox(
                               height: 30,
                             ),
+                            // TODO translation
                             Text('Notifications',
                                 style: TextStyle(color: Colors.black54)),
                             Consumer<SettingsService>(
@@ -109,6 +111,7 @@ class _SettingsState extends State<Settings> {
                                   ListTile(
                                 contentPadding: EdgeInsets.zero,
                                 title: Text(
+                                  // TODO translation
                                   'Push Notifications',
                                   style: TextStyle(fontSize: 18),
                                 ),
@@ -132,10 +135,12 @@ class _SettingsState extends State<Settings> {
                             SizedBox(
                               height: 15,
                             ),
+                            // TODO translation
                             Text('Account',
                                 style: TextStyle(color: Colors.black54)),
                             MergeSemantics(
                                 child: ListTile(
+                              // TODO translation
                               contentPadding: EdgeInsets.zero,
                               title: Text('Change Password',
                                   style: TextStyle(fontSize: 18)),
@@ -144,6 +149,7 @@ class _SettingsState extends State<Settings> {
                             )),
                             ListTile(
                                 contentPadding: EdgeInsets.zero,
+                                // TODO translation
                                 title: Text('Logout',
                                     style: TextStyle(fontSize: 18)),
                                 trailing: Icon(Icons.exit_to_app),
@@ -164,6 +170,7 @@ class _SettingsState extends State<Settings> {
                                 }),
                             MergeSemantics(
                               child: ListTile(
+                                  // TODO translation
                                   contentPadding: EdgeInsets.zero,
                                   title: Text('Terms of Services',
                                       style: TextStyle(fontSize: 18)),
@@ -179,6 +186,7 @@ class _SettingsState extends State<Settings> {
                                   onTap: () => changePage('/privacy_policy')),
                             ),
                             InkWellButton(
+                                // TODO translation
                                 'Delete Account',
                                 () => showDialog(
                                     context: context,
@@ -189,6 +197,7 @@ class _SettingsState extends State<Settings> {
                             SizedBox(
                               height: 15,
                             ),
+                            // TODO translation
                             Text('Feedback',
                                 style: TextStyle(color: Colors.black54)),
                             // TODO bug/rating
@@ -252,6 +261,7 @@ class _SettingsState extends State<Settings> {
                       SizedBox(
                         height: 16,
                       ),
+                      // TODO translation
                       Text('Logging Out'),
                     ],
                   ),
