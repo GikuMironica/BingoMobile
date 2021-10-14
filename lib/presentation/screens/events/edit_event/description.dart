@@ -54,7 +54,7 @@ class _EditPostDescriptionState extends State<EditPostDescription> {
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
-      _oldPost = provider.postContext;
+      _oldPost = provider.post;
       _newPost = {
         'EndTime': _oldPost.endTime,
         'EventTime': _oldPost.eventTime,

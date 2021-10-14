@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-Widget valueInput({
-  @required TextEditingController controller,
-  @required bool isStateValid,
-  @required String validationMessage,
-  @required String initialValue,
-  @required void Function(String) onChange,
-  @required int maxLength,
-}) {
+Widget valueInput(
+    {@required TextEditingController controller,
+    @required bool isStateValid,
+    @required String validationMessage,
+    @required String initialValue,
+    @required void Function(String) onChange,
+    @required int maxLength,
+    String hintText}) {
   return Stack(
     children: [
       Container(
@@ -34,6 +34,7 @@ Widget valueInput({
         maxLengthEnforced: true,
         maxLength: maxLength,
         decoration: InputDecoration(
+          hintText: hintText,
           counterText: "",
           isDense: true,
           errorMaxLines: 3,

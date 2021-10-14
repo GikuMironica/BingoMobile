@@ -89,7 +89,7 @@ class _RateEventState extends State<RateEvent> {
   Map<String, dynamic> _generatePayload(EventProvider provider) {
     Map<String, dynamic> ratingPayload = {
       'rate': rating,
-      'userId': provider.postContext.userId,
+      'userId': provider.post.userId,
       'postId': widget.postId,
       'feedback': ratingController.text.trim()
     };

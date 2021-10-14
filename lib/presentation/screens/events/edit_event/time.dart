@@ -49,7 +49,7 @@ class _EditPostTimeState extends State<EditPostTime> {
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
-      _oldPost = provider.postContext;
+      _oldPost = provider.post;
       _eventStart = _oldPost.startTimeAsDateTime;
       _eventEnd = _oldPost.endTimeAsDateTime;
 

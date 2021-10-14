@@ -62,7 +62,7 @@ class _EditPostPicturesState extends State<EditPostPictures> {
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
-      _oldPost = provider.postContext;
+      _oldPost = provider.post;
       _picturesSelected = [false, false, false];
       _networkImages = _oldPost.pictureUrls();
       _newPost = {

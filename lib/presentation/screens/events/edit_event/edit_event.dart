@@ -26,7 +26,7 @@ class _EditEventPageState extends State<EditEventPage> {
     // TODO: If not, then throw an error page.
     // TODO: Create an Error page that allows the user to return to the home page.
     return Consumer<EventProvider>(builder: (context, provider, child) {
-      post = provider.postContext;
+      post = provider.post;
       switch (post.event.eventType.index) {
         case 1:
           _paidEventType = EventType.houseParty;

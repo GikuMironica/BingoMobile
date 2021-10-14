@@ -50,7 +50,7 @@ class _EditPostTitleState extends State<EditPostTitle> {
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
-      _oldPost = provider.postContext;
+      _oldPost = provider.post;
       _newPost = {
         'Longitude': _oldPost.location.longitude,
         'Latitude': _oldPost.location.latitude,
