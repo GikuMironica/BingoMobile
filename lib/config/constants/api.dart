@@ -13,8 +13,8 @@ class API {
 
   // Users ---------------------------------------------------------------------
   static const String USERS = '/users';
-  static const String DELETE_PROFILE_PIC = USERS+"/deleteprofilepic";
-  static const String UPLOAD_PROFILE_PIC = USERS+"/uploadprofilepic";
+  static const String DELETE_PROFILE_PIC = USERS + "/profilepic";
+  static const String UPLOAD_PROFILE_PIC = USERS + "/profilepic";
 
   // Posts ---------------------------------------------------------------------
   static const String POSTS = '/posts';
