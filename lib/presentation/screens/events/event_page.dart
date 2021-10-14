@@ -149,7 +149,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
           .then((value) => setState(() => postIsLoaded = true))
           .then((value) {
         checkForImages();
-        provider.setPostContext(post);
+        provider.setPost(post);
       });
       return !postIsLoaded
           ? Scaffold(
@@ -335,7 +335,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                         Divider(),
                         SizedBox(height: 16),
                         EventDescription(isHost
-                            ? provider.postContext.event.description
+                            ? provider.post.event.description
                             : post.event.description ??
                                 'No description for this event yet'),
                         Visibility(

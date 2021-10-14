@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/controllers/providers/event_provider.dart';
+import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/screens/events/event_list_view.dart';
 import 'package:hopaut/presentation/widgets/hopaut_app_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class EventListPage extends StatelessWidget {
@@ -18,71 +21,75 @@ class EventListPage extends StatelessWidget {
         ? [API.MY_ACTIVE, API.MY_INACTIVE]
         : [API.ATTENDING_ACTIVE, API.ATTENDED_INACTIVE];
     final List<String> tabs = ['Current', 'Past']; // TODO: translate(maybe)
-    return Scaffold(
-      floatingActionButton: isMyEvents
-          ? FloatingActionButton(
-              heroTag: 'create-event',
-              child: Icon(Icons.add, color: Colors.white, size: 24),
-              backgroundColor: HATheme.HOPAUT_PINK,
-              onPressed: () async {
-                Application.router.navigateTo(context, '/create-event');
-              })
-          : Container(),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterFloat,
-      extendBodyBehindAppBar: false,
-      body: DefaultTabController(
-        length: 2,
-        child: NestedScrollView(
-          floatHeaderSlivers: true,
-          headerSliverBuilder:
-              (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: MultiSliver(
-                children: [
-                  HopAutAppBar(
-                    title: title,
-                    actions: <Widget>[
-                      IconButton(
-                        icon: SvgPicture.asset(
-                          'assets/icons/svg/paper-plane-outline.svg',
-                          color: Colors.white,
-                          height: 24,
-                        ),
-                        onPressed: () async {
-                          Application.router
-                              .navigateTo(context, '/announcements');
-                        },
-                      )
-                    ],
-                  ),
-                  SliverPersistentHeader(
-                    delegate: _SliverAppBarDelegate(
-                      TabBar(
-                        indicatorColor: HATheme.HOPAUT_PINK,
-                        labelColor: Colors.white,
-                        unselectedLabelColor: Colors.white70,
-                        tabs: tabs
-                            .map((e) => Tab(
-                                  text: e,
-                                ))
-                            .toList(),
-                      ),
+    return Consumer<EventProvider>(builder: (context, provider, child) {
+      return Scaffold(
+        floatingActionButton: isMyEvents
+            ? FloatingActionButton(
+                heroTag: 'create-event',
+                child: Icon(Icons.add, color: Colors.white, size: 24),
+                backgroundColor: HATheme.HOPAUT_PINK,
+                onPressed: () async {
+                  provider.setPost(Post());
+                  await Application.router.navigateTo(context, '/create-event');
+                })
+            : Container(),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterFloat,
+        extendBodyBehindAppBar: false,
+        body: DefaultTabController(
+          length: 2,
+          child: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: MultiSliver(
+                  children: [
+                    HopAutAppBar(
+                      title: title,
+                      actions: <Widget>[
+                        IconButton(
+                          icon: SvgPicture.asset(
+                            'assets/icons/svg/paper-plane-outline.svg',
+                            color: Colors.white,
+                            height: 24,
+                          ),
+                          onPressed: () async {
+                            await Application.router
+                                .navigateTo(context, '/announcements');
+                          },
+                        )
+                      ],
                     ),
-                    pinned: true,
-                  ),
-                ],
+                    SliverPersistentHeader(
+                      delegate: _SliverAppBarDelegate(
+                        TabBar(
+                          indicatorColor: HATheme.HOPAUT_PINK,
+                          labelColor: Colors.white,
+                          unselectedLabelColor: Colors.white70,
+                          tabs: tabs
+                              .map((e) => Tab(
+                                    text: e,
+                                  ))
+                              .toList(),
+                        ),
+                      ),
+                      pinned: true,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-          body: TabBarView(children: <Widget>[
-            EventsListView(listType: listTypes[0]),
-            EventsListView(listType: listTypes[1])
-          ]),
+            ],
+            body: TabBarView(children: <Widget>[
+              EventsListView(listType: listTypes[0]),
+              EventsListView(listType: listTypes[1])
+            ]),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 

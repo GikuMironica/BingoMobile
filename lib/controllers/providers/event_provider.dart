@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/api.dart';
+import 'package:hopaut/config/constants/constraint.dart';
 import 'package:hopaut/data/models/event_list.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/post.dart';
@@ -14,8 +15,11 @@ class EventProvider extends ChangeNotifier {
   EventRepository _eventRepository;
   TagRepository _tagRepository;
   HashMap<String, EventList> _eventsMap;
-  Post _postContext;
+  Post _post;
   int _miniPostContextId;
+
+  bool isTitleValid = true;
+  bool isDescriptionValid = true;
 
   EventProvider(
       {EventRepository eventRepository, TagRepository tagRepository}) {
@@ -25,11 +29,11 @@ class EventProvider extends ChangeNotifier {
   }
 
   HashMap<String, EventList> get eventsMap => _eventsMap;
-  Post get postContext => _postContext;
+  Post get post => _post;
   int get miniPostContextId => _miniPostContextId;
 
-  void setPostContext(Post post) {
-    _postContext = post;
+  void setPost(Post post) {
+    _post = post;
   }
 
   void setMiniPostContext(int id) {
@@ -93,23 +97,45 @@ class EventProvider extends ChangeNotifier {
   }
 
   void setPostDescription(String text) {
-    _postContext.event.description = text;
+    _post.event.description = text;
     notifyListeners();
   }
 
   void setPostRequirements(String text) {
-    _postContext.event.requirements = text;
+    _post.event.requirements = text;
     notifyListeners();
   }
 
   void setPostTags(List<String> text) {
-    _postContext.tags = text;
+    _post.tags = text;
     notifyListeners();
   }
 
   void setPostTitle(String text) {
-    _postContext.event.title = text;
+    _post.event.title = text;
     notifyListeners();
+  }
+
+  void validateTitle(String value, TextEditingController controller) {
+    print(controller.text.length);
+    isTitleValid = value.length > 0;
+    controller.text =
+        value.length <= Constraint.titleMaxLength ? value : controller.text;
+    notifyListeners();
+  }
+
+  void validateDescription(String value, TextEditingController controller) {
+    isDescriptionValid = value.length >= Constraint.descriptionMinLength;
+    controller.text = value.length <= Constraint.descriptionMaxLength
+        ? value
+        : controller.text;
+    notifyListeners();
+  }
+
+  void validateRequirements(String value, TextEditingController controller) {
+    controller.text = value.length <= Constraint.requirementsMaxLength
+        ? value
+        : controller.text;
   }
 
   void reset() {
