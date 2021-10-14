@@ -83,11 +83,14 @@ class AccountProvider extends ChangeNotifier {
   }
 
   Future<bool> deleteProfilePictureAsync(String userId) async {
-    var response = await _userRepository.deletePicture(userId);
-    currentIdentity.profilePicture = null;
-    _authenticationService.setUser(currentIdentity);
-    notifyListeners();
-    return response;
+    if (currentIdentity.profilePicture != null) {
+      var response = await _userRepository.deletePicture(userId);
+      currentIdentity.profilePicture = null;
+      _authenticationService.setUser(currentIdentity);
+      notifyListeners();
+      return response;
+    }
+    return true;
   }
 
   Future<RequestResult> uploadProfilePictureAsync(
@@ -98,6 +101,7 @@ class AccountProvider extends ChangeNotifier {
       if (result.data != null) {
         User user = result.data;
         _authenticationService.setUser(user);
+        return result;
       } else {
         // TODO Translation, to log
         return RequestResult(
@@ -107,6 +111,8 @@ class AccountProvider extends ChangeNotifier {
       return result;
     }
   }
+
+  void toggleUploadPictureButton() {}
 
   /// State validating methods
   void validateFirstNameChange(
@@ -125,9 +131,8 @@ class AccountProvider extends ChangeNotifier {
 
   void validateDescription(
       String value, TextEditingController controller, int maxLength) {
-    descriptionIsValid = value.length <= maxLength;
+    descriptionIsValid = value.characters.length <= maxLength;
     controller.text = descriptionIsValid ? value : controller.text;
-    print(controller.text.length);
     notifyListeners();
   }
 }

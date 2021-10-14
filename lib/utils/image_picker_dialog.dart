@@ -37,25 +37,37 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
         : 'assets/icons/svg/event_camera_picture.svg';
     _gallerySvg = 'assets/icons/svg/gallery_picture.svg';
     _uploadAsync = widget.uploadAsync;
+    isUploading = false;
   }
 
   String _cameraSvg;
   String _gallerySvg;
+  bool isUploading;
   File _selectedImage;
   Function _uploadAsync;
 
-  Future<void> _uploadPictureAsync() async{
-    RequestResult result = await _uploadAsync(_selectedImage.absolute.path);
-    result.isSuccessful
-        ? Application.router.pop(context)
-        : showSnackBar(context, result.errorMessage);
+  Future<void> _uploadPictureAsync() async {
+    setState(() {
+      isUploading = true;
+    });
+    if (_selectedImage != null) {
+      RequestResult result = await _uploadAsync(_selectedImage.absolute.path);
+      setState(() {
+        isUploading = false;
+      });
+      result.isSuccessful
+          ? Application.router.pop(context)
+          : showSnackBar(context, result.errorMessage);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.all(16.0),
-        child: Column(
+        child: ListView(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             children: _selectedImage == null
                 ? [
                     Align(
@@ -73,15 +85,15 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _imageTarget(
-                            _cameraSvg,
-                            loadImage(ImageSource.camera, 0),
+                            assetPath: _cameraSvg,
+                            imgSource: ImageSource.camera,
                             // TODO translation
-                            "Camera"),
+                            hint: "Camera"),
                         _imageTarget(
-                            _gallerySvg,
-                            loadImage(ImageSource.gallery, 1),
+                            assetPath: _gallerySvg,
+                            imgSource: ImageSource.gallery,
                             // TODO translation
-                            "Gallery")
+                            hint: "Gallery")
                       ],
                     )
                   ]
@@ -101,40 +113,45 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        InkWell(
-                          onTap: () => Application.router.pop(context),
-                          child: Row(
-                            children: [
-                              Icon(Icons.cancel),
-                              SizedBox(width: 4),
-                              Text('Cancel'),
-                            ],
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {}
-                          },
-                          child: Row(
-                            children: [
-                              Icon(Icons.check),
-                              SizedBox(
-                                height: 4,
+                      children: !isUploading
+                          ? [
+                              InkWell(
+                                onTap: () => Application.router.pop(context),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.cancel),
+                                    SizedBox(width: 4),
+                                    // TODO translation
+                                    Text('Cancel'),
+                                  ],
+                                ),
                               ),
-                              Text('Set as Profile Picture'),
+                              InkWell(
+                                onTap: () async => await _uploadPictureAsync(),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.check),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    // TODO translation
+                                    Text('Set as Profile Picture'),
+                                  ],
+                                ),
+                              )
+                            ]
+                          : [
+                              Container(
+                                  child: Expanded(
+                                      child: LinearProgressIndicator()))
                             ],
-                          ),
-                        )
-                      ],
                     )
-                  ]
-        )
-  );
+                  ]));
   }
 
   /// Image Selector Target
   /// Displays the SVG  image corresponding to image source (Galery/Camera)
-  Widget _imageTarget(String assetPath, Future<void> onTap, String hint) {
+  Widget _imageTarget({String assetPath, ImageSource imgSource, String hint}) {
     return InkWell(
       child: Column(
         children: [
@@ -146,16 +163,15 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
           SizedBox(
             height: 16,
           ),
-          // TODO - Translation
-          Text('Camera'),
+          Text(hint),
         ],
       ),
-      onTap: () => onTap,
+      onTap: () async => await loadImage(imgSource),
     );
   }
 
   /// Loads, compresses and optionally crops the image
-  Future<File> loadImage(ImageSource imageSource, int index) async {
+  Future<File> loadImage(ImageSource imageSource) async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: imageSource);
     File file;
@@ -172,8 +188,8 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
       });
     }
     file ??= File(pickedFile.path);
-    File compressedImage = await testCompressAndGetFile(
-        file, "${file.parent.absolute.path}/$index.webp");
+    File compressedImage =
+        await testCompressAndGetFile(file, "${file.parent.absolute.path}.webp");
     return compressedImage;
   }
 }

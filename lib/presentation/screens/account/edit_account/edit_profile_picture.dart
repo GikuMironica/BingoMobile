@@ -20,6 +20,7 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
     _accountProvider = Provider.of<AccountProvider>(context, listen: true);
     return Scaffold(
       appBar: SimpleAppBar(
+        // TODO translate
         text: 'Profile Picture',
         context: context,
       ),
@@ -37,14 +38,15 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
                   context: context,
                   builder: (context) => CustomDialog(
                           pageWidget: ImagePickerDialog(
-                            isCropperEnabled: true,
-                            isProfileUpdated: true,
-                            uploadAsync: _accountProvider.uploadProfilePictureAsync(),
+                        isCropperEnabled: true,
+                        isProfileUpdated: true,
+                        uploadAsync: _accountProvider.uploadProfilePictureAsync,
                       ))),
               trailing: Icon(
                 Icons.edit,
                 color: Colors.grey[400],
               ),
+              // TODO translate
               title: Text('Change Picture'),
             ),
             Divider(),
@@ -54,8 +56,9 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
                       _accountProvider.currentIdentity.id),
               trailing: Icon(
                 Icons.delete,
-                color: Colors.grey[400],
+                color: Colors.redAccent,
               ),
+              // TODO translate
               title: Text('Delete Picture'),
             )
           ],
