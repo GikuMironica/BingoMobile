@@ -46,6 +46,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
   File _selectedImage;
   Function _uploadAsync;
 
+  /// Upload image using the provided function "uploadAsync"
   Future<void> _uploadPictureAsync() async {
     setState(() {
       isUploading = true;
@@ -55,9 +56,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
       setState(() {
         isUploading = false;
       });
-      result.isSuccessful
-          ? Application.router.pop(context)
-          : showSnackBar(context, result.errorMessage);
+      Application.router.pop(context, result);
     }
   }
 
@@ -183,11 +182,11 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
         compressFormat: ImageCompressFormat.png,
         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
       );
-      setState(() {
-        _selectedImage = file;
-      });
     }
     file ??= File(pickedFile.path);
+    setState(() {
+      _selectedImage = file;
+    });
     File compressedImage =
         await testCompressAndGetFile(file, "${file.parent.absolute.path}.webp");
     return compressedImage;

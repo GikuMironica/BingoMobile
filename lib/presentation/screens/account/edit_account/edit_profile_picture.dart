@@ -3,7 +3,9 @@ import 'package:hopaut/controllers/providers/account_provider.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/profile_picture.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/utils/image_picker_dialog.dart';
+import 'package:hopaut/data/domain/request_result.dart';
 import 'package:provider/provider.dart';
 
 class EditAccountPicture extends StatefulWidget {
@@ -13,11 +15,12 @@ class EditAccountPicture extends StatefulWidget {
 
 class _EditAccountPictureState extends State<EditAccountPicture> {
   AccountProvider _accountProvider;
-
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     _accountProvider = Provider.of<AccountProvider>(context, listen: true);
     return Scaffold(
+      key: scaffoldKey,
       appBar: SimpleAppBar(
         // TODO translate
         text: 'Profile Picture',
@@ -33,14 +36,7 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
             ),
             Divider(),
             ListTile(
-              onTap: () => showDialog(
-                  context: context,
-                  builder: (context) => CustomDialog(
-                          pageWidget: ImagePickerDialog(
-                        isCropperEnabled: true,
-                        isProfileUpdated: true,
-                        uploadAsync: _accountProvider.uploadProfilePictureAsync,
-                      ))),
+              onTap: () async => await _navigateAndDisplayResult(context),
               trailing: Icon(
                 Icons.edit,
                 color: Colors.grey[400],
@@ -64,5 +60,21 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
         ),
       ),
     );
+  }
+
+  Future _navigateAndDisplayResult(BuildContext context) async {
+    RequestResult result = await showDialog(
+        context: context,
+        builder: (context) => CustomDialog(
+                pageWidget: ImagePickerDialog(
+              isCropperEnabled: true,
+              isProfileUpdated: true,
+              uploadAsync: _accountProvider.uploadProfilePictureAsync,
+            )));
+
+    // TODO translation
+    result.isSuccessful
+      ? showSuccessSnackBar(scaffoldKey: scaffoldKey, message: "Profile picture updated")
+      : showSnackBarWithError(scaffoldKey: scaffoldKey, message: result.errorMessage);
   }
 }

@@ -102,19 +102,36 @@ Widget circularProgressIndicator() {
       ));
 }
 
-void showSnackBar(BuildContext context, String message) {
-  Scaffold.of(context).showSnackBar(SnackBar(
+void showSnackBarWithError({BuildContext context, String message,
+    GlobalKey<ScaffoldState> scaffoldKey}) {
+  if (scaffoldKey == null) {
+    Scaffold.of(context).showSnackBar(_errorSnackBar(message));
+  } else {
+    scaffoldKey.currentState.showSnackBar(_errorSnackBar(message));
+  }
+}
+
+SnackBar _errorSnackBar(String message) {
+  return SnackBar(
       content: Text(
         message,
         textAlign: TextAlign.center,
       ),
       behavior: SnackBarBehavior.floating,
       duration: Duration(seconds: 4),
-      backgroundColor: HATheme.HOPAUT_PINK));
+      backgroundColor: HATheme.HOPAUT_PINK);
 }
 
-void showSuccessSnackBar({BuildContext context, String message}) {
-  Scaffold.of(context).showSnackBar(SnackBar(
+void showSuccessSnackBar({BuildContext context, String message, GlobalKey<ScaffoldState> scaffoldKey}) {
+  if (scaffoldKey == null) {
+    Scaffold.of(context).showSnackBar(_successSnackBar(message));
+  } else {
+    scaffoldKey.currentState.showSnackBar(_successSnackBar(message));
+  }
+}
+
+SnackBar _successSnackBar(String message){
+  return SnackBar(
       content: Container(
         height: 30,
         child: ListTile(
@@ -132,7 +149,7 @@ void showSuccessSnackBar({BuildContext context, String message}) {
       ),
       behavior: SnackBarBehavior.floating,
       duration: Duration(seconds: 4),
-      backgroundColor: Colors.white));
+      backgroundColor: Colors.white);
 }
 
 Widget _successIcon() {
@@ -177,6 +194,6 @@ _launchURL({String url, BuildContext context}) async {
     await launch(url);
   } else {
     // TODO - translate
-    showSnackBar(context, "Couldn't connect to $url");
+    showSnackBarWithError(context: context, message: "Couldn't connect to $url");
   }
 }

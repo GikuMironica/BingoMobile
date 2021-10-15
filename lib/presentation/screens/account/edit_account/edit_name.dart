@@ -65,7 +65,7 @@ class _EditAccountNameState extends State<EditAccountName> {
       // Translation
       Future.delayed(Duration.zero, () async {
         // TODO - translation
-        showSnackBar(context, "Error, Something went wrong");
+        showSnackBarWithError(context: context, message: "Error, Something went wrong");
       });
         _accountProvider.formStatus = new Idle();
     }
