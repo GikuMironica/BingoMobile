@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
       listener: (context, state) {
         final status = state.formStatus;
         if (status is SubmissionFailed) {
-          showSnackBar(context, status.exception.toString());
+          showSnackBarWithError(context: context, message: status.exception.toString());
           state.formStatus = new Idle();
         }
       },

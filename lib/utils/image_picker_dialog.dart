@@ -182,11 +182,11 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
         compressFormat: ImageCompressFormat.png,
         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
       );
-      setState(() {
-        _selectedImage = file;
-      });
     }
     file ??= File(pickedFile.path);
+    setState(() {
+      _selectedImage = file;
+    });
     File compressedImage =
         await testCompressAndGetFile(file, "${file.parent.absolute.path}.webp");
     return compressedImage;

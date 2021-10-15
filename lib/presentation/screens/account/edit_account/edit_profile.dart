@@ -90,7 +90,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
     var result = await Application.router
         .navigateTo(context, routes, transition: TransitionType.cupertino);
     if (result is Success) {
-      showSnackBar(scaffoldKey);
+      showSnackBarWithError(scaffoldKey: globalKey, message: "Upload unsuccessful, try again later.");
     }
   }
 }

@@ -15,11 +15,12 @@ class EditAccountPicture extends StatefulWidget {
 
 class _EditAccountPictureState extends State<EditAccountPicture> {
   AccountProvider _accountProvider;
-
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     _accountProvider = Provider.of<AccountProvider>(context, listen: true);
     return Scaffold(
+      key: scaffoldKey,
       appBar: SimpleAppBar(
         // TODO translate
         text: 'Profile Picture',
@@ -71,9 +72,9 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
               uploadAsync: _accountProvider.uploadProfilePictureAsync,
             )));
 
-    // await Application.router.navigateTo(
-    //     context, routes,
-    //     transition: TransitionType.cupertino);
-    if (result.isSuccessful) showSnackBar(context, "Profile updated");
+    // TODO translation
+    result.isSuccessful
+      ? showSuccessSnackBar(scaffoldKey: scaffoldKey, message: "Profile picture updated")
+      : showSnackBarWithError(scaffoldKey: scaffoldKey, message: result.errorMessage);
   }
 }
