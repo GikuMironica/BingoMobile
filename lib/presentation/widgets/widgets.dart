@@ -102,15 +102,24 @@ Widget circularProgressIndicator() {
       ));
 }
 
-void showSnackBar(BuildContext context, String message) {
-  Scaffold.of(context).showSnackBar(SnackBar(
+void showSnackBar(BuildContext context, String message,
+    {GlobalKey<ScaffoldState> scaffoldKey}) {
+  if (scaffoldKey == null) {
+    Scaffold.of(context).showSnackBar(_snackBar(message));
+  } else {
+    scaffoldKey.currentState.showSnackBar(_snackBar(message));
+  }
+}
+
+SnackBar _snackBar(String message) {
+  return SnackBar(
       content: Text(
         message,
         textAlign: TextAlign.center,
       ),
       behavior: SnackBarBehavior.floating,
       duration: Duration(seconds: 4),
-      backgroundColor: HATheme.HOPAUT_PINK));
+      backgroundColor: HATheme.HOPAUT_PINK);
 }
 
 void showSuccessSnackBar({BuildContext context, String message}) {

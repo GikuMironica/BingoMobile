@@ -46,6 +46,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
   File _selectedImage;
   Function _uploadAsync;
 
+  /// Upload image using the provided function "uploadAsync"
   Future<void> _uploadPictureAsync() async {
     setState(() {
       isUploading = true;
@@ -55,9 +56,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
       setState(() {
         isUploading = false;
       });
-      result.isSuccessful
-          ? Application.router.pop(context)
-          : showSnackBar(context, result.errorMessage);
+      Application.router.pop(context, result);
     }
   }
 
