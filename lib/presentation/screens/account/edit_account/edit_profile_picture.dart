@@ -54,7 +54,8 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
                 color: Colors.redAccent,
               ),
               // TODO translate
-              title: Text('Delete Picture'),
+              title: Text('Delete Picture',
+              style: TextStyle(color: Colors.redAccent)),
             )
           ],
         ),
