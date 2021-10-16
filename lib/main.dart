@@ -8,6 +8,7 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
+import 'package:hopaut/controllers/providers/change_password_provider.dart';
 import 'package:hopaut/data/repositories/tag_repository.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
@@ -124,7 +125,12 @@ class _HopAutState extends State<HopAut> {
           ChangeNotifierProvider<SettingsService>(
               create: (context) => getIt<SettingsService>()),
           ChangeNotifierProvider<AccountProvider>(
-              create: (context) => getIt<AccountProvider>()),
+              create: (context) => getIt<AccountProvider>()
+          ),
+          ChangeNotifierProvider<ChangePasswordProvider>(
+            create: (_) => getIt<ChangePasswordProvider>(),
+            lazy: true,
+          ),
           ChangeNotifierProvider<SearchPageController>(
             create: (_) => SearchPageController(),
             lazy: true,

@@ -11,17 +11,15 @@ class ChangePasswordProvider extends ChangeNotifier {
   static final RegExp _pwdRule =
   RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
 
-  bool get isPasswordValid =>
-      password.isNotEmpty && _pwdRule.hasMatch(password);
-  bool get isConfirmPasswordValid =>
-      confirmPassword.isNotEmpty && passwordsMatch;
-  bool get passwordsMatch => password == confirmPassword;
+  bool get isOldPasswordValid =>
+      oldPassword.isNotEmpty;
+  bool get isNewPasswordValid =>
+      newPassword.isNotEmpty && _pwdRule.hasMatch(newPassword);
 
   // State
-  String password;
-  String confirmPassword;
+  String oldPassword;
+  String newPassword;
   bool passwordObscureText;
-  bool confirmPasswordObscureText;
   BaseFormStatus formStatus;
 
   // Services, repositories and models
@@ -29,10 +27,20 @@ class ChangePasswordProvider extends ChangeNotifier {
 
   ChangePasswordProvider(){
     formStatus = Idle();
-    password = "";
-    confirmPassword = "";
+    oldPassword = "";
+    newPassword = "";
     passwordObscureText = true;
-    confirmPasswordObscureText = true;
+  }
+
+  void toggleObscurePassword(){
+    passwordObscureText = !passwordObscureText;
+    notifyListeners();
+  }
+
+  void validateOldPassword(
+      String value) {
+    oldPassword = value;
+    notifyListeners();
   }
 
   void doPasswordChange(String currentPassword, String newPassword) async {

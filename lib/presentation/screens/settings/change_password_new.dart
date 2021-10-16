@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/theme.dart';
+import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/controllers/providers/change_password_provider.dart';
 import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
@@ -11,14 +13,17 @@ class ChangePasswordPage extends StatefulWidget {
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  ChangePasswordProvider _passwordProvider;
 
   @override
   void initState() {
     super.initState();
+    _passwordProvider = getIt<ChangePasswordProvider>();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -31,13 +36,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         decoration: decorationGradient(),
         child: SingleChildScrollView(
           physics: NeverScrollableScrollPhysics(),
-          child: gradientBackground()
+          child: gradientBackground(context)
         ),
       ),
     );
   }
 
-  Widget gradientBackground(){
+  Widget gradientBackground(BuildContext context){
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,6 +65,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
+                // TODO translation
                 'Change Password',
                 style: TextStyle(
                     shadows: [
@@ -76,12 +82,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             ],
           ),
         ),
-        whiteOverlayCard()
+        whiteOverlayCard(context)
       ],
     );
   }
 
-  Widget whiteOverlayCard(){
+  Widget whiteOverlayCard(BuildContext context){
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -100,7 +106,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               SizedBox(
                 height: 30,
               ),
-              inputForm(),
+              Builder(
+                  builder: (context) =>
+                      inputForm(context),
+              )
             ]
         ),
       ),
@@ -115,6 +124,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           'If you have forgotten your password, you can log out and request a ',
           style: TextStyle(color: Colors.grey),
           children: [
+            // TODO translation
             TextSpan(text: 'Password Reset'),
             TextSpan(text: '.')
           ]
@@ -122,17 +132,26 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     );
   }
 
-  Widget inputForm(){
+  Widget inputForm(BuildContext context){
     return Form(
       child: Column(
         children: [
+          // TODO translation
+          passwordInputField(
+            context: context,
+            hint: 'Enter your old password',
+            validationMessage: 'Please input your old password',
+            isStateValid: _passwordProvider.isOldPasswordValid,
+            isTextObscured: _passwordProvider.passwordObscureText,
+            onObscureTap: _passwordProvider.toggleObscurePassword,
+            onChange: (v) => _passwordProvider.validateOldPassword(v)
+          ),
+          /*SizedBox(height: 20),
           passwordInputField(),
-          SizedBox(height: 20),
-          inputForm(),
-          SizedBox(height: 20),
-          inputForm(),
           SizedBox(height: 30),
-          authButton()
+          passwordInputField(),
+          SizedBox(height: 30),
+          authButton()*/
         ],
       ),
     );
