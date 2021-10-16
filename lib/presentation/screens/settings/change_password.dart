@@ -18,6 +18,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final _formKey = GlobalKey<FormState>();
   ChangePasswordProvider _passwordProvider;
 
+
+  @override
+  void dispose() {
+    super.dispose();
+    _passwordProvider.newPassword = "";
+    _passwordProvider.oldPassword = "";
+  }
+
   @override
   Widget build(BuildContext context) {
     _passwordProvider = Provider.of<ChangePasswordProvider>(context, listen: true);
@@ -152,10 +160,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               context: context,
               hint: 'Enter your old password',
               validationMessage: 'Please input your old password',
-              isStateValid: _passwordProvider.isOldPasswordValid,
+              isStateValid: _passwordProvider.validateOldPassword(),
               isTextObscured: _passwordProvider.passwordObscureText,
               onObscureTap: _passwordProvider.toggleObscurePassword,
-              onChange: (v) => _passwordProvider.validateOldPassword(v)
+              onChange: (v) => _passwordProvider.oldPasswordChange(v)
           ),
           SizedBox(height: 20),
           // TODO translation
@@ -165,10 +173,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             validationMessage: "Password must be at least 8 characters length," +
                 " must contain upper, lower case letters" +
                 " and digits",
-            isStateValid: _passwordProvider.isNewPasswordValid,
+            isStateValid: _passwordProvider.validateNewPassword(),
             isTextObscured: _passwordProvider.newPasswordObscureText,
             onObscureTap: _passwordProvider.toggleObscureNewPassword,
-            onChange: (v) => _passwordProvider.validateNewPassword(v)
+            onChange: (v) => _passwordProvider.newPasswordChange(v)
           ),
           SizedBox(height: 30),
           authButton(

@@ -1,7 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/data/repositories/authentication_repository.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:injectable/injectable.dart';
 
@@ -20,8 +22,7 @@ class ChangePasswordProvider extends ChangeNotifier {
   BaseFormStatus formStatus;
   bool isOldPasswordValid;
   bool isNewPasswordValid;
-  bool get isFormValid => isOldPasswordValid && isNewPasswordValid
-      && oldPassword.isNotEmpty && newPassword.isNotEmpty;
+
 
   /// Services, repositories and models
   AuthenticationRepository _authenticationRepository;
@@ -31,11 +32,10 @@ class ChangePasswordProvider extends ChangeNotifier {
     formStatus = Idle();
     oldPassword = "";
     newPassword = "";
-    isOldPasswordValid = true;
-    isNewPasswordValid = true;
     passwordObscureText = true;
     newPasswordObscureText = true;
-
+    isOldPasswordValid = false;
+    isNewPasswordValid = false;
     _authenticationRepository = getIt<AuthenticationRepository>();
     _authenticationService = getIt<AuthenticationService>();
   }
@@ -51,15 +51,23 @@ class ChangePasswordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void validateOldPassword(String value) {
+  bool validateOldPassword(){
+    return oldPassword.isNotEmpty;
+  }
+
+  bool validateNewPassword(){
+    return newPassword.isNotEmpty && _pwdRule.hasMatch(newPassword);
+  }
+
+  void oldPasswordChange(String value) {
     oldPassword = value;
-    isOldPasswordValid = oldPassword.isNotEmpty;
+    isOldPasswordValid = validateNewPassword();
     notifyListeners();
   }
 
-  void validateNewPassword(String value) {
+  void newPasswordChange(String value) {
     newPassword = value;
-    isNewPasswordValid = newPassword.isNotEmpty && _pwdRule.hasMatch(newPassword);
+    isNewPasswordValid = validateNewPassword();
     notifyListeners();
   }
 
@@ -74,6 +82,10 @@ class ChangePasswordProvider extends ChangeNotifier {
       formStatus = Failed();
     }else{
       formStatus = Success();
+      Future.delayed(Duration(seconds: 4), () async {
+        // TODO - translation
+        Application.router.pop(context);
+      });
     }
     notifyListeners();
   }
