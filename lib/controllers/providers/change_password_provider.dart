@@ -11,10 +11,9 @@ class ChangePasswordProvider extends ChangeNotifier {
   static final RegExp _pwdRule =
   RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
 
-  bool get isOldPasswordValid =>
-      oldPassword.isNotEmpty;
-  bool get isNewPasswordValid =>
-      newPassword.isNotEmpty && _pwdRule.hasMatch(newPassword);
+  bool isOldPasswordValid;
+  bool isNewPasswordValid;
+     // newPassword.isNotEmpty && _pwdRule.hasMatch(newPassword);
 
   // State
   String oldPassword;
@@ -29,6 +28,8 @@ class ChangePasswordProvider extends ChangeNotifier {
     formStatus = Idle();
     oldPassword = "";
     newPassword = "";
+    isOldPasswordValid = true;
+    isNewPasswordValid = true;
     passwordObscureText = true;
   }
 
@@ -37,9 +38,9 @@ class ChangePasswordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void validateOldPassword(
-      String value) {
+  void validateOldPassword(String value) {
     oldPassword = value;
+    isOldPasswordValid = oldPassword.isNotEmpty;
     notifyListeners();
   }
 
