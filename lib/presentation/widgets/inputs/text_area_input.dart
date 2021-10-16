@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 Widget textAreaInput(
-    {@required TextEditingController controller,
-    @required bool isStateValid,
+    {@required bool isStateValid,
     @required String validationMessage,
     @required String initialValue,
     @required void Function(String) onChange,
     @required int maxLength,
+    TextEditingController controller,
     String hintText}) {
   return Stack(
     children: [

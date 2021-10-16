@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants/constraint.dart';
 import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/mini_post.dart';
-import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/screens/events/replace/picture_list.dart';
 import 'package:hopaut/presentation/screens/events/replace/save_button.dart';
 import 'package:hopaut/presentation/screens/events/replace/tags.dart';
@@ -14,7 +12,6 @@ import 'package:hopaut/presentation/screens/events/replace/time_picker.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/inputs/basic_input.dart';
-import 'package:hopaut/presentation/widgets/inputs/event_text_field.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/inputs/text_area_input.dart';
 import 'package:provider/provider.dart';
@@ -30,18 +27,8 @@ class ReplaceEventPage extends StatefulWidget {
 class _ReplaceEventPageState extends State<ReplaceEventPage> {
   final formKey = GlobalKey<FormState>();
 
-  TextEditingController titleController;
-  TextEditingController descriptionController;
-  TextEditingController requirementsController;
-
   ScrollController scrollController = ScrollController(keepScrollOffset: true);
   bool isSaveEnabled = true;
-
-  _ReplaceEventPageState() {
-    titleController = TextEditingController();
-    descriptionController = TextEditingController();
-    requirementsController = TextEditingController();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,14 +59,12 @@ class _ReplaceEventPageState extends State<ReplaceEventPage> {
                         Divider(),
                         FieldTitle(title: "Event Title"), //TODO: translation
                         valueInput(
-                          controller: titleController,
                           isStateValid: provider.isTitleValid,
-                          initialValue: "",
+                          initialValue: provider.post.event.title,
                           validationMessage:
                               "Please provide a valid title.", // TODO: translation
                           maxLength: Constraint.titleMaxLength,
-                          onChange: (v) =>
-                              provider.validateTitle(v, titleController),
+                          onChange: (v) => provider.validateTitle(v),
                           hintText: 'Event Title', //TODO: translation
                         ),
                         Divider(),
@@ -90,33 +75,32 @@ class _ReplaceEventPageState extends State<ReplaceEventPage> {
                         TimePicker(
                             onConfirmStart: (startTime) =>
                                 provider.post.eventTime =
-                                    startTime.toUtc().millisecondsSinceEpoch,
+                                    (startTime.toUtc().millisecondsSinceEpoch /
+                                            1000)
+                                        .round(),
                             onConfirmEnd: (endTime) => provider.post.endTime =
-                                endTime.toUtc().millisecondsSinceEpoch),
+                                (endTime.toUtc().millisecondsSinceEpoch / 1000)
+                                    .round()),
                         FieldTitle(
                             title: "Event Description"), //TODO: translation
                         textAreaInput(
-                          controller: descriptionController,
                           validationMessage:
-                              "Please provide a valid title.", // TODO: translation
+                              "Please provide a valid description.", // TODO: translation
                           isStateValid: provider.isDescriptionValid,
-                          initialValue: "",
+                          initialValue: provider.post.event.description,
                           maxLength: Constraint.descriptionMaxLength,
-                          onChange: (v) => provider.validateDescription(
-                              v, descriptionController),
+                          onChange: (v) => provider.validateDescription(v),
                           hintText: 'Event Description', //TODO: translation
                         ),
                         FieldTitle(
                             title: "Event Requirements"), //TODO: translation
                         textAreaInput(
-                          controller: requirementsController,
                           validationMessage: "",
                           isStateValid: true,
-                          initialValue: "",
+                          initialValue: provider.post.event.requirements,
                           maxLength: Constraint.requirementsMaxLength,
                           onChange: (v) => () {
-                            provider.validateRequirements(
-                                v, requirementsController);
+                            provider.validateRequirements(v);
                           },
                           hintText:
                               'Event Requirements (Optional)', //TODO: translation
@@ -128,10 +112,9 @@ class _ReplaceEventPageState extends State<ReplaceEventPage> {
                                 provider.getTagSuggestions(
                                     pattern, currentTags)),
                         SaveButton(onPressed: () async {
-                          if (formKey.currentState.validate() &&
-                              isSaveEnabled) {
-                            MiniPost postRes = await provider
-                                .createOrUpdateEvent(provider.post);
+                          if (provider.isFormValid(formKey, isSaveEnabled)) {
+                            MiniPost postRes =
+                                await provider.createOrUpdateEvent();
                             setState(() => isSaveEnabled = false);
                             if (postRes != null) {
                               Application.router.navigateTo(

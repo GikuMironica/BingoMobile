@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/api.dart';
 import 'package:hopaut/config/constants/constraint.dart';
 import 'package:hopaut/data/models/event_list.dart';
+import 'package:hopaut/data/models/location.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
@@ -18,8 +19,9 @@ class EventProvider extends ChangeNotifier {
   Post _post;
   int _miniPostContextId;
 
-  bool isTitleValid = true;
-  bool isDescriptionValid = true;
+  bool isTitleValid = false;
+  bool isDescriptionValid = false;
+  bool isRequirementsValid = true;
 
   EventProvider(
       {EventRepository eventRepository, TagRepository tagRepository}) {
@@ -56,7 +58,7 @@ class EventProvider extends ChangeNotifier {
   }
 
   // TODO: Make to submethods for create and update
-  Future<MiniPost> createOrUpdateEvent(Post post) async {
+  Future<MiniPost> createOrUpdateEvent() async {
     if (_eventsMap[API.MY_ACTIVE] != null) {
       await _eventRepository.create(post);
       MiniPost miniPost = MiniPost.fromPost(post);
@@ -116,26 +118,41 @@ class EventProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void validateTitle(String value, TextEditingController controller) {
-    print(controller.text.length);
-    isTitleValid = value.length > 0;
-    controller.text =
-        value.length <= Constraint.titleMaxLength ? value : controller.text;
+  void validateTitle(String value) {
+    isTitleValid = value != null &&
+        value.characters.length > 0 &&
+        value.characters.length <= Constraint.titleMaxLength;
+    post.event.title = isTitleValid ? value : post.event.title;
     notifyListeners();
   }
 
-  void validateDescription(String value, TextEditingController controller) {
-    isDescriptionValid = value.length >= Constraint.descriptionMinLength;
-    controller.text = value.length <= Constraint.descriptionMaxLength
-        ? value
-        : controller.text;
+  void validateDescription(String value) {
+    isDescriptionValid = value != null &&
+        value.characters.length >= Constraint.descriptionMinLength &&
+        value.characters.length <= Constraint.descriptionMaxLength;
+    post.event.description =
+        isDescriptionValid ? value : post.event.description;
     notifyListeners();
   }
 
-  void validateRequirements(String value, TextEditingController controller) {
-    controller.text = value.length <= Constraint.requirementsMaxLength
-        ? value
-        : controller.text;
+  void validateRequirements(String value) {
+    isRequirementsValid =
+        value.characters.length <= Constraint.requirementsMaxLength;
+    post.event.requirements =
+        isRequirementsValid ? value : post.event.requirements;
+  }
+
+  bool isFormValid(GlobalKey<FormState> formKey, bool isSaveEnabled) {
+    post.location =
+        Location(id: 100, latitude: 48.405218, longitude: 10.001187);
+    bool isValid = formKey.currentState.validate() &&
+        isSaveEnabled &&
+        post.event.eventType != null &&
+        post.location != null &&
+        post.eventTime != null &&
+        post.endTime != null;
+    print(isValid ? "Valid" : "Not valid");
+    return isValid;
   }
 
   void reset() {

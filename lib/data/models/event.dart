@@ -19,7 +19,7 @@ class Event {
       this.entrancePrice,
       this.requirements,
       this.eventType,
-      this.currency = Currency.eur});
+      this.currency});
 
   Event.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
@@ -29,8 +29,8 @@ class Event {
     entrancePrice = json['EntrancePrice'];
     requirements = json['Requirements'];
     eventType = EventType.values[(json['EventType'])];
-
-    currency = Currency.values[json['Currency']];
+    currency =
+        json['Currency'] != null ? Currency.values[json['Currency']] : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -42,7 +42,7 @@ class Event {
     data['EntrancePrice'] = this.entrancePrice;
     data['Requirements'] = this.requirements;
     data['EventType'] = this.eventType.index;
-    data['Currency'] = this.currency;
+    data['Currency'] = this.currency.index;
     return data;
   }
 
