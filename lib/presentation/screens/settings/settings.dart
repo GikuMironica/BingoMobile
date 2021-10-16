@@ -24,8 +24,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  @override
-  void initState() {}
 
   @override
   Widget build(BuildContext context) {
@@ -37,29 +35,26 @@ class _SettingsState extends State<Settings> {
             height: MediaQuery.of(context).size.height,
             width: double.infinity,
             decoration: decorationGradient(),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 50,
-                      ),
-                      IconButton(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        iconSize: 32,
-                        color: Colors.white,
-                        icon: HATheme.backButton,
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, bottom: 15),
-                        child: Column(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 50),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        IconButton(
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          iconSize: 32,
+                          color: Colors.white,
+                          icon: HATheme.backButton,
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -67,7 +62,7 @@ class _SettingsState extends State<Settings> {
                               'Settings',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 36,
+                                  fontSize: 30,
                                   fontWeight: FontWeight.bold,
                                   shadows: [
                                     Shadow(
@@ -76,157 +71,156 @@ class _SettingsState extends State<Settings> {
                                         blurRadius: 10)
                                   ]),
                             ),
-                            SizedBox(height: 20),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              offset: Offset(5.0, 5.0),
-                              blurRadius: 5)
-                        ],
-                      ),
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            SizedBox(
-                              height: 30,
-                            ),
-                            // TODO translation
-                            Text('Notifications',
-                                style: TextStyle(color: Colors.black54)),
-                            Consumer<SettingsService>(
-                              builder: (context, settingsMgr, child) =>
-                                  ListTile(
-                                contentPadding: EdgeInsets.zero,
-                                title: Text(
-                                  // TODO translation
-                                  'Push Notifications',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                trailing: Visibility(
-                                  visible: Platform.isIOS,
-                                  child: CupertinoSwitch(
-                                    value: settingsMgr.pushNotifications,
-                                    onChanged: (v) =>
-                                        settingsMgr.togglePushNotifications(v),
-                                  ),
-                                  replacement: Switch(
-                                    value: settingsMgr.pushNotifications,
-                                    onChanged: (v) =>
-                                        settingsMgr.togglePushNotifications(v),
-                                  ),
-                                ),
-                                //onTap: () =>
-                                //    settingsMgr.togglePushNotifications(v),
+                      ],
+                    ),
+                    Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.3),
+                                offset: Offset(5.0, 5.0),
+                                blurRadius: 5)
+                          ],
+                        ),
+                        child: Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 30,
                               ),
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            // TODO translation
-                            Text('Account',
-                                style: TextStyle(color: Colors.black54)),
-                            MergeSemantics(
-                                child: ListTile(
                               // TODO translation
-                              contentPadding: EdgeInsets.zero,
-                              title: Text('Change Password',
-                                  style: TextStyle(fontSize: 18)),
-                              trailing: Icon(Icons.lock),
-                              onTap: () => changePage('/change_password'),
-                            )),
-                            ListTile(
+                              Text('Notifications',
+                                  style: TextStyle(color: Colors.black54)),
+                              Consumer<SettingsService>(
+                                builder: (context, settingsMgr, child) =>
+                                    ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  title: Text(
+                                    // TODO translation
+                                    'Push Notifications',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  trailing: Visibility(
+                                    visible: Platform.isIOS,
+                                    child: CupertinoSwitch(
+                                      value: settingsMgr.pushNotifications,
+                                      onChanged: (v) =>
+                                          settingsMgr.togglePushNotifications(v),
+                                    ),
+                                    replacement: Switch(
+                                      value: settingsMgr.pushNotifications,
+                                      onChanged: (v) =>
+                                          settingsMgr.togglePushNotifications(v),
+                                    ),
+                                  ),
+                                  //onTap: () =>
+                                  //    settingsMgr.togglePushNotifications(v),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              // TODO translation
+                              Text('Account',
+                                  style: TextStyle(color: Colors.black54)),
+                              MergeSemantics(
+                                  child: ListTile(
+                                // TODO translation
                                 contentPadding: EdgeInsets.zero,
-                                // TODO translation
-                                title: Text('Logout',
+                                title: Text('Change Password',
                                     style: TextStyle(fontSize: 18)),
-                                trailing: Icon(Icons.exit_to_app),
-                                onTap: () async {
-                                  setState(() => widget.logoutStatus = true);
-                                  await GetIt.I
-                                      .get<AuthenticationService>()
-                                      .logout()
-                                      .then((v) {
-                                    Future.delayed(
-                                        Duration(seconds: 1),
-                                        () => Application.router.navigateTo(
-                                            context, '/login',
-                                            transition: TransitionType.fadeIn,
-                                            replace: true,
-                                            clearStack: true));
-                                  });
-                                }),
-                            MergeSemantics(
-                              child: ListTile(
+                                trailing: Icon(Icons.lock),
+                                onTap: () => changePage('/change_password'),
+                              )),
+                              ListTile(
+                                  contentPadding: EdgeInsets.zero,
                                   // TODO translation
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text('Terms of Services',
+                                  title: Text('Logout',
                                       style: TextStyle(fontSize: 18)),
-                                  trailing: Icon(Icons.arrow_forward_ios),
-                                  onTap: () => changePage('/tos')),
-                            ),
-                            MergeSemantics(
-                              child: ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text('Privacy Policy',
-                                      style: TextStyle(fontSize: 18)),
-                                  trailing: Icon(Icons.arrow_forward_ios),
-                                  onTap: () => changePage('/privacy_policy')),
-                            ),
-                            InkWellButton(
-                                // TODO translation
-                                'Delete Account',
-                                () => showDialog(
-                                    context: context,
-                                    builder: (context) => CustomDialog(
-                                          pageWidget: DeleteAccountPopup(),
-                                        )),
-                                Colors.redAccent),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            // TODO translation
-                            Text('Feedback',
-                                style: TextStyle(color: Colors.black54)),
-                            // TODO bug/rating
-                            InkWellButton('Leave a Rating', () {}),
-                            InkWellButton('Report a bug', () {}),
-                          ],
-                        ),
-                      )),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Container(
-                        alignment: Alignment.center,
-                        child: Column(
-                          children: <Widget>[
-                            Text(
-                              'Hopaut',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            Consumer<SettingsService>(
-                              builder: (_, settingsMgr, child) => Text(
-                                  // TODO - await SettingService Initialization -> leads to null app version
-                                  'version ${settingsMgr.appVersion}',
-                                  style: TextStyle(
-                                      color: Colors.white.withOpacity(0.8))),
-                            ),
-                          ],
+                                  trailing: Icon(Icons.exit_to_app),
+                                  onTap: () async {
+                                    setState(() => widget.logoutStatus = true);
+                                    await GetIt.I
+                                        .get<AuthenticationService>()
+                                        .logout()
+                                        .then((v) {
+                                      Future.delayed(
+                                          Duration(seconds: 1),
+                                          () => Application.router.navigateTo(
+                                              context, '/login',
+                                              transition: TransitionType.fadeIn,
+                                              replace: true,
+                                              clearStack: true));
+                                    });
+                                  }),
+                              MergeSemantics(
+                                child: ListTile(
+                                    // TODO translation
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text('Terms of Services',
+                                        style: TextStyle(fontSize: 18)),
+                                    trailing: Icon(Icons.arrow_forward_ios),
+                                    onTap: () => changePage('/tos')),
+                              ),
+                              MergeSemantics(
+                                child: ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text('Privacy Policy',
+                                        style: TextStyle(fontSize: 18)),
+                                    trailing: Icon(Icons.arrow_forward_ios),
+                                    onTap: () => changePage('/privacy_policy')),
+                              ),
+                              InkWellButton(
+                                  // TODO translation
+                                  'Delete Account',
+                                  () => showDialog(
+                                      context: context,
+                                      builder: (context) => CustomDialog(
+                                            pageWidget: DeleteAccountPopup(),
+                                          )),
+                                  Colors.redAccent),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              // TODO translation
+                              Text('Feedback',
+                                  style: TextStyle(color: Colors.black54)),
+                              // TODO bug/rating
+                              InkWellButton('Leave a Rating', () {}),
+                              InkWellButton('Report a bug', () {}),
+                            ],
+                          ),
                         )),
-                  ),
-                ],
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Container(
+                          alignment: Alignment.center,
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Hopaut',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Consumer<SettingsService>(
+                                builder: (_, settingsMgr, child) => Text(
+                                    // TODO - await SettingService Initialization -> leads to null app version
+                                    'version ${settingsMgr.appVersion}',
+                                    style: TextStyle(
+                                        color: Colors.white.withOpacity(0.8))),
+                              ),
+                            ],
+                          )),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -8,20 +8,23 @@ import 'package:injectable/injectable.dart';
 @lazySingleton
 class ChangePasswordProvider extends ChangeNotifier {
 
+  /// Validators
   static final RegExp _pwdRule =
   RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
 
-  bool isOldPasswordValid;
-  bool isNewPasswordValid;
-     // newPassword.isNotEmpty && _pwdRule.hasMatch(newPassword);
-
-  // State
+  /// State properties
   String oldPassword;
   String newPassword;
   bool passwordObscureText;
+  bool newPasswordObscureText;
   BaseFormStatus formStatus;
+  bool isOldPasswordValid;
+  bool isNewPasswordValid;
+  bool get isFormValid => isOldPasswordValid && isNewPasswordValid
+      && oldPassword.isNotEmpty && newPassword.isNotEmpty;
 
-  // Services, repositories and models
+  /// Services, repositories and models
+  AuthenticationRepository _authenticationRepository;
   AuthenticationService _authenticationService;
 
   ChangePasswordProvider(){
@@ -31,10 +34,20 @@ class ChangePasswordProvider extends ChangeNotifier {
     isOldPasswordValid = true;
     isNewPasswordValid = true;
     passwordObscureText = true;
+    newPasswordObscureText = true;
+
+    _authenticationRepository = getIt<AuthenticationRepository>();
+    _authenticationService = getIt<AuthenticationService>();
   }
 
+  /// State validating methods
   void toggleObscurePassword(){
     passwordObscureText = !passwordObscureText;
+    notifyListeners();
+  }
+
+  void toggleObscureNewPassword() {
+    newPasswordObscureText = !newPasswordObscureText;
     notifyListeners();
   }
 
@@ -44,11 +57,24 @@ class ChangePasswordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void doPasswordChange(String currentPassword, String newPassword) async {
-    bool passChangeRes = await getIt<AuthenticationRepository>().changePassword(
-        email: getIt<AuthenticationService>().user.email,
-        oldPassword: currentPassword,
+  void validateNewPassword(String value) {
+    newPassword = value;
+    isNewPasswordValid = newPassword.isNotEmpty && _pwdRule.hasMatch(newPassword);
+    notifyListeners();
+  }
+
+  /// Updates
+  void updatePassword(BuildContext context) async {
+    bool passChangeRes = await _authenticationRepository.changePassword(
+        email: _authenticationService.user.email,
+        oldPassword: oldPassword,
         newPassword: newPassword);
 
+    if (!passChangeRes){
+      formStatus = Failed();
+    }else{
+      formStatus = Success();
+    }
+    notifyListeners();
   }
 }

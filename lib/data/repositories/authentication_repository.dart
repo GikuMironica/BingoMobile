@@ -127,7 +127,8 @@ class AuthenticationRepository extends Repository {
 
     try {
       Response response = await dio.post(API.CHANGE_PASSWORD, data: payload);
-      if (response is Map<String, dynamic>) return true;
+      if (response.statusCode==200)
+        return true;
     } on DioError catch (e) {
       logger.e(e.message);
     }
