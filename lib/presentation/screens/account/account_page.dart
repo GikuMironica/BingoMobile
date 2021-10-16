@@ -23,7 +23,8 @@ class _AccountPageState extends State<AccountPage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: SingleChildScrollView(
-        child: Stack(children: [
+      physics: NeverScrollableScrollPhysics(),
+      child: Stack(children: [
           Container(
             width: _size.width,
             height: _size.height,

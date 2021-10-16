@@ -57,7 +57,7 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
         body: Container(
           height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(20.0),
             child: Builder(
                 builder: (context) => _editProfileDescriptionForm(context)
             ),

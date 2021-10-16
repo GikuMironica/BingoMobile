@@ -51,7 +51,7 @@ class _EditAccountNameState extends State<EditAccountName> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: Builder(
               builder: (context) =>_editProfileForm(context)
             ),

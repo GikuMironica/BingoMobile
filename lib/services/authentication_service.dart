@@ -11,13 +11,13 @@ import 'package:injectable/injectable.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:hopaut/data/domain/login_result.dart';
-import 'package:hopaut/services/settings_service.dart';
+import 'package:hopaut/controllers/providers/settings_provider.dart';
 
 @lazySingleton
 class AuthenticationService with ChangeNotifier {
   final SecureStorageService _secureStorageService;
   final DioService _dioService;
-  final SettingsService _settingsService;
+  final SettingsProvider _settingsService;
 
   final UserRepository _userRepository;
   final AuthenticationRepository _authenticationRepository;
@@ -32,7 +32,7 @@ class AuthenticationService with ChangeNotifier {
         _userRepository = getIt<UserRepository>(),
         _dioService = getIt<DioService>(),
         _authenticationRepository = getIt<AuthenticationRepository>(),
-        _settingsService = getIt<SettingsService>();
+        _settingsService = getIt<SettingsProvider>();
 
   Identity get currentIdentity => _identity;
 
