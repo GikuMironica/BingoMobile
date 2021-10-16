@@ -4,7 +4,7 @@ import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @singleton
-class SettingsService with ChangeNotifier {
+class SettingsProvider with ChangeNotifier {
   PackageInfo _packageInfo;
   SharedPreferences _preferences;
 
@@ -12,7 +12,7 @@ class SettingsService with ChangeNotifier {
 
   bool pushNotifications = true;
 
-  SettingsService() {
+  SettingsProvider() {
     getPackageInfo();
     getSharedPreferences();
   }

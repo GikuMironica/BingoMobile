@@ -1,0 +1,97 @@
+import 'package:flutter/widgets.dart';
+import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/data/repositories/authentication_repository.dart';
+import 'package:hopaut/services/authentication_service.dart';
+import 'package:injectable/injectable.dart';
+
+@lazySingleton
+class ChangePasswordProvider extends ChangeNotifier {
+
+  /// Validators
+  static final RegExp _pwdRule =
+  RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
+
+  /// State properties
+  String oldPassword;
+  String newPassword;
+  bool passwordObscureText;
+  bool newPasswordObscureText;
+  BaseFormStatus formStatus;
+  bool isOldPasswordValid;
+  bool isNewPasswordValid;
+
+
+  /// Services, repositories and models
+  AuthenticationRepository _authenticationRepository;
+  AuthenticationService _authenticationService;
+
+  ChangePasswordProvider(){
+    formStatus = Idle();
+    oldPassword = "";
+    newPassword = "";
+    passwordObscureText = true;
+    newPasswordObscureText = true;
+    isOldPasswordValid = false;
+    isNewPasswordValid = false;
+    _authenticationRepository = getIt<AuthenticationRepository>();
+    _authenticationService = getIt<AuthenticationService>();
+  }
+
+  /// State validating methods
+  void toggleObscurePassword(){
+    passwordObscureText = !passwordObscureText;
+    notifyListeners();
+  }
+
+  void toggleObscureNewPassword() {
+    newPasswordObscureText = !newPasswordObscureText;
+    notifyListeners();
+  }
+
+  bool validateOldPassword(){
+    return oldPassword.isNotEmpty;
+  }
+
+  bool validateNewPassword(){
+    return newPassword.isNotEmpty && _pwdRule.hasMatch(newPassword);
+  }
+
+  void oldPasswordChange(String value) {
+    oldPassword = value;
+    isOldPasswordValid = validateNewPassword();
+    notifyListeners();
+  }
+
+  void newPasswordChange(String value) {
+    newPassword = value;
+    isNewPasswordValid = validateNewPassword();
+    notifyListeners();
+  }
+
+  /// Updates
+  void updatePassword(BuildContext context) async {
+    formStatus = Submitted();
+    notifyListeners();
+    bool passChangeRes = await _authenticationRepository.changePassword(
+        email: _authenticationService.user.email,
+        oldPassword: oldPassword,
+        newPassword: newPassword);
+
+    if (!passChangeRes){
+      formStatus = Failed();
+      oldPassword = "";
+      newPassword = "";
+    }else{
+      formStatus = Success();
+      oldPassword = "";
+      newPassword = "";
+      Future.delayed(Duration(seconds: 4), () async {
+        // TODO - translation
+        Application.router.pop(context);
+      });
+    }
+    notifyListeners();
+  }
+}
