@@ -42,14 +42,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       ),
     );
   }
-
   Widget gradientBackground(BuildContext context){
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 50),
+          padding: const EdgeInsets.only(top: 75),
           child: title(),
         ),
         whiteOverlayCard(context)
@@ -103,7 +102,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             topLeft: Radius.circular(30)),
       ),
       child: Padding(
-        padding: EdgeInsets.all(24),
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -150,49 +149,59 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         showSuccessSnackBar(context: context, message: "Password updated");
       });
     }
-    _passwordProvider.formStatus = new Idle();
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          // TODO translation
-          passwordInputField(
-              context: context,
-              hint: 'Enter your old password',
-              validationMessage: 'Please input your old password',
-              isStateValid: _passwordProvider.validateOldPassword(),
-              isTextObscured: _passwordProvider.passwordObscureText,
-              onObscureTap: _passwordProvider.toggleObscurePassword,
-              onChange: (v) => _passwordProvider.oldPasswordChange(v)
+    Future.delayed(Duration(seconds: 1), () async {
+      _passwordProvider.formStatus = Idle();
+    });
+    return _passwordProvider.formStatus is Submitted
+      ? Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+            child: CircularProgressIndicator(),
           ),
-          SizedBox(height: 20),
-          // TODO translation
-          passwordInputField(
-            context: context,
-            hint: 'Enter your new password',
-            validationMessage: "Password must be at least 8 characters length," +
-                " must contain upper, lower case letters" +
-                " and digits",
-            isStateValid: _passwordProvider.validateNewPassword(),
-            isTextObscured: _passwordProvider.newPasswordObscureText,
-            onObscureTap: _passwordProvider.toggleObscureNewPassword,
-            onChange: (v) => _passwordProvider.newPasswordChange(v)
+        )
+      : Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              // TODO translation
+              passwordInputField(
+                  context: context,
+                  hint: 'Enter your old password',
+                  validationMessage: 'Please input your old password',
+                  isStateValid: _passwordProvider.validateOldPassword(),
+                  isTextObscured: _passwordProvider.passwordObscureText,
+                  onObscureTap: _passwordProvider.toggleObscurePassword,
+                  onChange: (v) => _passwordProvider.oldPasswordChange(v)
+              ),
+              SizedBox(height: 20),
+              // TODO translation
+              passwordInputField(
+                context: context,
+                hint: 'Enter your new password',
+                validationMessage: "Password must be at least 8 characters length," +
+                    " must contain upper, lower case letters" +
+                    " and digits",
+                isStateValid: _passwordProvider.validateNewPassword(),
+                isTextObscured: _passwordProvider.newPasswordObscureText,
+                onObscureTap: _passwordProvider.toggleObscureNewPassword,
+                onChange: (v) => _passwordProvider.newPasswordChange(v)
+              ),
+              SizedBox(height: 30),
+              authButton(
+                context: context,
+                // TODO translation
+                label: 'Change password',
+                isStateValid: _passwordProvider.isNewPasswordValid &&
+                 _passwordProvider.isOldPasswordValid,
+                onPressed: () => {
+                  FocusManager.instance.primaryFocus.unfocus(),
+                  if (_formKey.currentState.validate())
+                    {_passwordProvider.updatePassword(context)}
+                }
+              )
+            ],
           ),
-          SizedBox(height: 30),
-          authButton(
-            context: context,
-            // TODO translation
-            label: 'Change password',
-            isStateValid: _passwordProvider.isNewPasswordValid &&
-             _passwordProvider.isOldPasswordValid,
-            onPressed: () => {
-              FocusManager.instance.primaryFocus.unfocus(),
-              if (_formKey.currentState.validate())
-                {_passwordProvider.updatePassword(context)}
-            }
-          )
-        ],
-      ),
-    );
+        );
   }
 }

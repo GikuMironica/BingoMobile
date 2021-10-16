@@ -16,7 +16,7 @@ import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/services/dio_service.dart';
 import 'package:hopaut/controllers/providers/account_provider.dart';
 import 'package:hopaut/services/secure_storage_service.dart';
-import 'package:hopaut/services/settings_service.dart';
+import 'package:hopaut/controllers/providers/settings_provider.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'controllers/providers/search_page_controller.dart';
@@ -53,7 +53,7 @@ Future<void> init() async {
           .then((result) => areNotificationsAllowed = result),
     ]);
 
-    SettingsService _settingsService = getIt<SettingsService>();
+    SettingsProvider _settingsService = getIt<SettingsProvider>();
     _settingsService.togglePushNotifications(areNotificationsAllowed ?? true);
     // Hive stores user ID logged in if there is any
     var authBox = await Hive.openBox('auth');
@@ -122,8 +122,8 @@ class _HopAutState extends State<HopAut> {
         providers: [
           ChangeNotifierProvider<AuthenticationService>(
               create: (context) => getIt<AuthenticationService>()),
-          ChangeNotifierProvider<SettingsService>(
-              create: (context) => getIt<SettingsService>()),
+          ChangeNotifierProvider<SettingsProvider>(
+              create: (context) => getIt<SettingsProvider>()),
           ChangeNotifierProvider<AccountProvider>(
               create: (context) => getIt<AccountProvider>()
           ),

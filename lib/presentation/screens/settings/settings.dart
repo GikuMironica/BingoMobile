@@ -9,7 +9,7 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/authentication_service.dart';
-import 'package:hopaut/services/settings_service.dart';
+import 'package:hopaut/controllers/providers/settings_provider.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'delete_account.dart';
@@ -36,7 +36,7 @@ class _SettingsState extends State<Settings> {
             width: double.infinity,
             decoration: decorationGradient(),
             child: Padding(
-              padding: const EdgeInsets.only(top: 50),
+              padding: const EdgeInsets.only(top: 75),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -98,8 +98,8 @@ class _SettingsState extends State<Settings> {
                               ),
                               // TODO translation
                               Text('Notifications',
-                                  style: TextStyle(color: Colors.black54)),
-                              Consumer<SettingsService>(
+                                  style: TextStyle(color: Colors.black38)),
+                              Consumer<SettingsProvider>(
                                 builder: (context, settingsMgr, child) =>
                                     ListTile(
                                   contentPadding: EdgeInsets.zero,
@@ -130,7 +130,7 @@ class _SettingsState extends State<Settings> {
                               ),
                               // TODO translation
                               Text('Account',
-                                  style: TextStyle(color: Colors.black54)),
+                                  style: TextStyle(color: Colors.black38)),
                               MergeSemantics(
                                   child: ListTile(
                                 // TODO translation
@@ -192,7 +192,7 @@ class _SettingsState extends State<Settings> {
                               ),
                               // TODO translation
                               Text('Feedback',
-                                  style: TextStyle(color: Colors.black54)),
+                                  style: TextStyle(color: Colors.black38)),
                               // TODO bug/rating
                               InkWellButton('Leave a Rating', () {}),
                               InkWellButton('Report a bug', () {}),
@@ -209,7 +209,7 @@ class _SettingsState extends State<Settings> {
                                 'Hopaut',
                                 style: TextStyle(color: Colors.white),
                               ),
-                              Consumer<SettingsService>(
+                              Consumer<SettingsProvider>(
                                 builder: (_, settingsMgr, child) => Text(
                                     // TODO - await SettingService Initialization -> leads to null app version
                                     'version ${settingsMgr.appVersion}',

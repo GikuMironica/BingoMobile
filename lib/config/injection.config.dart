@@ -24,7 +24,7 @@ import '../services/dio_service.dart' as _i16;
 import '../services/location_service.dart' as _i17;
 import '../services/logging_service.dart' as _i18;
 import '../services/secure_storage_service.dart' as _i19;
-import '../services/settings_service.dart'
+import '../controllers/providers/settings_provider.dart'
     as _i20; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
@@ -54,6 +54,6 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i17.LocationService>(_i17.LocationService());
   gh.singleton<_i18.LoggingService>(_i18.LoggingService());
   gh.singleton<_i19.SecureStorageService>(_i19.SecureStorageService());
-  gh.singleton<_i20.SettingsService>(_i20.SettingsService());
+  gh.singleton<_i20.SettingsProvider>(_i20.SettingsProvider());
   return get;
 }

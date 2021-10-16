@@ -3,7 +3,6 @@ import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/data/repositories/authentication_repository.dart';
-import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:injectable/injectable.dart';
 
@@ -73,6 +72,8 @@ class ChangePasswordProvider extends ChangeNotifier {
 
   /// Updates
   void updatePassword(BuildContext context) async {
+    formStatus = Submitted();
+    notifyListeners();
     bool passChangeRes = await _authenticationRepository.changePassword(
         email: _authenticationService.user.email,
         oldPassword: oldPassword,
@@ -80,8 +81,12 @@ class ChangePasswordProvider extends ChangeNotifier {
 
     if (!passChangeRes){
       formStatus = Failed();
+      oldPassword = "";
+      newPassword = "";
     }else{
       formStatus = Success();
+      oldPassword = "";
+      newPassword = "";
       Future.delayed(Duration(seconds: 4), () async {
         // TODO - translation
         Application.router.pop(context);

@@ -1,5 +1,5 @@
 import 'package:hopaut/services/authentication_service.dart';
-import 'package:hopaut/services/settings_service.dart';
+import 'package:hopaut/controllers/providers/settings_provider.dart';
 import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
 import 'package:hopaut/data/domain/login_result.dart';
 import 'package:hopaut/config/injection.dart';
@@ -10,7 +10,7 @@ import 'login_state.dart';
 
 abstract class LoginEvent extends BaseEvent {
   AuthenticationService authService = getIt<AuthenticationService>();
-  SettingsService settingsService = getIt<SettingsService>();
+  SettingsProvider settingsService = getIt<SettingsProvider>();
 }
 
 // Event 1
