@@ -45,8 +45,8 @@ class MiniPost {
     //address = post.location.address; TODO: fix address
     title = post.event.title;
     hostRating = post.hostRating;
-    //latitude = post.location.latitude;
-    //longitude = post.location.longitude;
+    latitude = post.location.latitude;
+    longitude = post.location.longitude;
     postTime = post.postTime;
     startTime = post.eventTime;
     endTime = post.endTime;
