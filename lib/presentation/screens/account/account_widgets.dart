@@ -21,17 +21,20 @@ Widget userDescription() {
   return Consumer<AuthenticationService>(
     builder: (context, provider, child) => Visibility(
       visible: provider.user.description != null,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-              // TODO translation
-              provider.user.description ??
-                  "Tell people something about you...",
-              textAlign: TextAlign.center,
-              maxLines: 4,
-              style: TextStyle(color: Colors.grey[500])),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+                // TODO translation
+                provider.user.description ??
+                    "Tell people something about you...",
+                textAlign: TextAlign.center,
+                maxLines: 4,
+                style: TextStyle(color: Colors.grey[500])),
+          ],
+        ),
       ),
     ),
   );

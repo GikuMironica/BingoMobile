@@ -19,6 +19,7 @@ class Routes {
   static String termsOfServices = '/tos';
   static String settings = '/settings';
   static String privacyPolicy = '/privacy_policy';
+  static String imprint = '/imprint';
   // -- EVENT -----------------------------------------------------------------
   static String event = '/event/:id';
   static String createEvent = '/create-event';
@@ -60,6 +61,7 @@ class Routes {
     router.define(forgotPassword, handler: forgotPasswordHandler);
     router.define(termsOfServices, handler: tosHandler);
     router.define(privacyPolicy, handler: ppHandler);
+    router.define(imprint, handler: imprintHandler);
 
     // EVENT
     router.define(event, handler: eventPageHandler);

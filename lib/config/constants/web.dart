@@ -6,4 +6,5 @@ class WEB {
   // Don't edit this two regardless of the environment prod/dev
   static const String PRIVACY_POLICY = 'https://hopaut.com/legal/privacy';
   static const String TERMS_SERVICES = 'https://hopaut.com/legal/terms';
+  static const String IMPRINT = 'https://hopaut.com/legal/impressum';
 }

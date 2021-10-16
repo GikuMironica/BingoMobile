@@ -170,3 +170,8 @@ var ppHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return WebvPage('Privacy Policy', 'https://hopaut.com/legal/privacy');
 });
+
+var imprintHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+      return WebvPage('Imprint', 'https://hopaut.com/legal/impressum');
+});
