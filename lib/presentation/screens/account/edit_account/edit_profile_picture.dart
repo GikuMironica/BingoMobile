@@ -74,8 +74,10 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
             )));
 
     // TODO translation
-    result.isSuccessful
-      ? showSuccessSnackBar(scaffoldKey: scaffoldKey, message: "Profile picture updated")
-      : showSnackBarWithError(scaffoldKey: scaffoldKey, message: result.errorMessage);
+    if(result != null){
+      result.isSuccessful
+          ? showSuccessSnackBar(scaffoldKey: scaffoldKey, message: "Profile picture updated")
+          : showSnackBarWithError(scaffoldKey: scaffoldKey, message: result.errorMessage);
+    }
   }
 }

@@ -9,6 +9,7 @@ import 'package:injectable/injectable.dart' as _i2;
 
 import '../controllers/providers/account_provider.dart' as _i3;
 import '../controllers/providers/change_password_provider.dart' as _i7;
+import '../controllers/providers/settings_provider.dart' as _i20;
 import '../data/repositories/announcement_repository.dart' as _i4;
 import '../data/repositories/authentication_repository.dart' as _i5;
 import '../data/repositories/event_repository.dart' as _i8;
@@ -23,9 +24,8 @@ import '../services/date_formatter_service.dart' as _i15;
 import '../services/dio_service.dart' as _i16;
 import '../services/location_service.dart' as _i17;
 import '../services/logging_service.dart' as _i18;
-import '../services/secure_storage_service.dart' as _i19;
-import '../controllers/providers/settings_provider.dart'
-    as _i20; // ignore_for_file: unnecessary_lambdas
+import '../services/secure_storage_service.dart'
+    as _i19; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]

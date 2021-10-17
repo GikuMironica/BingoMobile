@@ -48,7 +48,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 75),
+          padding: const EdgeInsets.only(top: 60),
           child: title(),
         ),
         whiteOverlayCard(context)
@@ -194,14 +194,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 label: 'Change password',
                 isStateValid: _passwordProvider.isNewPasswordValid &&
                  _passwordProvider.isOldPasswordValid,
-                onPressed: () => {
+                onPressed: () async => {
                   FocusManager.instance.primaryFocus.unfocus(),
                   if (_formKey.currentState.validate())
-                    {_passwordProvider.updatePassword(context)}
+                    {await _passwordProvider.updatePassword(context)}
                 }
               )
             ],
           ),
-        );
+      );
   }
 }

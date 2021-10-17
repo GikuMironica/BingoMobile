@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/controllers/providers/account_provider.dart';
+import 'package:hopaut/controllers/providers/change_password_provider.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/authentication_repository.dart';
@@ -17,7 +19,6 @@ import 'package:hopaut/controllers/providers/settings_provider.dart';
 class AuthenticationService with ChangeNotifier {
   final SecureStorageService _secureStorageService;
   final DioService _dioService;
-  final SettingsProvider _settingsService;
 
   final UserRepository _userRepository;
   final AuthenticationRepository _authenticationRepository;
@@ -31,8 +32,7 @@ class AuthenticationService with ChangeNotifier {
       : _secureStorageService = getIt<SecureStorageService>(),
         _userRepository = getIt<UserRepository>(),
         _dioService = getIt<DioService>(),
-        _authenticationRepository = getIt<AuthenticationRepository>(),
-        _settingsService = getIt<SettingsProvider>();
+        _authenticationRepository = getIt<AuthenticationRepository>();
 
   Identity get currentIdentity => _identity;
 
@@ -150,7 +150,13 @@ class AuthenticationService with ChangeNotifier {
     await Hive.box('auth').delete('identity');
     _secureStorageService.deleteAll();
     _dioService.removeBearerToken();
-    // TODO - clear event list
+
+    // reset providers
+    getIt<SettingsProvider>().resetProvider();
+    getIt<AccountProvider>().resetProvider();
+    getIt<ChangePasswordProvider>().resetProvider();
+
+
     setIdentity(null);
     setUser(null);
     if (oneSignalSettings) {

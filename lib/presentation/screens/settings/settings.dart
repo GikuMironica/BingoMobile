@@ -36,8 +36,9 @@ class _SettingsState extends State<Settings> {
             width: double.infinity,
             decoration: decorationGradient(),
             child: Padding(
-              padding: const EdgeInsets.only(top: 75),
+              padding: const EdgeInsets.only(top: 30),
               child: SingleChildScrollView(
+                padding: const EdgeInsets.only(top: 30),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,6 +162,21 @@ class _SettingsState extends State<Settings> {
                                               clearStack: true));
                                     });
                                   }),
+                              InkWellButton(
+                                // TODO translation
+                                  'Delete Account',
+                                      () => showDialog(
+                                      context: context,
+                                      builder: (context) => CustomDialog(
+                                        pageWidget: DeleteAccountPopup(),
+                                      )),
+                                  Colors.redAccent),
+                              // TODO translation
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text('Info',
+                                  style: TextStyle(color: Colors.black38)),
                               MergeSemantics(
                                 child: ListTile(
                                     // TODO translation
@@ -178,15 +194,15 @@ class _SettingsState extends State<Settings> {
                                     trailing: Icon(Icons.arrow_forward_ios),
                                     onTap: () => changePage('/privacy_policy')),
                               ),
-                              InkWellButton(
-                                  // TODO translation
-                                  'Delete Account',
-                                  () => showDialog(
-                                      context: context,
-                                      builder: (context) => CustomDialog(
-                                            pageWidget: DeleteAccountPopup(),
-                                          )),
-                                  Colors.redAccent),
+                              // TODO Translation
+                              MergeSemantics(
+                                child: ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text('Imprint',
+                                        style: TextStyle(fontSize: 18)),
+                                    trailing: Icon(Icons.arrow_forward_ios),
+                                    onTap: () => changePage('/imprint')),
+                              ),
                               SizedBox(
                                 height: 15,
                               ),

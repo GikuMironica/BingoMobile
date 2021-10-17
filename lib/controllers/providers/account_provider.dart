@@ -15,8 +15,8 @@ class AccountProvider extends ChangeNotifier {
       caseSensitive: false, unicode: true, dotAll: true);
 
   // state
-  bool firstNameIsValid = true;
-  bool lastNameIsValid = true;
+  bool firstNameIsValid = false;
+  bool lastNameIsValid = false;
   bool descriptionIsValid = true;
   BaseFormStatus formStatus;
   BaseFormStatus picturesPageStatus;
@@ -131,5 +131,13 @@ class AccountProvider extends ChangeNotifier {
     descriptionIsValid = value.characters.length <= maxLength;
     controller.text = descriptionIsValid ? value : controller.text;
     notifyListeners();
+  }
+
+  void resetProvider(){
+    firstNameIsValid = false;
+    lastNameIsValid = false;
+    descriptionIsValid = true;
+    formStatus = Idle();
+    picturesPageStatus = Idle();
   }
 }
