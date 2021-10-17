@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 Widget valueInput(
-    {@required TextEditingController controller,
-    @required bool isStateValid,
+    {@required bool isStateValid,
     @required String validationMessage,
     @required String initialValue,
     @required void Function(String) onChange,
     @required int maxLength,
+    TextEditingController controller,
     String hintText}) {
   return Stack(
     children: [
@@ -26,9 +26,7 @@ Widget valueInput(
         ],
         initialValue: initialValue ?? "",
         autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: (value) =>
-            // TODO translation
-            isStateValid ? null : validationMessage,
+        validator: (value) => isStateValid ? null : validationMessage,
         onChanged: onChange,
         maxLines: 1,
         maxLengthEnforced: true,

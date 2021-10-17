@@ -40,28 +40,28 @@ class PriceSelector extends StatelessWidget {
                     ),
                     contentPadding: EdgeInsets.only(top: 16.0),
                     border: InputBorder.none,
-                    hintText: 'Price',
+                    hintText: 'Price', //TODO: translation
                   ),
                   keyboardType: TextInputType.number,
                 ),
               ),
-              DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: currencyStrings[post.event.currency],
-                  onChanged: (String v) {
-                    post.event.currency = currencyStrings.keys.firstWhere(
-                        (key) => currencyStrings[key] == v,
-                        orElse: () => post.event.currency);
-                  },
-                  items: currencyStrings.values
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              ),
+              // DropdownButtonHideUnderline(
+              //   child: DropdownButton<String>(
+              //     value: currencyStrings[post.event.currency],
+              //     onChanged: (String v) {
+              //       post.event.currency = currencyStrings.keys.firstWhere(
+              //           (key) => currencyStrings[key] == v,
+              //           orElse: () => post.event.currency);
+              //     },
+              //     items: currencyStrings.values
+              //         .map<DropdownMenuItem<String>>((String value) {
+              //       return DropdownMenuItem<String>(
+              //         value: value,
+              //         child: Text(value),
+              //       );
+              //     }).toList(),
+              //   ),
+              // ),
               SizedBox(
                 width: 8,
               ),

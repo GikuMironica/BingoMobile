@@ -3,6 +3,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/picture.dart';
@@ -48,7 +49,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   bool isActiveEvent = false;
 
   Key attendCellKey = Key('attend-list-cell');
-  List<CachedNetworkImageProvider> _postImages = [];
+  List<ImageProvider> _postImages = [];
 
   ScrollController _scrollController;
   AnimationController _animationController;
@@ -85,8 +86,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
     if (post.pictures.length != 0) {
       postHasPictures = true;
       for (Picture picture in post.pictures) {
-        _postImages.add(
-            CachedNetworkImageProvider('${WEB.IMAGES}/${picture.path}.webp'));
+        _postImages.add(picture.image);
       }
     }
   }
@@ -252,7 +252,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                               width: 1,
                             ),
                             Text(
-                              post.event.eventType.toString(),
+                              eventTypeStrings[post.event.eventType],
                             ),
                             SizedBox(
                               width: 4,
@@ -266,7 +266,10 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                               width: 4,
                             ),
                             Text(
-                              '${post.location.address}, ${post.location.city}',
+                              post.location.address != null &&
+                                      post.location.city != null
+                                  ? '${post.location.address}, ${post.location.city}'
+                                  : 'Unknown address', //TODO: translation
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 14, color: Colors.black54),

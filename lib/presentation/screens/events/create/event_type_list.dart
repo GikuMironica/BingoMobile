@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/data/models/post.dart';
-import 'package:hopaut/presentation/screens/events/replace/price_selector.dart';
+import 'package:hopaut/presentation/screens/events/create/price_selector.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 import 'package:hopaut/presentation/widgets/inputs/event_drop_down.dart';
 import 'package:hopaut/presentation/widgets/inputs/event_text_field.dart';

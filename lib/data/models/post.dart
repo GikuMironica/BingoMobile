@@ -115,7 +115,8 @@ class Post {
       data['Event.Requirements'] = this.event.requirements;
       data['Event.Slots'] = this.event.slots;
       data['Event.Title'] = this.event.title;
-      data['Event.Currency'] = this.event.currency;
+      data['Event.Currency'] =
+          this.event.currency != null ? this.event.currency.index : null;
       data['Event.EntrancePrice'] = this.event.entrancePrice;
       data['Event.EventType'] = this.event.eventType.index;
     }
@@ -123,21 +124,13 @@ class Post {
       String mimeType = mimeFromExtension('webp');
       String mimee = mimeType.split('/')[0];
       String type = mimeType.split('/')[1];
-      if (pictures[0] != null)
-        data['Picture1'] = await MultipartFile.fromFile(
-            File(pictures[0].path).absolute.path,
-            filename: '0.webp',
+
+      for (int i = 0; i < pictures.length; i++) {
+        data['Picture$i'] = await MultipartFile.fromFile(
+            File(pictures[i].path).absolute.path,
+            filename: '$i.webp',
             contentType: MediaType(mimee, type));
-      if (pictures[1] != null)
-        data['Picture2'] = await MultipartFile.fromFile(
-            File(pictures[1].path).absolute.path,
-            filename: '1.webp',
-            contentType: MediaType(mimee, type));
-      if (pictures[2] != null)
-        data['Picture3'] = await MultipartFile.fromFile(
-            File(pictures[2].path).absolute.path,
-            filename: '2.webp',
-            contentType: MediaType(mimee, type));
+      }
     }
     data['Tags'] = this.tags ?? null;
     return data;
@@ -174,22 +167,6 @@ class Post {
       DateTime.fromMillisecondsSinceEpoch(endTime * 1000);
 
   String get hostRatingAsString => hostRating.toStringAsFixed(2);
-
-  void setTitle(String string) {
-    this.event.title = string;
-  }
-
-  void setLocation(Location location) {
-    this.location = location;
-  }
-
-  void setEndTime(int int) {
-    this.endTime = int;
-  }
-
-  void setStartTime(int int) {
-    this.eventTime = int;
-  }
 
   void setPicture(Picture picture, [int index]) async {
     if (index != null && index < Constraint.pictureMaxCount) {

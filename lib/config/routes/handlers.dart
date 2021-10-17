@@ -21,7 +21,7 @@ import 'package:hopaut/presentation/screens/events/edit_event/time.dart';
 import 'package:hopaut/presentation/screens/events/edit_event/title.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/screens/events/rate_event.dart';
-import 'package:hopaut/presentation/screens/events/replace/replace_event_page.dart';
+import 'package:hopaut/presentation/screens/events/create/create_event_page.dart';
 import 'package:hopaut/presentation/screens/home_page.dart';
 import 'package:hopaut/presentation/screens/authentication/login.dart';
 import 'package:hopaut/presentation/screens/settings/change_password.dart';
@@ -101,7 +101,7 @@ var rateEventHandler = new Handler(
 
 var createEventHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return ReplaceEventPage();
+  return CreateEventPage();
 });
 
 var editEventHandler = new Handler(

@@ -3,7 +3,7 @@ import 'package:hopaut/config/constants/constraint.dart';
 import 'package:hopaut/data/models/picture.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
-import 'package:hopaut/presentation/screens/events/replace/picture_card.dart';
+import 'package:hopaut/presentation/screens/events/create/picture_card.dart';
 import 'package:hopaut/utils/image_utilities.dart';
 
 class PictureList extends StatefulWidget {

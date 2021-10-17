@@ -20,7 +20,10 @@ class LocationButton extends StatelessWidget {
         InkWell(
           onTap: () => Application.router
               .navigateTo(context, Routes.searchByMap)
-              .then((value) => () => post.location = value as Location),
+              .then((value) => () {
+                    post.location = value as Location;
+                    print(post.location);
+                  }),
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.all(12.0),

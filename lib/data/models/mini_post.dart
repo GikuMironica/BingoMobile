@@ -1,12 +1,14 @@
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/data/models/picture.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/services/date_formatter_service.dart';
 
 class MiniPost {
   int postId;
-  int postType;
-  String thumbnail;
+  EventType postType;
+  Picture thumbnail;
   String address;
   String title;
   double hostRating;
@@ -41,12 +43,12 @@ class MiniPost {
 
   MiniPost.fromPost(Post post) {
     postId = post.id;
-    postType = post.event.eventType.index;
-    //address = post.location.address; TODO: fix address
+    postType = post.event.eventType;
+    address = post.location.address;
     title = post.event.title;
     hostRating = post.hostRating;
-    //latitude = post.location.latitude;
-    //longitude = post.location.longitude;
+    latitude = post.location.latitude;
+    longitude = post.location.longitude;
     postTime = post.postTime;
     startTime = post.eventTime;
     endTime = post.endTime;
@@ -56,8 +58,8 @@ class MiniPost {
 
   MiniPost.fromJson(Map<String, dynamic> json) {
     postId = json['PostId'];
-    postType = json['PostType'];
-    thumbnail = json['Thumbnail'];
+    postType = EventType.values[json['PostType']];
+    thumbnail = json['Thumbnail'] != null ? Picture(json['Thumbnail']) : null;
     address = json['Address'];
     title = json['Title'];
     hostRating = json['HostRating'];
@@ -76,8 +78,8 @@ class MiniPost {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['PostId'] = this.postId;
-    data['PostType'] = this.postType;
-    data['Thumbnail'] = this.thumbnail;
+    data['PostType'] = this.postType.index;
+    data['Thumbnail'] = this.thumbnail.path;
     data['Address'] = this.address;
     data['Title'] = this.title;
     data['HostRating'] = this.hostRating;
