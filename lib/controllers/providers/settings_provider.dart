@@ -18,7 +18,6 @@ class SettingsProvider with ChangeNotifier {
   String deleteAccountEmail;
   bool get isDeleteAccountEmailValid => EmailValidator.validate(deleteAccountEmail.trim());
   UserRepository _userRepository;
-  AuthenticationService _authenticationService;
   String get appVersion => _packageInfo.version;
 
   bool pushNotifications;
@@ -97,5 +96,9 @@ class SettingsProvider with ChangeNotifier {
         msg: "Unable to delete account"
       );
     }
+  }
+
+  void resetProvider(){
+    deleteAccountEmail = "";
   }
 }

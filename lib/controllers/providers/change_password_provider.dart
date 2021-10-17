@@ -94,4 +94,14 @@ class ChangePasswordProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void resetProvider(){
+    formStatus = Idle();
+    oldPassword = "";
+    newPassword = "";
+    passwordObscureText = true;
+    newPasswordObscureText = true;
+    isOldPasswordValid = false;
+    isNewPasswordValid = false;
+  }
 }

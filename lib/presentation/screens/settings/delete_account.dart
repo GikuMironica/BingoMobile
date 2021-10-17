@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hopaut/config/injection.dart';
-import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/controllers/providers/settings_provider.dart';
-import 'package:hopaut/data/repositories/user_repository.dart';
-import 'package:hopaut/presentation/forms/blocs/delete_account.dart';
-import 'package:hopaut/presentation/screens/settings/settings.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
-import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
-import 'package:hopaut/services/authentication_service.dart';
 import 'package:provider/provider.dart';
 
 class DeleteAccountPopup extends StatefulWidget {
