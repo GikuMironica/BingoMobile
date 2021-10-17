@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:hopaut/data/models/post.dart';
-import 'package:hopaut/presentation/screens/events/replace/tag_chip.dart';
+import 'package:hopaut/presentation/screens/events/create/tag_chip.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
 
 class Tags extends StatefulWidget {

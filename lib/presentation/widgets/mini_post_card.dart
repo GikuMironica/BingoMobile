@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:jiffy/jiffy.dart';
@@ -56,7 +56,7 @@ class MiniPostCard extends StatelessWidget {
                     ),
                     image: DecorationImage(
                       image: miniPost.thumbnail != null
-                          ? CachedNetworkImageProvider(miniPost.thumbnailUrl)
+                          ? miniPost.thumbnail.image
                           : AssetImage('assets/images/bg_placeholder.jpg'),
                       fit: BoxFit.cover,
                     )),
@@ -68,7 +68,7 @@ class MiniPostCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        miniPost.postType.toString(),
+                        eventTypeStrings[miniPost.postType],
                         style:
                             TextStyle(color: Color(0xFF9A9DB2), fontSize: 11),
                       ),
@@ -84,7 +84,8 @@ class MiniPostCard extends StatelessWidget {
                       ),
                       FittedBox(
                           child: Text(
-                        miniPost.address ?? "Unspecified",
+                        miniPost.address ??
+                            "Unknown address", //TODO: translation
                         style: TextStyle(
                             color: Color(0xFF747686),
                             fontSize: 11,

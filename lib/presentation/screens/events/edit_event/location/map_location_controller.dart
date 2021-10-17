@@ -4,6 +4,7 @@ import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/data/models/location.dart' as HopautLocation;
 import 'package:hopaut/services/location_service.dart';
 
@@ -20,6 +21,7 @@ class MapLocationController extends ChangeNotifier {
   SearchEngine _searchEngine;
   SearchResultState searchResultState;
   TextEditingController searchBarController;
+  EventProvider _eventProvider = getIt<EventProvider>();
 
   final double distanceToEarthInMeters = 3000;
   MapScheme mapScheme = MapScheme.greyDay;
@@ -110,7 +112,7 @@ class MapLocationController extends ChangeNotifier {
       GeoCircle geoCircle = GeoCircle(
           GeoCoordinates(locationManager.currentPosition.latitude,
               locationManager.currentPosition.longitude),
-          5000);
+          15000);
       TextQuery textQuery = TextQuery.withCircleArea(pattern, geoCircle);
       _searchEngine.searchByText(textQuery, SearchOptions.withDefaults(),
           (error, List<Place> suggestion) {

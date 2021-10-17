@@ -168,22 +168,6 @@ class Post {
 
   String get hostRatingAsString => hostRating.toStringAsFixed(2);
 
-  void setTitle(String string) {
-    this.event.title = string;
-  }
-
-  void setLocation(Location location) {
-    this.location = location;
-  }
-
-  void setEndTime(int int) {
-    this.endTime = int;
-  }
-
-  void setStartTime(int int) {
-    this.eventTime = int;
-  }
-
   void setPicture(Picture picture, [int index]) async {
     if (index != null && index < Constraint.pictureMaxCount) {
       pictures[index] = picture;

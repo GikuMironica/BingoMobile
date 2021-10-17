@@ -58,10 +58,9 @@ class EventProvider extends ChangeNotifier {
   }
 
   // TODO: Make to submethods for create and update
-  Future<MiniPost> createOrUpdateEvent() async {
+  Future<MiniPost> createEvent() async {
     if (_eventsMap[API.MY_ACTIVE] != null) {
-      await _eventRepository.create(post);
-      MiniPost miniPost = MiniPost.fromPost(post);
+      MiniPost miniPost = await _eventRepository.create(post);
       _eventsMap[API.MY_ACTIVE].events.insert(0, miniPost);
       return miniPost;
     }

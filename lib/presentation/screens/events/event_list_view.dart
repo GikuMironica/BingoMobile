@@ -4,7 +4,7 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/event_list.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
+import 'package:hopaut/presentation/widgets/mini_post_card.dart';
 
 class EventsListView extends StatelessWidget {
   final String listType;

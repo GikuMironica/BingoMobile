@@ -12,7 +12,7 @@ import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
-import 'package:hopaut/presentation/widgets/MiniPostCard.dart';
+import 'package:hopaut/presentation/widgets/mini_post_card.dart';
 import 'package:hopaut/services/location_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -149,7 +149,7 @@ class SearchPageController extends ChangeNotifier {
   Future<void> _addSearchResultsToMap(List<MiniPost> searchResults) async {
     for (MiniPost miniPost in searchResults) {
       Uint8List imgPixelData =
-          await _loadFileAsUint8List('${miniPost.postType}.png');
+          await _loadFileAsUint8List('${miniPost.postType.index}.png');
       _marker =
           MapImage.withPixelDataAndImageFormat(imgPixelData, ImageFormat.png);
 

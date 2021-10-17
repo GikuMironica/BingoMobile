@@ -5,10 +5,10 @@ import 'package:hopaut/config/constants/constraint.dart';
 import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/mini_post.dart';
-import 'package:hopaut/presentation/screens/events/replace/picture_list.dart';
-import 'package:hopaut/presentation/screens/events/replace/save_button.dart';
-import 'package:hopaut/presentation/screens/events/replace/tags.dart';
-import 'package:hopaut/presentation/screens/events/replace/time_picker.dart';
+import 'package:hopaut/presentation/screens/events/create/picture_list.dart';
+import 'package:hopaut/presentation/screens/events/create/tags.dart';
+import 'package:hopaut/presentation/screens/events/create/time_picker.dart';
+import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/inputs/basic_input.dart';
@@ -19,12 +19,12 @@ import 'package:provider/provider.dart';
 import 'event_type_list.dart';
 import 'location_button.dart';
 
-class ReplaceEventPage extends StatefulWidget {
+class CreateEventPage extends StatefulWidget {
   @override
-  _ReplaceEventPageState createState() => _ReplaceEventPageState();
+  _CreateEventPageState createState() => _CreateEventPageState();
 }
 
-class _ReplaceEventPageState extends State<ReplaceEventPage> {
+class _CreateEventPageState extends State<CreateEventPage> {
   final formKey = GlobalKey<FormState>();
 
   ScrollController scrollController = ScrollController(keepScrollOffset: true);
@@ -111,23 +111,27 @@ class _ReplaceEventPageState extends State<ReplaceEventPage> {
                             getTagSuggestions: (pattern, currentTags) =>
                                 provider.getTagSuggestions(
                                     pattern, currentTags)),
-                        SaveButton(onPressed: () async {
-                          if (provider.isFormValid(formKey, isSaveEnabled)) {
-                            MiniPost postRes =
-                                await provider.createOrUpdateEvent();
-                            setState(() => isSaveEnabled = false);
-                            if (postRes != null) {
-                              Application.router.navigateTo(
-                                  context, '/event/${postRes.postId}',
-                                  replace: true);
-                            } else {
-                              setState(() => isSaveEnabled = true);
-                              Fluttertoast.showToast(
-                                  msg:
-                                      "Unable to create event"); //TODO: translation
-                            }
-                          }
-                        })
+                        authButton(
+                            label: "Save", //TODO: translation
+                            context: context,
+                            isStateValid: true,
+                            onPressed: () async {
+                              if (provider.isFormValid(
+                                  formKey, isSaveEnabled)) {
+                                MiniPost postRes = await provider.createEvent();
+                                setState(() => isSaveEnabled = false);
+                                if (postRes != null) {
+                                  Application.router.navigateTo(
+                                      context, '/event/${postRes.postId}',
+                                      replace: true);
+                                } else {
+                                  setState(() => isSaveEnabled = true);
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          "Unable to create event"); //TODO: translation
+                                }
+                              }
+                            })
                       ]))));
     });
   }
