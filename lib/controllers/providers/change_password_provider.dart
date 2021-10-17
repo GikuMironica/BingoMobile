@@ -71,7 +71,7 @@ class ChangePasswordProvider extends ChangeNotifier {
   }
 
   /// Updates
-  void updatePassword(BuildContext context) async {
+  Future<void> updatePassword(BuildContext context) async {
     formStatus = Submitted();
     notifyListeners();
     bool passChangeRes = await _authenticationRepository.changePassword(
