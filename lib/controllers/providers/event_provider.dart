@@ -20,6 +20,7 @@ class EventProvider extends ChangeNotifier {
   int _miniPostContextId;
 
   bool isTitleValid = false;
+  bool isDateValid = true;
   bool isDescriptionValid = false;
   bool isRequirementsValid = true;
 
@@ -125,6 +126,11 @@ class EventProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void validateDates() {
+    isDateValid = post.eventTime != null && post.endTime != null;
+    notifyListeners();
+  }
+
   void validateDescription(String value) {
     isDescriptionValid = value != null &&
         value.characters.length >= Constraint.descriptionMinLength &&
@@ -144,14 +150,11 @@ class EventProvider extends ChangeNotifier {
   bool isFormValid(GlobalKey<FormState> formKey, bool isSaveEnabled) {
     post.location =
         Location(id: 100, latitude: 48.405218, longitude: 10.001187);
-    bool isValid = formKey.currentState.validate() &&
+    validateDates();
+    return formKey.currentState.validate() &&
         isSaveEnabled &&
-        post.event.eventType != null &&
         post.location != null &&
-        post.eventTime != null &&
-        post.endTime != null;
-    print(isValid ? "Valid" : "Not valid");
-    return isValid;
+        isDateValid;
   }
 
   void reset() {

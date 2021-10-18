@@ -73,14 +73,19 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         LocationButton(post: provider.post),
                         Divider(),
                         TimePicker(
+                            isValid: provider.isDateValid,
                             onConfirmStart: (startTime) =>
                                 provider.post.eventTime =
                                     (startTime.toUtc().millisecondsSinceEpoch /
                                             1000)
                                         .round(),
-                            onConfirmEnd: (endTime) => provider.post.endTime =
-                                (endTime.toUtc().millisecondsSinceEpoch / 1000)
-                                    .round()),
+                            onConfirmEnd: (endTime) {
+                              provider.post.endTime =
+                                  (endTime.toUtc().millisecondsSinceEpoch /
+                                          1000)
+                                      .round();
+                              provider.validateDates();
+                            }),
                         FieldTitle(
                             title: "Event Description"), //TODO: translation
                         textAreaInput(
