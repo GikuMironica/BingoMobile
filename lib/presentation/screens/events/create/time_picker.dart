@@ -6,8 +6,9 @@ import 'package:intl/intl.dart';
 class TimePicker extends StatefulWidget {
   final Function(DateTime) onConfirmStart;
   final Function(DateTime) onConfirmEnd;
+  final bool isValid;
 
-  TimePicker({this.onConfirmStart, this.onConfirmEnd});
+  TimePicker({this.onConfirmStart, this.onConfirmEnd, this.isValid});
 
   @override
   _TimePickerState createState() => _TimePickerState();
@@ -79,7 +80,7 @@ class _TimePickerState extends State<TimePicker> {
                 width: double.infinity,
                 padding: EdgeInsets.all(12.0),
                 height: 48,
-                margin: EdgeInsets.only(bottom: 24.0),
+                margin: EdgeInsets.only(bottom: 5.0),
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(8),
@@ -89,6 +90,20 @@ class _TimePickerState extends State<TimePicker> {
                       ? dateFormat.format(endDate)
                       : 'End Time', // TODO: translation
                 )),
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 19.0),
+            child: InputDecorator(
+              decoration: InputDecoration(
+                labelStyle: TextStyle(color: Colors.red),
+                labelText: widget.isValid
+                    ? ""
+                    : "Please input valid dates!", //TODO:translation
+                isDense: true,
+                contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
+                border: InputBorder.none,
+              ),
+            ),
           ),
         ]);
   }
