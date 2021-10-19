@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hopaut/config/routes/routes.dart';
 
 class FullscreenDialog extends StatelessWidget {
   final String asset;
@@ -83,7 +84,7 @@ class FullscreenDialog extends StatelessWidget {
                       Application.router.navigateTo(context, route,
                           replace: true,
                           transition: TransitionType.fadeIn,
-                          clearStack: true,
+                          clearStack: route == Routes.login,
                           transitionDuration: Duration(milliseconds: 900));
                     });
                   },

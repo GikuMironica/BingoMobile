@@ -36,11 +36,11 @@ class _HomePageState extends State<HomePage> {
                     // TODO - Translate
                     FullscreenDialog(
                       svgAsset: 'assets/icons/svg/complete_register.svg',
-                      header: 'Complete',
+                      header: 'Hey there!',
                       message:
-                          'the registration by entering your name in order to create or join events',
+                          'complete the registration by entering your name in order to create or join events',
                       buttonText: 'Settings',
-                      route: Routes.editAccountName,
+                      route: Routes.account,
                     )));
           })
         : null;
