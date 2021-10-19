@@ -1,18 +1,9 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get_it/get_it.dart';
-import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/domain/request_result.dart';
-import 'package:hopaut/data/models/picture.dart';
-import 'package:hopaut/data/models/user.dart';
-import 'package:hopaut/presentation/widgets/widgets.dart';
-import 'package:hopaut/services/authentication_service.dart';
-import 'package:hopaut/services/dio_service.dart';
 import 'package:hopaut/utils/image_utilities.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 

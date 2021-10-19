@@ -5,6 +5,10 @@ import 'package:hopaut/presentation/screens/account/account_page.dart';
 import 'package:hopaut/presentation/screens/search/search.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:hopaut/presentation/widgets/fullscreen_dialog.dart';
+import 'package:hopaut/services/authentication_service.dart';
+import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/config/routes/routes.dart';
 
 class HomePage extends StatefulWidget {
   final String route;
@@ -24,6 +28,22 @@ class _HomePageState extends State<HomePage> {
       WidgetsBinding.instance.addPostFrameCallback(
           (_) => Application.router.navigateTo(context, widget.route));
     }
+    getIt<AuthenticationService>().user.fullName.isEmpty
+        ? WidgetsBinding.instance.addPostFrameCallback((_) async {
+            await Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (BuildContext context, _, __) =>
+                    // TODO - Translate
+                    FullscreenDialog(
+                      svgAsset: 'assets/icons/svg/complete_register.svg',
+                      header: 'Complete',
+                      message:
+                          'the registration by entering your name in order to create or join events',
+                      buttonText: 'Settings',
+                      route: Routes.editAccountName,
+                    )));
+          })
+        : null;
   }
 
   @override
@@ -70,10 +90,10 @@ class _HomePageState extends State<HomePage> {
   List<Widget> _buildScreens() {
     return [
       SearchPage(),
-      EventListPage(title: "Events List", isMyEvents: true), //TODO: translation
       EventListPage(
-          title: "Attending Events List",
-          isMyEvents: false), //TODO: translation
+          title: "Hosted Events", isMyEvents: true), //TODO: translation
+      EventListPage(
+          title: "Joined Events", isMyEvents: false), //TODO: translation
       AccountPage(),
     ];
   }
@@ -81,20 +101,20 @@ class _HomePageState extends State<HomePage> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(MdiIcons.mapMarkerOutline),
+        icon: Icon(MdiIcons.mapLegend),
         title: ("Map"),
         activeColor: Colors.pinkAccent,
         inactiveColor: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(MdiIcons.calendarStar),
-        title: ("Events"),
+        icon: Icon(MdiIcons.bullhorn),
+        title: ("Hosted"),
         activeColor: Colors.pinkAccent,
         inactiveColor: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(MdiIcons.clipboardListOutline),
-        title: ("Attending"),
+        icon: Icon(MdiIcons.balloon),
+        title: ("Joined"),
         activeColor: Colors.pinkAccent,
         inactiveColor: Colors.grey,
       ),

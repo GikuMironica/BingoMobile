@@ -54,7 +54,8 @@ Future<void> init() async {
     ]);
 
     SettingsProvider _settingsService = getIt<SettingsProvider>();
-    _settingsService.togglePushNotifications(areNotificationsAllowed ?? true);
+    // TODO - refactor
+    //_settingsService.togglePushNotifications(areNotificationsAllowed ?? true);
     // Hive stores user ID logged in if there is any
     var authBox = await Hive.openBox('auth');
     final LinkedHashMap<dynamic, dynamic> data = authBox.get('identity');
@@ -125,8 +126,7 @@ class _HopAutState extends State<HopAut> {
           ChangeNotifierProvider<SettingsProvider>(
               create: (context) => getIt<SettingsProvider>()),
           ChangeNotifierProvider<AccountProvider>(
-              create: (context) => getIt<AccountProvider>()
-          ),
+              create: (context) => getIt<AccountProvider>()),
           ChangeNotifierProvider<ChangePasswordProvider>(
             create: (_) => getIt<ChangePasswordProvider>(),
             lazy: true,
