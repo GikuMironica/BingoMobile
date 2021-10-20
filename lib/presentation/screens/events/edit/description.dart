@@ -31,7 +31,7 @@ class _EditPostDescriptionState extends State<EditPostDescription> {
     if ((_oldPost.event.description != _descriptionController.text.trim()) &&
         (_descriptionController.text.trim().length != 0)) {
       _newPost['Description'] = _descriptionController.text.trim();
-      bool res = await getIt<EventRepository>().update(_oldPost.id, _newPost);
+      bool res = await getIt<EventProvider>().updateEvent();
       if (res) {
         provider.setPostDescription(_descriptionController.text.trim());
         Fluttertoast.showToast(msg: 'Event Description updated');

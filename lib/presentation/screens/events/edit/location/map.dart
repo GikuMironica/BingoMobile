@@ -5,7 +5,7 @@ import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/location.dart' as HopautLocation;
-import 'package:hopaut/presentation/screens/events/edit_event/location/map_location_controller.dart';
+import 'package:hopaut/presentation/screens/events/edit/location/map_location_controller.dart';
 import 'package:hopaut/presentation/widgets/buttons/basic_button.dart';
 import 'package:provider/provider.dart';
 
@@ -102,13 +102,14 @@ class _SearchByMapState extends State<SearchByMap> {
                     decoration: BoxDecoration(
                         color: Colors.grey[200].withOpacity(0.7),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey[300].withOpacity(0.7)),
+                        border: Border.all(
+                            color: Colors.grey[300].withOpacity(0.7)),
                         boxShadow: [
                           BoxShadow(
                               color: Colors.black.withOpacity(0.07),
                               blurRadius: 3.0,
                               spreadRadius: 2.0,
-                          offset: Offset(0,1.5))
+                              offset: Offset(0, 1.5))
                         ]),
                     child: TypeAheadField(
                       textFieldConfiguration: TextFieldConfiguration(

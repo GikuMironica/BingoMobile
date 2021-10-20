@@ -9,32 +9,31 @@ import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:provider/provider.dart';
 
-class EditPostRequirements extends StatefulWidget {
+class EditPostTitle extends StatefulWidget {
   @override
-  _EditPostRequirementsState createState() => _EditPostRequirementsState();
+  _EditPostTitleState createState() => _EditPostTitleState();
 }
 
-class _EditPostRequirementsState extends State<EditPostRequirements> {
-  final String nullRequirements = ':~+_77?!';
-
+class _EditPostTitleState extends State<EditPostTitle> {
   Map<String, dynamic> _newPost;
   Post _oldPost;
-  TextEditingController _requirementsController = TextEditingController();
-  final int maxCharCount = 3000;
+  TextEditingController _titleController = TextEditingController();
+  final int maxCharCount = 30;
   int currentCharCount = 0;
 
-  void submitNewRequirements(EventProvider provider) async {
-    if (_oldPost.event.requirements != _requirementsController.text.trim()) {
-      _newPost['Requirements'] = _requirementsController.text.trim().length == 0
-          ? nullRequirements
-          : _requirementsController.text.trim();
-      bool res = await getIt<EventRepository>().update(_oldPost.id, _newPost);
+  void submitNewTitle(EventProvider provider) async {
+    if ((_oldPost.event.description != _titleController.text.trim()) &&
+        (_titleController.text.trim().length != 0)) {
+      _newPost['Title'] = _titleController.text.trim();
+      bool res = await getIt<EventProvider>().updateEvent();
       if (res) {
-        provider.setPostRequirements(_requirementsController.text.trim());
-        Fluttertoast.showToast(msg: 'Event Requirements updated');
+        provider.setPostTitle(_titleController.text.trim());
+        provider.eventsMap[API.MY_ACTIVE].events[provider.miniPostContextId]
+            .title = _newPost['Title'];
+        Fluttertoast.showToast(msg: 'Event Title updated');
         Application.router.pop(context);
       } else {
-        Fluttertoast.showToast(msg: 'Unable to update requirements.');
+        Fluttertoast.showToast(msg: 'Unable to update title.');
       }
     } else {
       Application.router.pop(context);
@@ -44,7 +43,7 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
   @override
   void dispose() {
     // TODO: implement dispose
-    _requirementsController.dispose();
+    _titleController.dispose();
     super.dispose();
   }
 
@@ -53,15 +52,13 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       _oldPost = provider.post;
       _newPost = {
-        'EndTime': _oldPost.endTime,
-        'EventTime': _oldPost.eventTime,
         'Longitude': _oldPost.location.longitude,
         'Latitude': _oldPost.location.latitude,
         'Tags': _oldPost.tags,
         'RemainingImagesGuids': _oldPost.pictures
       };
-      _requirementsController.text = _oldPost.event.requirements ?? '';
-      currentCharCount = _requirementsController.text.length;
+      _titleController.text = _oldPost.event.title;
+      currentCharCount = _titleController.text.length;
 
       return Scaffold(
         appBar: AppBar(
@@ -73,14 +70,14 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
             icon: HATheme.backButton,
             onPressed: () => Application.router.pop(context),
           ),
-          title: Text('Edit Requirements'),
+          title: Text('Edit Title'),
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(24.0),
           physics: ClampingScrollPhysics(),
           child: ConstrainedBox(
             constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height * 0.8),
+                minHeight: MediaQuery.of(context).size.height * 0.72),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,17 +88,13 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: TextField(
-                    onChanged: (value) => setState(() => currentCharCount =
-                        _requirementsController.text.trim().length),
-                    controller: _requirementsController,
+                    onChanged: (value) => setState(() =>
+                        currentCharCount = _titleController.text.trim().length),
+                    controller: _titleController,
                     maxLength: maxCharCount,
-                    maxLines: 12,
+                    maxLines: 1,
                     decoration: InputDecoration(
-                      counter: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                            '${currentCharCount.toString()} / ${maxCharCount.toString()}'),
-                      ),
+                      counterText: '',
                       contentPadding: EdgeInsets.all(16.0),
                       border: InputBorder.none,
                     ),
@@ -117,8 +110,8 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
                   child: RawMaterialButton(
                     shape: CircleBorder(),
                     elevation: 1,
-                    child: Text('Save Requirements'),
-                    onPressed: () => submitNewRequirements(provider),
+                    child: Text('Save Title'),
+                    onPressed: () => submitNewTitle(provider),
                   ),
                 ),
               ],
