@@ -44,80 +44,74 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
             // TODO translation
             text: 'Description',
             actionButtons: _accountProvider.descriptionIsValid
-            ? [
-                IconButton(
-                  icon: Icon(Icons.check),
-                  onPressed : () async =>
-                      await _accountProvider.updateDescriptionAsync(
-                          _descriptionController.text.trim(), context)
-                )
-              ]
-            : null
-        ),
+                ? [
+                    IconButton(
+                        icon: Icon(Icons.check),
+                        onPressed: () async =>
+                            await _accountProvider.updateDescriptionAsync(
+                                _descriptionController.text.trim(), context))
+                  ]
+                : null),
         body: Container(
-          height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            padding: EdgeInsets.all(20.0),
-            child: Builder(
-                builder: (context) => _editProfileDescriptionForm(context)
-            ),
-          )
-        )
-    );
+            height: MediaQuery.of(context).size.height,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(20.0),
+              child: Builder(
+                  builder: (context) => _editProfileDescriptionForm(context)),
+            )));
   }
 
   Widget _editProfileDescriptionForm(BuildContext context) {
-    if(_accountProvider.formStatus is Failed){
+    if (_accountProvider.formStatus is Failed) {
       // Translation
       Future.delayed(Duration.zero, () async {
         // TODO - translation
-        showSnackBarWithError(context: context, message: "Error, Something went wrong");
+        showSnackBarWithError(
+            context: context, message: "Error, Something went wrong");
       });
       _accountProvider.formStatus = new Idle();
     }
     return _accountProvider.formStatus is Submitted
-    ? Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      )
-    : Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 8,
+        ? Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 12),
-              child: Text(
-                // TODO translation
-                'Description',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+          )
+        : Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 8,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 12),
+                  child: Text(
+                    // TODO translation
+                    'Description',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                textAreaInput(
+                  maxLength: maxFieldLength,
+                  controller: _descriptionController,
+                  isStateValid: _accountProvider.descriptionIsValid,
+                  initialValue: _accountProvider.currentIdentity.description,
+                  // TODO translation
+                  validationMessage: "Profile description too long",
+                  onChange: (v) => _accountProvider.onDescriptionChange(
+                      v, _descriptionController, maxFieldLength),
+                )
+              ],
             ),
-            SizedBox(
-              height: 8,
-            ),
-            textAreaInput(
-              maxLength: maxFieldLength,
-              controller: _descriptionController,
-              isStateValid: _accountProvider.descriptionIsValid,
-              initialValue: _accountProvider.currentIdentity.description,
-              // TODO translation
-              validationMessage: "Profile description too long",
-              onChange: (v) =>_accountProvider.validateDescription(
-                  v, _descriptionController, maxFieldLength),
-            )
-          ],
-        ),
-      );
+          );
   }
-
-
 
   @override
   void dispose() {

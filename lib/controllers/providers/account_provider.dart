@@ -15,9 +15,9 @@ class AccountProvider extends ChangeNotifier {
       caseSensitive: false, unicode: true, dotAll: true);
 
   // state
-  bool firstNameIsValid = true;
-  bool lastNameIsValid = true;
-  bool descriptionIsValid = true;
+  bool firstNameIsValid;
+  bool lastNameIsValid;
+  bool descriptionIsValid;
   BaseFormStatus formStatus;
   BaseFormStatus picturesPageStatus;
 
@@ -111,22 +111,27 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-  /// State validating methods
-  void validateFirstNameChange(
+  // /// Validation Methods
+  // bool validateFirstName(){
+  //   return firstNameIsValid
+  // }
+
+  /// On Change Methods
+  void onFirstNameChange(
       String value, TextEditingController controller, int maxLength) {
     firstNameIsValid = _regExp.hasMatch(value) && value.isNotEmpty;
     controller.text = value.length < maxLength ? value : controller.text;
     notifyListeners();
   }
 
-  void validateLastNameChange(
+  void onLastNameChange(
       String value, TextEditingController controller, int maxLength) {
     lastNameIsValid = _regExp.hasMatch(value) && value.isNotEmpty;
     controller.text = value.length < maxLength ? value : controller.text;
     notifyListeners();
   }
 
-  void validateDescription(
+  void onDescriptionChange(
       String value, TextEditingController controller, int maxLength) {
     descriptionIsValid = value.characters.length <= maxLength;
     controller.text = descriptionIsValid ? value : controller.text;
