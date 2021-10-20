@@ -11,13 +11,11 @@ import 'package:injectable/injectable.dart';
 @lazySingleton
 class AccountProvider extends ChangeNotifier {
   // validation rules
+  static final namesMaxLength = 20;
   static final RegExp _regExp = RegExp(r"^[\p{L} ,.'-]*$",
       caseSensitive: false, unicode: true, dotAll: true);
 
-  // state
-  bool firstNameIsValid;
-  bool lastNameIsValid;
-  bool descriptionIsValid;
+  // State data
   BaseFormStatus formStatus;
   BaseFormStatus picturesPageStatus;
 
@@ -111,37 +109,40 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-  // /// Validation Methods
-  // bool validateFirstName(){
-  //   return firstNameIsValid
-  // }
+  /// Validation Methods
+  bool validateFirstName(String value) {
+    return _regExp.hasMatch(value) &&
+        value.isNotEmpty &&
+        value.characters.length < namesMaxLength;
+  }
+
+  bool validateLastName(String value) {
+    return _regExp.hasMatch(value) &&
+        value.isNotEmpty &&
+        value.characters.length < namesMaxLength;
+  }
+
+  bool validateDescription(String value, int maxlength) {
+    return value.characters.length <= maxlength;
+  }
 
   /// On Change Methods
-  void onFirstNameChange(
-      String value, TextEditingController controller, int maxLength) {
-    firstNameIsValid = _regExp.hasMatch(value) && value.isNotEmpty;
-    controller.text = value.length < maxLength ? value : controller.text;
+  void onFirstNameChange(String value, TextEditingController controller) {
+    controller.text = value;
     notifyListeners();
   }
 
-  void onLastNameChange(
-      String value, TextEditingController controller, int maxLength) {
-    lastNameIsValid = _regExp.hasMatch(value) && value.isNotEmpty;
-    controller.text = value.length < maxLength ? value : controller.text;
+  void onLastNameChange(String value, TextEditingController controller) {
+    controller.text = value;
     notifyListeners();
   }
 
-  void onDescriptionChange(
-      String value, TextEditingController controller, int maxLength) {
-    descriptionIsValid = value.characters.length <= maxLength;
-    controller.text = descriptionIsValid ? value : controller.text;
+  void onDescriptionChange(String value, TextEditingController controller) {
+    controller.text = value;
     notifyListeners();
   }
 
   void resetProvider() {
-    firstNameIsValid = false;
-    lastNameIsValid = false;
-    descriptionIsValid = true;
     formStatus = Idle();
     picturesPageStatus = Idle();
   }

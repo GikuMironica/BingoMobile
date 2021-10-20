@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/injection.dart';
-import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/account_provider.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
-import 'package:hopaut/data/models/user.dart';
-import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/presentation/widgets/inputs/text_area_input.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
@@ -43,7 +38,8 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
             context: context,
             // TODO translation
             text: 'Description',
-            actionButtons: _accountProvider.descriptionIsValid
+            actionButtons: _accountProvider.validateDescription(
+                    _descriptionController.text, maxFieldLength)
                 ? [
                     IconButton(
                         icon: Icon(Icons.check),
@@ -101,12 +97,13 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
                 textAreaInput(
                   maxLength: maxFieldLength,
                   controller: _descriptionController,
-                  isStateValid: _accountProvider.descriptionIsValid,
+                  isStateValid: _accountProvider.validateDescription(
+                      _descriptionController.text, maxFieldLength),
                   initialValue: _accountProvider.currentIdentity.description,
                   // TODO translation
                   validationMessage: "Profile description too long",
                   onChange: (v) => _accountProvider.onDescriptionChange(
-                      v, _descriptionController, maxFieldLength),
+                      v, _descriptionController),
                 )
               ],
             ),
@@ -116,7 +113,6 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
   @override
   void dispose() {
     super.dispose();
-    _accountProvider.descriptionIsValid = true;
     _descriptionController.dispose();
   }
 }
