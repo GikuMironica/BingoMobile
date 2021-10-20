@@ -8,6 +8,8 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:hopaut/presentation/widgets/fullscreen_dialog.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/presentation/widgets/hopaut_btm_nav_bar/hopaut_nav_bar_item.dart';
+import 'package:hopaut/presentation/widgets/hopaut_btm_nav_bar/hopaut_bottom_nav_bar.dart';
 import 'package:hopaut/config/routes/routes.dart';
 
 class HomePage extends StatefulWidget {
@@ -46,12 +48,20 @@ class _HomePageState extends State<HomePage> {
         : null;
   }
 
+  Future<void> changeTab(int index) async {
+    if (_controller.index == index) {
+      return;
+    }
+    setState(() {
+      _controller.index = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return PersistentTabView(
       controller: _controller,
       screens: _buildScreens(),
-      items: _navBarsItems(),
       confineInSafeArea: false,
       backgroundColor: Colors.white,
       handleAndroidBackButtonPress: true,
@@ -59,17 +69,17 @@ class _HomePageState extends State<HomePage> {
       stateManagement: true,
       hideNavigationBarWhenKeyboardShows: true,
       decoration: NavBarDecoration(
-        border: Border(
-            top: BorderSide(
-          color: Colors.grey[300],
-          width: 1.0,
-        )),
-        colorBehindNavBar: Colors.transparent,
+        // border: Border(
+        //     top: BorderSide(
+        //   color: Colors.grey[300],
+        //   width: 1.0,
+        // )),
+        colorBehindNavBar: Colors.white,
       ),
       popAllScreensOnTapOfSelectedTab: true,
       itemAnimationProperties: ItemAnimationProperties(
         // Navigation Bar's items animation properties.
-        duration: Duration(milliseconds: 200),
+        duration: Duration(milliseconds: 50),
         curve: Curves.ease,
       ),
       screenTransitionAnimation: ScreenTransitionAnimation(
@@ -78,7 +88,13 @@ class _HomePageState extends State<HomePage> {
         curve: Curves.ease,
         duration: Duration(milliseconds: 100),
       ),
-      navBarStyle: NavBarStyle.style12,
+      navBarStyle: NavBarStyle.custom,
+      itemCount: 4,
+      customWidget: HopautNavBar(
+        items: _navBarsItems(),
+        onItemSelected: (idx) async => await changeTab(idx),
+        selectedIndex: _controller.index,
+      ),
     );
   }
 
@@ -98,31 +114,24 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
-  List<PersistentBottomNavBarItem> _navBarsItems() {
+  // TODO translation
+  List<HopautNavBarItem> _navBarsItems() {
     return [
-      PersistentBottomNavBarItem(
-        icon: Icon(MdiIcons.mapLegend),
+      HopautNavBarItem(
+        svg: MdiIcons.mapLegend,
         title: ("Map"),
-        activeColor: Colors.pinkAccent,
-        inactiveColor: Colors.grey,
       ),
-      PersistentBottomNavBarItem(
-        icon: Icon(MdiIcons.bullhorn),
+      HopautNavBarItem(
+        svg: MdiIcons.bullhorn,
         title: ("Hosted"),
-        activeColor: Colors.pinkAccent,
-        inactiveColor: Colors.grey,
       ),
-      PersistentBottomNavBarItem(
-        icon: Icon(MdiIcons.balloon),
+      HopautNavBarItem(
+        svg: MdiIcons.balloon,
         title: ("Joined"),
-        activeColor: Colors.pinkAccent,
-        inactiveColor: Colors.grey,
       ),
-      PersistentBottomNavBarItem(
-        icon: Icon(MdiIcons.accountOutline),
+      HopautNavBarItem(
+        svg: MdiIcons.accountOutline,
         title: ("Account"),
-        activeColor: Colors.pinkAccent,
-        inactiveColor: Colors.grey,
       ),
     ];
   }
