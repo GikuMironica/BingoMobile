@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
                       message:
                           'complete the registration by entering your name in order to create or join events',
                       buttonText: 'Settings',
-                      route: Routes.account,
+                      route: Routes.editAccount,
                     )));
           })
         : null;

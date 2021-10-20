@@ -15,8 +15,8 @@ class AccountProvider extends ChangeNotifier {
       caseSensitive: false, unicode: true, dotAll: true);
 
   // state
-  bool firstNameIsValid = false;
-  bool lastNameIsValid = false;
+  bool firstNameIsValid = true;
+  bool lastNameIsValid = true;
   bool descriptionIsValid = true;
   BaseFormStatus formStatus;
   BaseFormStatus picturesPageStatus;
@@ -133,7 +133,7 @@ class AccountProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void resetProvider(){
+  void resetProvider() {
     firstNameIsValid = false;
     lastNameIsValid = false;
     descriptionIsValid = true;
