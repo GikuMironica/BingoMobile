@@ -5,7 +5,7 @@ import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
-import 'package:hopaut/controllers/providers/search_page_controller.dart';
+import 'package:hopaut/controllers/providers/search_page_provider.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/services/location_service.dart';
 import 'package:ionicons/ionicons.dart';
@@ -27,7 +27,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Provider.of<SearchPageController>(context);
+    var controller = Provider.of<SearchPageProvider>(context);
     controller.context = context;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
@@ -128,7 +128,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _searchFilter() => Consumer<SearchPageController>(
+  Widget _searchFilter() => Consumer<SearchPageProvider>(
         builder: (_, con, __) => Card(
           color: con.filter ? Colors.white : Colors.white.withOpacity(0.3),
           elevation: con.filter ? 4.0 : 0.0,

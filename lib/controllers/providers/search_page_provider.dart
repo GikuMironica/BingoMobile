@@ -27,7 +27,7 @@ enum SearchPageState {
 
 enum MapState { LOADING, LOADED }
 
-class SearchPageController extends ChangeNotifier {
+class SearchPageProvider extends ChangeNotifier {
   final EventRepository _eventRepository;
 
   SearchPageState _pageState;
@@ -64,7 +64,7 @@ class SearchPageController extends ChangeNotifier {
   SearchPageState get pageState => _pageState;
   bool get hasFocus => _hasFocus;
 
-  SearchPageController() : _eventRepository = getIt<EventRepository>() {
+  SearchPageProvider() : _eventRepository = getIt<EventRepository>() {
     init();
   }
 

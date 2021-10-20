@@ -15,22 +15,31 @@ class HopautNavBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        BoxShadow(
+            blurRadius: 3,
+            spreadRadius: 1,
+            color: Colors.black.withOpacity(0.05),
+            offset: Offset(0, -4))
+      ]),
       child: Container(
-          width: double.infinity,
-          height: 60.0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: items.map((i) {
-              var idx = items.indexOf(i);
-              return Flexible(
-                child: GestureDetector(
-                  onTap: () => onItemSelected(idx),
-                  child: _buildItem(i, selectedIndex == idx),
-                ),
-              );
-            }).toList(),
-          )),
+        color: Colors.white,
+        child: Container(
+            width: double.infinity,
+            height: 60.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: items.map((i) {
+                var idx = items.indexOf(i);
+                return Flexible(
+                  child: GestureDetector(
+                    onTap: () => onItemSelected(idx),
+                    child: _buildItem(i, selectedIndex == idx),
+                  ),
+                );
+              }).toList(),
+            )),
+      ),
     );
   }
 
@@ -49,7 +58,7 @@ class HopautNavBarWidget extends StatelessWidget {
                 height: 24),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 5.0),
+            padding: const EdgeInsets.all(0),
             child: Material(
               type: MaterialType.transparency,
               child: FittedBox(

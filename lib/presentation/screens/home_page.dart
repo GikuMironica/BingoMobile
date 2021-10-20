@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
       controller: _controller,
       screens: _buildScreens(),
       items: _navBarsItems(),
-      confineInSafeArea: true,
+      confineInSafeArea: false,
       backgroundColor: Colors.white,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,

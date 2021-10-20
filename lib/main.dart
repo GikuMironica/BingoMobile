@@ -19,7 +19,7 @@ import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:hopaut/controllers/providers/settings_provider.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
-import 'controllers/providers/search_page_controller.dart';
+import 'controllers/providers/search_page_provider.dart';
 import 'data/repositories/event_repository.dart';
 import 'controllers/providers/event_provider.dart';
 import 'init.dart';
@@ -131,8 +131,8 @@ class _HopAutState extends State<HopAut> {
             create: (_) => getIt<ChangePasswordProvider>(),
             lazy: true,
           ),
-          ChangeNotifierProvider<SearchPageController>(
-            create: (_) => SearchPageController(),
+          ChangeNotifierProvider<SearchPageProvider>(
+            create: (_) => SearchPageProvider(),
             lazy: true,
           ),
           ChangeNotifierProvider<EventProvider>(
