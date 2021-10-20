@@ -52,7 +52,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        PictureList(post: provider.post),
+                        PictureList(
+                          selectPicture: provider.selectPicture,
+                          onSaved: (value) => provider.post.pictures = value,
+                        ),
                         SizedBox(
                           height: 8,
                         ),
@@ -123,6 +126,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                             onPressed: () async {
                               if (provider.isFormValid(
                                   formKey, isSaveEnabled)) {
+                                formKey.currentState.save();
                                 MiniPost postRes = await provider.createEvent();
                                 setState(() => isSaveEnabled = false);
                                 if (postRes != null) {
