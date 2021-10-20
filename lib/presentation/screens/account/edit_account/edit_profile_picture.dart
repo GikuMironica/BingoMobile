@@ -4,7 +4,7 @@ import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/profile_picture.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
-import 'package:hopaut/utils/image_picker_dialog.dart';
+import 'package:hopaut/presentation/widgets/image_picker_dialog.dart';
 import 'package:hopaut/data/domain/request_result.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +55,7 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
               ),
               // TODO translate
               title: Text('Delete Picture',
-              style: TextStyle(color: Colors.redAccent)),
+                  style: TextStyle(color: Colors.redAccent)),
             )
           ],
         ),
@@ -74,10 +74,12 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
             )));
 
     // TODO translation
-    if(result != null){
+    if (result != null) {
       result.isSuccessful
-          ? showSuccessSnackBar(scaffoldKey: scaffoldKey, message: "Profile picture updated")
-          : showSnackBarWithError(scaffoldKey: scaffoldKey, message: result.errorMessage);
+          ? showSuccessSnackBar(
+              scaffoldKey: scaffoldKey, message: "Profile picture updated")
+          : showSnackBarWithError(
+              scaffoldKey: scaffoldKey, message: result.errorMessage);
     }
   }
 }

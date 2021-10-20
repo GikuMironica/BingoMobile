@@ -8,10 +8,9 @@ import 'package:injectable/injectable.dart';
 
 @lazySingleton
 class ChangePasswordProvider extends ChangeNotifier {
-
   /// Validators
   static final RegExp _pwdRule =
-  RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
+      RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
 
   /// State properties
   String oldPassword;
@@ -19,28 +18,23 @@ class ChangePasswordProvider extends ChangeNotifier {
   bool passwordObscureText;
   bool newPasswordObscureText;
   BaseFormStatus formStatus;
-  bool isOldPasswordValid;
-  bool isNewPasswordValid;
-
 
   /// Services, repositories and models
   AuthenticationRepository _authenticationRepository;
   AuthenticationService _authenticationService;
 
-  ChangePasswordProvider(){
+  ChangePasswordProvider() {
     formStatus = Idle();
     oldPassword = "";
     newPassword = "";
     passwordObscureText = true;
     newPasswordObscureText = true;
-    isOldPasswordValid = false;
-    isNewPasswordValid = false;
     _authenticationRepository = getIt<AuthenticationRepository>();
     _authenticationService = getIt<AuthenticationService>();
   }
 
   /// State validating methods
-  void toggleObscurePassword(){
+  void toggleObscurePassword() {
     passwordObscureText = !passwordObscureText;
     notifyListeners();
   }
@@ -50,23 +44,21 @@ class ChangePasswordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool validateOldPassword(){
+  bool validateOldPassword() {
     return oldPassword.isNotEmpty;
   }
 
-  bool validateNewPassword(){
+  bool validateNewPassword() {
     return newPassword.isNotEmpty && _pwdRule.hasMatch(newPassword);
   }
 
   void oldPasswordChange(String value) {
     oldPassword = value;
-    isOldPasswordValid = validateNewPassword();
     notifyListeners();
   }
 
   void newPasswordChange(String value) {
     newPassword = value;
-    isNewPasswordValid = validateNewPassword();
     notifyListeners();
   }
 
@@ -79,29 +71,25 @@ class ChangePasswordProvider extends ChangeNotifier {
         oldPassword: oldPassword,
         newPassword: newPassword);
 
-    if (!passChangeRes){
+    if (!passChangeRes) {
       formStatus = Failed();
-      oldPassword = "";
-      newPassword = "";
-    }else{
+    } else {
       formStatus = Success();
-      oldPassword = "";
-      newPassword = "";
       Future.delayed(Duration(seconds: 4), () async {
         // TODO - translation
         Application.router.pop(context);
       });
     }
     notifyListeners();
+    oldPassword = "";
+    newPassword = "";
   }
 
-  void resetProvider(){
+  void resetProvider() {
     formStatus = Idle();
     oldPassword = "";
     newPassword = "";
     passwordObscureText = true;
     newPasswordObscureText = true;
-    isOldPasswordValid = false;
-    isNewPasswordValid = false;
   }
 }
