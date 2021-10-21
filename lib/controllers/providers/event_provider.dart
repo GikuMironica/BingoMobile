@@ -6,9 +6,11 @@ import 'package:hopaut/config/constants/constraint.dart';
 import 'package:hopaut/data/models/event_list.dart';
 import 'package:hopaut/data/models/location.dart';
 import 'package:hopaut/data/models/mini_post.dart';
+import 'package:hopaut/data/models/picture.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/data/repositories/tag_repository.dart';
+import 'package:hopaut/utils/image_utilities.dart';
 
 enum EventProviderStatus { Idle, Loading, Error }
 
@@ -23,6 +25,8 @@ class EventProvider extends ChangeNotifier {
   bool isDateValid = true;
   bool isDescriptionValid = false;
   bool isRequirementsValid = true;
+
+  EventListState eventLoadingState = EventListState.notYetLoaded;
 
   EventProvider(
       {EventRepository eventRepository, TagRepository tagRepository}) {
@@ -66,6 +70,14 @@ class EventProvider extends ChangeNotifier {
       return miniPost;
     }
     return null;
+  }
+
+  Future<bool> updateEvent() async {
+    bool result = false;
+    if (post != null) {
+      result = await _eventRepository.update(post);
+    }
+    return result;
   }
 
   void removeEvent(int id) {
@@ -145,6 +157,10 @@ class EventProvider extends ChangeNotifier {
         value.characters.length <= Constraint.requirementsMaxLength;
     post.event.requirements =
         isRequirementsValid ? value : post.event.requirements;
+  }
+
+  Future<Picture> selectPicture(int index) async {
+    return await choosePicture(index);
   }
 
   bool isFormValid(GlobalKey<FormState> formKey, bool isSaveEnabled) {

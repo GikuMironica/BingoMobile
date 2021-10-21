@@ -22,7 +22,6 @@ class LocationButton extends StatelessWidget {
               .navigateTo(context, Routes.searchByMap)
               .then((value) => () {
                     post.location = value as Location;
-                    print(post.location);
                   }),
           child: Container(
             width: double.infinity,

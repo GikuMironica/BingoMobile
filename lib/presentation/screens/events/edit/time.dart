@@ -27,7 +27,7 @@ class _EditPostTimeState extends State<EditPostTime> {
   void submitNewTime() async {
     if ((_oldPost.eventTime != _newPost['EventTime']) ||
         (_oldPost.endTime != _newPost['EndTime'])) {
-      bool res = await getIt<EventRepository>().update(_oldPost.id, _newPost);
+      bool res = await getIt<EventProvider>().updateEvent();
       if (res) {
         // getIt<EventManager>().setPostTitle(_titleController.text.trim());
         Fluttertoast.showToast(msg: 'Event Time updated');

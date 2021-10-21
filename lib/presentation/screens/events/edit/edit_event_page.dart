@@ -10,36 +10,13 @@ import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
-class EditEventPage extends StatefulWidget {
-  @override
-  _EditEventPageState createState() => _EditEventPageState();
-}
-
-class _EditEventPageState extends State<EditEventPage> {
-  bool _userIsHost;
-  Post post;
-  EventType _paidEventType;
-
+class EditEventPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: Check if the user is the owner of the event.
     // TODO: If not, then throw an error page.
     // TODO: Create an Error page that allows the user to return to the home page.
     return Consumer<EventProvider>(builder: (context, provider, child) {
-      post = provider.post;
-      switch (post.event.eventType.index) {
-        case 1:
-          _paidEventType = EventType.houseParty;
-          break;
-        case 2:
-          _paidEventType = EventType.club;
-          break;
-        case 3:
-          _paidEventType = EventType.bar;
-          break;
-        default:
-          break;
-      }
       return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -60,7 +37,7 @@ class _EditEventPageState extends State<EditEventPage> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Subtitle(label: post.event.title),
+                child: Subtitle(label: provider.post.event.title),
               ),
               Divider(),
               ListTile(
@@ -85,12 +62,12 @@ class _EditEventPageState extends State<EditEventPage> {
               ListTile(
                 onTap: () =>
                     Application.router.navigateTo(context, '/edit-event/time'),
-                leading: Icon(ClockIcon(post.timeRange)),
+                leading: Icon(ClockIcon(provider.post.timeRange)),
                 title: Text('Time'),
               ),
               Divider(),
               Visibility(
-                visible: _paidEventType == EventType.houseParty,
+                visible: provider.post.event.eventType == EventType.houseParty,
                 child: Column(
                   children: <Widget>[
                     ListTile(
@@ -102,7 +79,7 @@ class _EditEventPageState extends State<EditEventPage> {
                 ),
               ),
               Visibility(
-                visible: _paidEventType != null,
+                visible: provider.post.event.isPaidEvent(),
                 child: Column(
                   children: <Widget>[
                     ListTile(
@@ -132,11 +109,6 @@ class _EditEventPageState extends State<EditEventPage> {
                     Application.router.navigateTo(context, '/edit-event/tags'),
                 leading: Icon(MdiIcons.tag),
                 title: Text('Tags'),
-              ),
-              Divider(),
-              ListTile(
-                onTap: () => print(post.toJson()),
-                title: Text('DEBUG: PRINT POST CONTEXT'),
               ),
             ],
           ),

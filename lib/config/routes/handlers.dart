@@ -11,14 +11,14 @@ import 'package:hopaut/presentation/screens/announcements/announcements_index.da
 import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
 import 'package:hopaut/presentation/screens/authentication/forgot_password.dart';
 import 'package:hopaut/presentation/screens/authentication/register.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/description.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/edit_event.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/location/map.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/pictures.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/requirements.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/tags.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/time.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/title.dart';
+import 'package:hopaut/presentation/screens/events/edit/description.dart';
+import 'package:hopaut/presentation/screens/events/edit/edit_event_page.dart';
+import 'package:hopaut/presentation/screens/events/edit/location/map.dart';
+import 'package:hopaut/presentation/screens/events/edit/pictures.dart';
+import 'package:hopaut/presentation/screens/events/edit/requirements.dart';
+import 'package:hopaut/presentation/screens/events/edit/tags.dart';
+import 'package:hopaut/presentation/screens/events/edit/time.dart';
+import 'package:hopaut/presentation/screens/events/edit/title.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/screens/events/rate_event.dart';
 import 'package:hopaut/presentation/screens/events/create/create_event_page.dart';
@@ -173,5 +173,5 @@ var ppHandler = new Handler(
 
 var imprintHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-      return WebvPage('Imprint', 'https://hopaut.com/legal/impressum');
+  return WebvPage('Imprint', 'https://hopaut.com/legal/impressum');
 });

@@ -6,6 +6,7 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/data/models/event_list.dart';
 import 'package:hopaut/data/models/picture.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/models/profile.dart';
@@ -80,6 +81,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
     isHost = post.userId == getIt<AuthenticationService>().user.id;
     isAttending = post.isAttending;
     isActiveEvent = post.activeFlag == 1;
+    setState(() {});
   }
 
   void checkForImages() {
@@ -113,10 +115,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    // TODO: We need to call the event details here.
-
     super.initState();
-
     _scrollController = ScrollController();
     _animationController = AnimationController(
       vsync: this,
@@ -145,13 +144,16 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
-      getDetails()
-          .then((value) => setState(() => postIsLoaded = true))
-          .then((value) {
-        checkForImages();
-        provider.setPost(post);
-      });
-      return !postIsLoaded
+      if (post == null || post.id != postId) {
+        provider.eventLoadingState = EventListState.loading;
+        getDetails()
+            .then((value) => setState(
+                () => provider.eventLoadingState = EventListState.idle))
+            .then((value) {
+          checkForImages();
+        });
+      }
+      return provider.eventLoadingState == EventListState.loading
           ? Scaffold(
               body: Container(),
             )
@@ -219,6 +221,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                           highlightColor: Colors.transparent,
                           icon: Icon(Icons.edit),
                           onPressed: () {
+                            provider.setPost(post);
                             Application.router
                                 .navigateTo(context, '/edit-event');
                           },
@@ -338,7 +341,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                         Divider(),
                         SizedBox(height: 16),
                         EventDescription(isHost
-                            ? provider.post.event.description
+                            ? post.event.description
                             : post.event.description ??
                                 'No description for this event yet'),
                         Visibility(
@@ -447,6 +450,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                           visible: isHost && isActiveEvent,
                           child: InkWell(
                             onTap: () {
+                              provider.setPost(post);
                               Application.router
                                   .navigateTo(context, '/edit-event');
                             },

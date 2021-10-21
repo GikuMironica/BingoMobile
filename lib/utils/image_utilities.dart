@@ -22,19 +22,18 @@ Future<File> testCompressAndGetFile(File file, String targetPath) async {
 Future<File> compressToWebp({String source, String target}) async {
   var conversionResult = await FlutterImageCompress.compressAndGetFile(
       source, target,
-      quality: 75,
-      format: CompressFormat.webp);
+      quality: 75, format: CompressFormat.webp);
 
   return conversionResult;
 }
 
-Future<Picture> choosePicture() async {
+Future<Picture> choosePicture(int index) async {
   final PickedFile pickedFile =
       await imagePicker.getImage(source: ImageSource.gallery);
   if (pickedFile != null) {
     File file = File(pickedFile.path);
-    File convertedImage =
-        await testCompressAndGetFile(file, "${file.parent.absolute.path}.webp");
+    File convertedImage = await testCompressAndGetFile(
+        file, "${file.parent.absolute.path}/$index.webp");
     MemoryImage image = MemoryImage(convertedImage.readAsBytesSync());
     return Picture(convertedImage.path, image);
   }

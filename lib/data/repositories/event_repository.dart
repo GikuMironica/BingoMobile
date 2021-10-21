@@ -46,14 +46,14 @@ class EventRepository extends Repository {
   }
 
   /// Update Post
-  Future<bool> update(int postId, Map<String, dynamic> newValues) async {
+  Future<bool> update(Post post) async {
     try {
-      FormData data = FormData.fromMap(await multiPartUpdatedPost(newValues));
+      FormData data = FormData.fromMap(await post.toMultipartJson());
       dio.options.headers.addAll({
         Headers.contentTypeHeader: 'multipart/form-data',
       });
       Response response = await dio.post(
-        '${API.POSTS}/$postId',
+        '${API.POSTS}/${post.id}',
         data: data,
       );
       return response.statusCode == 200;

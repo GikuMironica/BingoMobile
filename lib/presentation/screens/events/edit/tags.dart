@@ -24,7 +24,7 @@ class _EditPostTagsState extends State<EditPostTags> {
 
   void submitNewDescription(EventProvider eventProvider) async {
     if (_oldPost.tags == _newPost['Tags']) {
-      bool res = await getIt<EventRepository>().update(_oldPost.id, _newPost);
+      bool res = await getIt<EventProvider>().updateEvent();
       if (res) {
         eventProvider.setPostTags(_newPost['Tags']);
         Fluttertoast.showToast(msg: 'Event Tags updated');

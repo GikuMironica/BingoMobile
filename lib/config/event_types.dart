@@ -1,4 +1,5 @@
 enum EventType {
+  defaultType,
   houseParty,
   club,
   bar,

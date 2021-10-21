@@ -1,61 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/constraint.dart';
 import 'package:hopaut/data/models/picture.dart';
-import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 import 'package:hopaut/presentation/screens/events/create/picture_card.dart';
-import 'package:hopaut/utils/image_utilities.dart';
 
-class PictureList extends StatefulWidget {
-  final Post post;
+class PictureList extends FormField<List<Picture>> {
+  final Future<Picture> Function(int) selectPicture;
 
-  PictureList({this.post});
-
-  @override
-  _PictureListState createState() => _PictureListState();
-}
-
-class _PictureListState extends State<PictureList> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          FieldTitle(title: "Pictures"), //TODO: translation
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ...widget.post.pictures
-                  .asMap()
-                  .entries
-                  .map(((map) => PictureCard(
-                      picture: map.value,
-                      onSet: () async {
-                        Picture picture = await choosePicture();
-                        if (picture != null) {
-                          setState(() {
-                            widget.post.setPicture(picture, map.key);
-                          });
-                        }
-                      },
-                      onRemove: () {
-                        setState(() {
-                          widget.post.removePicture(map.value);
-                        });
-                      })))
-                  .toList(),
-              widget.post.pictures.length < Constraint.pictureMaxCount
-                  ? PictureCard(onSet: () async {
-                      Picture picture = await choosePicture();
-                      if (picture != null) {
-                        setState(() {
-                          widget.post.setPicture(picture);
-                        });
-                      }
-                    })
-                  : Container()
-            ],
-          )
-        ]);
-  }
+  PictureList(
+      {@required this.selectPicture,
+      FormFieldSetter<List<Picture>> onSaved,
+      FormFieldValidator<List<Picture>> validator,
+      List<Picture> initialValue})
+      : super(
+            onSaved: onSaved,
+            validator: validator,
+            initialValue: initialValue ?? [],
+            builder: (FormFieldState<List<Picture>> state) {
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    FieldTitle(title: "Pictures"), //TODO: translation
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ...state.value
+                            .asMap()
+                            .entries
+                            .map(((map) => PictureCard(
+                                picture: map.value,
+                                onSet: () async {
+                                  Picture picture =
+                                      await selectPicture(map.key);
+                                  if (picture != null) {
+                                    state.value[map.key] = picture;
+                                    state.validate();
+                                  }
+                                },
+                                onRemove: () {
+                                  state.value.remove(map.value);
+                                  state.validate();
+                                })))
+                            .toList(),
+                        state.value.length < Constraint.pictureMaxCount
+                            ? PictureCard(onSet: () async {
+                                Picture picture =
+                                    await selectPicture(state.value.length);
+                                if (picture != null) {
+                                  state.value.add(picture);
+                                  state.validate();
+                                }
+                              })
+                            : Container()
+                      ],
+                    )
+                  ]);
+            });
 }
