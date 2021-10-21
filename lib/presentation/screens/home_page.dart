@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
                       svgAsset: 'assets/icons/svg/complete_register.svg',
                       header: 'Hey there!',
                       message:
-                          'complete the registration by entering your name in order to create or join events',
+                          'Complete the registration by entering your name to create or join events',
                       buttonText: 'Settings',
                       route: Routes.editAccount,
                     )));
@@ -48,6 +48,7 @@ class _HomePageState extends State<HomePage> {
         : null;
   }
 
+  // TODO move all state management to a provider!
   Future<void> changeTab(int index) async {
     if (_controller.index == index) {
       return;
@@ -62,11 +63,9 @@ class _HomePageState extends State<HomePage> {
     return PersistentTabView(
       controller: _controller,
       screens: _buildScreens(),
-      confineInSafeArea: false,
+      confineInSafeArea: true,
       backgroundColor: Colors.white,
-      handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
-      stateManagement: true,
       hideNavigationBarWhenKeyboardShows: true,
       decoration: NavBarDecoration(
         // border: Border(

@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/presentation/widgets/hopaut_btm_nav_bar/hopaut_nav_bar_item.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HopautNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -24,23 +21,20 @@ class HopautNavBar extends StatelessWidget {
             offset: Offset(0, -4))
       ]),
       child: Container(
-        color: Colors.white,
-        child: Container(
-            width: double.infinity,
-            height: 60.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: items.map((i) {
-                var idx = items.indexOf(i);
-                return Flexible(
-                  child: GestureDetector(
-                    onTap: () => onItemSelected(idx),
-                    child: _buildItem(i, selectedIndex == idx),
-                  ),
-                );
-              }).toList(),
-            )),
-      ),
+          width: double.infinity,
+          height: 60.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: items.map((i) {
+              var idx = items.indexOf(i);
+              return Flexible(
+                child: GestureDetector(
+                  onTap: () => onItemSelected(idx),
+                  child: _buildItem(i, selectedIndex == idx),
+                ),
+              );
+            }).toList(),
+          )),
     );
   }
 
@@ -57,17 +51,14 @@ class HopautNavBar extends StatelessWidget {
             item.svg,
             color: isSelected ? HATheme.HOPAUT_PINK : Colors.grey,
           )),
-          Padding(
-            padding: const EdgeInsets.all(0),
-            child: Material(
-              type: MaterialType.transparency,
-              child: FittedBox(
-                child: Text(
-                  item.title,
-                  style: TextStyle(
-                    color: isSelected ? Colors.black : Colors.grey,
-                    fontSize: 12,
-                  ),
+          Material(
+            type: MaterialType.transparency,
+            child: FittedBox(
+              child: Text(
+                item.title,
+                style: TextStyle(
+                  color: isSelected ? Colors.black : Colors.grey,
+                  fontSize: 12,
                 ),
               ),
             ),
