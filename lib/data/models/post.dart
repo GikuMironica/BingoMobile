@@ -1,12 +1,10 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/picture.dart';
 import 'package:hopaut/services/date_formatter_service.dart';
-import 'package:hopaut/utils/image_utilities.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
 
@@ -126,9 +124,9 @@ class Post {
       String type = mimeType.split('/')[1];
 
       for (int i = 0; i < pictures.length; i++) {
-        data['Picture$i'] = await MultipartFile.fromFile(
+        data['Picture${i + 1}'] = await MultipartFile.fromFile(
             File(pictures[i].path).absolute.path,
-            filename: '$i.webp',
+            filename: '${i + 1}.webp',
             contentType: MediaType(mimee, type));
       }
     }

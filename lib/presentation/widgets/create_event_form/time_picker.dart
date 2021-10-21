@@ -25,7 +25,6 @@ class _TimePickerState extends State<TimePicker> {
   int hour;
   int minute;
 
-
   _TimePickerState() {
     _state = formState.date;
   }
@@ -34,36 +33,40 @@ class _TimePickerState extends State<TimePicker> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.35,
+          height: MediaQuery.of(context).size.height * 0.35,
           color: Colors.white,
           child: _state == formState.date
               ? DatePickerWidget(
-            onMonthChangeStartWithFirstDate: true,
-            dateFormat: 'dd-MMMM-yyyy',
-                onConfirm: (dateTime, index){
-                  setState(() {
-                  year = dateTime.year;
-                  month = dateTime.month;
-                  day = dateTime.day;
-                  _state = formState.time;
-                });
+                  onMonthChangeStartWithFirstDate: true,
+                  dateFormat: 'dd-MMMM-yyyy',
+                  onConfirm: (dateTime, index) {
+                    setState(() {
+                      year = dateTime.year;
+                      month = dateTime.month;
+                      day = dateTime.day;
+                      _state = formState.time;
+                    });
                   },
-                minDateTime: widget.minTime,
-                maxDateTime: widget.maxTime,
-              )
+                  minDateTime: widget.minTime,
+                  maxDateTime: widget.maxTime,
+                )
               : TimePickerWidget(
                   onCancel: () => setState(() => _state = formState.date),
                   dateFormat: 'HH-mm',
-                  minDateTime: widget.minTime.day == day ? widget.minTime.add(Duration(minutes: 30)) : null,
-                  maxDateTime: widget.pickerForEndTime ? widget.minTime.day == day ? widget.minTime.add(Duration(hours: 6)) : widget.minTime.add(Duration(hours: 12)) : null,
+                  minDateTime: widget.minTime.day == day
+                      ? widget.minTime.add(Duration(minutes: 30))
+                      : null,
+                  maxDateTime: widget.pickerForEndTime
+                      ? widget.minTime.day == day
+                          ? widget.minTime.add(Duration(hours: 6))
+                          : widget.minTime.add(Duration(hours: 12))
+                      : null,
                   onConfirm: (dateTime, index) {
                     setState(() {
                       hour = dateTime.hour;
                       minute = dateTime.minute;
                     });
-                    DateTime dt =
-                        DateTime(year, month, day, hour, minute);
-                    print(dt.toString());
+                    DateTime dt = DateTime(year, month, day, hour, minute);
                     Application.router.pop<DateTime>(context, dt);
                   })),
     );

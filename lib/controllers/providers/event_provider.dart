@@ -40,9 +40,7 @@ class EventProvider extends ChangeNotifier {
   int get miniPostContextId => _miniPostContextId;
 
   void setPost(Post post) {
-    print(post);
     _post = post;
-    print(_post);
   }
 
   void setMiniPostContext(int id) {
@@ -75,10 +73,11 @@ class EventProvider extends ChangeNotifier {
   }
 
   Future<bool> updateEvent() async {
+    bool result = false;
     if (post != null) {
-      return await _eventRepository.update(post);
+      result = await _eventRepository.update(post);
     }
-    return false;
+    return result;
   }
 
   void removeEvent(int id) {
@@ -160,9 +159,8 @@ class EventProvider extends ChangeNotifier {
         isRequirementsValid ? value : post.event.requirements;
   }
 
-  Future<Picture> selectPicture() async {
-    print("here");
-    return await choosePicture();
+  Future<Picture> selectPicture(int index) async {
+    return await choosePicture(index);
   }
 
   bool isFormValid(GlobalKey<FormState> formKey, bool isSaveEnabled) {
