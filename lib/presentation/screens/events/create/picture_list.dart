@@ -5,7 +5,7 @@ import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 import 'package:hopaut/presentation/screens/events/create/picture_card.dart';
 
 class PictureList extends FormField<List<Picture>> {
-  final Future<Picture> Function() selectPicture;
+  final Future<Picture> Function(int) selectPicture;
 
   PictureList(
       {@required this.selectPicture,
@@ -30,7 +30,8 @@ class PictureList extends FormField<List<Picture>> {
                             .map(((map) => PictureCard(
                                 picture: map.value,
                                 onSet: () async {
-                                  Picture picture = await selectPicture();
+                                  Picture picture =
+                                      await selectPicture(map.key);
                                   if (picture != null) {
                                     state.value[map.key] = picture;
                                     state.validate();
@@ -43,7 +44,8 @@ class PictureList extends FormField<List<Picture>> {
                             .toList(),
                         state.value.length < Constraint.pictureMaxCount
                             ? PictureCard(onSet: () async {
-                                Picture picture = await selectPicture();
+                                Picture picture =
+                                    await selectPicture(state.value.length);
                                 if (picture != null) {
                                   state.value.add(picture);
                                   state.validate();

@@ -2,7 +2,6 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/picture.dart';
-import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/services/date_formatter_service.dart';
 
 class MiniPost {
@@ -40,21 +39,6 @@ class MiniPost {
       this.endTime,
       this.entracePrice,
       this.slots});
-
-  MiniPost.fromPost(Post post) {
-    postId = post.id;
-    postType = post.event.eventType;
-    address = post.location.address;
-    title = post.event.title;
-    hostRating = post.hostRating;
-    latitude = post.location.latitude;
-    longitude = post.location.longitude;
-    postTime = post.postTime;
-    startTime = post.eventTime;
-    endTime = post.endTime;
-    entracePrice = post.event.entrancePrice;
-    slots = post.event.slots;
-  }
 
   MiniPost.fromJson(Map<String, dynamic> json) {
     postId = json['PostId'];
