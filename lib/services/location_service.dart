@@ -15,7 +15,8 @@ class LocationService {
   Future<void> getCurrentLocation() async {
     if (await Permission.location.isGranted) {
       _currentPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best);
+          desiredAccuracy: LocationAccuracy.best,
+          forceAndroidLocationManager: true);
     } else {
       print("Location permission was not granted.");
       await Permission.location.request();

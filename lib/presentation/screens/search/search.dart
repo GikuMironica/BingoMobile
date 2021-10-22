@@ -18,7 +18,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   FocusNode _focusNode = FocusNode();
-
+  SearchPageProvider searchProvider;
   @override
   void initState() {
     getIt<LocationService>().getCurrentLocation();
@@ -27,8 +27,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Provider.of<SearchPageProvider>(context);
-    controller.context = context;
+    searchProvider = Provider.of<SearchPageProvider>(context, listen: true);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       floatingActionButton: FloatingActionButton(
@@ -38,7 +37,7 @@ class _SearchPageState extends State<SearchPage> {
           color: Colors.white,
           size: 16,
         ),
-        onPressed: () => controller.mapController.camera.lookAtPoint(
+        onPressed: () => searchProvider.mapController.camera.lookAtPoint(
             GeoCoordinates(getIt<LocationService>().currentPosition.latitude,
                 getIt<LocationService>().currentPosition.longitude)),
       ),
@@ -49,21 +48,22 @@ class _SearchPageState extends State<SearchPage> {
             physics: NeverScrollableScrollPhysics(),
             child: GestureDetector(
               onTapDown: (_) {
-                if (controller.filter) {
-                  controller.toggleFilter();
+                if (searchProvider.filter) {
+                  searchProvider.toggleFilter();
                 }
               },
               child: Container(
                 height: MediaQuery.of(context).size.height,
                 child: HereMap(
-                  onMapCreated: controller.onMapCreated,
+                  onMapCreated: searchProvider.onMapCreated,
                 ),
               ),
             ),
           ),
           _searchFilter(),
           Visibility(
-            visible: controller.pageState == SearchPageState.HAS_SEARCH_RESULTS,
+            visible:
+                searchProvider.pageState == SearchPageState.HAS_SEARCH_RESULTS,
             child: Positioned(
               bottom: 0.0,
               child: Container(
@@ -76,11 +76,11 @@ class _SearchPageState extends State<SearchPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         CarouselSlider(
-                          items: controller.cardList,
+                          items: searchProvider.cardList,
                           options: CarouselOptions(
                             onPageChanged: (value, reason) {
-                              MiniPost mp = controller.searchResults[value];
-                              controller.mapController.camera
+                              MiniPost mp = searchProvider.searchResults[value];
+                              searchProvider.mapController.camera
                                   .lookAtPointWithDistance(
                                       GeoCoordinates(mp.latitude, mp.longitude),
                                       1000);
