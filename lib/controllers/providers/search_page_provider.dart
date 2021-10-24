@@ -152,7 +152,7 @@ class SearchPageProvider extends ChangeNotifier {
           MapMarker.withAnchor(geoCoordinates, _marker, anchor2d);
       mapMarker.drawOrder = searchResults.indexOf(miniPost);
       Metadata metaData = Metadata();
-      metaData.setString('title', miniPost.title);
+      metaData.setInteger('id', miniPost.postId);
       mapMarker.metadata = metaData;
 
       _hereMapController.mapScene.addMapMarker(mapMarker);
@@ -168,8 +168,6 @@ class SearchPageProvider extends ChangeNotifier {
   void onMapCreated(HereMapController hereMapController) async {
     _hereMapController = hereMapController;
     _setTapGestureHandler();
-    // _hereMapController.gestures.tapListener = TapListener.fromLambdas(
-    //     lambda_onTap: (Point2D touchPoint) => print('map tapped'));
     _hereMapController.mapScene.loadSceneForMapScheme(MapScheme.greyDay,
         (MapError error) async {
       if (error == null) {
@@ -214,17 +212,15 @@ class SearchPageProvider extends ChangeNotifier {
     _hereMapController.pickMapItems(touchPoint, radiusInPixel,
         (eventPickResult) {
       var eventMarkerList = eventPickResult.markers;
+      print(eventMarkerList);
       if (eventMarkerList.isEmpty) return;
       var topMostEvent = eventMarkerList.first;
+      print(topMostEvent);
       var metaData = topMostEvent.metadata;
       if (metaData != null) {
-        if (metaData.getString('number') == '') return;
-        var selectedLatitude = metaData.getDouble('lat');
-        var selectedLongitude = metaData.getDouble('long');
+        var selectedPostId = metaData.getInteger('id');
         for (MiniPost miniPost in _searchResults) {
-          if (miniPost.latitude == selectedLatitude &&
-              miniPost.longitude == selectedLongitude &&
-              miniPost.postId != null) {
+          if (miniPost.postId == selectedPostId) {
             carouselController.animateToPage(_searchResults.indexOf(miniPost),
                 duration: Duration(milliseconds: 300), curve: Curves.linear);
           }
