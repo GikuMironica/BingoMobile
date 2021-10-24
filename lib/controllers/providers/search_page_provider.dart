@@ -1,11 +1,8 @@
 import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:here_sdk/core.dart';
-import 'package:here_sdk/mapview.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/mini_post.dart';
@@ -13,9 +10,12 @@ import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/mini_post_card.dart';
-import 'package:hopaut/services/location_service.dart';
+import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:here_sdk/core.dart';
+import 'package:here_sdk/gestures.dart';
+import 'package:here_sdk/mapview.dart';
 
 enum SearchPageState {
   IDLE,
@@ -32,34 +32,26 @@ class SearchPageProvider extends ChangeNotifier {
 
   SearchPageState _pageState;
   MapState _mapState;
-
   List<MiniPost> _searchResults;
   SearchQuery searchQuery;
   List<MapMarker> _mapMarkerList = [];
   List<InkWell> _cardList = [];
   HereMapController _hereMapController;
   MapImage _marker;
+  bool _filterToggled;
+  bool _hasFocus;
+  GeolocationProvider _locationManager;
 
   double cameraMaxZoom = 15.5;
   double cameraMinZoom = 10.864;
-
   int searchRadius = 15;
-
-  HereMapController get mapController => _hereMapController;
-
-  bool _filterToggled;
-  bool _hasFocus;
-
-  bool get filter => _filterToggled;
 
   BuildContext context;
 
-  LocationService _locationManager = getIt<LocationService>();
-
+  HereMapController get mapController => _hereMapController;
   List<Widget> get cardList => _cardList;
-
+  bool get filter => _filterToggled;
   List<MiniPost> get searchResults => _searchResults;
-
   MapState get mapState => _mapState;
   SearchPageState get pageState => _pageState;
   bool get hasFocus => _hasFocus;
@@ -74,6 +66,7 @@ class SearchPageProvider extends ChangeNotifier {
     searchQuery = SearchQuery(radius: searchRadius);
     _filterToggled = false;
     _hasFocus = false;
+    _locationManager = getIt<GeolocationProvider>();
     await Permission.location.request();
   }
 
@@ -119,7 +112,12 @@ class SearchPageProvider extends ChangeNotifier {
       _addSearchResultsToMap(_searchResults);
     } else {
       setPageState(SearchPageState.NO_SEARCH_RESULT);
-      Fluttertoast.showToast(msg: 'No events found in your area');
+      Fluttertoast.showToast(
+          // TODO translation
+          backgroundColor: Color(0xFFed2f65),
+          textColor: Colors.white,
+          toastLength: Toast.LENGTH_LONG,
+          msg: "No events found in this area.");
     }
   }
 
@@ -136,12 +134,6 @@ class SearchPageProvider extends ChangeNotifier {
   void toggleFilter() {
     _filterToggled = !_filterToggled;
     notifyListeners();
-  }
-
-  @override
-  void dispose() {
-    _hereMapController.release();
-    super.dispose();
   }
 
   // --------------------------------------------------------------------------
@@ -175,6 +167,9 @@ class SearchPageProvider extends ChangeNotifier {
 
   void onMapCreated(HereMapController hereMapController) async {
     _hereMapController = hereMapController;
+    // _hereMapController.gestures.tapListener = TapListener((Point2D touchPoint) {
+    //   if (filter) toggleFilter();
+    // });
     _hereMapController.mapScene.loadSceneForMapScheme(MapScheme.greyDay,
         (MapError error) async {
       if (error == null) {
@@ -182,13 +177,13 @@ class SearchPageProvider extends ChangeNotifier {
             MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
         const double distanceToEarthInMeters = 3000;
         GeoCoordinates geoCoordinates = GeoCoordinates(
-            getIt<LocationService>().currentPosition.latitude,
-            getIt<LocationService>().currentPosition.longitude);
+            getIt<GeolocationProvider>().currentPosition.latitude,
+            getIt<GeolocationProvider>().currentPosition.longitude);
         _hereMapController.camera
             .lookAtPointWithDistance(geoCoordinates, distanceToEarthInMeters);
         GeoCircle geoCircle = GeoCircle(geoCoordinates, 15000);
         MapPolygon mapPolygon = MapPolygon(
-            GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.01));
+            GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.05));
         _hereMapController.mapScene.addMapPolygon(mapPolygon);
 
         // Show the user on the map.
@@ -214,5 +209,11 @@ class SearchPageProvider extends ChangeNotifier {
   void filterToggleToday() {
     searchQuery.today = !searchQuery.today;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _hereMapController.release();
+    super.dispose();
   }
 }
