@@ -99,7 +99,7 @@ Widget blurBackgroundCircularProgressIndicator() {
         backgroundColor: Colors.white.withOpacity(0),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [CircularProgressIndicator()]),
+            children: [CupertinoActivityIndicator()]),
       ));
 }
 
