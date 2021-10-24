@@ -36,7 +36,8 @@ class _CreatePageState extends State<SearchPageCarousel> {
                       MiniPost mp = searchProvider.searchResults[value];
                       searchProvider.mapController.camera
                           .lookAtPointWithDistance(
-                              GeoCoordinates(mp.latitude, mp.longitude), 1000);
+                              GeoCoordinates(mp.latitude, mp.longitude),
+                              searchProvider.onCarouselSwipeLookFromDistance);
                     },
                     enableInfiniteScroll: false,
                     autoPlay: false,

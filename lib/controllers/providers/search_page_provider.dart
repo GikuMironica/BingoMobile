@@ -45,6 +45,8 @@ class SearchPageProvider extends ChangeNotifier {
   double cameraMaxZoom = 15.5;
   double cameraMinZoom = 10.864;
   int searchRadius = 15;
+  double onCarouselSwipeLookFromDistance = 3000;
+  double initialDistanceToEarth = 3000;
 
   CarouselController carouselController;
   HereMapController get mapController => _hereMapController;
@@ -98,6 +100,7 @@ class SearchPageProvider extends ChangeNotifier {
     }
   }
 
+  //TODO clean old results!
   Future<void> searchEvents() async {
     setPageState(SearchPageState.SEARCHING);
     await _locationManager.getCurrentLocation();
@@ -173,12 +176,11 @@ class SearchPageProvider extends ChangeNotifier {
       if (error == null) {
         _hereMapController.mapScene.setLayerState(
             MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
-        const double distanceToEarthInMeters = 3000;
         GeoCoordinates geoCoordinates = GeoCoordinates(
-            getIt<GeolocationProvider>().currentPosition.latitude,
-            getIt<GeolocationProvider>().currentPosition.longitude);
+            _locationManager.currentPosition.latitude,
+            _locationManager.currentPosition.longitude);
         _hereMapController.camera
-            .lookAtPointWithDistance(geoCoordinates, distanceToEarthInMeters);
+            .lookAtPointWithDistance(geoCoordinates, initialDistanceToEarth);
         GeoCircle geoCircle = GeoCircle(geoCoordinates, 15000);
         MapPolygon mapPolygon = MapPolygon(
             GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.05));
@@ -222,7 +224,7 @@ class SearchPageProvider extends ChangeNotifier {
         for (MiniPost miniPost in _searchResults) {
           if (miniPost.postId == selectedPostId) {
             carouselController.animateToPage(_searchResults.indexOf(miniPost),
-                duration: Duration(milliseconds: 300), curve: Curves.linear);
+                duration: Duration(milliseconds: 200), curve: Curves.linear);
           }
         }
       }

@@ -31,15 +31,15 @@ class _SearchPageState extends State<SearchPage> {
         floatingActionButton: FloatingActionButton(
           mini: true,
           child: Icon(
-            Ionicons.locate_outline,
+            Ionicons.navigate,
             color: Colors.white,
             size: 16,
           ),
           onPressed: () async => {
             await locationService.getCurrentLocation(),
             searchProvider.mapController.camera.lookAtPoint(GeoCoordinates(
-                getIt<GeolocationProvider>().currentPosition.latitude,
-                getIt<GeolocationProvider>().currentPosition.longitude)),
+                locationService.currentPosition.latitude,
+                locationService.currentPosition.longitude)),
           },
         ),
         resizeToAvoidBottomInset: false,
