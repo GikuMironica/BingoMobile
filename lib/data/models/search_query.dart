@@ -22,6 +22,7 @@ class SearchQuery {
     }
   }
 
+  // TODO not used
   String toString() {
     String x = "";
 
@@ -37,6 +38,7 @@ class SearchQuery {
     return x.replaceFirst('&', '');
   }
 
+  // TODO not used
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['UserLocation.Latitude'] = this.latitude;

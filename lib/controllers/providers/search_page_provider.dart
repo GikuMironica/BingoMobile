@@ -11,10 +11,10 @@ import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/mini_post_card.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:here_sdk/mapview.dart';
 
 enum SearchPageState {
@@ -46,8 +46,7 @@ class SearchPageProvider extends ChangeNotifier {
   double cameraMinZoom = 10.864;
   int searchRadius = 15;
 
-  BuildContext context;
-
+  CarouselController carouselController;
   HereMapController get mapController => _hereMapController;
   List<Widget> get cardList => _cardList;
   bool get filter => _filterToggled;
@@ -55,19 +54,20 @@ class SearchPageProvider extends ChangeNotifier {
   MapState get mapState => _mapState;
   SearchPageState get pageState => _pageState;
   bool get hasFocus => _hasFocus;
+  BuildContext context;
 
   SearchPageProvider() : _eventRepository = getIt<EventRepository>() {
     init();
   }
 
   void init() async {
+    carouselController = CarouselController();
     _pageState = SearchPageState.IDLE;
     _mapState = MapState.LOADING;
     searchQuery = SearchQuery(radius: searchRadius);
     _filterToggled = false;
     _hasFocus = false;
     _locationManager = getIt<GeolocationProvider>();
-    await Permission.location.request();
   }
 
   void setPageState(SearchPageState searchPageState) {
@@ -167,9 +167,6 @@ class SearchPageProvider extends ChangeNotifier {
 
   void onMapCreated(HereMapController hereMapController) async {
     _hereMapController = hereMapController;
-    // _hereMapController.gestures.tapListener = TapListener((Point2D touchPoint) {
-    //   if (filter) toggleFilter();
-    // });
     _hereMapController.mapScene.loadSceneForMapScheme(MapScheme.greyDay,
         (MapError error) async {
       if (error == null) {
@@ -194,9 +191,47 @@ class SearchPageProvider extends ChangeNotifier {
         _hereMapController.mapScene.addMapMarker(userMarker);
 
         setMapState(MapState.LOADED);
+        _setTapGestureHandler();
         searchEvents();
       } else {
         print('Map Scene not loaded MapError ${error.toString()}');
+      }
+    });
+  }
+
+  _setTapGestureHandler() {
+    print('listener set');
+    _hereMapController.gestures.tapListener = TapListener.fromLambdas(
+        lambda_onTap: (Point2D touchPoint) => () {
+              print('here listener, tapped');
+              if (filter) toggleFilter();
+              FocusManager.instance.primaryFocus?.unfocus();
+              _pickEventOnMap(touchPoint);
+              notifyListeners();
+            });
+  }
+
+  void _pickEventOnMap(Point2D touchPoint) {
+    var radiusInPixel = 2.0;
+    print('picking event, tapped');
+    _hereMapController.pickMapItems(touchPoint, radiusInPixel,
+        (eventPickResult) {
+      var eventMarkerList = eventPickResult.markers;
+      if (eventMarkerList.isEmpty) return;
+      var topMostEvent = eventMarkerList.first;
+      var metaData = topMostEvent.metadata;
+      if (metaData != null) {
+        if (metaData.getString('number') == '') return;
+        var selectedLatitude = metaData.getDouble('lat');
+        var selectedLongitude = metaData.getDouble('long');
+        for (MiniPost miniPost in _searchResults) {
+          if (miniPost.latitude == selectedLatitude &&
+              miniPost.longitude == selectedLongitude &&
+              miniPost.postId != null) {
+            carouselController.animateToPage(_searchResults.indexOf(miniPost),
+                duration: Duration(milliseconds: 300), curve: Curves.linear);
+          }
+        }
       }
     });
   }

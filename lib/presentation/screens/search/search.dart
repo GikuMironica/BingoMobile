@@ -27,6 +27,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     locationService = Provider.of<GeolocationProvider>(context, listen: true);
     searchProvider = Provider.of<SearchPageProvider>(context, listen: true);
+    searchProvider.context = context;
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
         floatingActionButton: FloatingActionButton(
@@ -51,16 +52,10 @@ class _SearchPageState extends State<SearchPage> {
     return Stack(children: [
       SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
-        child: GestureDetector(
-          onTap: () {
-            if (searchProvider.filter) searchProvider.toggleFilter();
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            child: HereMap(
-              onMapCreated: searchProvider.onMapCreated,
-            ),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: HereMap(
+            onMapCreated: searchProvider.onMapCreated,
           ),
         ),
       ),

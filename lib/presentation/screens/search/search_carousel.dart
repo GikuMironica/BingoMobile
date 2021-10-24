@@ -29,6 +29,7 @@ class _CreatePageState extends State<SearchPageCarousel> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 CarouselSlider(
+                  carouselController: searchProvider.carouselController,
                   items: searchProvider.cardList,
                   options: CarouselOptions(
                     onPageChanged: (value, reason) {

@@ -3,9 +3,9 @@ enum EventType {
   houseParty,
   club,
   bar,
-  carMeet,
   bikerMeet,
   bicycleMeet,
+  carMeet,
   streetParty,
   marathon,
   other
