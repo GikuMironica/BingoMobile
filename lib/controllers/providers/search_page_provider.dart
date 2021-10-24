@@ -167,6 +167,9 @@ class SearchPageProvider extends ChangeNotifier {
 
   void onMapCreated(HereMapController hereMapController) async {
     _hereMapController = hereMapController;
+    _setTapGestureHandler();
+    // _hereMapController.gestures.tapListener = TapListener.fromLambdas(
+    //     lambda_onTap: (Point2D touchPoint) => print('map tapped'));
     _hereMapController.mapScene.loadSceneForMapScheme(MapScheme.greyDay,
         (MapError error) async {
       if (error == null) {
@@ -191,7 +194,6 @@ class SearchPageProvider extends ChangeNotifier {
         _hereMapController.mapScene.addMapMarker(userMarker);
 
         setMapState(MapState.LOADED);
-        _setTapGestureHandler();
         searchEvents();
       } else {
         print('Map Scene not loaded MapError ${error.toString()}');
@@ -200,19 +202,14 @@ class SearchPageProvider extends ChangeNotifier {
   }
 
   _setTapGestureHandler() {
-    print('listener set');
     _hereMapController.gestures.tapListener = TapListener.fromLambdas(
-        lambda_onTap: (Point2D touchPoint) => () {
-              print('here listener, tapped');
-              if (filter) toggleFilter();
-              FocusManager.instance.primaryFocus?.unfocus();
-              _pickEventOnMap(touchPoint);
-              notifyListeners();
-            });
+        lambda_onTap: (Point2D touchPoint) => _pickEventOnMap(touchPoint));
   }
 
   void _pickEventOnMap(Point2D touchPoint) {
     var radiusInPixel = 2.0;
+    if (filter) toggleFilter();
+    FocusManager.instance.primaryFocus?.unfocus();
     print('picking event, tapped');
     _hereMapController.pickMapItems(touchPoint, radiusInPixel,
         (eventPickResult) {
@@ -234,6 +231,7 @@ class SearchPageProvider extends ChangeNotifier {
         }
       }
     });
+    notifyListeners();
   }
 
   void filterToggleEventType(EventType eventType) {
