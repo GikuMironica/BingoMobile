@@ -12,7 +12,6 @@ import 'package:hopaut/presentation/widgets/text/text.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
-
   @override
   _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
 }
@@ -34,8 +33,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               ),
             ),
           ),
-        )
-    );
+        ));
   }
 
   Widget _forgotPassView() {
@@ -53,18 +51,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               child: _forgotPasswordForm())
         ]),
       ),
-      BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(builder: (context, state) {
-        if (state.formStatus is SubmissionSuccess){
+      BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
+          builder: (context, state) {
+        if (state.formStatus is SubmissionSuccess) {
           _showFullscreenDialog();
         }
         return Expanded(
           child: Container(
               child: Visibility(
-                visible: state.formStatus is Idle,
-                child: Align(
-                    alignment: FractionalOffset.bottomCenter,
-                    child: accountAlreadyPrompt(context)),
-              )),
+            visible: state.formStatus is Idle,
+            child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: accountAlreadyPrompt(context)),
+          )),
         );
       })
     ]);
@@ -75,7 +74,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       listener: (context, state) {
         final status = state.formStatus;
         if (status is SubmissionFailed) {
-          showSnackBarWithError(context: context, message: status.exception.toString());
+          showSnackBarWithError(
+              context: context, message: status.exception.toString());
           state.formStatus = new Idle();
         }
       },
@@ -83,10 +83,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           key: _formKey,
           child: Column(
             children: [
-              text(text: "Enter the email associated with your account and we'll send"
-                  " an email with instructions to reset your password."),
+              text(
+                  text:
+                      "Enter the email associated with your account and we'll send"
+                      " an email with instructions to reset your password."),
               SizedBox(height: 32),
-              BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(builder: (context, state) {
+              BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
+                  builder: (context, state) {
                 return emailInputField(
                     context: context,
                     isStateValid: state.isValidEmail,
@@ -97,10 +100,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               SizedBox(
                 height: 32,
               ),
-              BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(builder: (context, state) {
-                return state.formStatus is RequestSubmitted
-                    || state.formStatus is SubmissionSuccess
-                    ? circularProgressIndicator()
+              BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
+                  builder: (context, state) {
+                return state.formStatus is RequestSubmitted ||
+                        state.formStatus is SubmissionSuccess
+                    ? blurBackgroundCircularProgressIndicator()
                     : _forgotPasswordButtons();
               }),
               // SizedBox(height: 32),
@@ -111,38 +115,40 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   Widget _forgotPasswordButtons() {
     return Column(children: [
-      BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(builder: (context, state) {
+      BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
+          builder: (context, state) {
         return authButton(
-          // TODO - Translate
+            // TODO - Translate
             label: 'Send request',
             context: context,
             isStateValid: state.formStatus is SubmissionSuccess,
             onPressed: state.formStatus is RequestSubmitted
-              ? () {}
-              : () => {
-                FocusManager.instance.primaryFocus.unfocus(),
-                if (_formKey.currentState.validate()) {
-                  context.read<ForgotPasswordBloc>().add(new RequestClicked())
-              }
-            });
+                ? () {}
+                : () => {
+                      FocusManager.instance.primaryFocus.unfocus(),
+                      if (_formKey.currentState.validate())
+                        {
+                          context
+                              .read<ForgotPasswordBloc>()
+                              .add(new RequestClicked())
+                        }
+                    });
       }),
     ]);
   }
 
   _showFullscreenDialog() {
-    Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, () {
       Navigator.of(context).push(PageRouteBuilder(
           opaque: false,
-          pageBuilder: (BuildContext context, _, __) =>
-              FullscreenDialog(
+          pageBuilder: (BuildContext context, _, __) => FullscreenDialog(
                 asset: 'assets/icons/forgot_password.png',
                 header: 'Check your email',
-                message: 'We have sent a password recover instructions to your email.',
+                message:
+                    'We have sent a password recover instructions to your email.',
                 buttonText: 'Back to login',
                 route: '/login',
               )));
     });
   }
 }
-
-

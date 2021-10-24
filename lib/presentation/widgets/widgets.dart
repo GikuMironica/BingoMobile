@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../../config/routes/application.dart';
 import 'package:hopaut/config/constants/theme.dart';
 
@@ -90,7 +91,7 @@ Widget noAccountYetPrompt(BuildContext context) {
       ));
 }
 
-Widget circularProgressIndicator() {
+Widget blurBackgroundCircularProgressIndicator() {
   return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
       child: Dialog(
@@ -102,7 +103,51 @@ Widget circularProgressIndicator() {
       ));
 }
 
-void showSnackBarWithError({BuildContext context, String message,
+Widget overlayBlurBackgroundCircularProgressIndicator(
+    BuildContext context, String text) {
+  return BackdropFilter(
+    filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+    child: Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      alignment: Alignment.center,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.4,
+        height: MediaQuery.of(context).size.height * 0.12,
+        padding: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                offset: Offset(0, 0),
+                blurRadius: 5,
+                spreadRadius: 1,
+              ),
+            ]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CupertinoActivityIndicator(),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            Text(
+              text,
+              style: TextStyle(color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+void showSnackBarWithError(
+    {BuildContext context,
+    String message,
     GlobalKey<ScaffoldState> scaffoldKey}) {
   if (scaffoldKey == null) {
     Scaffold.of(context).showSnackBar(_errorSnackBar(message));
@@ -122,7 +167,10 @@ SnackBar _errorSnackBar(String message) {
       backgroundColor: HATheme.HOPAUT_PINK);
 }
 
-void showSuccessSnackBar({BuildContext context, String message, GlobalKey<ScaffoldState> scaffoldKey}) {
+void showSuccessSnackBar(
+    {BuildContext context,
+    String message,
+    GlobalKey<ScaffoldState> scaffoldKey}) {
   if (scaffoldKey == null) {
     Scaffold.of(context).showSnackBar(_successSnackBar(message));
   } else {
@@ -130,7 +178,7 @@ void showSuccessSnackBar({BuildContext context, String message, GlobalKey<Scaffo
   }
 }
 
-SnackBar _successSnackBar(String message){
+SnackBar _successSnackBar(String message) {
   return SnackBar(
       content: Container(
         height: 30,
@@ -194,6 +242,7 @@ _launchURL({String url, BuildContext context}) async {
     await launch(url);
   } else {
     // TODO - translate
-    showSnackBarWithError(context: context, message: "Couldn't connect to $url");
+    showSnackBarWithError(
+        context: context, message: "Couldn't connect to $url");
   }
 }

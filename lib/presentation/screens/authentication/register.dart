@@ -78,7 +78,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
       listener: (context, state) {
         final status = state.formStatus;
         if (status is SubmissionFailed) {
-          showSnackBarWithError(context: context, message: status.exception.toString());
+          showSnackBarWithError(
+              context: context, message: status.exception.toString());
           state.formStatus = new Idle();
         }
       },
@@ -145,7 +146,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               BlocBuilder<RegisterBloc, RegisterState>(
                   builder: (context, state) {
                 return state.formStatus is RegisterSubmitted
-                    ? circularProgressIndicator()
+                    ? blurBackgroundCircularProgressIndicator()
                     : _registerButton();
               }),
               SizedBox(

@@ -58,8 +58,8 @@ class _LoginPageState extends State<LoginPage> {
         ]),
       ),
       BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-        if (state.formStatus is SubmissionSuccess){
-          Future.delayed(Duration.zero, (){
+        if (state.formStatus is SubmissionSuccess) {
+          Future.delayed(Duration.zero, () {
             Application.router.navigateTo(context, '/home',
                 replace: true,
                 clearStack: true,
@@ -69,11 +69,11 @@ class _LoginPageState extends State<LoginPage> {
         return Expanded(
           child: Container(
               child: Visibility(
-              visible: state.formStatus is Idle,
-              child: Align(
-                  alignment: FractionalOffset.bottomCenter,
-                  child: noAccountYetPrompt(context)),
-            )),
+            visible: state.formStatus is Idle,
+            child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: noAccountYetPrompt(context)),
+          )),
         );
       })
     ]);
@@ -84,7 +84,8 @@ class _LoginPageState extends State<LoginPage> {
       listener: (context, state) {
         final status = state.formStatus;
         if (status is SubmissionFailed) {
-          showSnackBarWithError(context: context, message: status.exception.toString());
+          showSnackBarWithError(
+              context: context, message: status.exception.toString());
           state.formStatus = new Idle();
         }
       },
@@ -112,17 +113,17 @@ class _LoginPageState extends State<LoginPage> {
                     isStateValid: state.isValidPassword,
                     // TODO - Translation
                     validationMessage: "Please input your password",
-                    onObscureTap: () => context.read<LoginBloc>()
-                        .add(ShowPasswordClicked(obscureText: state.obscureText)),
+                    onObscureTap: () => context.read<LoginBloc>().add(
+                        ShowPasswordClicked(obscureText: state.obscureText)),
                     onChange: (value) => context
                         .read<LoginBloc>()
                         .add(LoginPasswordChanged(password: value)));
               }),
               forgotPassword(context),
               BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-                return state.formStatus is LoginSubmitted
-                    || state.formStatus is SubmissionSuccess
-                    ? circularProgressIndicator()
+                return state.formStatus is LoginSubmitted ||
+                        state.formStatus is SubmissionSuccess
+                    ? blurBackgroundCircularProgressIndicator()
                     : _loginButtons();
               }),
               // SizedBox(height: 32),
@@ -135,37 +136,33 @@ class _LoginPageState extends State<LoginPage> {
     return Column(children: [
       BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
         return authButton(
-          // TODO - translate
-          label: 'Login',
-          context: context,
-          isStateValid: state.formStatus is SubmissionSuccess,
-          onPressed: state.formStatus is LoginSubmitted
-              ? () {}
-              : () => {
-              FocusManager.instance.primaryFocus.unfocus(),
-                if (_formKey.currentState.validate()) {
-                  context.read<LoginBloc>().add(new LoginClicked())
-            }
-          });
+            // TODO - translate
+            label: 'Login',
+            context: context,
+            isStateValid: state.formStatus is SubmissionSuccess,
+            onPressed: state.formStatus is LoginSubmitted
+                ? () {}
+                : () => {
+                      FocusManager.instance.primaryFocus.unfocus(),
+                      if (_formKey.currentState.validate())
+                        {context.read<LoginBloc>().add(new LoginClicked())}
+                    });
       }),
-      SizedBox(height: 10,),
-      Row(
-          children: <Widget>[
-            Expanded(
-                child: Divider()
-            ),
-            // TODO translate
-            Text(" Or continue with "),
-            Expanded(
-                child: Divider()
-            ),
-          ]
+      SizedBox(
+        height: 10,
       ),
-      SizedBox(height: 10,),
+      Row(children: <Widget>[
+        Expanded(child: Divider()),
+        // TODO translate
+        Text(" Or continue with "),
+        Expanded(child: Divider()),
+      ]),
+      SizedBox(
+        height: 10,
+      ),
       BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
         return facebookButton(context, state);
       }),
     ]);
   }
-
 }

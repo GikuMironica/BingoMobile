@@ -1,17 +1,15 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
-import 'package:hopaut/config/event_types.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/search_page_provider.dart';
-import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:hopaut/presentation/screens/search/search_carousel.dart';
 import 'package:hopaut/presentation/screens/search/search_filter.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -64,6 +62,16 @@ class _SearchPageState extends State<SearchPage> {
         visible: searchProvider.pageState == SearchPageState.HAS_SEARCH_RESULTS,
         child: SearchPageCarousel(),
       ),
+      _loadingMapDialog()
     ]);
+  }
+
+  Widget _loadingMapDialog() {
+    return Visibility(
+        visible: searchProvider.pageState == SearchPageState.SEARCHING,
+        child: overlayBlurBackgroundCircularProgressIndicator(
+            // TODO translations
+            context,
+            'Looking for events'));
   }
 }
