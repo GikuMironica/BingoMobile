@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/controllers/providers/settings_provider.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
@@ -20,22 +21,18 @@ class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
     return SingleChildScrollView(
       physics: NeverScrollableScrollPhysics(),
       child: ListView(
-        shrinkWrap: true,
-        children: _settingsProvider.deleteFormStatus is Idle
-          ? [
-              deleteView(context)
-            ]
-          : [
-              loadingView(context)
-            ]
-      ),
+          shrinkWrap: true,
+          children: _settingsProvider.deleteFormStatus is Idle
+              ? [deleteView(context)]
+              : [loadingView(context)]),
     );
   }
 
-  Widget deleteView(BuildContext context){
+  Widget deleteView(BuildContext context) {
     return Column(
       children: [
         Text(
+          // TODO translation
           'Delete Account',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
@@ -70,16 +67,14 @@ class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
     );
   }
 
-  Widget deleteForm(BuildContext context){
+  Widget deleteForm(BuildContext context) {
     return Form(
-      key: _formKey,
-      child: Column(
-        children: [
+        key: _formKey,
+        child: Column(children: [
           emailInputField(
-            context: context,
-            isStateValid: _settingsProvider.isDeleteAccountEmailValid,
-            onChange: (v) => _settingsProvider.emailChange(v)
-          ),
+              context: context,
+              isStateValid: _settingsProvider.isDeleteAccountEmailValid,
+              onChange: (v) => _settingsProvider.emailChange(v)),
           SizedBox(
             height: 10,
           ),
@@ -87,48 +82,40 @@ class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               ButtonTheme(
-                  minWidth: 100,
-                  child: RaisedButton(
-                      color: _settingsProvider.isDeleteAccountEmailValid
-                          ? Colors.red
-                          : Colors.red.withOpacity(0.5),
-                      // TODO translation
-                      child: Text('Delete',
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: () => {
-                        FocusManager.instance.primaryFocus.unfocus(),
-                        if (_formKey.currentState.validate())
-                          {_settingsProvider.deleteAccount(context)}
-                      }
-                  ),
+                minWidth: 100,
+                child: RaisedButton(
+                    color: _settingsProvider.isDeleteAccountEmailValid
+                        ? Colors.red
+                        : Colors.red.withOpacity(0.5),
+                    // TODO translation
+                    child:
+                        Text('Delete', style: TextStyle(color: Colors.white)),
+                    onPressed: () => {
+                          FocusManager.instance.primaryFocus.unfocus(),
+                          if (_formKey.currentState.validate())
+                            {_settingsProvider.deleteAccount(context)}
+                        }),
               ),
               ButtonTheme(
                 minWidth: 100,
                 child: RaisedButton(
-                  //TODO translte
-                    child: Text('Cancel',
-                        style: TextStyle(color: Colors.black54)),
+                    //TODO translte
+                    child:
+                        Text('Cancel', style: TextStyle(color: Colors.black54)),
                     color: Colors.grey[350],
                     onPressed: () => Navigator.of(context).pop()),
               ),
             ],
           ),
-        ]
-     )
-    );
+        ]));
   }
 
-  Widget loadingView(BuildContext context){
+  Widget loadingView(BuildContext context) {
     return Container(
       height: 250.0,
       child: Center(
-        child: CircularProgressIndicator(
-          backgroundColor: Color(0xFFed2f65).withOpacity(0.45),
-          valueColor:
-          AlwaysStoppedAnimation<Color>(Color(0xFFed2f65)),
-        ),
+        child: CupertinoActivityIndicator(),
       ),
     );
   }
-
 }

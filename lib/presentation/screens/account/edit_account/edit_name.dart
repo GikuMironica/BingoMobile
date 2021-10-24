@@ -73,13 +73,8 @@ class _EditAccountNameState extends State<EditAccountName> {
       _accountProvider.formStatus = new Idle();
     }
     return _accountProvider.formStatus is Submitted
-        ? Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          )
+        // TODO translation
+        ? overlayBlurBackgroundCircularProgressIndicator(context, 'Updating')
         : Form(
             key: _formKey,
             child: Column(

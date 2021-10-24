@@ -149,13 +149,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       _passwordProvider.formStatus = Idle();
     });
     return _passwordProvider.formStatus is Submitted
-        ? Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          )
+        ? overlayBlurBackgroundCircularProgressIndicator(context, 'Updating')
         : Form(
             key: _formKey,
             child: Column(
