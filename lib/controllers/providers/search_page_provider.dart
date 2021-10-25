@@ -1,11 +1,8 @@
 import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:here_sdk/core.dart';
-import 'package:here_sdk/mapview.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/mini_post.dart';
@@ -13,9 +10,12 @@ import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/mini_post_card.dart';
-import 'package:hopaut/services/location_service.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:here_sdk/core.dart';
+import 'package:here_sdk/gestures.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:here_sdk/mapview.dart';
 
 enum SearchPageState {
   IDLE,
@@ -27,54 +27,49 @@ enum SearchPageState {
 
 enum MapState { LOADING, LOADED }
 
-class SearchPageController extends ChangeNotifier {
+class SearchPageProvider extends ChangeNotifier {
   final EventRepository _eventRepository;
 
   SearchPageState _pageState;
   MapState _mapState;
-
   List<MiniPost> _searchResults;
   SearchQuery searchQuery;
   List<MapMarker> _mapMarkerList = [];
   List<InkWell> _cardList = [];
   HereMapController _hereMapController;
   MapImage _marker;
+  bool _filterToggled;
+  bool _hasFocus;
+  GeolocationProvider _locationManager;
 
   double cameraMaxZoom = 15.5;
   double cameraMinZoom = 10.864;
-
   int searchRadius = 15;
+  double onCarouselSwipeLookFromDistance = 3000;
+  double initialDistanceToEarth = 3000;
 
+  CarouselController carouselController;
   HereMapController get mapController => _hereMapController;
-
-  bool _filterToggled;
-  bool _hasFocus;
-
-  bool get filter => _filterToggled;
-
-  BuildContext context;
-
-  LocationService _locationManager = getIt<LocationService>();
-
   List<Widget> get cardList => _cardList;
-
+  bool get filter => _filterToggled;
   List<MiniPost> get searchResults => _searchResults;
-
   MapState get mapState => _mapState;
   SearchPageState get pageState => _pageState;
   bool get hasFocus => _hasFocus;
+  BuildContext context;
 
-  SearchPageController() : _eventRepository = getIt<EventRepository>() {
+  SearchPageProvider() : _eventRepository = getIt<EventRepository>() {
     init();
   }
 
   void init() async {
+    carouselController = CarouselController();
     _pageState = SearchPageState.IDLE;
     _mapState = MapState.LOADING;
     searchQuery = SearchQuery(radius: searchRadius);
     _filterToggled = false;
     _hasFocus = false;
-    await Permission.location.request();
+    _locationManager = getIt<GeolocationProvider>();
   }
 
   void setPageState(SearchPageState searchPageState) {
@@ -105,6 +100,7 @@ class SearchPageController extends ChangeNotifier {
     }
   }
 
+  //TODO clean old results!
   Future<void> searchEvents() async {
     setPageState(SearchPageState.SEARCHING);
     await _locationManager.getCurrentLocation();
@@ -119,7 +115,12 @@ class SearchPageController extends ChangeNotifier {
       _addSearchResultsToMap(_searchResults);
     } else {
       setPageState(SearchPageState.NO_SEARCH_RESULT);
-      Fluttertoast.showToast(msg: 'No events found in your area');
+      Fluttertoast.showToast(
+          // TODO translation
+          backgroundColor: Color(0xFFed2f65),
+          textColor: Colors.white,
+          toastLength: Toast.LENGTH_LONG,
+          msg: "No events found in this area.");
     }
   }
 
@@ -138,12 +139,6 @@ class SearchPageController extends ChangeNotifier {
     notifyListeners();
   }
 
-  @override
-  void dispose() {
-    _hereMapController.release();
-    super.dispose();
-  }
-
   // --------------------------------------------------------------------------
 
   Future<void> _addSearchResultsToMap(List<MiniPost> searchResults) async {
@@ -160,7 +155,7 @@ class SearchPageController extends ChangeNotifier {
           MapMarker.withAnchor(geoCoordinates, _marker, anchor2d);
       mapMarker.drawOrder = searchResults.indexOf(miniPost);
       Metadata metaData = Metadata();
-      metaData.setString('title', miniPost.title);
+      metaData.setInteger('id', miniPost.postId);
       mapMarker.metadata = metaData;
 
       _hereMapController.mapScene.addMapMarker(mapMarker);
@@ -175,20 +170,20 @@ class SearchPageController extends ChangeNotifier {
 
   void onMapCreated(HereMapController hereMapController) async {
     _hereMapController = hereMapController;
+    _setTapGestureHandler();
     _hereMapController.mapScene.loadSceneForMapScheme(MapScheme.greyDay,
         (MapError error) async {
       if (error == null) {
         _hereMapController.mapScene.setLayerState(
             MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
-        const double distanceToEarthInMeters = 3000;
         GeoCoordinates geoCoordinates = GeoCoordinates(
-            getIt<LocationService>().currentPosition.latitude,
-            getIt<LocationService>().currentPosition.longitude);
+            _locationManager.currentPosition.latitude,
+            _locationManager.currentPosition.longitude);
         _hereMapController.camera
-            .lookAtPointWithDistance(geoCoordinates, distanceToEarthInMeters);
+            .lookAtPointWithDistance(geoCoordinates, initialDistanceToEarth);
         GeoCircle geoCircle = GeoCircle(geoCoordinates, 15000);
         MapPolygon mapPolygon = MapPolygon(
-            GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.01));
+            GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.05));
         _hereMapController.mapScene.addMapPolygon(mapPolygon);
 
         // Show the user on the map.
@@ -206,6 +201,37 @@ class SearchPageController extends ChangeNotifier {
     });
   }
 
+  _setTapGestureHandler() {
+    _hereMapController.gestures.tapListener = TapListener.fromLambdas(
+        lambda_onTap: (Point2D touchPoint) => _pickEventOnMap(touchPoint));
+  }
+
+  void _pickEventOnMap(Point2D touchPoint) {
+    var radiusInPixel = 2.0;
+    if (filter) toggleFilter();
+    FocusManager.instance.primaryFocus?.unfocus();
+    print('picking event, tapped');
+    _hereMapController.pickMapItems(touchPoint, radiusInPixel,
+        (eventPickResult) {
+      var eventMarkerList = eventPickResult.markers;
+      print(eventMarkerList);
+      if (eventMarkerList.isEmpty) return;
+      var topMostEvent = eventMarkerList.first;
+      print(topMostEvent);
+      var metaData = topMostEvent.metadata;
+      if (metaData != null) {
+        var selectedPostId = metaData.getInteger('id');
+        for (MiniPost miniPost in _searchResults) {
+          if (miniPost.postId == selectedPostId) {
+            carouselController.animateToPage(_searchResults.indexOf(miniPost),
+                duration: Duration(milliseconds: 200), curve: Curves.linear);
+          }
+        }
+      }
+    });
+    notifyListeners();
+  }
+
   void filterToggleEventType(EventType eventType) {
     searchQuery.eventTypes[eventType] = !searchQuery.eventTypes[eventType];
     notifyListeners();
@@ -214,5 +240,11 @@ class SearchPageController extends ChangeNotifier {
   void filterToggleToday() {
     searchQuery.today = !searchQuery.today;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _hereMapController.release();
+    super.dispose();
   }
 }

@@ -3,6 +3,7 @@ import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class MiniPostCard extends StatelessWidget {
   final MiniPost miniPost;

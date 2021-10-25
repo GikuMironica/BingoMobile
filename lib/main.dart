@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/controllers/providers/change_password_provider.dart';
 import 'package:hopaut/data/repositories/tag_repository.dart';
@@ -19,7 +20,7 @@ import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:hopaut/controllers/providers/settings_provider.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
-import 'controllers/providers/search_page_controller.dart';
+import 'controllers/providers/search_page_provider.dart';
 import 'data/repositories/event_repository.dart';
 import 'controllers/providers/event_provider.dart';
 import 'init.dart';
@@ -131,14 +132,16 @@ class _HopAutState extends State<HopAut> {
             create: (_) => getIt<ChangePasswordProvider>(),
             lazy: true,
           ),
-          ChangeNotifierProvider<SearchPageController>(
-            create: (_) => SearchPageController(),
+          ChangeNotifierProvider<SearchPageProvider>(
+            create: (_) => SearchPageProvider(),
             lazy: true,
           ),
           ChangeNotifierProvider<EventProvider>(
             create: (_) => getIt<EventProvider>(),
             lazy: true,
-          )
+          ),
+          ChangeNotifierProvider<GeolocationProvider>(
+              create: (context) => getIt<GeolocationProvider>()),
         ],
         child: MaterialApp(
           builder: (context, child) {

@@ -6,7 +6,7 @@ import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/data/models/location.dart' as HopautLocation;
-import 'package:hopaut/services/location_service.dart';
+import 'package:hopaut/controllers/providers/location_provider.dart';
 
 enum SearchResultState {
   IDLE,
@@ -16,7 +16,7 @@ enum SearchResultState {
 }
 
 class MapLocationController extends ChangeNotifier {
-  LocationService locationManager = getIt<LocationService>();
+  GeolocationProvider locationManager = getIt<GeolocationProvider>();
   HereMapController _hereMapController;
   SearchEngine _searchEngine;
   SearchResultState searchResultState;

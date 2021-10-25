@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/event_list.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:hopaut/presentation/widgets/mini_post_card.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 
 class EventsListView extends StatelessWidget {
   final String listType;
@@ -15,10 +17,11 @@ class EventsListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       provider.fetchEventList(listType);
-
       return provider.eventsMap[listType].state == EventListState.loading
           ? Center(
-              child: CupertinoActivityIndicator(),
+              // TODO translation
+              child: overlayBlurBackgroundCircularProgressIndicator(
+                  context, 'Loading events'),
             )
           : provider.eventsMap[listType].state == EventListState.idle &&
                   provider.eventsMap[listType].events.isNotEmpty
@@ -60,7 +63,23 @@ class EventsListView extends StatelessWidget {
                     ],
                   ),
                 )
-              : Center(child: Text('No Events')); // TODO: translation
+              //: Center(child: Text('No Events')); // TODO: translation
+              : Center(
+                  child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/svg/no_events_found.svg',
+                      width: 100,
+                      height: 100,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text('No events found')
+                  ],
+                )); // TODO: translation
     });
   }
 }

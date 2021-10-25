@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,8 +88,8 @@ class _SettingsState extends State<Settings> {
                           ],
                         ),
                         child: Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
@@ -113,13 +112,13 @@ class _SettingsState extends State<Settings> {
                                     visible: Platform.isIOS,
                                     child: CupertinoSwitch(
                                       value: settingsMgr.pushNotifications,
-                                      onChanged: (v) =>
-                                          settingsMgr.togglePushNotifications(v),
+                                      onChanged: (v) => settingsMgr
+                                          .togglePushNotifications(v),
                                     ),
                                     replacement: Switch(
                                       value: settingsMgr.pushNotifications,
-                                      onChanged: (v) =>
-                                          settingsMgr.togglePushNotifications(v),
+                                      onChanged: (v) => settingsMgr
+                                          .togglePushNotifications(v),
                                     ),
                                   ),
                                   //onTap: () =>
@@ -163,13 +162,13 @@ class _SettingsState extends State<Settings> {
                                     });
                                   }),
                               InkWellButton(
-                                // TODO translation
+                                  // TODO translation
                                   'Delete Account',
-                                      () => showDialog(
+                                  () => showDialog(
                                       context: context,
                                       builder: (context) => CustomDialog(
-                                        pageWidget: DeleteAccountPopup(),
-                                      )),
+                                            pageWidget: DeleteAccountPopup(),
+                                          )),
                                   Colors.redAccent),
                               // TODO translation
                               SizedBox(
@@ -241,44 +240,10 @@ class _SettingsState extends State<Settings> {
             ),
           ),
           Visibility(
-            visible: widget.logoutStatus,
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.15),
-              ),
-              child: Center(
-                child: Container(
-                  margin: EdgeInsets.all(64.0),
-                  padding: EdgeInsets.all(16.0),
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  height: MediaQuery.of(context).size.height * 0.15,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 5,
-                          spreadRadius: 5,
-                        ),
-                      ]),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CupertinoActivityIndicator(),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      // TODO translation
-                      Text('Logging Out'),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+              visible: widget.logoutStatus,
+              // TODO translate
+              child: overlayBlurBackgroundCircularProgressIndicator(
+                  context, 'Logging out')),
         ],
       ),
     );
