@@ -28,7 +28,11 @@ class _CreateEventPageState extends State<CreateEventPage> {
   final formKey = GlobalKey<FormState>();
 
   ScrollController scrollController = ScrollController(keepScrollOffset: true);
-  bool isSaveEnabled = true;
+  TextEditingController titleController = TextEditingController();
+  TextEditingController startDateController = TextEditingController();
+  TextEditingController endDateController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController requirementsController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +66,17 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         Divider(),
                         FieldTitle(title: "Event Title"), //TODO: translation
                         valueInput(
-                          isStateValid: provider.isTitleValid,
+                          controller: titleController,
+                          isStateValid:
+                              provider.validateTitle(titleController.text),
                           initialValue: provider.post.event.title,
                           validationMessage:
                               "Please provide a valid title.", // TODO: translation
                           maxLength: Constraint.titleMaxLength,
-                          onChange: (v) => provider.validateTitle(v),
+                          onSaved: (value) =>
+                              provider.post.event.title = titleController.text,
+                          onChange: (value) =>
+                              provider.onFieldChange(titleController, value),
                           hintText: 'Event Title', //TODO: translation
                         ),
                         Divider(),
@@ -78,38 +87,49 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         TimePicker(
                             isValid: provider.isDateValid,
                             onConfirmStart: (startTime) =>
-                                provider.post.eventTime =
+                                startDateController.text =
                                     (startTime.toUtc().millisecondsSinceEpoch /
                                             1000)
-                                        .round(),
+                                        .round()
+                                        .toString(),
                             onConfirmEnd: (endTime) {
-                              provider.post.endTime =
+                              endDateController.text =
                                   (endTime.toUtc().millisecondsSinceEpoch /
                                           1000)
-                                      .round();
-                              provider.validateDates();
+                                      .round()
+                                      .toString();
+                              provider.validateDates(
+                                  startDateController, endDateController);
                             }),
                         FieldTitle(
                             title: "Event Description"), //TODO: translation
                         textAreaInput(
+                          controller: descriptionController,
                           validationMessage:
                               "Please provide a valid description.", // TODO: translation
-                          isStateValid: provider.isDescriptionValid,
+                          isStateValid: provider
+                              .validateDescription(descriptionController.text),
                           initialValue: provider.post.event.description,
                           maxLength: Constraint.descriptionMaxLength,
-                          onChange: (v) => provider.validateDescription(v),
+                          onSaved: (value) => provider.post.event.description =
+                              descriptionController.text,
+                          onChange: (value) => provider.onFieldChange(
+                              descriptionController, value),
                           hintText: 'Event Description', //TODO: translation
                         ),
                         FieldTitle(
                             title: "Event Requirements"), //TODO: translation
                         textAreaInput(
+                          controller: requirementsController,
                           validationMessage: "",
-                          isStateValid: true,
+                          isStateValid: provider.validateRequirements(
+                              requirementsController.text),
                           initialValue: provider.post.event.requirements,
                           maxLength: Constraint.requirementsMaxLength,
-                          onChange: (v) => () {
-                            provider.validateRequirements(v);
-                          },
+                          onSaved: (value) => provider.post.event.requirements =
+                              requirementsController.text,
+                          onChange: (value) => provider.onFieldChange(
+                              requirementsController, value),
                           hintText:
                               'Event Requirements (Optional)', //TODO: translation
                         ),
@@ -124,17 +144,19 @@ class _CreateEventPageState extends State<CreateEventPage> {
                             context: context,
                             isStateValid: true,
                             onPressed: () async {
-                              if (provider.isFormValid(
-                                  formKey, isSaveEnabled)) {
+                              if (provider.isFormValid(formKey,
+                                  startDateController, endDateController)) {
                                 formKey.currentState.save();
+                                provider.post.eventTime =
+                                    int.parse(startDateController.text);
+                                provider.post.endTime =
+                                    int.parse(endDateController.text);
                                 MiniPost postRes = await provider.createEvent();
-                                setState(() => isSaveEnabled = false);
                                 if (postRes != null) {
                                   Application.router.navigateTo(
                                       context, '/event/${postRes.postId}',
                                       replace: true);
                                 } else {
-                                  setState(() => isSaveEnabled = true);
                                   Fluttertoast.showToast(
                                       msg:
                                           "Unable to create event"); //TODO: translation

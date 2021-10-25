@@ -66,8 +66,8 @@ class _TimePickerState extends State<TimePicker> {
               if (startDate != null) {
                 await DatePicker.showDateTimePicker(context,
                     showTitleActions: true,
-                    minTime: startDate.add(Duration(minutes: 45)),
-                    maxTime: startDate.add(Duration(hours: 12)),
+                    minTime: startDate.add(Duration(minutes: 30)),
+                    maxTime: startDate.add(Duration(hours: 12, minutes: 30)),
                     onConfirm: (date) {
                   setState(() {
                     endDate = date;

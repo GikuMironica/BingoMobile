@@ -95,8 +95,9 @@ class Post {
     return data;
   }
 
-  Future<Map<String, dynamic>> toMultipartJson() async {
+  Future<Map<String, dynamic>> toMultipartJson(bool isUpdate) async {
     final Map<String, dynamic> data = Map<String, dynamic>();
+    String eventPrefix = isUpdate ? "UpdatedEvent" : "Event";
     data['EventTime'] = this.eventTime;
     data['EndTime'] = this.endTime;
     if (this.location != null) {
@@ -109,28 +110,35 @@ class Post {
       data['UserLocation.Country'] = this.location.country;
     }
     if (this.event != null) {
-      data['Event.Description'] = this.event.description;
-      data['Event.Requirements'] = this.event.requirements;
-      data['Event.Slots'] = this.event.slots;
-      data['Event.Title'] = this.event.title;
-      data['Event.Currency'] =
+      data['$eventPrefix.Description'] = this.event.description;
+      data['$eventPrefix.Requirements'] = this.event.requirements;
+      data['$eventPrefix.Slots'] = this.event.slots;
+      data['$eventPrefix.Title'] = this.event.title;
+      data['$eventPrefix.Currency'] =
           this.event.currency != null ? this.event.currency.index : null;
-      data['Event.EntrancePrice'] = this.event.entrancePrice;
-      data['Event.EventType'] = this.event.eventType.index;
+      data['$eventPrefix.EntrancePrice'] = this.event.entrancePrice;
+      data['$eventPrefix.EventType'] = this.event.eventType.index;
     }
     if (pictures.isNotEmpty) {
       String mimeType = mimeFromExtension('webp');
       String mimee = mimeType.split('/')[0];
       String type = mimeType.split('/')[1];
-
+      List<String> ramainingGuids = [];
       for (int i = 0; i < pictures.length; i++) {
-        data['Picture${i + 1}'] = await MultipartFile.fromFile(
-            File(pictures[i].path).absolute.path,
-            filename: '${i + 1}.webp',
-            contentType: MediaType(mimee, type));
+        if (pictures[i].path.contains("/")) {
+          data['Picture${i + 1}'] = await MultipartFile.fromFile(
+              File(pictures[i].path).absolute.path,
+              filename: '${i + 1}.webp',
+              contentType: MediaType(mimee, type));
+        } else {
+          ramainingGuids.add(pictures[i].path);
+        }
+      }
+      if (ramainingGuids.isNotEmpty) {
+        data["RemainingImagesGuids"] = ramainingGuids;
       }
     }
-    data['Tags'] = this.tags ?? null;
+    data[isUpdate ? 'TagNames' : 'Tags'] = this.tags ?? null;
     return data;
   }
 

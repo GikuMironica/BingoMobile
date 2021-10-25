@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/widgets/clock_icons.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';

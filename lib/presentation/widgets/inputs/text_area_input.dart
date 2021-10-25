@@ -8,6 +8,7 @@ Widget textAreaInput(
     @required void Function(String) onChange,
     @required int maxLength,
     TextEditingController controller,
+    FormFieldSetter<String> onSaved,
     String hintText}) {
   return Stack(
     children: [
@@ -30,6 +31,7 @@ Widget textAreaInput(
             // TODO translation
             isStateValid ? null : validationMessage,
         onChanged: onChange,
+        onSaved: onSaved,
         maxLines: 7,
         maxLengthEnforced: true,
         maxLength: maxLength,
