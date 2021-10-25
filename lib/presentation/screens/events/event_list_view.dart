@@ -63,18 +63,22 @@ class EventsListView extends StatelessWidget {
                     ],
                   ),
                 )
+              //: Center(child: Text('No Events')); // TODO: translation
               : Center(
-                  child: Container(
-                  child: Stack(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/icons/svg/no_events_found',
-                        width: 100,
-                        height: 100,
-                      ),
-                      Text('No events found')
-                    ],
-                  ),
+                  child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/svg/no_events_found.svg',
+                      width: 100,
+                      height: 100,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text('No events found')
+                  ],
                 )); // TODO: translation
     });
   }
