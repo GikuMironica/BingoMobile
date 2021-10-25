@@ -29,7 +29,7 @@ class EventRepository extends Repository {
 
   Future<MiniPost> create(Post post) async {
     try {
-      FormData _data = FormData.fromMap(await post.toMultipartJson());
+      FormData _data = FormData.fromMap(await post.toMultipartJson(false));
       Response response = await dio.post(API.POSTS,
           data: _data,
           options: Options(headers: {
@@ -48,7 +48,7 @@ class EventRepository extends Repository {
   /// Update Post
   Future<bool> update(Post post) async {
     try {
-      FormData data = FormData.fromMap(await post.toMultipartJson());
+      FormData data = FormData.fromMap(await post.toMultipartJson(true));
       dio.options.headers.addAll({
         Headers.contentTypeHeader: 'multipart/form-data',
       });

@@ -22,18 +22,18 @@ class _EventTypeListState extends State<EventTypeList> {
       FieldTitle(title: "Event Type"), //TODO: translation
       DropDownWidget<String>(
         onChanged: (String v) {
-          setState(() {
-            widget.post.event.eventType = eventTypeStrings.keys.firstWhere(
-                (key) => eventTypeStrings[key] == v,
-                orElse: () => widget.post.event.eventType);
-          });
+          setState(() {});
         },
         list: eventTypeStrings.values.toList(),
         hintText: 'Event Type', //TODO: translation
-        validator: (v) => widget.post.event.eventType == null
+        validator: (v) => v == null
             ? 'Event Type is required' //TODO: translation
             : null,
-        onSaved: (v) {},
+        onSaved: (v) {
+          widget.post.event.eventType = eventTypeStrings.keys.firstWhere(
+              (key) => eventTypeStrings[key] == v,
+              orElse: () => widget.post.event.eventType);
+        },
       ),
       widget.post.event.eventType == EventType.houseParty
           ? EventTextField(

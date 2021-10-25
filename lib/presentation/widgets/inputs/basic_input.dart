@@ -5,9 +5,10 @@ Widget valueInput(
     {@required bool isStateValid,
     @required String validationMessage,
     @required String initialValue,
-    @required void Function(String) onChange,
     @required int maxLength,
+    void Function(String) onChange,
     TextEditingController controller,
+    FormFieldSetter<String> onSaved,
     String hintText}) {
   return Stack(
     children: [
@@ -28,6 +29,7 @@ Widget valueInput(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (value) => isStateValid ? null : validationMessage,
         onChanged: onChange,
+        onSaved: onSaved,
         maxLines: 1,
         maxLengthEnforced: true,
         maxLength: maxLength,

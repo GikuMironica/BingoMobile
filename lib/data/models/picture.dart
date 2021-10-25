@@ -17,9 +17,7 @@ class Picture {
     }
   }
 
-  ImageProvider get image {
-    return _image == null ? CachedNetworkImage(imageUrl: _url,) : _image;
-  }
+  ImageProvider get image => _image;
 
   String get path => _path;
   String get url => _url;
