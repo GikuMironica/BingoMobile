@@ -136,9 +136,7 @@ class _HopAutState extends State<HopAut> {
             lazy: true,
           ),
           ChangeNotifierProvider<EventProvider>(
-            create: (_) => EventProvider(
-                eventRepository: getIt<EventRepository>(),
-                tagRepository: getIt<TagRepository>()),
+            create: (_) => getIt<EventProvider>(),
             lazy: true,
           )
         ],

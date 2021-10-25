@@ -11,9 +11,11 @@ import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/data/repositories/tag_repository.dart';
 import 'package:hopaut/utils/image_utilities.dart';
+import 'package:injectable/injectable.dart';
 
 enum EventProviderStatus { Idle, Loading, Error }
 
+@lazySingleton
 class EventProvider extends ChangeNotifier {
   EventRepository _eventRepository;
   TagRepository _tagRepository;
@@ -21,10 +23,7 @@ class EventProvider extends ChangeNotifier {
   Post _post;
   int _miniPostContextId;
 
-  bool isTitleValid = false;
   bool isDateValid = true;
-  bool isDescriptionValid = false;
-  bool isRequirementsValid = true;
 
   EventListState eventLoadingState = EventListState.notYetLoaded;
 
@@ -130,45 +129,46 @@ class EventProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void validateTitle(String value) {
-    isTitleValid = value != null &&
+  bool validateTitle(String value) {
+    return value != null &&
         value.characters.length > 0 &&
         value.characters.length <= Constraint.titleMaxLength;
-    post.event.title = isTitleValid ? value : post.event.title;
+  }
+
+  void validateDates(TextEditingController startDateController,
+      TextEditingController endDateController) {
+    isDateValid = startDateController.text.isNotEmpty &&
+        endDateController.text.isNotEmpty;
     notifyListeners();
   }
 
-  void validateDates() {
-    isDateValid = post.eventTime != null && post.endTime != null;
-    notifyListeners();
-  }
-
-  void validateDescription(String value) {
-    isDescriptionValid = value != null &&
+  bool validateDescription(String value) {
+    return value != null &&
         value.characters.length >= Constraint.descriptionMinLength &&
         value.characters.length <= Constraint.descriptionMaxLength;
-    post.event.description =
-        isDescriptionValid ? value : post.event.description;
+  }
+
+  bool validateRequirements(String value) {
+    return value.characters.length <= Constraint.requirementsMaxLength;
+  }
+
+  void onFieldChange(TextEditingController controller, String value) {
+    controller.text = value;
     notifyListeners();
   }
 
-  void validateRequirements(String value) {
-    isRequirementsValid =
-        value.characters.length <= Constraint.requirementsMaxLength;
-    post.event.requirements =
-        isRequirementsValid ? value : post.event.requirements;
+  Future<Picture> selectPicture() async {
+    return await choosePicture();
   }
 
-  Future<Picture> selectPicture(int index) async {
-    return await choosePicture(index);
-  }
-
-  bool isFormValid(GlobalKey<FormState> formKey, bool isSaveEnabled) {
+  bool isFormValid(
+      GlobalKey<FormState> formKey,
+      TextEditingController startDateController,
+      TextEditingController endDateController) {
     post.location =
         Location(id: 100, latitude: 48.405218, longitude: 10.001187);
-    validateDates();
+    validateDates(startDateController, endDateController);
     return formKey.currentState.validate() &&
-        isSaveEnabled &&
         post.location != null &&
         isDateValid;
   }
