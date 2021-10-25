@@ -63,7 +63,6 @@ class EventsListView extends StatelessWidget {
                     ],
                   ),
                 )
-              //: Center(child: Text('No Events')); // TODO: translation
               : Center(
                   child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

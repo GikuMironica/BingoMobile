@@ -106,8 +106,7 @@ class SearchPageProvider extends ChangeNotifier {
     await _locationManager.getCurrentLocation();
     searchQuery.longitude = _locationManager.currentPosition.longitude;
     searchQuery.latitude = _locationManager.currentPosition.latitude;
-    if (_filterToggled) toggleFilter();
-
+    clearSearch();
     _searchResults = await _eventRepository.search(searchQuery);
     if (_searchResults != null) {
       setPageState(SearchPageState.HAS_SEARCH_RESULTS);
@@ -128,10 +127,11 @@ class SearchPageProvider extends ChangeNotifier {
     for (MapMarker mapMarker in _mapMarkerList) {
       _hereMapController.mapScene.removeMapMarker(mapMarker);
     }
-    _searchResults.clear();
-    _cardList.clear();
-    _mapMarkerList.clear();
-    setPageState(SearchPageState.IDLE);
+    _searchResults?.clear();
+    _cardList?.clear();
+    _mapMarkerList?.clear();
+    notifyListeners();
+    //setPageState(SearchPageState.IDLE);
   }
 
   void toggleFilter() {

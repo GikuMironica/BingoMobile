@@ -5,13 +5,13 @@ import 'package:hopaut/config/constants/web.dart';
 class Picture {
   String _path;
   String _url;
-  ImageProvider _image;
+  CachedNetworkImageProvider _image;
 
   Picture(String path, [ImageProvider image]) {
     _path = path;
     _url = "${WEB.IMAGES}/$_path.webp";
     if (image == null) {
-      _image = NetworkImage(_url);
+      _image = CachedNetworkImageProvider(_url);
     } else {
       _image = image;
     }
