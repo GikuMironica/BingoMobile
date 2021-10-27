@@ -15,6 +15,14 @@ class Tags extends StatefulWidget {
 }
 
 class _TagsState extends State<Tags> {
+  List<String> tags;
+
+  @override
+  void initState() {
+    super.initState();
+    tags = widget.post.tags;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,11 +46,11 @@ class _TagsState extends State<Tags> {
           child: Wrap(
               spacing: 8.0,
               runSpacing: 4.0,
-              children: widget.post.tags
+              children: tags
                   .map((tag) => TagChip(
                         tag: tag,
                         onDelete: () {
-                          setState(() => widget.post.tags.remove(tag));
+                          setState(() => tags.remove(tag));
                         },
                       ))
                   .toList()),
@@ -51,23 +59,22 @@ class _TagsState extends State<Tags> {
           height: 48,
           margin: EdgeInsets.only(bottom: 24.0),
           decoration: BoxDecoration(
-            color: widget.post.tags.length >= 5
-                ? Colors.grey[400]
-                : Colors.grey[200],
+            color: tags.length >= 5 ? Colors.grey[400] : Colors.grey[200],
             borderRadius: BorderRadius.circular(8),
           ),
           child: TypeAheadFormField(
+            onSaved: (value) => widget.post.tags = tags,
             hideOnError: false,
             hideOnEmpty: true,
             textFieldConfiguration: TextFieldConfiguration(
-                enabled: widget.post.tags.length >= 5 ? false : true,
+                enabled: tags.length >= 5 ? false : true,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(12.0),
                     hintText: 'Add tags', //TODO: translation
                     border: InputBorder.none)),
             suggestionsCallback: (pattern) async {
-              return await widget.getTagSuggestions(pattern, widget.post.tags);
+              return await widget.getTagSuggestions(pattern, tags);
             },
             itemBuilder: (context, suggestion) {
               return ListTile(
@@ -78,9 +85,7 @@ class _TagsState extends State<Tags> {
               return suggestionsBox;
             },
             onSuggestionSelected: (suggestion) {
-              widget.post.tags.contains(suggestion)
-                  ? null
-                  : widget.post.tags.add(suggestion);
+              tags.contains(suggestion) ? null : tags.add(suggestion);
             },
           ),
         ),

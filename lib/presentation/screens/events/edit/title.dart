@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/inputs/basic_input.dart';
@@ -71,10 +72,10 @@ class _EditPostTitleState extends State<EditPostTitle> {
                           color: Colors.green),
                       width: MediaQuery.of(context).size.width * 0.9,
                       height: 50,
-                      child: RawMaterialButton(
-                          shape: CircleBorder(),
-                          elevation: 1,
-                          child: Text('Save Title'),
+                      child: authButton(
+                          label: "Save", //TODO: translation
+                          context: context,
+                          isStateValid: true,
                           onPressed: () async {
                             if (formKey.currentState.validate()) {
                               formKey.currentState.save();
@@ -85,11 +86,13 @@ class _EditPostTitleState extends State<EditPostTitle> {
                                     .events[provider.miniPostContextId]
                                     .title = provider.post.event.title;
                                 Fluttertoast.showToast(
-                                    msg: 'Event Title updated');
+                                    msg:
+                                        'Event Title updated'); //TODO: translation
                                 Application.router.pop(context);
                               } else {
                                 Fluttertoast.showToast(
-                                    msg: 'Unable to update title.');
+                                    msg:
+                                        'Unable to update title.'); //TODO: translation
                               }
                             }
                           }),

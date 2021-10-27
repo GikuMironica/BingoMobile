@@ -7,6 +7,7 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/screens/events/create/time_picker.dart';
+import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/services/date_formatter_service.dart';
@@ -67,10 +68,10 @@ class _EditPostTimeState extends State<EditPostTime> {
                       color: Colors.green),
                   width: MediaQuery.of(context).size.width * 0.9,
                   height: 50,
-                  child: RawMaterialButton(
-                      shape: CircleBorder(),
-                      elevation: 1,
-                      child: Text('Save Time'),
+                  child: authButton(
+                      label: "Save", //TODO: translation
+                      context: context,
+                      isStateValid: true,
                       onPressed: () async {
                         if (provider.isDateValid) {
                           provider.post.eventTime =
@@ -83,11 +84,13 @@ class _EditPostTimeState extends State<EditPostTime> {
                                 .eventsMap[API.MY_ACTIVE]
                                 .events[provider.miniPostContextId]
                                 .title = provider.post.event.title;
-                            Fluttertoast.showToast(msg: 'Event Time updated');
+                            Fluttertoast.showToast(
+                                msg: 'Event Time updated'); //TODO: translation
                             Application.router.pop(context);
                           } else {
                             Fluttertoast.showToast(
-                                msg: 'Unable to update time.');
+                                msg:
+                                    'Unable to update time.'); //TODO: translation
                           }
                         }
                       }),

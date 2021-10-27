@@ -5,6 +5,7 @@ import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
+import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/inputs/text_area_input.dart';
@@ -73,21 +74,23 @@ class _EditPostDescriptionState extends State<EditPostDescription> {
                           color: Colors.green),
                       width: MediaQuery.of(context).size.width * 0.9,
                       height: 50,
-                      child: RawMaterialButton(
-                          shape: CircleBorder(),
-                          elevation: 1,
-                          child: Text('Save Description'),
+                      child: authButton(
+                          label: "Save", //TODO: translation
+                          context: context,
+                          isStateValid: true,
                           onPressed: () async {
                             if (formKey.currentState.validate()) {
                               formKey.currentState.save();
                               bool res = await provider.updateEvent();
                               if (res) {
                                 Fluttertoast.showToast(
-                                    msg: 'Event Description updated');
+                                    msg:
+                                        'Event Description updated'); //TODO: translation
                                 Application.router.pop(context);
                               } else {
                                 Fluttertoast.showToast(
-                                    msg: 'Unable to update description.');
+                                    msg:
+                                        'Unable to update description.'); //TODO: translation
                               }
                             }
                           }),

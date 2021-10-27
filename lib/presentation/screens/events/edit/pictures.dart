@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/screens/events/create/picture_list.dart';
+import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:provider/provider.dart';
@@ -50,10 +51,10 @@ class EditPostPictures extends StatelessWidget {
                           color: Colors.grey[200]),
                       width: MediaQuery.of(context).size.width * 0.9,
                       height: 50,
-                      child: RawMaterialButton(
-                        shape: CircleBorder(),
-                        elevation: 1,
-                        child: Text('Save Pictures'),
+                      child: authButton(
+                        label: "Save", //TODO: translation
+                        context: context,
+                        isStateValid: true,
                         onPressed: () async {
                           if (formKey.currentState.validate()) {
                             formKey.currentState.save();
@@ -67,11 +68,13 @@ class EditPostPictures extends StatelessWidget {
                                       AssetImage(
                                           'assets/images/bg_placeholder.jpg');
                               Fluttertoast.showToast(
-                                  msg: 'Event Pictures updated');
+                                  msg:
+                                      'Event Pictures updated'); //TODO: translation
                               Application.router.pop(context);
                             } else {
                               Fluttertoast.showToast(
-                                  msg: 'Unable to update pictures.');
+                                  msg:
+                                      'Unable to update pictures.'); //TODO: translation
                             }
                           }
                         },
