@@ -60,10 +60,7 @@ class EditPostPictures extends StatelessWidget {
                             formKey.currentState.save();
                             bool res = await provider.updateEvent();
                             if (res) {
-                              provider
-                                      .eventsMap[API.MY_ACTIVE]
-                                      .events[provider.miniPostContextId]
-                                      .thumbnail =
+                              provider.miniPost.thumbnail =
                                   provider.post.pictures[0] ??
                                       AssetImage(
                                           'assets/images/bg_placeholder.jpg');

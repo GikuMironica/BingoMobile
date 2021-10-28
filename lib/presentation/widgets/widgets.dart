@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants/web.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fluro/fluro.dart';
@@ -165,6 +166,14 @@ SnackBar _errorSnackBar(String message) {
       behavior: SnackBarBehavior.floating,
       duration: Duration(seconds: 4),
       backgroundColor: HATheme.HOPAUT_PINK);
+}
+
+void showNewErrorSnackbar(String message) {
+  Fluttertoast.showToast(
+      backgroundColor: Color(0xFFed2f65),
+      textColor: Colors.white,
+      toastLength: Toast.LENGTH_LONG,
+      msg: message);
 }
 
 void showSuccessSnackBar(

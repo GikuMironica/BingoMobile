@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/api.dart';
 import 'package:hopaut/config/constants/constraint.dart';
+import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/data/models/event_list.dart';
 import 'package:hopaut/data/models/location.dart';
 import 'package:hopaut/data/models/mini_post.dart';
@@ -21,29 +22,30 @@ class EventProvider extends ChangeNotifier {
   TagRepository _tagRepository;
   HashMap<String, EventList> _eventsMap;
   Post _post;
-  int _miniPostContextId;
+  MiniPost _miniPost;
 
   bool isDateValid = true;
 
-  EventListState eventLoadingState = EventListState.notYetLoaded;
+  BaseFormStatus eventLoadingStatus;
 
   EventProvider(
       {EventRepository eventRepository, TagRepository tagRepository}) {
     _eventRepository = eventRepository;
     _tagRepository = tagRepository;
     _initEventMap();
+    eventLoadingStatus = Idle();
   }
 
   HashMap<String, EventList> get eventsMap => _eventsMap;
   Post get post => _post;
-  int get miniPostContextId => _miniPostContextId;
+  MiniPost get miniPost => _miniPost;
 
   void setPost(Post post) {
     _post = post;
   }
 
-  void setMiniPostContext(int id) {
-    _miniPostContextId = id;
+  void setMiniPost(int index, String listType) {
+    _miniPost = _eventsMap[listType].events[index];
   }
 
   Future<void> fetchEventList(String type) async {
@@ -63,18 +65,24 @@ class EventProvider extends ChangeNotifier {
 
   // TODO: Make to submethods for create and update
   Future<MiniPost> createEvent() async {
+    eventLoadingStatus = Submitted();
+    notifyListeners();
     if (_eventsMap[API.MY_ACTIVE] != null) {
       MiniPost miniPost = await _eventRepository.create(post);
       _eventsMap[API.MY_ACTIVE].events.insert(0, miniPost);
+      eventLoadingStatus = Idle();
       return miniPost;
     }
     return null;
   }
 
   Future<bool> updateEvent() async {
+    eventLoadingStatus = Submitted();
+    notifyListeners();
     bool result = false;
     if (post != null) {
       result = await _eventRepository.update(post);
+      eventLoadingStatus = Idle();
     }
     return result;
   }

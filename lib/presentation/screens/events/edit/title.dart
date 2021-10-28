@@ -81,10 +81,8 @@ class _EditPostTitleState extends State<EditPostTitle> {
                               formKey.currentState.save();
                               bool res = await provider.updateEvent();
                               if (res) {
-                                provider
-                                    .eventsMap[API.MY_ACTIVE]
-                                    .events[provider.miniPostContextId]
-                                    .title = provider.post.event.title;
+                                provider.miniPost.title =
+                                    provider.post.event.title;
                                 Fluttertoast.showToast(
                                     msg:
                                         'Event Title updated'); //TODO: translation

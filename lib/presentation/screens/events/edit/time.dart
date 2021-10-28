@@ -80,10 +80,7 @@ class _EditPostTimeState extends State<EditPostTime> {
                               int.parse(endDateController.text);
                           bool res = await provider.updateEvent();
                           if (res) {
-                            provider
-                                .eventsMap[API.MY_ACTIVE]
-                                .events[provider.miniPostContextId]
-                                .title = provider.post.event.title;
+                            provider.miniPost.title = provider.post.event.title;
                             Fluttertoast.showToast(
                                 msg: 'Event Time updated'); //TODO: translation
                             Application.router.pop(context);

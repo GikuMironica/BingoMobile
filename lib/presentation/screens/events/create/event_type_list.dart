@@ -19,7 +19,6 @@ class _EventTypeListState extends State<EventTypeList> {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      FieldTitle(title: "Event Type"), //TODO: translation
       DropDownWidget<String>(
         onChanged: (String v) {
           setState(() {});

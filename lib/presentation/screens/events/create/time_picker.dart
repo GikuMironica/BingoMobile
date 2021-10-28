@@ -25,7 +25,6 @@ class _TimePickerState extends State<TimePicker> {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          FieldTitle(title: "Time"), //TODO: translation
           InkWell(
             onTap: () async {
               DateTime minTime = DateTime.now().add(Duration(minutes: 15));

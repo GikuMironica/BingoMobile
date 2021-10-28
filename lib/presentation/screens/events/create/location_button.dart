@@ -13,29 +13,23 @@ class LocationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        FieldTitle(title: "Event Location"), //TODO: translation
-        InkWell(
-          onTap: () => Application.router
-              .navigateTo(context, Routes.searchByMap)
-              .then((value) => () {
-                    post.location = value as Location;
-                  }),
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(12.0),
-            height: 48,
-            margin: EdgeInsets.only(bottom: 24.0),
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(post.location?.address ?? ''),
-          ),
+    return InkWell(
+      onTap: () => Application.router
+          .navigateTo(context, Routes.searchByMap)
+          .then((value) => () {
+                post.location = value as Location;
+              }),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(12.0),
+        height: 48,
+        margin: EdgeInsets.only(bottom: 24.0),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(8),
         ),
-      ],
+        child: Text(post.location?.address ?? ''),
+      ),
     );
   }
 }
