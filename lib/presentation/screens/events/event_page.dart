@@ -154,11 +154,14 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
           checkForImages();
         });
       }
-      return provider.eventLoadingStatus is Submitted
-          ? Center(
-              // TODO translation
-              child: overlayBlurBackgroundCircularProgressIndicator(
-                  context, 'Loading event'),
+      return provider.eventLoadingStatus == EventListState.loading
+          ? Scaffold(
+              body: Container(
+                child: overlayBlurBackgroundCircularProgressIndicator(
+                    // TODO translations
+                    context,
+                    "Loading event data"),
+              ),
             )
           : Scaffold(
               floatingActionButton: Visibility(
@@ -188,7 +191,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                               ? _postImages
                               : [
                                   AssetImage(
-                                      'assets/images/bg_placeholder.jpg'),
+                                      'assets/icons/event_default_image.png'),
                                 ],
                           dotSize: 4.0,
                           dotSpacing: 15.0,

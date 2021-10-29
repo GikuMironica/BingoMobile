@@ -49,12 +49,19 @@ class SearchPageProvider extends ChangeNotifier {
   double initialDistanceToEarth = 3000;
 
   CarouselController carouselController;
+
   HereMapController get mapController => _hereMapController;
+
   List<Widget> get cardList => _cardList;
+
   bool get filter => _filterToggled;
+
   List<MiniPost> get searchResults => _searchResults;
+
   MapState get mapState => _mapState;
+
   SearchPageState get pageState => _pageState;
+
   bool get hasFocus => _hasFocus;
   BuildContext context;
 
@@ -90,7 +97,7 @@ class SearchPageProvider extends ChangeNotifier {
             onTap: () => pushNewScreen(context,
                 screen: EventPage(postId: mp.postId),
                 withNavBar: false,
-                pageTransitionAnimation: PageTransitionAnimation.fade),
+                pageTransitionAnimation: PageTransitionAnimation.scale),
             child: MiniPostCard(miniPost: mp),
           ));
         }
@@ -240,6 +247,10 @@ class SearchPageProvider extends ChangeNotifier {
   void filterToggleToday() {
     searchQuery.today = !searchQuery.today;
     notifyListeners();
+  }
+
+  void updateTag(String v) {
+    searchQuery.tag = v;
   }
 
   @override

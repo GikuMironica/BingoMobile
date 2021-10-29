@@ -32,11 +32,11 @@ class MapLocationController extends ChangeNotifier {
     Map<String, dynamic> map = Map();
     map['placeType'] = place.type.toString();
     map['EntityName'] = (place.type == PlaceType.street)
-        ? place.address.streetName
+        ? place.address.street
         : (place.type == PlaceType.houseNumber)
-            ? '${place.address.streetName} ${place.address.houseNumOrName}'
+            ? '${place.address.street} ${place.address.houseNumOrName}'
             : place.title;
-    map['Address'] = place.address.streetName;
+    map['Address'] = place.address.street;
     if (place.address.houseNumOrName.isNotEmpty)
       map['Address'] = '${map['Address']} ${place.address.houseNumOrName}';
     map['City'] = place.address.city;
@@ -112,7 +112,7 @@ class MapLocationController extends ChangeNotifier {
       GeoCircle geoCircle = GeoCircle(
           GeoCoordinates(locationManager.currentPosition.latitude,
               locationManager.currentPosition.longitude),
-          15000);
+          50000);
       TextQuery textQuery = TextQuery.withCircleArea(pattern, geoCircle);
       _searchEngine.searchByText(textQuery, SearchOptions.withDefaults(),
           (error, List<Place> suggestion) {
@@ -123,7 +123,7 @@ class MapLocationController extends ChangeNotifier {
             PlaceType.unit,
             PlaceType.houseNumber
           ].contains(p.type)) {
-            if (p.address.streetName.isNotEmpty) suggestionResult.add(p);
+            if (p.address.street.isNotEmpty) suggestionResult.add(p);
           }
         }
       });
