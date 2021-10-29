@@ -154,7 +154,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
           checkForImages();
         });
       }
-      return provider.eventLoadingStatus == EventListState.loading
+      return provider.eventLoadingStatus is Submitted
           ? Scaffold(
               body: Container(
                 child: overlayBlurBackgroundCircularProgressIndicator(
