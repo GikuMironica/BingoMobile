@@ -29,9 +29,10 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
             children: [
               Row(
                 children: [
-                  Icon(
-                    Ionicons.search_outline,
-                    color: Color(0xFFED2F65),
+                  IconButton(
+                    icon: const Icon(Ionicons.search_outline,
+                        color: Color(0xFFED2F65)),
+                    onPressed: () async => await provider.searchEvents(),
                   ),
                   VerticalDivider(
                     width: 3,
@@ -39,11 +40,13 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                   ),
                   Expanded(
                     child: TextField(
+                      onChanged: (v) => provider.updateTag(v),
                       //focusNode: _focusNode,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.only(left: 8.0),
-                        hintText: 'Search for events',
+                        // TODO translation
+                        hintText: 'Search for events by tag',
                         hintStyle: TextStyle(
                           color: Color(0xFF818181).withOpacity(0.69),
                           fontSize: 14.0,
@@ -73,7 +76,8 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                       ),
                       SizedBox(height: 4.0),
                       Text(
-                        'Select Type:',
+                        // TODO translation
+                        'Event Type:',
                         style: TextStyle(
                           color: Color(0xFF2A2A2A),
                           fontSize: 12.0,
@@ -160,6 +164,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
+                            // TODO translation
                             'Happening Today',
                             style: TextStyle(
                                 fontWeight: FontWeight.w500, fontSize: 12.0),
@@ -168,10 +173,6 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                               value: provider.searchQuery.today,
                               onChanged: (v) => provider.filterToggleToday()),
                         ],
-                      ),
-                      RaisedButton(
-                        child: Text('Search'),
-                        onPressed: () async => await provider.searchEvents(),
                       ),
                       SizedBox(height: 16.0),
                     ],

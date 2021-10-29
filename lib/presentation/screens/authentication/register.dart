@@ -8,7 +8,7 @@ import 'package:hopaut/controllers/blocs/register/register_event.dart';
 import 'package:hopaut/controllers/blocs/register/register_page_status.dart';
 import 'package:hopaut/controllers/blocs/register/register_state.dart';
 import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
-import 'package:hopaut/presentation/widgets/fullscreen_dialog.dart';
+import 'package:hopaut/presentation/widgets/dialogs/fullscreen_dialog.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
 import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';

@@ -22,7 +22,7 @@ class SearchQuery {
     }
   }
 
-  // TODO not used
+  // Do not modify
   String toString() {
     String x = "";
 
@@ -34,11 +34,12 @@ class SearchQuery {
         if (v.length == 0) return null;
       }
       x = x + '&$k=$v';
+      x = x.replaceAll('EventType', '');
     });
     return x.replaceFirst('&', '');
   }
 
-  // TODO not used
+  // Do not modify
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['UserLocation.Latitude'] = this.latitude;

@@ -5,7 +5,7 @@ import 'package:hopaut/presentation/screens/account/account_page.dart';
 import 'package:hopaut/presentation/screens/search/search.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:hopaut/presentation/widgets/fullscreen_dialog.dart';
+import 'package:hopaut/presentation/widgets/dialogs/fullscreen_dialog.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/presentation/widgets/hopaut_btm_nav_bar/hopaut_nav_bar_item.dart';

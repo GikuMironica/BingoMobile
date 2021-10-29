@@ -58,7 +58,7 @@ class MiniPostCard extends StatelessWidget {
                     image: DecorationImage(
                       image: miniPost.thumbnail != null
                           ? miniPost.thumbnail.image
-                          : AssetImage('assets/images/bg_placeholder.jpg'),
+                          : AssetImage('assets/icons/event_default_image.png'),
                       fit: BoxFit.cover,
                     )),
               ),
