@@ -59,27 +59,6 @@ class MiniPost {
     slots = json['Slots'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['PostId'] = this.postId;
-    data['PostType'] = this.postType.index;
-    data['Thumbnail'] = this.thumbnail.path;
-    data['Address'] = this.address;
-    data['Title'] = this.title;
-    data['HostRating'] = this.hostRating;
-    data['Latitude'] = this.latitude;
-    data['Logitude'] = this.longitude;
-    data['RepteatableEnabled'] = this.repteatableEnabled;
-    data['Frequency'] = this.frequency;
-    data['VouchersEnabled'] = this.vouchersEnabled;
-    data['PostTime'] = this.postTime;
-    data['StartTime'] = this.startTime;
-    data['EndTime'] = this.endTime;
-    data['EntracePrice'] = this.entracePrice;
-    data['Slots'] = this.slots;
-    return data;
-  }
-
   String get getStartTime =>
       getIt<DateFormatterService>().formatDateTime(startTime);
   DateTime get getPostTimeAsDT =>
