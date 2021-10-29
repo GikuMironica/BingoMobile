@@ -260,7 +260,7 @@ class _SettingsState extends State<Settings> {
 
   void changePage(String path) {
     Application.router
-        .navigateTo(context, path, transition: TransitionType.fadeIn);
+        .navigateTo(context, path, transition: TransitionType.cupertino);
   }
 }
 

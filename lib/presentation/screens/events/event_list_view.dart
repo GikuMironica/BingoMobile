@@ -44,7 +44,7 @@ class EventsListView extends StatelessWidget {
                           delegate: SliverChildBuilderDelegate(
                             (ctx, index) => InkWell(
                               onTap: () async {
-                                provider.setMiniPostContext(index);
+                                provider.setMiniPost(index, listType);
                                 int id = provider
                                     .eventsMap[listType].events[index].postId;
                                 await Application.router

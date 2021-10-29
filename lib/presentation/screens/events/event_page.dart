@@ -5,6 +5,7 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/data/models/event_list.dart';
 import 'package:hopaut/data/models/picture.dart';
 import 'package:hopaut/data/models/post.dart';
@@ -26,6 +27,7 @@ import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/image_screen/image_screen.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/services/date_formatter_service.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -144,17 +146,19 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       if (post == null || post.id != postId) {
-        provider.eventLoadingState = EventListState.loading;
+        provider.eventLoadingStatus = Submitted();
         getDetails()
-            .then((value) => setState(
-                () => provider.eventLoadingState = EventListState.idle))
+            .then((value) =>
+                setState(() => provider.eventLoadingStatus = Success()))
             .then((value) {
           checkForImages();
         });
       }
-      return provider.eventLoadingState == EventListState.loading
-          ? Scaffold(
-              body: Container(),
+      return provider.eventLoadingStatus is Submitted
+          ? Center(
+              // TODO translation
+              child: overlayBlurBackgroundCircularProgressIndicator(
+                  context, 'Loading event'),
             )
           : Scaffold(
               floatingActionButton: Visibility(
