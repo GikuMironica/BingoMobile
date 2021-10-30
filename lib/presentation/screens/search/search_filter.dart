@@ -81,7 +81,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                         style: TextStyle(
                           color: Color(0xFF2A2A2A),
                           fontSize: 12.0,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       SizedBox(height: 8.0),
@@ -160,21 +160,66 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                       SizedBox(
                         height: 12,
                       ),
+                      Text(
+                        'Search Radius :',
+                        style: TextStyle(
+                          color: Color(0xFF2A2A2A),
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Slider(
+                        value: provider.searchRadius.toDouble(),
+                        min: 1,
+                        max: 15,
+                        onChanged: (v) {
+                          provider.updateSearchRadius(v);
+                        },
+                        onChangeEnd: (v) => provider.onSliderChangeEnd(),
+                        activeColor: Theme.of(context).primaryColor,
+                        inactiveColor: Color(0xFF707070).withOpacity(0.67),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            // TODO translation
-                            'Happening Today',
+                            '1km',
                             style: TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 12.0),
+                              color: Color(0xFF2A2A2A),
+                              fontSize: 11.0,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                          CircularCheckBox(
-                              value: provider.searchQuery.today,
-                              onChanged: (v) => provider.filterToggleToday()),
+                          Text(
+                            '15km',
+                            style: TextStyle(
+                              color: Color(0xFF2A2A2A),
+                              fontSize: 11.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
                         ],
                       ),
-                      SizedBox(height: 16.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            // TODO translation
+                            'Today',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 14.0),
+                          ),
+                          CircularCheckBox(
+                            value: provider.searchQuery.today,
+                            onChanged: (v) => provider.filterToggleToday(),
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            activeColor: Theme.of(context).primaryColor,
+                            disabledColor: Color(0xFFE7E7E7),
+                            inactiveColor: Color(0xFFE7E7E7),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ),
