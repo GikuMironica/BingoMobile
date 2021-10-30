@@ -39,14 +39,14 @@ class SearchPageProvider extends ChangeNotifier {
   HereMapController _hereMapController;
   MapImage _marker;
   bool _filterToggled;
+  MapPolygon _mapPolygon;
   bool _hasFocus;
   GeolocationProvider _locationManager;
 
   double cameraMaxZoom = 15.5;
   double cameraMinZoom = 10.864;
-  int searchRadius = 15;
+  double searchRadius = 1.5;
   double onCarouselSwipeLookFromDistance = 3000;
-  double initialDistanceToEarth = 3000;
 
   CarouselController carouselController;
 
@@ -73,7 +73,7 @@ class SearchPageProvider extends ChangeNotifier {
     carouselController = CarouselController();
     _pageState = SearchPageState.IDLE;
     _mapState = MapState.LOADING;
-    searchQuery = SearchQuery(radius: searchRadius);
+    searchQuery = SearchQuery(radius: searchRadius.ceil());
     _filterToggled = false;
     _hasFocus = false;
     _locationManager = getIt<GeolocationProvider>();
@@ -113,6 +113,7 @@ class SearchPageProvider extends ChangeNotifier {
     await _locationManager.getCurrentLocation();
     searchQuery.longitude = _locationManager.currentPosition.longitude;
     searchQuery.latitude = _locationManager.currentPosition.latitude;
+    searchQuery.radius = searchRadius.ceil();
     clearSearch();
     _searchResults = await _eventRepository.search(searchQuery);
     if (_searchResults != null) {
@@ -186,12 +187,13 @@ class SearchPageProvider extends ChangeNotifier {
         GeoCoordinates geoCoordinates = GeoCoordinates(
             _locationManager.currentPosition.latitude,
             _locationManager.currentPosition.longitude);
+
         _hereMapController.camera
-            .lookAtPointWithDistance(geoCoordinates, initialDistanceToEarth);
-        GeoCircle geoCircle = GeoCircle(geoCoordinates, 15000);
-        MapPolygon mapPolygon = MapPolygon(
-            GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.05));
-        _hereMapController.mapScene.addMapPolygon(mapPolygon);
+            .lookAtPointWithDistance(geoCoordinates, searchRadius * 5000);
+        GeoCircle geoCircle = GeoCircle(geoCoordinates, searchRadius * 1000);
+        _mapPolygon = MapPolygon(
+            GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.09));
+        _hereMapController.mapScene.addMapPolygon(_mapPolygon);
 
         // Show the user on the map.
         MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
@@ -251,6 +253,28 @@ class SearchPageProvider extends ChangeNotifier {
 
   void updateTag(String v) {
     searchQuery.tag = v;
+  }
+
+  void updateSearchRadius(double v) {
+    searchRadius = v;
+    GeoCoordinates geoCoordinates = GeoCoordinates(
+        _locationManager.currentPosition.latitude,
+        _locationManager.currentPosition.longitude);
+    _hereMapController.camera
+        .lookAtPointWithDistance(geoCoordinates, searchRadius * 5000);
+    GeoCircle geoCircle = GeoCircle(geoCoordinates, searchRadius * 1000);
+    _hereMapController.mapScene.removeMapPolygon(_mapPolygon);
+    _mapPolygon = MapPolygon(
+        GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.09));
+    _hereMapController.mapScene.addMapPolygon(_mapPolygon);
+    print(v);
+    notifyListeners();
+  }
+
+  void onSliderChangeEnd() {
+    Future.delayed(Duration(milliseconds: 500), () {
+      searchEvents();
+    });
   }
 
   @override
