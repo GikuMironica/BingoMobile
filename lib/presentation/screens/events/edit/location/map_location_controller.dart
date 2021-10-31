@@ -6,7 +6,7 @@ import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/data/models/location.dart' as HopautLocation;
-import 'package:hopaut/controllers/providers/location_provider.dart';
+import 'package:hopaut/controllers/providers/legacy_location_provider.dart';
 
 enum SearchResultState {
   IDLE,

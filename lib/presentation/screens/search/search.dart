@@ -3,8 +3,9 @@ import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/config/injection.dart';
-import 'package:hopaut/controllers/providers/search_page_provider.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
+import 'package:hopaut/controllers/providers/search_page_provider.dart';
+import 'package:hopaut/controllers/providers/legacy_location_provider.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:hopaut/presentation/screens/search/search_carousel.dart';
@@ -19,11 +20,11 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   FocusNode _focusNode = FocusNode();
   SearchPageProvider searchProvider;
-  GeolocationProvider locationService;
+  LocationServiceProvider locationService;
 
   @override
   Widget build(BuildContext context) {
-    locationService = Provider.of<GeolocationProvider>(context, listen: true);
+    locationService = Provider.of<LocationServiceProvider>(context, listen: true);
     searchProvider = Provider.of<SearchPageProvider>(context, listen: true);
     searchProvider.context = context;
     return Scaffold(

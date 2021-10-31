@@ -6,12 +6,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/controllers/providers/location_provider.dart';
+import 'package:hopaut/data/domain/coordinate.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/mini_post_card.dart';
-import 'package:hopaut/controllers/providers/location_provider.dart';
+import 'package:hopaut/controllers/providers/legacy_location_provider.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
@@ -42,7 +44,7 @@ class SearchPageProvider extends ChangeNotifier {
   bool _filterToggled;
   MapPolygon _mapPolygon;
   bool _hasFocus;
-  GeolocationProvider _locationManager;
+  LocationServiceProvider _locationManager;
   MapMarker _userMarker;
 
   double searchRadius = 1.0;
@@ -76,7 +78,7 @@ class SearchPageProvider extends ChangeNotifier {
     searchQuery = SearchQuery(radius: searchRadius.ceil());
     _filterToggled = false;
     _hasFocus = false;
-    _locationManager = getIt<GeolocationProvider>();
+    _locationManager = getIt<LocationServiceProvider>();
   }
 
   void setPageState(SearchPageState searchPageState) {
@@ -110,9 +112,9 @@ class SearchPageProvider extends ChangeNotifier {
   //TODO clean old results!
   Future<void> searchEvents() async {
     setPageState(SearchPageState.SEARCHING);
-    await _locationManager.getCurrentLocation();
-    searchQuery.longitude = _locationManager.currentPosition.longitude;
-    searchQuery.latitude = _locationManager.currentPosition.latitude;
+    await _locationManager.getActualLocation();
+    searchQuery.longitude = _locationManager.location.longitude;
+    searchQuery.latitude = _locationManager.location.latitude;
     searchQuery.radius = searchRadius.ceil();
     clearSearch();
     _searchResults = await _eventRepository.search(searchQuery);
@@ -238,8 +240,8 @@ class SearchPageProvider extends ChangeNotifier {
   void updateSearchRadius(double v) {
     searchRadius = v;
     GeoCoordinates geoCoordinates = GeoCoordinates(
-        _locationManager.currentPosition.latitude,
-        _locationManager.currentPosition.longitude);
+        _locationManager.location.latitude,
+        _locationManager.location.longitude);
     _hereMapController.camera
         .lookAtPointWithDistance(geoCoordinates, searchRadius * 5000);
     redrawGeoCircle(geoCoordinates);
@@ -252,7 +254,7 @@ class SearchPageProvider extends ChangeNotifier {
   }
 
   Future<void> updateUserLocation({bool isInitalizeAction=false}) async{
-    Position userPosition = await _locationManager.getCurrentLocation();
+    UserLocation userPosition = await _locationManager.getActualLocation();
     GeoCoordinates geoCoordinates = GeoCoordinates(
         userPosition.latitude,
         userPosition.longitude);
