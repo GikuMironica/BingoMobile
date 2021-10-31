@@ -36,10 +36,7 @@ class _SearchPageState extends State<SearchPage> {
             size: 16,
           ),
           onPressed: () async => {
-            await locationService.getCurrentLocation(),
-            searchProvider.mapController.camera.lookAtPoint(GeoCoordinates(
-                locationService.currentPosition.latitude,
-                locationService.currentPosition.longitude)),
+            await searchProvider.updateUserLocation()
           },
         ),
         resizeToAvoidBottomInset: false,

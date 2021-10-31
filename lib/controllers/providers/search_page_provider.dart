@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/mini_post.dart';
@@ -42,6 +43,7 @@ class SearchPageProvider extends ChangeNotifier {
   MapPolygon _mapPolygon;
   bool _hasFocus;
   GeolocationProvider _locationManager;
+  MapMarker _userMarker;
 
   double cameraMaxZoom = 15.5;
   double cameraMinZoom = 10.864;
@@ -184,23 +186,7 @@ class SearchPageProvider extends ChangeNotifier {
       if (error == null) {
         _hereMapController.mapScene.setLayerState(
             MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
-        GeoCoordinates geoCoordinates = GeoCoordinates(
-            _locationManager.currentPosition.latitude,
-            _locationManager.currentPosition.longitude);
-
-        _hereMapController.camera
-            .lookAtPointWithDistance(geoCoordinates, searchRadius * 5000);
-        GeoCircle geoCircle = GeoCircle(geoCoordinates, searchRadius * 1000);
-        _mapPolygon = MapPolygon(
-            GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.09));
-        _hereMapController.mapScene.addMapPolygon(_mapPolygon);
-
-        // Show the user on the map.
-        MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
-            'assets/icons/map/radio-button-off-outline.svg', 48, 48);
-        MapMarker userMarker = MapMarker(geoCoordinates, userMarkerSvg);
-
-        _hereMapController.mapScene.addMapMarker(userMarker);
+        await updateUserLocation(isInitalizeAction: true);
 
         setMapState(MapState.LOADED);
         searchEvents();
@@ -262,13 +248,8 @@ class SearchPageProvider extends ChangeNotifier {
         _locationManager.currentPosition.longitude);
     _hereMapController.camera
         .lookAtPointWithDistance(geoCoordinates, searchRadius * 5000);
-    GeoCircle geoCircle = GeoCircle(geoCoordinates, searchRadius * 1000);
-    _hereMapController.mapScene.removeMapPolygon(_mapPolygon);
-    _mapPolygon = MapPolygon(
-        GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.09));
-    _hereMapController.mapScene.addMapPolygon(_mapPolygon);
-    print(v);
-    notifyListeners();
+
+    redrawGeoCircle(geoCoordinates);
   }
 
   void onSliderChangeEnd() {
@@ -281,5 +262,38 @@ class SearchPageProvider extends ChangeNotifier {
   void dispose() {
     _hereMapController.release();
     super.dispose();
+  }
+
+  Future<void> updateUserLocation({bool isInitalizeAction=false}) async{
+    Position userPosition = await _locationManager.getCurrentLocation();
+    GeoCoordinates geoCoordinates = GeoCoordinates(
+        userPosition.latitude,
+        userPosition.longitude);
+
+    isInitalizeAction
+        ? mapController.camera.lookAtPointWithDistance(geoCoordinates, searchRadius * 5000)
+        : mapController.camera.lookAtPoint(geoCoordinates);
+
+    // Show the user on the map.
+    MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
+        'assets/icons/map/radio-button-off-outline.svg', 48, 48);
+    if (_userMarker != null){
+      _hereMapController.mapScene.removeMapMarker(_userMarker);
+    }
+    _userMarker = MapMarker(geoCoordinates, userMarkerSvg);
+    _hereMapController.mapScene.addMapMarker(_userMarker);
+    redrawGeoCircle(geoCoordinates);
+  }
+
+  void redrawGeoCircle(GeoCoordinates geoCoordinates){
+    // Redraw circle
+    GeoCircle geoCircle = GeoCircle(geoCoordinates, searchRadius * 1000);
+    if (_mapPolygon != null){
+      _hereMapController.mapScene.removeMapPolygon(_mapPolygon);
+    }
+    _mapPolygon = MapPolygon(
+        GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.09));
+    _hereMapController.mapScene.addMapPolygon(_mapPolygon);
+    notifyListeners();
   }
 }

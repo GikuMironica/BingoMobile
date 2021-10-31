@@ -45,6 +45,7 @@ class GeolocationProvider extends ChangeNotifier {
             desiredAccuracy: LocationAccuracy.best,
             timeLimit: Duration(seconds: 10)) ??
         await Geolocator.getLastKnownPosition();
+    print("LOcations"+_currentPosition.latitude.toString()+" "+_currentPosition.longitude.toString());
     notifyListeners();
     return _currentPosition;
   }

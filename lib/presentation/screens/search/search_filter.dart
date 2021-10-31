@@ -1,5 +1,6 @@
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
+import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/controllers/providers/search_page_provider.dart';
 import 'package:ionicons/ionicons.dart';
@@ -200,25 +201,50 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                           ),
                         ],
                       ),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            // TODO translation
-                            'Today',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14.0),
-                          ),
-                          CircularCheckBox(
-                            value: provider.searchQuery.today,
-                            onChanged: (v) => provider.filterToggleToday(),
-                            materialTapTargetSize:
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                // TODO translation
+                                'Today',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14.0),
+                              ),
+                              Checkbox(
+                                value: provider.searchQuery.today,
+                                onChanged: (v) => provider.filterToggleToday(),
+                                materialTapTargetSize:
                                 MaterialTapTargetSize.shrinkWrap,
-                            activeColor: Theme.of(context).primaryColor,
-                            disabledColor: Color(0xFFE7E7E7),
-                            inactiveColor: Color(0xFFE7E7E7),
-                          )
+                                activeColor: Theme.of(context).primaryColor,
+                              ),
+                            ],
+                          ),
+                          OutlinedButton(
+                            // TODO translation
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: HATheme.HOPAUT_PINK,
+                              side: BorderSide(color: HATheme.HOPAUT_PINK, width: 1),
+                              shadowColor: Colors.black,
+                              elevation: 20,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5),
+                                ),
+                              ),
+                            ),
+                            child: const Text('Search', style: TextStyle(color: Colors.white)),
+                            onPressed: () async => await provider.searchEvents(),
+                          ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                     ],
                   ),
