@@ -171,6 +171,8 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                       ),
                       Slider(
                         value: provider.searchRadius.toDouble(),
+                        divisions: 15,
+                        label: provider.searchRadius.round().toString(),
                         min: 1,
                         max: 15,
                         onChanged: (v) {
