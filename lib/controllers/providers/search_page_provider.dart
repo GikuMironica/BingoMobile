@@ -45,9 +45,7 @@ class SearchPageProvider extends ChangeNotifier {
   GeolocationProvider _locationManager;
   MapMarker _userMarker;
 
-  double cameraMaxZoom = 15.5;
-  double cameraMinZoom = 10.864;
-  double searchRadius = 1.5;
+  double searchRadius = 1.0;
   double onCarouselSwipeLookFromDistance = 3000;
 
   CarouselController carouselController;
