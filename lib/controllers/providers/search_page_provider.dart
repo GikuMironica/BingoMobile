@@ -205,14 +205,11 @@ class SearchPageProvider extends ChangeNotifier {
     var radiusInPixel = 2.0;
     if (filter) toggleFilter();
     FocusManager.instance.primaryFocus?.unfocus();
-    print('picking event, tapped');
     _hereMapController.pickMapItems(touchPoint, radiusInPixel,
         (eventPickResult) {
       var eventMarkerList = eventPickResult.markers;
-      print(eventMarkerList);
       if (eventMarkerList.isEmpty) return;
       var topMostEvent = eventMarkerList.first;
-      print(topMostEvent);
       var metaData = topMostEvent.metadata;
       if (metaData != null) {
         var selectedPostId = metaData.getInteger('id');
@@ -248,7 +245,6 @@ class SearchPageProvider extends ChangeNotifier {
         _locationManager.currentPosition.longitude);
     _hereMapController.camera
         .lookAtPointWithDistance(geoCoordinates, searchRadius * 5000);
-
     redrawGeoCircle(geoCoordinates);
   }
 
@@ -256,12 +252,6 @@ class SearchPageProvider extends ChangeNotifier {
     Future.delayed(Duration(milliseconds: 500), () {
       searchEvents();
     });
-  }
-
-  @override
-  void dispose() {
-    _hereMapController.release();
-    super.dispose();
   }
 
   Future<void> updateUserLocation({bool isInitalizeAction=false}) async{
@@ -286,7 +276,6 @@ class SearchPageProvider extends ChangeNotifier {
   }
 
   void redrawGeoCircle(GeoCoordinates geoCoordinates){
-    // Redraw circle
     GeoCircle geoCircle = GeoCircle(geoCoordinates, searchRadius * 1000);
     if (_mapPolygon != null){
       _hereMapController.mapScene.removeMapPolygon(_mapPolygon);
@@ -295,5 +284,11 @@ class SearchPageProvider extends ChangeNotifier {
         GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.09));
     _hereMapController.mapScene.addMapPolygon(_mapPolygon);
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _hereMapController.release();
+    super.dispose();
   }
 }
