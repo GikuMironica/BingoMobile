@@ -185,7 +185,6 @@ class SearchPageProvider extends ChangeNotifier {
         _hereMapController.mapScene.setLayerState(
             MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
         await updateUserLocation(isInitalizeAction: true);
-
         setMapState(MapState.LOADED);
         searchEvents();
       } else {
