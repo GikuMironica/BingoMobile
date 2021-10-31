@@ -113,8 +113,8 @@ class SearchPageProvider extends ChangeNotifier {
   Future<void> searchEvents() async {
     setPageState(SearchPageState.SEARCHING);
     await _locationManager.getActualLocation();
-    searchQuery.longitude = _locationManager.location.longitude;
-    searchQuery.latitude = _locationManager.location.latitude;
+    searchQuery.longitude = _locationManager.userLocation.longitude;
+    searchQuery.latitude = _locationManager.userLocation.latitude;
     searchQuery.radius = searchRadius.ceil();
     clearSearch();
     _searchResults = await _eventRepository.search(searchQuery);
@@ -240,8 +240,8 @@ class SearchPageProvider extends ChangeNotifier {
   void updateSearchRadius(double v) {
     searchRadius = v;
     GeoCoordinates geoCoordinates = GeoCoordinates(
-        _locationManager.location.latitude,
-        _locationManager.location.longitude);
+        _locationManager.userLocation.latitude,
+        _locationManager.userLocation.longitude);
     _hereMapController.camera
         .lookAtPointWithDistance(geoCoordinates, searchRadius * 5000);
     redrawGeoCircle(geoCoordinates);
@@ -254,7 +254,15 @@ class SearchPageProvider extends ChangeNotifier {
   }
 
   Future<void> updateUserLocation({bool isInitalizeAction=false}) async{
-    UserLocation userPosition = await _locationManager.getActualLocation();
+    UserLocation userPosition;
+    if(isInitalizeAction){
+      userPosition = _locationManager.userLocation;
+      print('Initialized with'+userPosition.longitude.toString()+" "+userPosition.latitude.toString());
+    } else{
+      userPosition = await _locationManager.getActualLocation();
+      print('Updated with'+userPosition.longitude.toString()+" "+userPosition.latitude.toString());
+    }
+
     GeoCoordinates geoCoordinates = GeoCoordinates(
         userPosition.latitude,
         userPosition.longitude);

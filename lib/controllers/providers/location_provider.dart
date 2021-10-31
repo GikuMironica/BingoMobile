@@ -12,10 +12,7 @@ class LocationServiceProvider extends ChangeNotifier {
   PermissionStatus _permissionStatus = PermissionStatus.undetermined;
 
   l.Location _location;
-  UserLocation _userLocation;
-
-  UserLocation get location => _userLocation;
-  PermissionStatus get permissionStatus => _permissionStatus;
+  UserLocation userLocation;
 
   LocationServiceProvider() {
     getActualLocation();
@@ -28,44 +25,39 @@ class LocationServiceProvider extends ChangeNotifier {
       // TODO handle
       return null;
     }
-    await _getLocation();
+    l.LocationData locationData = await _getLocation();
+    userLocation = UserLocation(locationData.latitude, locationData.longitude);
+    notifyListeners();
+    return userLocation;
   }
 
   Future<bool> _isLocationServiceEnabled() async{
     bool serviceEnabled;
-    LocationPermission permission;
+    l.PermissionStatus isLocationTrackingAllowed;
     serviceEnabled = await _location.serviceEnabled();
     if (!serviceEnabled) {
       // TODO translation
-      showNewErrorSnackbar('Please enable location services');
-      return false;
-      //TODO log ask to enable permission
-      return Future.error('Location services are disabled.');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied){
-        //TODO log
+      showNewErrorSnackbar('Location service is disabled');
+      var accepted = await _location.requestService();
+      if(!accepted)
         return false;
-        return Future.error('Location permission are denied.');
-      }
     }
-    if (permission == LocationPermission.deniedForever) {
-      return false;
-      // TODO log
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+    isLocationTrackingAllowed = await _location.hasPermission();
+    if (isLocationTrackingAllowed != l.PermissionStatus.granted
+        && isLocationTrackingAllowed != l.PermissionStatus.grantedLimited) {
+      isLocationTrackingAllowed = await _location.requestPermission();
+      if(isLocationTrackingAllowed != l.PermissionStatus.granted
+        && isLocationTrackingAllowed != l.PermissionStatus.grantedLimited){
+        // TODO translate
+        showNewErrorSnackbar('Location permission denied');
+        return false;
+      }
     }
     return true;
   }
 
-  Future<UserLocation> _getLocation() async {
-    var locationData = await _location.getLocation();
-    _userLocation =
-        UserLocation(locationData.latitude, locationData.longitude);
-    notifyListeners();
-    return _userLocation;
+  Future<l.LocationData> _getLocation() async {
+    l.LocationData locationData = await _location.getLocation();
+    return locationData;
   }
 }
