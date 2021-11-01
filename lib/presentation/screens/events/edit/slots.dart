@@ -1,30 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/controllers/providers/event_provider.dart';
-import 'package:hopaut/presentation/widgets/inputs/basic_input.dart';
+import 'package:hopaut/presentation/widgets/inputs/event_text_field.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-class EditPostTitle extends StatefulWidget {
+class EditSlotsPage extends StatefulWidget {
   @override
-  _EditPostTitleState createState() => _EditPostTitleState();
+  _EditSlotsPageState createState() => _EditSlotsPageState();
 }
 
-class _EditPostTitleState extends State<EditPostTitle> {
+class _EditSlotsPageState extends State<EditSlotsPage> {
   final formKey = GlobalKey<FormState>();
-  TextEditingController titleController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    titleController.text = getIt<EventProvider>().post.event.title;
-  }
+  int slots;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +32,7 @@ class _EditPostTitleState extends State<EditPostTitle> {
               icon: HATheme.backButton,
               onPressed: () => Application.router.pop(context),
             ),
-            title: Text('Edit Title'),
+            title: Text('Edit Slots'), //TODO: translation
           ),
           body: provider.eventLoadingStatus is Submitted
               ? Container(
@@ -60,19 +53,12 @@ class _EditPostTitleState extends State<EditPostTitle> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          valueInput(
-                            controller: titleController,
-                            isStateValid:
-                                provider.validateTitle(titleController.text),
-                            initialValue: provider.post.event.title,
-                            validationMessage:
-                                "Please provide a valid title.", // TODO: translation
-                            maxLength: Constraint.titleMaxLength,
-                            onSaved: (value) => provider.post.event.title =
-                                titleController.text,
-                            onChange: (value) =>
-                                provider.onFieldChange(titleController, value),
-                            hintText: 'Event Title', //TODO: translation
+                          EventTextField(
+                            initialValue: provider.post.event.slots.toString(),
+                            onChanged: (v) => slots = int.parse(v),
+                            onSaved: (v) => provider.post.event.slots = slots,
+                            textInputType: TextInputType.number,
+                            textHint: "Slots", //TODO: translation
                           ),
                           Container(
                             decoration: BoxDecoration(
@@ -94,12 +80,12 @@ class _EditPostTitleState extends State<EditPostTitle> {
                                           provider.post.event.title;
                                       Fluttertoast.showToast(
                                           msg:
-                                              'Event Title updated'); //TODO: translation
+                                              'Event Price updated'); //TODO: translation
                                       Application.router.pop(context);
                                     } else {
                                       Fluttertoast.showToast(
                                           msg:
-                                              'Unable to update title.'); //TODO: translation
+                                              'Unable to update price.'); //TODO: translation
                                     }
                                   }
                                 }),

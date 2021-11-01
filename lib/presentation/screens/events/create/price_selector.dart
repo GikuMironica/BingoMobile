@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hopaut/config/currencies.dart';
-import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/widgets/currency_icons.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 
 class PriceSelector extends StatelessWidget {
-  final Post post;
-  PriceSelector({@required this.post});
+  final void Function(String) onChanged;
+  final FormFieldSetter<String> onSaved;
+  final String initialValue;
+
+  PriceSelector({this.onChanged, this.onSaved, this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -26,19 +28,21 @@ class PriceSelector extends StatelessWidget {
             children: <Widget>[
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.67,
-                child: TextField(
-                  onChanged: (v) => post.event.entrancePrice = double.parse(v),
+                child: TextFormField(
+                  onChanged: onChanged,
+                  onSaved: onSaved,
+                  initialValue: initialValue,
                   inputFormatters: [LengthLimitingTextInputFormatter(6)],
                   decoration: InputDecoration(
                     prefixIcon: Padding(
                       padding: EdgeInsets.zero,
                       child: Icon(
-                        currencyIcon(post.event.currency),
+                        currencyIcon(Currency.eur),
                         color: Colors.black54,
                         size: 20,
                       ),
                     ),
-                    contentPadding: EdgeInsets.only(top: 16.0),
+                    contentPadding: EdgeInsets.all(12.0),
                     border: InputBorder.none,
                     hintText: 'Price', //TODO: translation
                   ),

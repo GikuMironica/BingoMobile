@@ -1,3 +1,4 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hopaut/config/constants.dart';
@@ -30,7 +31,8 @@ class EventListPage extends StatelessWidget {
                 backgroundColor: HATheme.HOPAUT_PINK,
                 onPressed: () async {
                   provider.setPost(Post());
-                  await Application.router.navigateTo(context, '/create-event');
+                  await Application.router.navigateTo(context, '/create-event',
+                      transition: TransitionType.cupertino);
                 })
             : Container(),
         floatingActionButtonLocation:
