@@ -83,38 +83,43 @@ class _SearchByMapState extends State<SearchByMap> {
             ),
           ),
         ),
-        _searchTextField(locationSelectionProvider),
-        SafeArea(
-          child: Visibility(
-            visible: locationSelectionProvider.searchResults.isNotEmpty,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  padding: EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: ListView.builder(
-                    itemCount: locationSelectionProvider.searchResults.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(
-                      locationSelectionProvider.searchResults[index].title),
-                      );
-                    }),
-                ),
-              ),
-            ),
-          ),
-        ),
+        _searchResultTextCard(locationSelectionProvider),
+        _selectedLocation(locationSelectionProvider)
       ],
     );
   }
-  Widget _searchTextField(MapLocationProvider locationSelectionProvider){
+
+  Widget _selectedLocation(MapLocationProvider locationSelectionProvider){
+    return SafeArea(
+      child: Visibility(
+        visible: locationSelectionProvider.searchResults.isNotEmpty,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: ListView.builder(
+                itemCount: locationSelectionProvider.searchResults.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(
+                      locationSelectionProvider.searchResults[index].title),
+                  );
+                }),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _searchResultTextCard(MapLocationProvider locationSelectionProvider){
     return SafeArea(
       child: Align(
         alignment: Alignment.topCenter,

@@ -11,7 +11,6 @@ import 'package:location/location.dart' as l;
 
 @singleton
 class LocationServiceProvider extends ChangeNotifier {
-  PermissionStatus _permissionStatus = PermissionStatus.undetermined;
 
   l.Location _location;
   UserLocation userLocation;
@@ -23,7 +22,7 @@ class LocationServiceProvider extends ChangeNotifier {
 
   Future<UserLocation> _getActualLocation() async {
     _location = l.Location();
-    bool isLocationEnabled = await _isLocationServiceEnabled();
+    bool isLocationEnabled = await _isLocationServiceEnabledAndAllowed();
     if(!isLocationEnabled){
       // TODO handle
       return null;
@@ -34,7 +33,7 @@ class LocationServiceProvider extends ChangeNotifier {
     return userLocation;
   }
 
-  Future<bool> _isLocationServiceEnabled() async{
+  Future<bool> _isLocationServiceEnabledAndAllowed() async{
     bool serviceEnabled;
     l.PermissionStatus isLocationTrackingAllowed;
     serviceEnabled = await _location.serviceEnabled();
@@ -70,6 +69,7 @@ class LocationServiceProvider extends ChangeNotifier {
       if(e != null) {
         final newLatitude = roundOff(5, e.latitude);
         final newLongtiude = roundOff(5, e.longitude);
+        print('Location changed'+newLongtiude.toString()+" "+newLatitude.toString());
         if (_lastLocation != null) {
           if (_lastLocation.latitude != newLatitude &&
               _lastLocation.longitude != newLongtiude) {
