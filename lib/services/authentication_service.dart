@@ -156,7 +156,6 @@ class AuthenticationService with ChangeNotifier {
     getIt<AccountProvider>().resetProvider();
     getIt<ChangePasswordProvider>().resetProvider();
 
-
     setIdentity(null);
     setUser(null);
     if (oneSignalSettings) {

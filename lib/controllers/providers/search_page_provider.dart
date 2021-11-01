@@ -3,14 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/controllers/providers/location_provider.dart';
+import 'package:hopaut/data/domain/coordinate.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/mini_post_card.dart';
-import 'package:hopaut/controllers/providers/location_provider.dart';
+import 'package:hopaut/controllers/providers/legacy_location_provider.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
@@ -41,11 +44,10 @@ class SearchPageProvider extends ChangeNotifier {
   bool _filterToggled;
   MapPolygon _mapPolygon;
   bool _hasFocus;
-  GeolocationProvider _locationManager;
+  LocationServiceProvider _locationManager;
+  MapMarker _userMarker;
 
-  double cameraMaxZoom = 15.5;
-  double cameraMinZoom = 10.864;
-  double searchRadius = 1.5;
+  double searchRadius = 1.0;
   double onCarouselSwipeLookFromDistance = 3000;
 
   CarouselController carouselController;
@@ -76,7 +78,7 @@ class SearchPageProvider extends ChangeNotifier {
     searchQuery = SearchQuery(radius: searchRadius.ceil());
     _filterToggled = false;
     _hasFocus = false;
-    _locationManager = getIt<GeolocationProvider>();
+    _locationManager = getIt<LocationServiceProvider>();
   }
 
   void setPageState(SearchPageState searchPageState) {
@@ -110,9 +112,9 @@ class SearchPageProvider extends ChangeNotifier {
   //TODO clean old results!
   Future<void> searchEvents() async {
     setPageState(SearchPageState.SEARCHING);
-    await _locationManager.getCurrentLocation();
-    searchQuery.longitude = _locationManager.currentPosition.longitude;
-    searchQuery.latitude = _locationManager.currentPosition.latitude;
+    await _locationManager.getActualLocation();
+    searchQuery.longitude = _locationManager.userLocation.longitude;
+    searchQuery.latitude = _locationManager.userLocation.latitude;
     searchQuery.radius = searchRadius.ceil();
     clearSearch();
     _searchResults = await _eventRepository.search(searchQuery);
@@ -184,24 +186,7 @@ class SearchPageProvider extends ChangeNotifier {
       if (error == null) {
         _hereMapController.mapScene.setLayerState(
             MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
-        GeoCoordinates geoCoordinates = GeoCoordinates(
-            _locationManager.currentPosition.latitude,
-            _locationManager.currentPosition.longitude);
-
-        _hereMapController.camera
-            .lookAtPointWithDistance(geoCoordinates, searchRadius * 5000);
-        GeoCircle geoCircle = GeoCircle(geoCoordinates, searchRadius * 1000);
-        _mapPolygon = MapPolygon(
-            GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.09));
-        _hereMapController.mapScene.addMapPolygon(_mapPolygon);
-
-        // Show the user on the map.
-        MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
-            'assets/icons/map/radio-button-off-outline.svg', 48, 48);
-        MapMarker userMarker = MapMarker(geoCoordinates, userMarkerSvg);
-
-        _hereMapController.mapScene.addMapMarker(userMarker);
-
+        await updateUserLocation(isInitalizeAction: true);
         setMapState(MapState.LOADED);
         searchEvents();
       } else {
@@ -219,14 +204,11 @@ class SearchPageProvider extends ChangeNotifier {
     var radiusInPixel = 2.0;
     if (filter) toggleFilter();
     FocusManager.instance.primaryFocus?.unfocus();
-    print('picking event, tapped');
     _hereMapController.pickMapItems(touchPoint, radiusInPixel,
         (eventPickResult) {
       var eventMarkerList = eventPickResult.markers;
-      print(eventMarkerList);
       if (eventMarkerList.isEmpty) return;
       var topMostEvent = eventMarkerList.first;
-      print(topMostEvent);
       var metaData = topMostEvent.metadata;
       if (metaData != null) {
         var selectedPostId = metaData.getInteger('id');
@@ -258,23 +240,57 @@ class SearchPageProvider extends ChangeNotifier {
   void updateSearchRadius(double v) {
     searchRadius = v;
     GeoCoordinates geoCoordinates = GeoCoordinates(
-        _locationManager.currentPosition.latitude,
-        _locationManager.currentPosition.longitude);
+        _locationManager.userLocation.latitude,
+        _locationManager.userLocation.longitude);
     _hereMapController.camera
         .lookAtPointWithDistance(geoCoordinates, searchRadius * 5000);
-    GeoCircle geoCircle = GeoCircle(geoCoordinates, searchRadius * 1000);
-    _hereMapController.mapScene.removeMapPolygon(_mapPolygon);
-    _mapPolygon = MapPolygon(
-        GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.09));
-    _hereMapController.mapScene.addMapPolygon(_mapPolygon);
-    print(v);
-    notifyListeners();
+    redrawGeoCircle(geoCoordinates);
   }
 
   void onSliderChangeEnd() {
     Future.delayed(Duration(milliseconds: 500), () {
       searchEvents();
     });
+  }
+
+  Future<void> updateUserLocation({bool isInitalizeAction=false}) async{
+    UserLocation userPosition;
+    if(isInitalizeAction){
+      userPosition = _locationManager.userLocation;
+      print('Initialized with'+userPosition.longitude.toString()+" "+userPosition.latitude.toString());
+    } else{
+      userPosition = await _locationManager.getActualLocation();
+      print('Updated with'+userPosition.longitude.toString()+" "+userPosition.latitude.toString());
+    }
+
+    GeoCoordinates geoCoordinates = GeoCoordinates(
+        userPosition.latitude,
+        userPosition.longitude);
+
+    isInitalizeAction
+        ? mapController.camera.lookAtPointWithDistance(geoCoordinates, searchRadius * 5000)
+        : mapController.camera.lookAtPoint(geoCoordinates);
+
+    // Show the user on the map.
+    MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
+        'assets/icons/map/radio-button-off-outline.svg', 48, 48);
+    if (_userMarker != null){
+      _hereMapController.mapScene.removeMapMarker(_userMarker);
+    }
+    _userMarker = MapMarker(geoCoordinates, userMarkerSvg);
+    _hereMapController.mapScene.addMapMarker(_userMarker);
+    redrawGeoCircle(geoCoordinates);
+  }
+
+  void redrawGeoCircle(GeoCoordinates geoCoordinates){
+    GeoCircle geoCircle = GeoCircle(geoCoordinates, searchRadius * 1000);
+    if (_mapPolygon != null){
+      _hereMapController.mapScene.removeMapPolygon(_mapPolygon);
+    }
+    _mapPolygon = MapPolygon(
+        GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.09));
+    _hereMapController.mapScene.addMapPolygon(_mapPolygon);
+    notifyListeners();
   }
 
   @override

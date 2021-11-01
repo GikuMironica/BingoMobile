@@ -1,51 +1,63 @@
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:hopaut/data/domain/coordinate.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
+import 'package:hopaut/utils/rounding_decimals.dart';
 import 'package:injectable/injectable.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:location/location.dart' as l;
 
 @singleton
-class GeolocationProvider extends ChangeNotifier {
-  Position _currentPosition;
+class LocationServiceProvider extends ChangeNotifier {
+  PermissionStatus _permissionStatus = PermissionStatus.undetermined;
 
-  GeolocationProvider() {
-    getCurrentLocation();
-    // Live location
-    // var positionStream = Geolocator.getPositionStream(
-    //         distanceFilter: 1, desiredAccuracy: LocationAccuracy.high)
-    //     .listen((Position position) {
-    //   _currentPosition = position;
-    //   Fluttertoast.showToast(msg: "New Location");
-    // });
+  l.Location _location;
+  UserLocation userLocation;
+
+  LocationServiceProvider() {
+    getActualLocation();
   }
 
-  Position get currentPosition => _currentPosition;
-
-  Future<Position> getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
+  Future<UserLocation> getActualLocation() async {
+    _location = l.Location();
+    bool isLocationEnabled = await _isLocationServiceEnabled();
+    if(!isLocationEnabled){
+      // TODO handle
+      return null;
     }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied)
-        return Future.error('Location permission are denied.');
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-    print('Loc updated');
-    _currentPosition = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.best,
-            timeLimit: Duration(seconds: 10)) ??
-        await Geolocator.getLastKnownPosition();
+    l.LocationData locationData = await _getLocation();
+    userLocation = UserLocation(locationData.latitude, locationData.longitude);
     notifyListeners();
-    return _currentPosition;
+    return userLocation;
+  }
+
+  Future<bool> _isLocationServiceEnabled() async{
+    bool serviceEnabled;
+    l.PermissionStatus isLocationTrackingAllowed;
+    serviceEnabled = await _location.serviceEnabled();
+    if (!serviceEnabled) {
+      // TODO translation
+      showNewErrorSnackbar('Location service is disabled');
+      var accepted = await _location.requestService();
+      if(!accepted)
+        return false;
+    }
+    isLocationTrackingAllowed = await _location.hasPermission();
+    if (isLocationTrackingAllowed != l.PermissionStatus.granted
+        && isLocationTrackingAllowed != l.PermissionStatus.grantedLimited) {
+      isLocationTrackingAllowed = await _location.requestPermission();
+      if(isLocationTrackingAllowed != l.PermissionStatus.granted
+        && isLocationTrackingAllowed != l.PermissionStatus.grantedLimited){
+        // TODO translate
+        showNewErrorSnackbar('Location permission denied');
+        return false;
+      }
+    }
+    return true;
+  }
+
+  Future<l.LocationData> _getLocation() async {
+    l.LocationData locationData = await _location.getLocation();
+    return locationData;
   }
 }

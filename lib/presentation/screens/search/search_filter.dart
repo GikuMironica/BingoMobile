@@ -1,5 +1,6 @@
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
+import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/controllers/providers/search_page_provider.dart';
 import 'package:ionicons/ionicons.dart';
@@ -90,71 +91,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                         child: ListView(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          children: [
-                            _filterEventType(
-                                context: context,
-                                type: 'House Party',
-                                value: provider.searchQuery
-                                    .eventTypes[EventType.houseParty],
-                                onTap: (v) => provider.filterToggleEventType(
-                                    EventType.houseParty)),
-                            _filterEventType(
-                                context: context,
-                                type: 'Bar',
-                                value: provider
-                                    .searchQuery.eventTypes[EventType.bar],
-                                onTap: (v) => provider
-                                    .filterToggleEventType(EventType.bar)),
-                            _filterEventType(
-                                context: context,
-                                type: 'Club',
-                                value: provider
-                                    .searchQuery.eventTypes[EventType.club],
-                                onTap: (v) => provider
-                                    .filterToggleEventType(EventType.club)),
-                            _filterEventType(
-                                context: context,
-                                type: 'Street Party',
-                                value: provider.searchQuery
-                                    .eventTypes[EventType.streetParty],
-                                onTap: (v) => provider.filterToggleEventType(
-                                    EventType.streetParty)),
-                            _filterEventType(
-                                context: context,
-                                type: 'Bicycle Meet',
-                                value: provider.searchQuery
-                                    .eventTypes[EventType.bicycleMeet],
-                                onTap: (v) => provider.filterToggleEventType(
-                                    EventType.bicycleMeet)),
-                            _filterEventType(
-                                context: context,
-                                type: 'Biker Meet',
-                                value: provider.searchQuery
-                                    .eventTypes[EventType.bikerMeet],
-                                onTap: (v) => provider.filterToggleEventType(
-                                    EventType.bikerMeet)),
-                            _filterEventType(
-                                context: context,
-                                type: 'Car Meet',
-                                value: provider
-                                    .searchQuery.eventTypes[EventType.carMeet],
-                                onTap: (v) => provider
-                                    .filterToggleEventType(EventType.carMeet)),
-                            _filterEventType(
-                                context: context,
-                                type: 'Marathon',
-                                value: provider
-                                    .searchQuery.eventTypes[EventType.marathon],
-                                onTap: (v) => provider
-                                    .filterToggleEventType(EventType.marathon)),
-                            _filterEventType(
-                                context: context,
-                                type: 'Other',
-                                value: provider
-                                    .searchQuery.eventTypes[EventType.other],
-                                onTap: (v) => provider
-                                    .filterToggleEventType(EventType.other)),
-                          ],
+                          children: _carouselFilterItems(provider: provider, context: context)
                         ),
                       ),
                       SizedBox(
@@ -170,6 +107,8 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                       ),
                       Slider(
                         value: provider.searchRadius.toDouble(),
+                        divisions: 14,
+                        label: provider.searchRadius.round().toString(),
                         min: 1,
                         max: 15,
                         onChanged: (v) {
@@ -200,25 +139,35 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                           ),
                         ],
                       ),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            // TODO translation
-                            'Today',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14.0),
-                          ),
-                          CircularCheckBox(
-                            value: provider.searchQuery.today,
-                            onChanged: (v) => provider.filterToggleToday(),
-                            materialTapTargetSize:
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                // TODO translation
+                                'Today',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14.0),
+                              ),
+                              Checkbox(
+                                value: provider.searchQuery.today,
+                                onChanged: (v) => provider.filterToggleToday(),
+                                materialTapTargetSize:
                                 MaterialTapTargetSize.shrinkWrap,
-                            activeColor: Theme.of(context).primaryColor,
-                            disabledColor: Color(0xFFE7E7E7),
-                            inactiveColor: Color(0xFFE7E7E7),
-                          )
+                                activeColor: Theme.of(context).primaryColor,
+                              ),
+                            ],
+                          ),
+                          _searchButton(provider)
                         ],
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                     ],
                   ),
@@ -231,6 +180,100 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
     );
   }
 }
+
+List<Widget> _carouselFilterItems({SearchPageProvider provider, BuildContext context}){
+  return [
+    _filterEventType(
+        context: context,
+        type: 'House Party',
+        value: provider.searchQuery
+            .eventTypes[EventType.houseParty],
+        onTap: (v) => provider.filterToggleEventType(
+            EventType.houseParty)),
+    _filterEventType(
+        context: context,
+        type: 'Bar',
+        value: provider
+            .searchQuery.eventTypes[EventType.bar],
+        onTap: (v) => provider
+            .filterToggleEventType(EventType.bar)),
+    _filterEventType(
+        context: context,
+        type: 'Club',
+        value: provider
+            .searchQuery.eventTypes[EventType.club],
+        onTap: (v) => provider
+            .filterToggleEventType(EventType.club)),
+    _filterEventType(
+        context: context,
+        type: 'Street Party',
+        value: provider.searchQuery
+            .eventTypes[EventType.streetParty],
+        onTap: (v) => provider.filterToggleEventType(
+            EventType.streetParty)),
+    _filterEventType(
+        context: context,
+        type: 'Bicycle Meet',
+        value: provider.searchQuery
+            .eventTypes[EventType.bicycleMeet],
+        onTap: (v) => provider.filterToggleEventType(
+            EventType.bicycleMeet)),
+    _filterEventType(
+        context: context,
+        type: 'Biker Meet',
+        value: provider.searchQuery
+            .eventTypes[EventType.bikerMeet],
+        onTap: (v) => provider.filterToggleEventType(
+            EventType.bikerMeet)),
+    _filterEventType(
+        context: context,
+        type: 'Car Meet',
+        value: provider
+            .searchQuery.eventTypes[EventType.carMeet],
+        onTap: (v) => provider
+            .filterToggleEventType(EventType.carMeet)),
+    _filterEventType(
+        context: context,
+        type: 'Marathon',
+        value: provider
+            .searchQuery.eventTypes[EventType.marathon],
+        onTap: (v) => provider
+            .filterToggleEventType(EventType.marathon)),
+    _filterEventType(
+        context: context,
+        type: 'Other',
+        value: provider
+            .searchQuery.eventTypes[EventType.other],
+        onTap: (v) => provider
+            .filterToggleEventType(EventType.other)),
+  ];
+}
+
+OutlinedButton _searchButton(SearchPageProvider provider) {
+  return OutlinedButton(
+    // TODO translation
+    style: OutlinedButton.styleFrom(
+      enableFeedback: true,
+      backgroundColor: Colors.white,
+      side: BorderSide(color: Colors.transparent, width: 1),
+      shadowColor: Colors.black,
+      elevation: 20,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(5),
+        ),
+      ),
+    ),
+    child: const Text(
+      'Search',
+      style: TextStyle(
+        color: HATheme.HOPAUT_PINK,
+        fontWeight: FontWeight.w600)),
+      onPressed: () async => await provider.searchEvents(),
+  );
+}
+
+
 
 Padding _filterEventType(
         {String type,

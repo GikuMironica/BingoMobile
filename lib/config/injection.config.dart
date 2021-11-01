@@ -10,8 +10,9 @@ import 'package:injectable/injectable.dart' as _i2;
 import '../controllers/providers/account_provider.dart' as _i3;
 import '../controllers/providers/change_password_provider.dart' as _i7;
 import '../controllers/providers/event_provider.dart' as _i15;
-import '../controllers/providers/location_provider.dart' as _i18;
-import '../controllers/providers/settings_provider.dart' as _i21;
+import '../controllers/providers/legacy_location_provider.dart' as _i18;
+import '../controllers/providers/location_provider.dart' as _i19;
+import '../controllers/providers/settings_provider.dart' as _i22;
 import '../data/repositories/announcement_repository.dart' as _i4;
 import '../data/repositories/authentication_repository.dart' as _i5;
 import '../data/repositories/event_repository.dart' as _i8;
@@ -24,9 +25,9 @@ import '../data/repositories/user_repository.dart' as _i14;
 import '../services/authentication_service.dart' as _i6;
 import '../services/date_formatter_service.dart' as _i16;
 import '../services/dio_service.dart' as _i17;
-import '../services/logging_service.dart' as _i19;
+import '../services/logging_service.dart' as _i20;
 import '../services/secure_storage_service.dart'
-    as _i20; // ignore_for_file: unnecessary_lambdas
+    as _i21; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -56,8 +57,9 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i16.DateFormatterService>(_i16.DateFormatterService());
   gh.singleton<_i17.DioService>(_i17.DioService());
   gh.singleton<_i18.GeolocationProvider>(_i18.GeolocationProvider());
-  gh.singleton<_i19.LoggingService>(_i19.LoggingService());
-  gh.singleton<_i20.SecureStorageService>(_i20.SecureStorageService());
-  gh.singleton<_i21.SettingsProvider>(_i21.SettingsProvider());
+  gh.singleton<_i19.LocationServiceProvider>(_i19.LocationServiceProvider());
+  gh.singleton<_i20.LoggingService>(_i20.LoggingService());
+  gh.singleton<_i21.SecureStorageService>(_i21.SecureStorageService());
+  gh.singleton<_i22.SettingsProvider>(_i22.SettingsProvider());
   return get;
 }
