@@ -62,10 +62,10 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _loadingMapDialog() {
     return Visibility(
-        visible: searchProvider.pageState == SearchPageState.SEARCHING,
-        child: overlayBlurBackgroundCircularProgressIndicator(
-            // TODO translations
-            context,
-            'Looking for events'));
+      visible: searchProvider.pageState == SearchPageState.SEARCHING,
+      child: overlayBlurBackgroundCircularProgressIndicator(
+        // TODO translations
+        context,
+        'Looking for events'));
   }
 }

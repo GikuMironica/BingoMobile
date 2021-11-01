@@ -65,7 +65,7 @@ class LocationServiceProvider extends ChangeNotifier {
 
   Future<void> listenToUpdates() async{
     var _lastLocation;
-    await _location.changeSettings(accuracy: l.LocationAccuracy.balanced, distanceFilter: 20);
+    await _location.changeSettings(accuracy: l.LocationAccuracy.high, distanceFilter: 10);
     _location.onLocationChanged.listen((e) async {
       if(e != null) {
         final newLatitude = roundOff(5, e.latitude);
