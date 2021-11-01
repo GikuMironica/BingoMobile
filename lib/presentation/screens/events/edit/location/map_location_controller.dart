@@ -68,8 +68,8 @@ class MapLocationController extends ChangeNotifier {
       hereMapController.mapScene.setLayerState(
           MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
       _hereMapController.camera.lookAtPointWithDistance(
-          GeoCoordinates(locationManager.currentPosition.latitude,
-              locationManager.currentPosition.longitude),
+          GeoCoordinates(locationManager.userLocation.latitude,
+              locationManager.userLocation.longitude),
           distanceToEarthInMeters);
       _setTapGestureHandler();
     } else {
@@ -110,8 +110,8 @@ class MapLocationController extends ChangeNotifier {
     if (pattern.length > 2) {
       List<Place> suggestionResult = [];
       GeoCircle geoCircle = GeoCircle(
-          GeoCoordinates(locationManager.currentPosition.latitude,
-              locationManager.currentPosition.longitude),
+          GeoCoordinates(locationManager.userLocation.latitude,
+              locationManager.userLocation.longitude),
           50000);
       TextQuery textQuery = TextQuery.withCircleArea(pattern, geoCircle);
       _searchEngine.searchByText(textQuery, SearchOptions.withDefaults(),

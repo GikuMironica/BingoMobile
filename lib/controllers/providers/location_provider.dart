@@ -16,17 +16,12 @@ class LocationServiceProvider extends ChangeNotifier {
   l.Location _location;
   UserLocation userLocation;
 
-  final StreamController<UserLocation> _locationController =
-  StreamController<UserLocation>();
-
-  Stream<UserLocation> get locationStream => _locationController.stream;
-
   LocationServiceProvider() {
-    getActualLocation();
+    _getActualLocation();
     listenToUpdates();
   }
 
-  Future<UserLocation> getActualLocation() async {
+  Future<UserLocation> _getActualLocation() async {
     _location = l.Location();
     bool isLocationEnabled = await _isLocationServiceEnabled();
     if(!isLocationEnabled){
@@ -72,24 +67,17 @@ class LocationServiceProvider extends ChangeNotifier {
   Future<void> listenToUpdates() async{
     var _lastLocation;
     _location.onLocationChanged.listen((e) async {
-      print('something happening');
       if(e != null) {
+        final newLatitude = roundOff(5, e.latitude);
+        final newLongtiude = roundOff(5, e.longitude);
         if (_lastLocation != null) {
-          final newLatitude = roundOff(5, e.latitude);
-          final newLongtiude = roundOff(5, e.longitude);
           if (_lastLocation.latitude != newLatitude &&
               _lastLocation.longitude != newLongtiude) {
-            print('User location auto updated: $newLatitude, $newLongtiude');
             userLocation = UserLocation(newLatitude, newLongtiude);
-            notifyListeners();
           }
         } else {
-          final newLatitude = roundOff(5, e.latitude);
-          final newLongtiude = roundOff(5, e.longitude);
           final userLocation = UserLocation(newLatitude, newLongtiude);
-          print('User location auto updated: $newLatitude, $newLongtiude');
           this.userLocation = userLocation;
-          notifyListeners();
         }
       }
     });

@@ -7,8 +7,8 @@ class GeolocationProvider extends ChangeNotifier {
   Position _currentPosition;
 
   GeolocationProvider() {
-    getCurrentLocation();
-    onLocationChange();
+    //getActualLocation();
+    //onLocationChange();
     // Live location
     // var positionStream = Geolocator.getPositionStream(
     //         distanceFilter: 1, desiredAccuracy: LocationAccuracy.high)
@@ -18,9 +18,9 @@ class GeolocationProvider extends ChangeNotifier {
     // });
   }
 
-  Position get currentPosition => _currentPosition;
+  Position get userLocation => _currentPosition;
 
-  Future<Position> getCurrentLocation() async {
+  Future<Position> getActualLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
 

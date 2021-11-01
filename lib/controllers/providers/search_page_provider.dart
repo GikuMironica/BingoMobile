@@ -112,7 +112,6 @@ class SearchPageProvider extends ChangeNotifier {
   //TODO clean old results!
   Future<void> searchEvents() async {
     setPageState(SearchPageState.SEARCHING);
-    await _locationManager.getActualLocation();
     searchQuery.longitude = _locationManager.userLocation.longitude;
     searchQuery.latitude = _locationManager.userLocation.latitude;
     searchQuery.radius = searchRadius.ceil();
@@ -254,15 +253,7 @@ class SearchPageProvider extends ChangeNotifier {
   }
 
   Future<void> updateUserLocation({bool isInitalizeAction=false}) async{
-    UserLocation userPosition;
-    if(isInitalizeAction){
-      userPosition = _locationManager.userLocation;
-      print('Initialized with'+userPosition.longitude.toString()+" "+userPosition.latitude.toString());
-    } else{
-      userPosition = await _locationManager.getActualLocation();
-      print('Updated with'+userPosition.longitude.toString()+" "+userPosition.latitude.toString());
-    }
-
+    UserLocation userPosition = _locationManager.userLocation;
     GeoCoordinates geoCoordinates = GeoCoordinates(
         userPosition.latitude,
         userPosition.longitude);
