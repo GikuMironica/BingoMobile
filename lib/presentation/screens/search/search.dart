@@ -15,13 +15,11 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  FocusNode _focusNode = FocusNode();
   SearchPageProvider searchProvider;
   LocationServiceProvider locationService;
 
   @override
   Widget build(BuildContext context) {
-    print('REBUILT REBUILT REBUILT REBUILT REBUILT REBUILT REBUILT REBUILT REBUILT REBUILT REBUILT REBUILT');
     locationService = Provider.of<LocationServiceProvider>(context, listen: true);
     searchProvider = Provider.of<SearchPageProvider>(context, listen: true);
     searchProvider.context = context;

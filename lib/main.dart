@@ -10,6 +10,7 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/legacy_location_provider.dart';
 import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/controllers/providers/change_password_provider.dart';
+import 'package:hopaut/controllers/providers/map_location_provider.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/presentation/widgets/behaviors/disable_glow_behavior.dart';
 import 'package:hopaut/services/authentication_service.dart';
@@ -143,7 +144,10 @@ class _HopAutState extends State<HopAut> {
               create: (context) => getIt<GeolocationProvider>()),
           ChangeNotifierProvider<LocationServiceProvider>(
               create: (context) => getIt<LocationServiceProvider>()),
-
+          ChangeNotifierProvider<MapLocationProvider>(
+            create: (_) => MapLocationProvider(),
+            lazy: true,
+          ),
         ],
         child: MaterialApp(
           builder: (context, child) {

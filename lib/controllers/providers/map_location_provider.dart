@@ -5,8 +5,8 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
+import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:hopaut/data/models/location.dart' as HopautLocation;
-import 'package:hopaut/controllers/providers/legacy_location_provider.dart';
 
 enum SearchResultState {
   IDLE,
@@ -15,8 +15,8 @@ enum SearchResultState {
   NO_RESULT
 }
 
-class MapLocationController extends ChangeNotifier {
-  GeolocationProvider locationManager = getIt<GeolocationProvider>();
+class MapLocationProvider extends ChangeNotifier {
+  LocationServiceProvider locationManager = getIt<LocationServiceProvider>();
   HereMapController _hereMapController;
   SearchEngine _searchEngine;
   SearchResultState searchResultState;
@@ -28,26 +28,7 @@ class MapLocationController extends ChangeNotifier {
 
   List<Place> searchResults = [];
 
-  HopautLocation.Location parseLocation(Place place) {
-    Map<String, dynamic> map = Map();
-    map['placeType'] = place.type.toString();
-    map['EntityName'] = (place.type == PlaceType.street)
-        ? place.address.street
-        : (place.type == PlaceType.houseNumber)
-            ? '${place.address.street} ${place.address.houseNumOrName}'
-            : place.title;
-    map['Address'] = place.address.street;
-    if (place.address.houseNumOrName.isNotEmpty)
-      map['Address'] = '${map['Address']} ${place.address.houseNumOrName}';
-    map['City'] = place.address.city;
-    map['Country'] = place.address.country;
-    map['Longitude'] = place.geoCoordinates.longitude;
-    map['Latitude'] = place.geoCoordinates.latitude;
-    map['Region'] = place.address.postalCode;
-    return HopautLocation.Location.fromJson(map);
-  }
-
-  MapLocationController() {
+  MapLocationProvider() {
     this.searchResultState = SearchResultState.IDLE;
     this._searchEngine = SearchEngine();
     this.searchBarController = TextEditingController();
@@ -57,7 +38,6 @@ class MapLocationController extends ChangeNotifier {
 
   void onMapCreated(HereMapController hereMapController) {
     _hereMapController = hereMapController;
-
     _hereMapController.mapScene.loadSceneForMapScheme(
         mapScheme, (MapError err) => _initializeMap(_hereMapController, err));
     notifyListeners();
@@ -67,6 +47,7 @@ class MapLocationController extends ChangeNotifier {
     if (error == null) {
       hereMapController.mapScene.setLayerState(
           MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
+      _hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
       _hereMapController.camera.lookAtPointWithDistance(
           GeoCoordinates(locationManager.userLocation.latitude,
               locationManager.userLocation.longitude),
@@ -147,5 +128,24 @@ class MapLocationController extends ChangeNotifier {
         notifyListeners();
       }
     });
+  }
+
+  HopautLocation.Location parseLocation(Place place) {
+    Map<String, dynamic> map = Map();
+    map['placeType'] = place.type.toString();
+    map['EntityName'] = (place.type == PlaceType.street)
+        ? place.address.street
+        : (place.type == PlaceType.houseNumber)
+        ? '${place.address.street} ${place.address.houseNumOrName}'
+        : place.title;
+    map['Address'] = place.address.street;
+    if (place.address.houseNumOrName.isNotEmpty)
+      map['Address'] = '${map['Address']} ${place.address.houseNumOrName}';
+    map['City'] = place.address.city;
+    map['Country'] = place.address.country;
+    map['Longitude'] = place.geoCoordinates.longitude;
+    map['Latitude'] = place.geoCoordinates.latitude;
+    map['Region'] = place.address.postalCode;
+    return HopautLocation.Location.fromJson(map);
   }
 }
