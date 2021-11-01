@@ -16,11 +16,11 @@ class LocationServiceProvider extends ChangeNotifier {
   UserLocation userLocation;
 
   LocationServiceProvider() {
-    _getActualLocation();
+    getActualLocation();
     listenToUpdates();
   }
 
-  Future<UserLocation> _getActualLocation() async {
+  Future<UserLocation> getActualLocation() async {
     _location = l.Location();
     bool isLocationEnabled = await _isLocationServiceEnabledAndAllowed();
     if(!isLocationEnabled){
@@ -65,11 +65,12 @@ class LocationServiceProvider extends ChangeNotifier {
 
   Future<void> listenToUpdates() async{
     var _lastLocation;
+    await _location.changeSettings(accuracy: l.LocationAccuracy.balanced, distanceFilter: 20);
     _location.onLocationChanged.listen((e) async {
       if(e != null) {
         final newLatitude = roundOff(5, e.latitude);
         final newLongtiude = roundOff(5, e.longitude);
-        print('Location changed'+newLongtiude.toString()+" "+newLatitude.toString());
+        print('LOCATION UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE ');
         if (_lastLocation != null) {
           if (_lastLocation.latitude != newLatitude &&
               _lastLocation.longitude != newLongtiude) {

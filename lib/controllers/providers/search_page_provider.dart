@@ -253,7 +253,14 @@ class SearchPageProvider extends ChangeNotifier {
   }
 
   Future<void> updateUserLocation({bool isInitalizeAction=false}) async{
-    UserLocation userPosition = _locationManager.userLocation;
+    UserLocation userPosition;
+    if(isInitalizeAction){
+      userPosition = _locationManager.userLocation;
+      print('Initialized with'+userPosition.longitude.toString()+" "+userPosition.latitude.toString());
+    } else{
+      userPosition = await _locationManager.getActualLocation();
+      print('Updated with'+userPosition.longitude.toString()+" "+userPosition.latitude.toString());
+    }
     GeoCoordinates geoCoordinates = GeoCoordinates(
         userPosition.latitude,
         userPosition.longitude);
