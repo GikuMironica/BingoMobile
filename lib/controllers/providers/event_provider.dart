@@ -71,6 +71,7 @@ class EventProvider extends ChangeNotifier {
       MiniPost miniPost = await _eventRepository.create(post);
       _eventsMap[API.MY_ACTIVE].events.insert(0, miniPost);
       eventLoadingStatus = Idle();
+      notifyListeners();
       return miniPost;
     }
     return null;
@@ -83,6 +84,7 @@ class EventProvider extends ChangeNotifier {
     if (post != null) {
       result = await _eventRepository.update(post);
       eventLoadingStatus = Idle();
+      notifyListeners();
     }
     return result;
   }

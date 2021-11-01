@@ -11,17 +11,20 @@ class EventTextField extends StatefulWidget {
   final List<TextInputFormatter> inputFormatter;
   final Function onChanged;
   final int maxChars;
+  final FormFieldSetter<String> onSaved;
+  final String initialValue;
 
-  EventTextField({
-    this.title,
-    @required this.textHint,
-    this.maxChars,
-    this.onChanged,
-    this.height = 48.0,
-    this.expand = false,
-    this.textInputType = TextInputType.text,
-    this.inputFormatter = const [],
-  });
+  EventTextField(
+      {this.title,
+      this.textHint,
+      this.maxChars,
+      this.onChanged,
+      this.height = 48.0,
+      this.expand = false,
+      this.textInputType = TextInputType.text,
+      this.inputFormatter = const [],
+      this.onSaved,
+      this.initialValue});
 
   @override
   _EventTextFieldState createState() => _EventTextFieldState();
@@ -42,8 +45,10 @@ class _EventTextFieldState extends State<EventTextField> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: TextFormField(
+            initialValue: widget.initialValue,
             maxLines: widget.expand ? 6 : 1,
             onChanged: widget.onChanged,
+            onSaved: widget.onSaved,
             keyboardType: widget.textInputType,
             inputFormatters: widget.inputFormatter,
             decoration: InputDecoration(

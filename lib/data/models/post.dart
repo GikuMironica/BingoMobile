@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/picture.dart';
@@ -165,6 +166,16 @@ class Post {
       }
     }
     return urls;
+  }
+
+  List<ImageProvider> getImages() {
+    List<ImageProvider> images = List();
+    for (Picture picture in pictures) {
+      if (picture != null) {
+        images.add(picture.image);
+      }
+    }
+    return images;
   }
 
   DateTime get startTimeAsDateTime =>
