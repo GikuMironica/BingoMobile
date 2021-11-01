@@ -1,7 +1,9 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/presentation/widgets/clock_icons.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
@@ -40,15 +42,17 @@ class EditEventPage extends StatelessWidget {
               ),
               Divider(),
               ListTile(
-                onTap: () => Application.router
-                    .navigateTo(context, '/edit-event/pictures'),
+                onTap: () => Application.router.navigateTo(
+                    context, Routes.editEventPictures,
+                    transition: TransitionType.cupertino),
                 leading: Icon(Icons.photo),
                 title: Text('Pictures'),
               ),
               Divider(),
               ListTile(
-                onTap: () =>
-                    Application.router.navigateTo(context, '/edit-event/title'),
+                onTap: () => Application.router.navigateTo(
+                    context, Routes.editEventTitle,
+                    transition: TransitionType.cupertino),
                 leading: Icon(MdiIcons.alphabeticalVariant),
                 title: Text('Title'),
               ),
@@ -59,8 +63,9 @@ class EditEventPage extends StatelessWidget {
               ),
               Divider(),
               ListTile(
-                onTap: () =>
-                    Application.router.navigateTo(context, '/edit-event/time'),
+                onTap: () => Application.router.navigateTo(
+                    context, Routes.editEventTime,
+                    transition: TransitionType.cupertino),
                 leading: Icon(ClockIcon(provider.post.timeRange)),
                 title: Text('Time'),
               ),
@@ -70,6 +75,9 @@ class EditEventPage extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     ListTile(
+                      onTap: () => Application.router.navigateTo(
+                          context, Routes.editEventSlots,
+                          transition: TransitionType.cupertino),
                       leading: Icon(MdiIcons.clipboardListOutline),
                       title: Text('Slots'),
                     ),
@@ -82,6 +90,9 @@ class EditEventPage extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     ListTile(
+                      onTap: () => Application.router.navigateTo(
+                          context, Routes.editEventPrice,
+                          transition: TransitionType.cupertino),
                       leading: Icon(MdiIcons.cash),
                       title: Text('Entrance Price'),
                     ),
@@ -90,22 +101,25 @@ class EditEventPage extends StatelessWidget {
                 ),
               ),
               ListTile(
-                onTap: () => Application.router
-                    .navigateTo(context, '/edit-event/description'),
+                onTap: () => Application.router.navigateTo(
+                    context, Routes.editEventDescription,
+                    transition: TransitionType.cupertino),
                 leading: Icon(MdiIcons.text),
                 title: Text('Description'),
               ),
               Divider(),
               ListTile(
-                onTap: () => Application.router
-                    .navigateTo(context, '/edit-event/requirements'),
+                onTap: () => Application.router.navigateTo(
+                    context, Routes.editEventRequirements,
+                    transition: TransitionType.cupertino),
                 leading: Icon(MdiIcons.clipboardAlertOutline),
                 title: Text('Requirements'),
               ),
               Divider(),
               ListTile(
-                onTap: () =>
-                    Application.router.navigateTo(context, '/edit-event/tags'),
+                onTap: () => Application.router.navigateTo(
+                    context, Routes.editEventTags,
+                    transition: TransitionType.cupertino),
                 leading: Icon(MdiIcons.tag),
                 title: Text('Tags'),
               ),

@@ -5,7 +5,7 @@ import 'package:hopaut/config/constants/web.dart';
 class Picture {
   String _path;
   String _url;
-  CachedNetworkImageProvider _image;
+  ImageProvider _image;
 
   Picture(String path, [ImageProvider image]) {
     _path = path;

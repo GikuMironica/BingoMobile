@@ -33,6 +33,9 @@ class Routes {
   static String editEventRequirements = '/edit-event/requirements';
   static String editEventPictures = '/edit-event/pictures';
   static String editEventTime = '/edit-event/time';
+  static String editEventSlots = '/edit-event/slots';
+  static String editEventPrice = '/edit-event/price';
+
   // -- ANNOUNCEMENTS ---------------------------------------------------------
   static String announcements = '/announcements';
   static String announcementById = '/announcements/:id';
@@ -73,6 +76,9 @@ class Routes {
     router.define(editEventTags, handler: editEventTagsHandler);
     router.define(editEventPictures, handler: editEventPicturesHandler);
     router.define(editEventTime, handler: editEventTimeHandler);
+    router.define(editEventSlots, handler: editEventSlotsHandler);
+    router.define(editEventPrice, handler: editEventPriceHandler);
+
     router.define(rateEvent, handler: rateEventHandler);
     router.define(searchByMap, handler: locationSearchPageHandler);
 

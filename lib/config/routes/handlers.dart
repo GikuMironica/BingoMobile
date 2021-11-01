@@ -15,7 +15,9 @@ import 'package:hopaut/presentation/screens/events/edit/description.dart';
 import 'package:hopaut/presentation/screens/events/edit/edit_event_page.dart';
 import 'package:hopaut/presentation/screens/events/edit/location/map.dart';
 import 'package:hopaut/presentation/screens/events/edit/pictures.dart';
+import 'package:hopaut/presentation/screens/events/edit/price.dart';
 import 'package:hopaut/presentation/screens/events/edit/requirements.dart';
+import 'package:hopaut/presentation/screens/events/edit/slots.dart';
 import 'package:hopaut/presentation/screens/events/edit/tags.dart';
 import 'package:hopaut/presentation/screens/events/edit/time.dart';
 import 'package:hopaut/presentation/screens/events/edit/title.dart';
@@ -127,6 +129,16 @@ var editEventTagsHandler = new Handler(
 var editEventTitleHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return EditPostTitle();
+});
+
+var editEventSlotsHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return EditSlotsPage();
+});
+
+var editEventPriceHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return EditPricePage();
 });
 
 var locationSearchPageHandler =

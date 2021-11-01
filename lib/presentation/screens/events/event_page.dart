@@ -51,7 +51,6 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   bool isActiveEvent = false;
 
   Key attendCellKey = Key('attend-list-cell');
-  List<ImageProvider> _postImages = [];
 
   ScrollController _scrollController;
   AnimationController _animationController;
@@ -83,15 +82,6 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
     isAttending = post.isAttending;
     isActiveEvent = post.activeFlag == 1;
     setState(() {});
-  }
-
-  void checkForImages() {
-    if (post.pictures.length != 0) {
-      postHasPictures = true;
-      for (Picture picture in post.pictures) {
-        _postImages.add(picture.image);
-      }
-    }
   }
 
   void attendEvent() async {
@@ -150,9 +140,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
         getDetails()
             .then((value) =>
                 setState(() => provider.eventLoadingStatus = Success()))
-            .then((value) {
-          checkForImages();
-        });
+            .then((value) {});
       }
       return provider.eventLoadingStatus is Submitted
           ? Scaffold(
@@ -187,8 +175,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                       child: FlexibleSpaceBar(
                         collapseMode: CollapseMode.parallax,
                         background: Carousel(
-                          images: postHasPictures
-                              ? _postImages
+                          images: post.pictures.isNotEmpty
+                              ? post.getImages()
                               : [
                                   AssetImage(
                                       'assets/icons/event_default_image.png'),

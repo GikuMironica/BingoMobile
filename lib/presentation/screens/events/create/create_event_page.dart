@@ -1,3 +1,4 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -39,23 +40,24 @@ class _CreateEventPageState extends State<CreateEventPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
-      return provider.eventLoadingStatus is Submitted
-          ? Center(
-              // TODO translation
-              child: overlayBlurBackgroundCircularProgressIndicator(
-                  context, 'Loading'),
-            )
-          : Scaffold(
-              appBar: AppBar(
-                flexibleSpace: Container(
-                  decoration: decorationGradient(),
-                ),
-                leading: IconButton(
-                    icon: HATheme.backButton,
-                    onPressed: () => Application.router.pop(context)),
-                title: Text('Create Event'), //TODO: translation
-              ),
-              body: SingleChildScrollView(
+      return Scaffold(
+          appBar: AppBar(
+            flexibleSpace: Container(
+              decoration: decorationGradient(),
+            ),
+            leading: IconButton(
+                icon: HATheme.backButton,
+                onPressed: () => Application.router.pop(context)),
+            title: Text('Create Event'), //TODO: translation
+          ),
+          body: provider.eventLoadingStatus is Submitted
+              ? Container(
+                  child: overlayBlurBackgroundCircularProgressIndicator(
+                      // TODO translations
+                      context,
+                      "Creating event"),
+                )
+              : SingleChildScrollView(
                   controller: scrollController,
                   physics: ClampingScrollPhysics(),
                   padding: EdgeInsets.all(24.0),
@@ -74,6 +76,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                               height: 8,
                             ),
                             Divider(),
+                            FieldTitle(title: "Тitle"), //TODO: translation
                             valueInput(
                               controller: titleController,
                               isStateValid:
@@ -86,13 +89,12 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                   titleController.text,
                               onChange: (value) => provider.onFieldChange(
                                   titleController, value),
-                              hintText: 'Event Title', //TODO: translation
                             ),
                             Divider(),
+                            FieldTitle(title: "Type"), //TODO: translation
                             EventTypeList(post: provider.post),
                             Divider(),
-                            FieldTitle(
-                                title: "Event Location"), //TODO: translation
+                            FieldTitle(title: "Location"), //TODO: translation
                             LocationButton(post: provider.post),
                             Divider(),
                             FieldTitle(title: "Time"), //TODO: translation
@@ -114,6 +116,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                   provider.validateDates(
                                       startDateController, endDateController);
                                 }),
+                            FieldTitle(
+                                title: "Description"), //TODO: translation
                             textAreaInput(
                               controller: descriptionController,
                               validationMessage:
@@ -126,8 +130,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                   .description = descriptionController.text,
                               onChange: (value) => provider.onFieldChange(
                                   descriptionController, value),
-                              hintText: 'Event Description', //TODO: translation
+                              // hintText: 'Event Description', //TODO: write an example description + translation
                             ),
+                            FieldTitle(
+                                title: "Requirements"), //TODO: translation
                             textAreaInput(
                               controller: requirementsController,
                               validationMessage: "",
@@ -139,8 +145,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                   .requirements = requirementsController.text,
                               onChange: (value) => provider.onFieldChange(
                                   requirementsController, value),
-                              hintText:
-                                  'Event Requirements (Optional)', //TODO: translation
+                              //hintText:
+                              //'Event Requirements (Optional)', //TODO: write example requirements + translation
                             ),
                             Divider(),
                             Tags(
@@ -165,11 +171,11 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                     if (postRes != null) {
                                       Application.router.navigateTo(
                                           context, '/event/${postRes.postId}',
+                                          transition: TransitionType.cupertino,
                                           replace: true);
                                     } else {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              "Unable to create event"); //TODO: translation
+                                      showNewErrorSnackbar(
+                                          "Unable to create event"); //TODO: translation
                                     }
                                   }
                                 })
