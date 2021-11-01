@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hopaut/data/domain/coordinate.dart';
@@ -14,8 +16,14 @@ class LocationServiceProvider extends ChangeNotifier {
   l.Location _location;
   UserLocation userLocation;
 
+  final StreamController<UserLocation> _locationController =
+  StreamController<UserLocation>();
+
+  Stream<UserLocation> get locationStream => _locationController.stream;
+
   LocationServiceProvider() {
     getActualLocation();
+    listenToUpdates();
   }
 
   Future<UserLocation> getActualLocation() async {
@@ -59,5 +67,31 @@ class LocationServiceProvider extends ChangeNotifier {
   Future<l.LocationData> _getLocation() async {
     l.LocationData locationData = await _location.getLocation();
     return locationData;
+  }
+
+  Future<void> listenToUpdates() async{
+    var _lastLocation;
+    _location.onLocationChanged.listen((e) async {
+      print('something happening');
+      if(e != null) {
+        if (_lastLocation != null) {
+          final newLatitude = roundOff(5, e.latitude);
+          final newLongtiude = roundOff(5, e.longitude);
+          if (_lastLocation.latitude != newLatitude &&
+              _lastLocation.longitude != newLongtiude) {
+            print('User location auto updated: $newLatitude, $newLongtiude');
+            userLocation = UserLocation(newLatitude, newLongtiude);
+            notifyListeners();
+          }
+        } else {
+          final newLatitude = roundOff(5, e.latitude);
+          final newLongtiude = roundOff(5, e.longitude);
+          final userLocation = UserLocation(newLatitude, newLongtiude);
+          print('User location auto updated: $newLatitude, $newLongtiude');
+          this.userLocation = userLocation;
+          notifyListeners();
+        }
+      }
+    });
   }
 }
