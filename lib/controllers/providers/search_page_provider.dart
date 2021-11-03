@@ -14,6 +14,7 @@ import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/mini_post_card.dart';
 import 'package:hopaut/controllers/providers/legacy_location_provider.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
@@ -73,7 +74,7 @@ class SearchPageProvider extends ChangeNotifier {
 
   void init() async {
     carouselController = CarouselController();
-    _pageState = SearchPageState.IDLE;
+    _pageState = SearchPageState.SEARCHING;
     _mapState = MapState.LOADING;
     searchQuery = SearchQuery(radius: searchRadius.ceil());
     _filterToggled = false;
@@ -123,12 +124,8 @@ class SearchPageProvider extends ChangeNotifier {
       _addSearchResultsToMap(_searchResults);
     } else {
       setPageState(SearchPageState.NO_SEARCH_RESULT);
-      Fluttertoast.showToast(
-          // TODO translation
-          backgroundColor: Color(0xFFed2f65),
-          textColor: Colors.white,
-          toastLength: Toast.LENGTH_LONG,
-          msg: "No events found in this area.");
+      // TODO translation
+      showNewErrorSnackbar('No events found in this area.');
     }
   }
 
@@ -253,10 +250,11 @@ class SearchPageProvider extends ChangeNotifier {
   }
 
   Future<void> updateUserLocation({bool isInitalizeAction=false}) async{
-
     UserLocation userPosition;
     if(isInitalizeAction){
       userPosition = _locationManager.userLocation;
+      if (_locationManager.userLocation.latitude == null || _locationManager.userLocation.longitude==null)
+        userPosition = await _locationManager.getActualLocation();
     } else{
       userPosition = await _locationManager.getActualLocation();
     }
@@ -264,7 +262,6 @@ class SearchPageProvider extends ChangeNotifier {
     GeoCoordinates geoCoordinates = GeoCoordinates(
         userPosition.latitude,
         userPosition.longitude);
-
     isInitalizeAction
         ? mapController.camera.lookAtPointWithDistance(geoCoordinates, searchRadius * 5000)
         : mapController.camera.lookAtPoint(geoCoordinates);

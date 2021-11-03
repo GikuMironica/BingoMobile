@@ -70,10 +70,9 @@ class LocationServiceProvider extends ChangeNotifier {
       if(e != null) {
         final newLatitude = roundOff(5, e.latitude);
         final newLongtiude = roundOff(5, e.longitude);
-        print('LOCATION UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE ');
         if (_lastLocation != null) {
           if (_lastLocation.latitude != newLatitude &&
-              _lastLocation.longitude != newLongtiude) {
+            _lastLocation.longitude != newLongtiude) {
             userLocation = UserLocation(newLatitude, newLongtiude);
           }
         } else {
