@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/theme.dart';
@@ -12,11 +13,12 @@ class SearchPageFilter extends StatefulWidget {
 }
 
 class _SearchPageFilterState extends State<SearchPageFilter> {
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SearchPageProvider>(
       builder: (context, provider, __) => Card(
-        color: provider.filter ? Colors.white.withOpacity(0.95) : Colors.white.withOpacity(0.5),
+        color: provider.filter ? Colors.white.withOpacity(0.9) : Colors.white.withOpacity(0.5),
         elevation: provider.filter ? 4.0 : 0.25,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
@@ -85,14 +87,46 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(height: 8.0),
-                      SizedBox(
-                        height: 36.0,
-                        child: ListView(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          children: _carouselFilterItems(provider: provider, context: context)
-                        ),
+                      SizedBox(height: 6.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            '❮',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14
+                            ),
+                          ),
+                          SizedBox(width: 6,),
+                          Expanded(
+                            child: CarouselSlider(
+                              options: CarouselOptions(
+                                //autoPlayAnimationDuration: Duration(milliseconds: 12000),
+                                //autoPlayInterval: Duration(milliseconds: 11900),
+                                //autoPlay: true,
+                                height: 46,
+                                initialPage: 1,
+                                viewportFraction: 0.45,
+                                enableInfiniteScroll: false,
+                                enlargeCenterPage: true,
+                                enlargeStrategy: CenterPageEnlargeStrategy.scale,
+                                autoPlayCurve: Curves.linear,
+                              ),
+                              items: _carouselFilterItems(provider: provider, context: context)
+                            ),
+                          ),
+                          SizedBox(width: 8,),
+                          Text(
+                            '❯',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 12,
@@ -154,12 +188,12 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600, fontSize: 14.0),
                               ),
-                              Checkbox(
+                              CircularCheckBox(
                                 value: provider.searchQuery.today,
                                 onChanged: (v) => provider.filterToggleToday(),
-                                materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 activeColor: Theme.of(context).primaryColor,
+                                inactiveColor: Theme.of(context).primaryColor,
                               ),
                             ],
                           ),
@@ -192,13 +226,6 @@ List<Widget> _carouselFilterItems({SearchPageProvider provider, BuildContext con
             EventType.houseParty)),
     _filterEventType(
         context: context,
-        type: 'Bar',
-        value: provider
-            .searchQuery.eventTypes[EventType.bar],
-        onTap: (v) => provider
-            .filterToggleEventType(EventType.bar)),
-    _filterEventType(
-        context: context,
         type: 'Club',
         value: provider
             .searchQuery.eventTypes[EventType.club],
@@ -211,6 +238,13 @@ List<Widget> _carouselFilterItems({SearchPageProvider provider, BuildContext con
             .eventTypes[EventType.streetParty],
         onTap: (v) => provider.filterToggleEventType(
             EventType.streetParty)),
+    _filterEventType(
+        context: context,
+        type: 'Bar',
+        value: provider
+            .searchQuery.eventTypes[EventType.bar],
+        onTap: (v) => provider
+            .filterToggleEventType(EventType.bar)),
     _filterEventType(
         context: context,
         type: 'Bicycle Meet',
@@ -273,33 +307,41 @@ OutlinedButton _searchButton(SearchPageProvider provider) {
   );
 }
 
-
-
-Padding _filterEventType(
+Widget _filterEventType(
         {String type,
         bool value,
         Function(bool) onTap,
         BuildContext context}) =>
-    Padding(
-      padding: const EdgeInsets.only(right: 4.0),
-      child: Row(
-        children: [
-          CircularCheckBox(
-            value: value,
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            activeColor: Theme.of(context).primaryColor,
-            disabledColor: Color(0xFFE7E7E7),
-            inactiveColor: Color(0xFFE7E7E7),
-            onChanged: onTap,
-          ),
-          Text(
-            type,
-            style: TextStyle(
-              color: Color(0xFF2A2A2A),
-              fontSize: 11.0,
-              fontWeight: FontWeight.w400,
+    Card(
+      elevation: 5,
+      color: Colors.transparent,
+      shadowColor: Colors.black.withOpacity(0.12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 4.0),
+        child: Row(
+          children: [
+            CircularCheckBox(
+              value: value,
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              activeColor: Theme.of(context).primaryColor,
+              disabledColor: Color(0xFFE7E7E7),
+              inactiveColor: Theme.of(context).primaryColor,
+              onChanged: onTap,
             ),
-          ),
-        ],
+            Text(
+              type,
+              style: TextStyle(
+                color: Color(0xFF2A2A2A),
+                fontSize: 11.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
       ),
     );
+
+
