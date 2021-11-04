@@ -13,6 +13,8 @@ class SearchPageFilter extends StatefulWidget {
 }
 
 class _SearchPageFilterState extends State<SearchPageFilter> {
+  CarouselController _carouselController = CarouselController();
+  int _carouselLengh = 8;
 
   @override
   Widget build(BuildContext context) {
@@ -91,17 +93,23 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(
-                            '❮',
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14
+                          GestureDetector(
+                            onTap: (){
+                              _carouselController.animateToPage(1);
+                            },
+                            child: Text(
+                              '❮',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14
+                              ),
                             ),
                           ),
                           SizedBox(width: 6,),
                           Expanded(
                             child: CarouselSlider(
+                              carouselController: _carouselController,
                               options: CarouselOptions(
                                 //autoPlayAnimationDuration: Duration(milliseconds: 12000),
                                 //autoPlayInterval: Duration(milliseconds: 11900),
@@ -118,12 +126,17 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                             ),
                           ),
                           SizedBox(width: 8,),
-                          Text(
-                            '❯',
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14
+                          GestureDetector(
+                            onTap: (){
+                              _carouselController.animateToPage(_carouselLengh);
+                            },
+                            child: Text(
+                              '❯',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14
+                              ),
                             ),
                           ),
                         ],

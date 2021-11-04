@@ -253,7 +253,7 @@ class SearchPageProvider extends ChangeNotifier {
     UserLocation userPosition;
     if(isInitalizeAction){
       userPosition = _locationManager.userLocation;
-      if (_locationManager.userLocation.latitude == null || _locationManager.userLocation.longitude==null)
+      if (_locationManager?.userLocation?.latitude == null || _locationManager?.userLocation?.longitude==null)
         userPosition = await _locationManager.getActualLocation();
     } else{
       userPosition = await _locationManager.getActualLocation();
