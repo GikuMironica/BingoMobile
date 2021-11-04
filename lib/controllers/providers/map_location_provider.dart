@@ -22,7 +22,7 @@ class MapLocationProvider extends ChangeNotifier {
   SearchResultState searchResultState;
   TextEditingController searchBarController;
   EventProvider _eventProvider = getIt<EventProvider>();
-
+  GeoCoordinates _geoCoordinates;
   final double distanceToEarthInMeters = 3000;
   MapScheme mapScheme = MapScheme.greyDay;
 
@@ -61,23 +61,26 @@ class MapLocationProvider extends ChangeNotifier {
   void _setTapGestureHandler() {
     _hereMapController.gestures.tapListener =
         TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) {
-      var geoCoordinates = _hereMapController.viewToGeoCoordinates(touchPoint);
-      getReverseGeocodeResult(geo: geoCoordinates);
+      _geoCoordinates = _hereMapController.viewToGeoCoordinates(touchPoint);
+      print("These coordinates were tapped" +
+          _geoCoordinates.longitude.toString() +
+          " " +
+          _geoCoordinates.longitude.toString());
     });
-    _hereMapController.gestures.longPressListener =
-        LongPressListener.fromLambdas(
-            lambda_onLongPress: (GestureState state, Point2D touchPoint) {
-      print('Long Press Detected');
-      print(state);
-      var geoCoordinates = _hereMapController.viewToGeoCoordinates(touchPoint);
-      getReverseGeocodeResult(geo: geoCoordinates);
-    });
+    // _hereMapController.gestures.longPressListener =
+    //     LongPressListener.fromLambdas(
+    //         lambda_onLongPress: (GestureState state, Point2D touchPoint) {
+    //   print('Long Press Detected');
+    //   print(state);
+    //   var geoCoordinates = _hereMapController.viewToGeoCoordinates(touchPoint);
+    //   getReverseGeocodeResult(geo: geoCoordinates);
+    // });
   }
 
-  void clearSearchResult() {
+  void getGeoLocation() {
     searchResults.clear();
-    searchResultState = SearchResultState.IDLE;
-    notifyListeners();
+    print('Tapped');
+    getReverseGeocodeResult(geo: _geoCoordinates);
   }
 
   void addToSearchResult(Place item) {
@@ -115,19 +118,20 @@ class MapLocationProvider extends ChangeNotifier {
   }
 
   Future<void> getReverseGeocodeResult({GeoCoordinates geo}) async {
+    print("Geo is " + geo.toString());
     if (geo == null) geo = _hereMapController.camera.state.targetCoordinates;
     _searchEngine.searchByCoordinates(geo, SearchOptions.withDefaults(),
         (error, List<Place> results) {
       if (error != null) print('Error: $error');
       if (results.isNotEmpty) {
-        searchResults = [...results];
+        searchResults = [results.first];
+        print(searchResults.first.toString() + " is the search result");
         searchResultState = SearchResultState.HAS_RESULTS_GEOCODE;
-        notifyListeners();
       } else {
         searchResultState = SearchResultState.NO_RESULT;
-        notifyListeners();
       }
     });
+    notifyListeners();
   }
 
   HopautLocation.Location parseLocation(Place place) {
@@ -136,8 +140,8 @@ class MapLocationProvider extends ChangeNotifier {
     map['EntityName'] = (place.type == PlaceType.street)
         ? place.address.street
         : (place.type == PlaceType.houseNumber)
-        ? '${place.address.street} ${place.address.houseNumOrName}'
-        : place.title;
+            ? '${place.address.street} ${place.address.houseNumOrName}'
+            : place.title;
     map['Address'] = place.address.street;
     if (place.address.houseNumOrName.isNotEmpty)
       map['Address'] = '${map['Address']} ${place.address.houseNumOrName}';

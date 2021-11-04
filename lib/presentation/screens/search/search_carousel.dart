@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
+import 'package:here_sdk/mapview.dart';
 import 'package:hopaut/controllers/providers/search_page_provider.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:provider/provider.dart';
@@ -35,9 +36,10 @@ class _CreatePageState extends State<SearchPageCarousel> {
                     onPageChanged: (value, reason) {
                       MiniPost mp = searchProvider.searchResults[value];
                       searchProvider.mapController.camera
-                          .lookAtPointWithDistance(
+                          .flyToWithOptionsAndDistance(
                               GeoCoordinates(mp.latitude, mp.longitude),
-                              searchProvider.onCarouselSwipeLookFromDistance);
+                              searchProvider.onCarouselSwipeLookFromDistance,
+                              MapCameraFlyToOptions.withDefaults());
                     },
                     enableInfiniteScroll: false,
                     autoPlay: false,

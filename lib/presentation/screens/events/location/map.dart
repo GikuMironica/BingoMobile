@@ -27,43 +27,41 @@ class _SearchByMapState extends State<SearchByMap> {
 
   @override
   Widget build(BuildContext context) {
-    locationSelectionProvider = Provider.of<MapLocationProvider>(context, listen: true);
+    locationSelectionProvider =
+        Provider.of<MapLocationProvider>(context, listen: true);
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      resizeToAvoidBottomInset: false,
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        mini: true,
-        child: Icon(
-          Ionicons.navigate,
-          color: Colors.white,
-          size: 16,
-        ),
-        onPressed: () async =>{
-        },
-      ),
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: decorationGradient(),
-        ),
-        leading: IconButton(
-            icon: HATheme.backButton,
+        extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: FloatingActionButton(
+          mini: true,
+          child: Icon(
+            Ionicons.navigate,
             color: Colors.white,
-            onPressed: () => Application.router.pop(
-                context)
-               /* mapController.searchResults != null
+            size: 16,
+          ),
+          onPressed: () async => {},
+        ),
+        appBar: AppBar(
+          flexibleSpace: Container(
+            decoration: decorationGradient(),
+          ),
+          leading: IconButton(
+              icon: HATheme.backButton,
+              color: Colors.white,
+              onPressed: () => Application.router.pop(context)
+              /* mapController.searchResults != null
                     ? mapController
                         .parseLocation(mapController.searchResults.first)
                     : null),*/
+              ),
+          title: Text(
+            // TODO translation
+            'Choose Location',
+          ),
+          elevation: 0,
         ),
-        title: Text(
-          // TODO translation
-          'Choose Location',
-        ),
-        elevation: 0,
-      ),
-      body: _body(locationSelectionProvider)
-    );
+        body: _body(locationSelectionProvider));
   }
 
   Widget _body(MapLocationProvider locationSelectionProvider) {
@@ -76,10 +74,10 @@ class _SearchByMapState extends State<SearchByMap> {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 32),
               child: BasicButton(
-                onPressed: () async =>
-                  locationSelectionProvider.getReverseGeocodeResult(),
-              // TODO translation
-              label: 'Confirm'),
+                  onPressed: () async =>
+                      locationSelectionProvider.getReverseGeocodeResult(),
+                  // TODO translation
+                  label: 'Confirm'),
             ),
           ),
         ),
@@ -89,7 +87,7 @@ class _SearchByMapState extends State<SearchByMap> {
     );
   }
 
-  Widget _selectedLocation(MapLocationProvider locationSelectionProvider){
+  Widget _selectedLocation(MapLocationProvider locationSelectionProvider) {
     return SafeArea(
       child: Visibility(
         visible: locationSelectionProvider.searchResults.isNotEmpty,
@@ -104,14 +102,14 @@ class _SearchByMapState extends State<SearchByMap> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: ListView.builder(
-                itemCount: locationSelectionProvider.searchResults.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                      locationSelectionProvider.searchResults[index].title),
-                  );
-                }),
+                  itemCount: locationSelectionProvider.searchResults.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(
+                          locationSelectionProvider.searchResults[index].title),
+                    );
+                  }),
             ),
           ),
         ),
@@ -119,7 +117,7 @@ class _SearchByMapState extends State<SearchByMap> {
     );
   }
 
-  Widget _searchResultTextCard(MapLocationProvider locationSelectionProvider){
+  Widget _searchResultTextCard(MapLocationProvider locationSelectionProvider) {
     return SafeArea(
       child: Align(
         alignment: Alignment.topCenter,
@@ -127,28 +125,28 @@ class _SearchByMapState extends State<SearchByMap> {
           padding: const EdgeInsets.all(16.0),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.grey[200].withOpacity(0.7),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                  color: Colors.grey[300].withOpacity(0.7)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.07),
-                  blurRadius: 3.0,
-                  spreadRadius: 2.0,
-                  offset: Offset(0, 1.5))
-              ]),
+                color: Colors.grey[200].withOpacity(0.7),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey[300].withOpacity(0.7)),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.07),
+                      blurRadius: 3.0,
+                      spreadRadius: 2.0,
+                      offset: Offset(0, 1.5))
+                ]),
             child: TypeAheadField(
               textFieldConfiguration: TextFieldConfiguration(
-                keyboardType: TextInputType.text,
-                controller: locationSelectionProvider.searchBarController,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(12.0),
-                  hintText: 'Search',
-                  border: InputBorder.none,
-                )),
+                  keyboardType: TextInputType.text,
+                  controller: locationSelectionProvider.searchBarController,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(12.0),
+                    hintText: 'Search',
+                    border: InputBorder.none,
+                  )),
               suggestionsCallback: (pattern) async =>
-              await locationSelectionProvider.getAutocompleteResult(pattern),
+                  await locationSelectionProvider
+                      .getAutocompleteResult(pattern),
               itemBuilder: (context, Place suggestion) => ListTile(
                 title: Text(suggestion.title),
               ),
@@ -163,55 +161,52 @@ class _SearchByMapState extends State<SearchByMap> {
     );
   }
 
-  Widget _map(MapLocationProvider locationServiceProvider){
-    return Stack(
-      children: [
-        Container(
-          padding: EdgeInsets.zero,
-          height: MediaQuery.of(context).size.height,
-          width: double.infinity,
-          child: RepaintBoundary(
-            child: HereMap(
-              onMapCreated: locationSelectionProvider.onMapCreated,
-            ),
+  Widget _map(MapLocationProvider locationServiceProvider) {
+    return Stack(children: [
+      Container(
+        padding: EdgeInsets.zero,
+        height: MediaQuery.of(context).size.height,
+        width: double.infinity,
+        child: RepaintBoundary(
+          child: HereMap(
+            onMapCreated: locationSelectionProvider.onMapCreated,
           ),
         ),
-        Align(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.location_pin,
-                  size: 40,
-                  color: HATheme.HOPAUT_PINK,
-                ),
-                onPressed: () => locationSelectionProvider.searchResultState != SearchResultState.IDLE
-                    ? locationSelectionProvider.clearSearchResult()
-                    : null,
+      ),
+      Align(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: Icon(
+                Icons.location_pin,
+                size: 40,
+                color: HATheme.HOPAUT_PINK,
               ),
-              SizedBox(
-                height: 5,
-              ),
-              // TODO translation
-              Text(' Tap to get location ',
+              onPressed: () => locationSelectionProvider.searchResultState !=
+                      SearchResultState.IDLE
+                  ? locationSelectionProvider.getGeoLocation()
+                  : null,
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            // TODO translation
+            Text(' Tap to get location ',
                 style: TextStyle(
                   shadows: [
                     Shadow(
-                      offset: Offset(3, 3),
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 5
-                    )
+                        offset: Offset(3, 3),
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 5)
                   ],
                   backgroundColor: Colors.black.withOpacity(0.60),
                   color: Colors.white,
-                )
-              ),
-            ],
-          ),
+                )),
+          ],
         ),
-      ]
-    );
+      ),
+    ]);
   }
 }

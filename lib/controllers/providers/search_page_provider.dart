@@ -238,8 +238,8 @@ class SearchPageProvider extends ChangeNotifier {
     GeoCoordinates geoCoordinates = GeoCoordinates(
         _locationManager.userLocation.latitude,
         _locationManager.userLocation.longitude);
-    _hereMapController.camera
-        .lookAtPointWithDistance(geoCoordinates, searchRadius * 5000);
+    _hereMapController.camera.flyToWithOptionsAndDistance(geoCoordinates,
+        searchRadius * 5000, MapCameraFlyToOptions.withDefaults());
     redrawGeoCircle(geoCoordinates);
   }
 
@@ -249,27 +249,28 @@ class SearchPageProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> updateUserLocation({bool isInitalizeAction=false}) async{
+  Future<void> updateUserLocation({bool isInitalizeAction = false}) async {
     UserLocation userPosition;
-    if(isInitalizeAction){
+    if (isInitalizeAction) {
       userPosition = _locationManager.userLocation;
-      if (_locationManager?.userLocation?.latitude == null || _locationManager?.userLocation?.longitude==null)
+      if (_locationManager?.userLocation?.latitude == null ||
+          _locationManager?.userLocation?.longitude == null)
         userPosition = await _locationManager.getActualLocation();
-    } else{
+    } else {
       userPosition = await _locationManager.getActualLocation();
     }
 
-    GeoCoordinates geoCoordinates = GeoCoordinates(
-        userPosition.latitude,
-        userPosition.longitude);
+    GeoCoordinates geoCoordinates =
+        GeoCoordinates(userPosition.latitude, userPosition.longitude);
     isInitalizeAction
-        ? mapController.camera.lookAtPointWithDistance(geoCoordinates, searchRadius * 5000)
-        : mapController.camera.lookAtPoint(geoCoordinates);
+        ? mapController.camera.flyToWithOptionsAndDistance(geoCoordinates,
+            searchRadius * 5000, MapCameraFlyToOptions.withDefaults())
+        : mapController.camera.flyTo(geoCoordinates);
 
     // Show the user on the map.
     MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
         'assets/icons/map/radio-button-off-outline.svg', 48, 48);
-    if (_userMarker != null){
+    if (_userMarker != null) {
       _hereMapController.mapScene.removeMapMarker(_userMarker);
     }
     _userMarker = MapMarker(geoCoordinates, userMarkerSvg);
@@ -277,9 +278,9 @@ class SearchPageProvider extends ChangeNotifier {
     redrawGeoCircle(geoCoordinates);
   }
 
-  void redrawGeoCircle(GeoCoordinates geoCoordinates){
+  void redrawGeoCircle(GeoCoordinates geoCoordinates) {
     GeoCircle geoCircle = GeoCircle(geoCoordinates, searchRadius * 1000);
-    if (_mapPolygon != null){
+    if (_mapPolygon != null) {
       _hereMapController.mapScene.removeMapPolygon(_mapPolygon);
     }
     _mapPolygon = MapPolygon(
