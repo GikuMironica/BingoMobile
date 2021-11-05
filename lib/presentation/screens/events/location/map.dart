@@ -40,7 +40,7 @@ class _SearchByMapState extends State<SearchByMap> {
             color: Colors.white,
             size: 16,
           ),
-          onPressed: () async => {},
+          onPressed: () async => await locationSelectionProvider.locateUser(),
         ),
         appBar: AppBar(
           flexibleSpace: Container(
@@ -75,13 +75,13 @@ class _SearchByMapState extends State<SearchByMap> {
               padding: const EdgeInsets.symmetric(vertical: 32),
               child: BasicButton(
                   onPressed: () async =>
-                      locationSelectionProvider.getReverseGeocodeResult(),
+                      await locationSelectionProvider.getReverseGeocodeResult(),
                   // TODO translation
                   label: 'Confirm'),
             ),
           ),
         ),
-        _searchResultTextCard(locationSelectionProvider),
+        _searchBox(locationSelectionProvider),
         _selectedLocation(locationSelectionProvider)
       ],
     );
@@ -117,7 +117,7 @@ class _SearchByMapState extends State<SearchByMap> {
     );
   }
 
-  Widget _searchResultTextCard(MapLocationProvider locationSelectionProvider) {
+  Widget _searchBox(MapLocationProvider locationSelectionProvider) {
     return SafeArea(
       child: Align(
         alignment: Alignment.topCenter,

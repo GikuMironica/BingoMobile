@@ -6,6 +6,7 @@ import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
+import 'package:hopaut/data/domain/coordinate.dart';
 import 'package:hopaut/data/models/location.dart' as HopautLocation;
 
 enum SearchResultState {
@@ -16,7 +17,7 @@ enum SearchResultState {
 }
 
 class MapLocationProvider extends ChangeNotifier {
-  LocationServiceProvider locationManager = getIt<LocationServiceProvider>();
+  LocationServiceProvider _locationManager = getIt<LocationServiceProvider>();
   HereMapController _hereMapController;
   SearchEngine _searchEngine;
   SearchResultState searchResultState;
@@ -24,6 +25,7 @@ class MapLocationProvider extends ChangeNotifier {
   EventProvider _eventProvider = getIt<EventProvider>();
   GeoCoordinates _geoCoordinates;
   final double distanceToEarthInMeters = 3000;
+  final double _autoCompleteSearchRadius = 50000;
   MapScheme mapScheme = MapScheme.greyDay;
 
   List<Place> searchResults = [];
@@ -49,8 +51,8 @@ class MapLocationProvider extends ChangeNotifier {
           MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
       _hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
       _hereMapController.camera.lookAtPointWithDistance(
-          GeoCoordinates(locationManager.userLocation.latitude,
-              locationManager.userLocation.longitude),
+          GeoCoordinates(_locationManager.userLocation.latitude,
+              _locationManager.userLocation.longitude),
           distanceToEarthInMeters);
       _setTapGestureHandler();
     } else {
@@ -67,14 +69,12 @@ class MapLocationProvider extends ChangeNotifier {
           " " +
           _geoCoordinates.longitude.toString());
     });
-    // _hereMapController.gestures.longPressListener =
-    //     LongPressListener.fromLambdas(
-    //         lambda_onLongPress: (GestureState state, Point2D touchPoint) {
-    //   print('Long Press Detected');
-    //   print(state);
-    //   var geoCoordinates = _hereMapController.viewToGeoCoordinates(touchPoint);
-    //   getReverseGeocodeResult(geo: geoCoordinates);
-    // });
+    _hereMapController.gestures.longPressListener =
+        LongPressListener.fromLambdas(
+            lambda_onLongPress: (GestureState state, Point2D touchPoint) {
+      print('Long Press Detected');
+      searchResultState = SearchResultState.IDLE;
+    });
   }
 
   void getGeoLocation() {
@@ -94,9 +94,9 @@ class MapLocationProvider extends ChangeNotifier {
     if (pattern.length > 2) {
       List<Place> suggestionResult = [];
       GeoCircle geoCircle = GeoCircle(
-          GeoCoordinates(locationManager.userLocation.latitude,
-              locationManager.userLocation.longitude),
-          50000);
+          GeoCoordinates(_locationManager.userLocation.latitude,
+              _locationManager.userLocation.longitude),
+          _autoCompleteSearchRadius);
       TextQuery textQuery = TextQuery.withCircleArea(pattern, geoCircle);
       _searchEngine.searchByText(textQuery, SearchOptions.withDefaults(),
           (error, List<Place> suggestion) {
@@ -151,5 +151,16 @@ class MapLocationProvider extends ChangeNotifier {
     map['Latitude'] = place.geoCoordinates.latitude;
     map['Region'] = place.address.postalCode;
     return HopautLocation.Location.fromJson(map);
+  }
+
+  Future<void> locateUser() async {
+    UserLocation userPosition;
+    userPosition = await _locationManager.getActualLocation();
+
+    GeoCoordinates geoCoordinates =
+        GeoCoordinates(userPosition.latitude, userPosition.longitude);
+    mapController.camera.flyToWithOptionsAndDistance(
+        geoCoordinates, 2000, MapCameraFlyToOptions.withDefaults());
+    getReverseGeocodeResult(geo: geoCoordinates);
   }
 }
