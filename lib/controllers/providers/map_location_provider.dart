@@ -64,26 +64,27 @@ class MapLocationProvider extends ChangeNotifier {
     _hereMapController.gestures.tapListener =
         TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) {
       _geoCoordinates = _hereMapController.viewToGeoCoordinates(touchPoint);
+      FocusManager.instance.primaryFocus?.unfocus();
       print("These coordinates were tapped" +
           _geoCoordinates.longitude.toString() +
           " " +
           _geoCoordinates.longitude.toString());
     });
-    _hereMapController.gestures.longPressListener =
-        LongPressListener.fromLambdas(
-            lambda_onLongPress: (GestureState state, Point2D touchPoint) {
-      print('Long Press Detected');
-      searchResultState = SearchResultState.IDLE;
-    });
+    // _hereMapController.gestures.doubleTapListener =
+    //     DoubleTapListener.fromLambdas(lambda_onDoubleTap: (Point2D touchpoint) {
+    //   searchResults.clear();
+    //   searchResultState = SearchResultState.IDLE;
+    //   notifyListeners();
+    // });
   }
 
   void getGeoLocation() {
     searchResults.clear();
-    print('Tapped');
-    getReverseGeocodeResult(geo: _geoCoordinates);
+    getReverseGeocodeResult();
   }
 
   void addToSearchResult(Place item) {
+    // searchResults.clear();
     searchResults.add(item);
     _hereMapController.camera.lookAtPoint(item.geoCoordinates);
     searchResultState = SearchResultState.HAS_RESULTS_AUTOCOMPLETE;
@@ -126,12 +127,13 @@ class MapLocationProvider extends ChangeNotifier {
       if (results.isNotEmpty) {
         searchResults = [results.first];
         print(searchResults.first.toString() + " is the search result");
-        searchResultState = SearchResultState.HAS_RESULTS_GEOCODE;
+        searchResultState = SearchResultState.HAS_RESULTS_AUTOCOMPLETE;
+        notifyListeners();
       } else {
         searchResultState = SearchResultState.NO_RESULT;
+        notifyListeners();
       }
     });
-    notifyListeners();
   }
 
   HopautLocation.Location parseLocation(Place place) {
@@ -162,5 +164,12 @@ class MapLocationProvider extends ChangeNotifier {
     mapController.camera.flyToWithOptionsAndDistance(
         geoCoordinates, 2000, MapCameraFlyToOptions.withDefaults());
     getReverseGeocodeResult(geo: geoCoordinates);
+  }
+
+  void cleanSearch(DismissDirection dismissDirection) {
+    print('swipe left detected');
+    searchResults?.clear();
+    searchResultState = SearchResultState.IDLE;
+    notifyListeners();
   }
 }

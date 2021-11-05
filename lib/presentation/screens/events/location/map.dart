@@ -10,6 +10,7 @@ import 'package:hopaut/controllers/providers/map_location_provider.dart';
 import 'package:hopaut/presentation/widgets/buttons/basic_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 class SearchByMap extends StatefulWidget {
@@ -31,10 +32,11 @@ class _SearchByMapState extends State<SearchByMap> {
         Provider.of<MapLocationProvider>(context, listen: true);
     return Scaffold(
         extendBodyBehindAppBar: true,
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
           mini: true,
+          heroTag: 'SearchBtn',
           child: Icon(
             Ionicons.navigate,
             color: Colors.white,
@@ -89,13 +91,14 @@ class _SearchByMapState extends State<SearchByMap> {
 
   Widget _selectedLocation(MapLocationProvider locationSelectionProvider) {
     return SafeArea(
-      child: Visibility(
-        visible: locationSelectionProvider.searchResults.isNotEmpty,
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
+      child: Dismissible(
+        key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
+        onDismissed: (direction) =>
+            locationSelectionProvider.cleanSearch(direction),
+        child: Visibility(
+          visible: locationSelectionProvider.searchResults.isNotEmpty,
+          child: Center(
             child: Container(
-              padding: EdgeInsets.all(4),
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(),
@@ -106,8 +109,22 @@ class _SearchByMapState extends State<SearchByMap> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return ListTile(
+                      contentPadding: EdgeInsets.zero,
                       title: Text(
                           locationSelectionProvider.searchResults[index].title),
+                      // TODO translation
+                      leading: Container(
+                          width: 21,
+                          height: 150,
+                          decoration: BoxDecoration(color: Colors.red),
+                          child: Icon(MdiIcons.trashCan,
+                              color: Colors.white, size: 20)),
+                      trailing: Container(
+                          width: 21,
+                          height: 150,
+                          decoration: BoxDecoration(color: Colors.red),
+                          child: Icon(MdiIcons.trashCan,
+                              color: Colors.white, size: 20)),
                     );
                   }),
             ),
@@ -173,38 +190,38 @@ class _SearchByMapState extends State<SearchByMap> {
           ),
         ),
       ),
-      Align(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            IconButton(
-              icon: Icon(
+      GestureDetector(
+        onTap: () => locationSelectionProvider.getGeoLocation(),
+        child: Align(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
                 Icons.location_pin,
                 size: 40,
                 color: HATheme.HOPAUT_PINK,
               ),
-              onPressed: () => locationSelectionProvider.searchResultState !=
-                      SearchResultState.IDLE
-                  ? locationSelectionProvider.getGeoLocation()
-                  : null,
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            // TODO translation
-            Text(' Tap to get location ',
-                style: TextStyle(
-                  shadows: [
-                    Shadow(
-                        offset: Offset(3, 3),
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 5)
-                  ],
-                  backgroundColor: Colors.black.withOpacity(0.60),
-                  color: Colors.white,
-                )),
-          ],
+              SizedBox(
+                height: 5,
+              ),
+              // TODO translation
+              Visibility(
+                visible: locationSelectionProvider.searchResults.isEmpty,
+                child: Text(' Tap to get location ',
+                    style: TextStyle(
+                      shadows: [
+                        Shadow(
+                            offset: Offset(3, 3),
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 5)
+                      ],
+                      backgroundColor: Colors.black.withOpacity(0.60),
+                      color: Colors.white,
+                    )),
+              ),
+            ],
+          ),
         ),
       ),
     ]);
