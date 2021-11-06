@@ -20,9 +20,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
   Widget build(BuildContext context) {
     return Consumer<SearchPageProvider>(
       builder: (context, provider, __) => Card(
-        color: provider.filter
-            ? Colors.white.withOpacity(0.9)
-            : Colors.white.withOpacity(0.9),
+        color: Colors.white.withOpacity(0.9),
         elevation: provider.filter ? 4.0 : 0.25,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),

@@ -1,3 +1,4 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
@@ -5,6 +6,7 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:hopaut/data/domain/coordinate.dart';
@@ -17,14 +19,17 @@ enum SearchResultState {
   NO_RESULT
 }
 
+enum MapLoadingState { LOADING, LOADED, ERROR }
+
 class MapLocationProvider extends ChangeNotifier {
   LocationServiceProvider _locationManager = getIt<LocationServiceProvider>();
   HereMapController _hereMapController;
   SearchEngine _searchEngine;
   SearchResultState searchResultState;
+  MapLoadingState _loadingState;
   TextEditingController searchBarController;
   EventProvider _eventProvider = getIt<EventProvider>();
-  final double distanceToEarthInMeters = 3000;
+  final double distanceToEarthInMeters = 2000;
   final double _autoCompleteSearchRadius = 50000;
   MapScheme mapScheme = MapScheme.greyDay;
 
@@ -32,6 +37,7 @@ class MapLocationProvider extends ChangeNotifier {
 
   MapLocationProvider() {
     this.searchResultState = SearchResultState.IDLE;
+    this._loadingState = MapLoadingState.LOADING;
     this._searchEngine = SearchEngine();
     this.searchBarController = TextEditingController();
   }
@@ -42,6 +48,7 @@ class MapLocationProvider extends ChangeNotifier {
     _hereMapController = hereMapController;
     _hereMapController.mapScene.loadSceneForMapScheme(
         mapScheme, (MapError err) => _initializeMap(_hereMapController, err));
+    _loadingState = MapLoadingState.LOADED;
     notifyListeners();
   }
 
@@ -49,15 +56,21 @@ class MapLocationProvider extends ChangeNotifier {
     if (error == null) {
       hereMapController.mapScene.setLayerState(
           MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
-      _hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
-      _hereMapController.camera.flyToWithOptionsAndDistance(
-          GeoCoordinates(_locationManager.userLocation.latitude,
-              _locationManager.userLocation.longitude),
-          distanceToEarthInMeters,
-          MapCameraFlyToOptions.withDefaults());
+      _hereMapController.setWatermarkPosition(
+          WatermarkPlacement.bottomRight, 10);
+
+      var location = _eventProvider.post.location;
+      GeoCoordinates stateCoordinates = location == null
+          ? GeoCoordinates(_locationManager.userLocation.latitude,
+              _locationManager.userLocation.longitude)
+          : GeoCoordinates(location.latitude, location.longitude);
+
+      _hereMapController.camera.flyToWithOptionsAndDistance(stateCoordinates,
+          distanceToEarthInMeters, MapCameraFlyToOptions.withDefaults());
+
       _setTapGestureHandler();
     } else {
-      print('Map Scene not loaded\nMapError ${error.toString()}');
+      _loadingState = MapLoadingState.ERROR;
     }
   }
 
@@ -76,7 +89,8 @@ class MapLocationProvider extends ChangeNotifier {
   void addToSearchResult(Place item) {
     searchResults.clear();
     searchResults.add(item);
-    _hereMapController.camera.flyTo(item.geoCoordinates);
+    _hereMapController.camera.flyToWithOptionsAndDistance(item.geoCoordinates,
+        distanceToEarthInMeters, MapCameraFlyToOptions.withDefaults());
     searchResultState = SearchResultState.HAS_RESULTS_AUTOCOMPLETE;
     notifyListeners();
   }
@@ -160,9 +174,16 @@ class MapLocationProvider extends ChangeNotifier {
     getReverseGeocodeResult(geo: geoCoordinates);
   }
 
-  void cleanSearch(DismissDirection dismissDirection) {
-    searchResults?.clear();
-    searchResultState = SearchResultState.IDLE;
-    notifyListeners();
+  void handleSwipe(DismissDirection dismissDirection, BuildContext context) {
+    if (dismissDirection == DismissDirection.endToStart) {
+      searchResults?.clear();
+      searchResultState = SearchResultState.IDLE;
+      _eventProvider.post.location = null;
+      notifyListeners();
+    } else if (dismissDirection == DismissDirection.startToEnd) {
+      saveSelectedLocation();
+      Application.router.navigateTo(context, Routes.createEvent,
+          replace: true, transition: TransitionType.cupertino);
+    }
   }
 }

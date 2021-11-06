@@ -5,8 +5,8 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/controllers/providers/map_location_provider.dart';
-import 'package:hopaut/presentation/widgets/buttons/basic_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -32,7 +32,7 @@ class _SearchByMapState extends State<SearchByMap> {
     return Scaffold(
         extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset: true,
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton(
           mini: true,
           heroTag: 'SearchBtn',
@@ -51,8 +51,8 @@ class _SearchByMapState extends State<SearchByMap> {
               icon: HATheme.backButton,
               color: Colors.white,
               onPressed: () => Application.router.navigateTo(
-                  context, '/create-event',
-                  transition: TransitionType.cupertino, replace: true)),
+                  context, Routes.createEvent,
+                  replace: true, transition: TransitionType.cupertino)),
           title: Text(
             // TODO translation
             'Choose Location',
@@ -66,27 +66,6 @@ class _SearchByMapState extends State<SearchByMap> {
     return Stack(
       children: [
         _map(locationSelectionProvider),
-        SafeArea(
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Visibility(
-                visible: locationSelectionProvider.searchResults.isNotEmpty,
-                child: BasicButton(
-                    onPressed: () => {
-                          locationSelectionProvider.saveSelectedLocation(),
-                          Application.router.navigateTo(
-                              context, '/create-event',
-                              transition: TransitionType.cupertino,
-                              replace: true)
-                        },
-                    // TODO translation
-                    label: 'Confirm'),
-              ),
-            ),
-          ),
-        ),
         _searchBox(locationSelectionProvider),
         _selectedLocation(locationSelectionProvider)
       ],
@@ -101,36 +80,40 @@ class _SearchByMapState extends State<SearchByMap> {
           child: Dismissible(
             key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
             onDismissed: (direction) =>
-                locationSelectionProvider.cleanSearch(direction),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(),
-                borderRadius: BorderRadius.circular(5),
+                locationSelectionProvider.handleSwipe(direction, context),
+            child: Card(
+              elevation: 10,
+              color: Colors.grey.shade200,
+              child: Container(
+                //decoration: BoxDecoration(
+                // color: Colors.grey.shade100.withOpacity(0.85),
+                // border: Border.all(),
+                // borderRadius: BorderRadius.circular(5),
+                //),
+                child: ListView.builder(
+                    itemCount: locationSelectionProvider.searchResults.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(locationSelectionProvider
+                            .searchResults[index].title),
+                        // TODO translation
+                        leading: Container(
+                            width: 30,
+                            height: 150,
+                            //decoration: BoxDecoration(color: Colors.red),
+                            child: Icon(MdiIcons.chevronLeft,
+                                color: Colors.red, size: 30)),
+                        trailing: Container(
+                            width: 30,
+                            height: 150,
+                            //decoration: BoxDecoration(color: Colors.green),
+                            child: Icon(MdiIcons.chevronRight,
+                                color: Colors.lightGreen, size: 30)),
+                      );
+                    }),
               ),
-              child: ListView.builder(
-                  itemCount: locationSelectionProvider.searchResults.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(
-                          locationSelectionProvider.searchResults[index].title),
-                      // TODO translation
-                      leading: Container(
-                          width: 21,
-                          height: 150,
-                          decoration: BoxDecoration(color: Colors.red),
-                          child: Icon(MdiIcons.trashCan,
-                              color: Colors.white, size: 20)),
-                      trailing: Container(
-                          width: 21,
-                          height: 150,
-                          decoration: BoxDecoration(color: Colors.red),
-                          child: Icon(MdiIcons.trashCan,
-                              color: Colors.white, size: 20)),
-                    );
-                  }),
             ),
           ),
         ),
@@ -146,7 +129,7 @@ class _SearchByMapState extends State<SearchByMap> {
           padding: const EdgeInsets.all(16.0),
           child: Container(
             decoration: BoxDecoration(
-                color: Colors.grey[200].withOpacity(0.7),
+                color: Colors.white.withOpacity(0.9),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.grey[300].withOpacity(0.7)),
                 boxShadow: [
@@ -163,7 +146,7 @@ class _SearchByMapState extends State<SearchByMap> {
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(12.0),
                     // TODO translation
-                    hintText: 'Search',
+                    hintText: 'Search in radius of 50km',
                     border: InputBorder.none,
                   )),
               suggestionsCallback: (pattern) async =>
@@ -195,25 +178,25 @@ class _SearchByMapState extends State<SearchByMap> {
           ),
         ),
       ),
-      GestureDetector(
-        onTap: () => locationSelectionProvider.getGeoLocation(),
-        child: Align(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.location_pin,
-                size: 40,
-                color: HATheme.HOPAUT_PINK,
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              // TODO translation
-              Visibility(
-                visible: locationSelectionProvider.searchResults.isEmpty,
-                child: Text(' Tap to get location ',
+      Visibility(
+        visible: locationSelectionProvider.searchResults.isEmpty,
+        child: GestureDetector(
+          onTap: () => locationSelectionProvider.getGeoLocation(),
+          child: Align(
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.location_pin,
+                  size: 40,
+                  color: HATheme.HOPAUT_PINK,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                // TODO translation
+                Text(' Tap to get location ',
                     style: TextStyle(
                       shadows: [
                         Shadow(
@@ -224,8 +207,8 @@ class _SearchByMapState extends State<SearchByMap> {
                       backgroundColor: Colors.black.withOpacity(0.60),
                       color: Colors.white,
                     )),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

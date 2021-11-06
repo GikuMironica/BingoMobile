@@ -73,6 +73,7 @@ class LoginClicked extends LoginEvent {
               formStatus: SubmissionFailed(result.data["Error"]));
     } catch (e) {
       // TODO - translations
+      print(e.toString());
       yield loginState.copyWith(formStatus: SubmissionFailed("Internal error"));
     }
   }
@@ -95,7 +96,7 @@ class FacebookLoginClicked extends LoginEvent {
           : loginState.copyWith(
               formStatus: SubmissionFailed("Error, something went wrong"));
     } catch (e) {
-      yield loginState.copyWith(formStatus: SubmissionFailed(e));
+      yield loginState.copyWith(formStatus: SubmissionFailed(e.toString()));
     }
   }
 }
