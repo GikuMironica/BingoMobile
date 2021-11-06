@@ -20,6 +20,13 @@ class DateFormatterService {
     return '${_timeFormat.format(DateTime.fromMillisecondsSinceEpoch(startTime * 1000))} - ${_timeFormat.format(DateTime.fromMillisecondsSinceEpoch(endTime * 1000))}';
   }
 
+  String formatDateRange(int startTime, int endTime) {
+    String startDate = formatDate(startTime);
+    String endDate = formatDate(endTime);
+
+    return startDate == endDate ? '$startDate' : '$startDate - $endDate';
+  }
+
   String formatDate(int time) {
     return _dateFormat.format(DateTime.fromMillisecondsSinceEpoch(time * 1000));
   }

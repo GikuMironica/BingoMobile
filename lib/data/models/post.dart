@@ -145,6 +145,8 @@ class Post {
 
   String get timeRange =>
       getIt<DateFormatterService>().formatTimeRange(eventTime, endTime);
+  String get dateRange =>
+      getIt<DateFormatterService>().formatDateRange(eventTime, endTime);
   double get entryPrice =>
       event.entrancePrice != 0.0 ? event.entrancePrice : null;
 

@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/account_provider.dart';
 import 'package:hopaut/controllers/providers/change_password_provider.dart';
+import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/data/models/identity.dart';
 import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/authentication_repository.dart';
@@ -155,6 +156,7 @@ class AuthenticationService with ChangeNotifier {
     getIt<SettingsProvider>().resetProvider();
     getIt<AccountProvider>().resetProvider();
     getIt<ChangePasswordProvider>().resetProvider();
+    getIt<EventProvider>().reset();
 
     setIdentity(null);
     setUser(null);
