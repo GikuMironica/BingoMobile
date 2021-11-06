@@ -1,11 +1,10 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/controllers/providers/location_provider.dart';
-import 'package:hopaut/data/models/location.dart' as HopautLocation;
 import 'package:hopaut/controllers/providers/map_location_provider.dart';
 import 'package:hopaut/presentation/widgets/buttons/basic_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
@@ -51,12 +50,9 @@ class _SearchByMapState extends State<SearchByMap> {
           leading: IconButton(
               icon: HATheme.backButton,
               color: Colors.white,
-              onPressed: () => Application.router.pop(context)
-              /* mapController.searchResults != null
-                    ? mapController
-                        .parseLocation(mapController.searchResults.first)
-                    : null),*/
-              ),
+              onPressed: () => Application.router.navigateTo(
+                  context, '/create-event',
+                  transition: TransitionType.cupertino, replace: true)),
           title: Text(
             // TODO translation
             'Choose Location',
@@ -74,12 +70,20 @@ class _SearchByMapState extends State<SearchByMap> {
           child: Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32),
-              child: BasicButton(
-                  onPressed: () async =>
-                      await locationSelectionProvider.getReverseGeocodeResult(),
-                  // TODO translation
-                  label: 'Confirm'),
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Visibility(
+                visible: locationSelectionProvider.searchResults.isNotEmpty,
+                child: BasicButton(
+                    onPressed: () => {
+                          locationSelectionProvider.saveSelectedLocation(),
+                          Application.router.navigateTo(
+                              context, '/create-event',
+                              transition: TransitionType.cupertino,
+                              replace: true)
+                        },
+                    // TODO translation
+                    label: 'Confirm'),
+              ),
             ),
           ),
         ),
@@ -91,13 +95,13 @@ class _SearchByMapState extends State<SearchByMap> {
 
   Widget _selectedLocation(MapLocationProvider locationSelectionProvider) {
     return SafeArea(
-      child: Dismissible(
-        key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
-        onDismissed: (direction) =>
-            locationSelectionProvider.cleanSearch(direction),
-        child: Visibility(
-          visible: locationSelectionProvider.searchResults.isNotEmpty,
-          child: Center(
+      child: Visibility(
+        visible: locationSelectionProvider.searchResults.isNotEmpty,
+        child: Center(
+          child: Dismissible(
+            key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
+            onDismissed: (direction) =>
+                locationSelectionProvider.cleanSearch(direction),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -158,6 +162,7 @@ class _SearchByMapState extends State<SearchByMap> {
                   controller: locationSelectionProvider.searchBarController,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(12.0),
+                    // TODO translation
                     hintText: 'Search',
                     border: InputBorder.none,
                   )),

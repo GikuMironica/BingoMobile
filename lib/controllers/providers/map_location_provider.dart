@@ -4,6 +4,7 @@ import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:hopaut/data/domain/coordinate.dart';
@@ -23,7 +24,6 @@ class MapLocationProvider extends ChangeNotifier {
   SearchResultState searchResultState;
   TextEditingController searchBarController;
   EventProvider _eventProvider = getIt<EventProvider>();
-  GeoCoordinates _geoCoordinates;
   final double distanceToEarthInMeters = 3000;
   final double _autoCompleteSearchRadius = 50000;
   MapScheme mapScheme = MapScheme.greyDay;
@@ -50,10 +50,11 @@ class MapLocationProvider extends ChangeNotifier {
       hereMapController.mapScene.setLayerState(
           MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
       _hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
-      _hereMapController.camera.lookAtPointWithDistance(
+      _hereMapController.camera.flyToWithOptionsAndDistance(
           GeoCoordinates(_locationManager.userLocation.latitude,
               _locationManager.userLocation.longitude),
-          distanceToEarthInMeters);
+          distanceToEarthInMeters,
+          MapCameraFlyToOptions.withDefaults());
       _setTapGestureHandler();
     } else {
       print('Map Scene not loaded\nMapError ${error.toString()}');
@@ -63,19 +64,8 @@ class MapLocationProvider extends ChangeNotifier {
   void _setTapGestureHandler() {
     _hereMapController.gestures.tapListener =
         TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) {
-      _geoCoordinates = _hereMapController.viewToGeoCoordinates(touchPoint);
       FocusManager.instance.primaryFocus?.unfocus();
-      print("These coordinates were tapped" +
-          _geoCoordinates.longitude.toString() +
-          " " +
-          _geoCoordinates.longitude.toString());
     });
-    // _hereMapController.gestures.doubleTapListener =
-    //     DoubleTapListener.fromLambdas(lambda_onDoubleTap: (Point2D touchpoint) {
-    //   searchResults.clear();
-    //   searchResultState = SearchResultState.IDLE;
-    //   notifyListeners();
-    // });
   }
 
   void getGeoLocation() {
@@ -84,9 +74,9 @@ class MapLocationProvider extends ChangeNotifier {
   }
 
   void addToSearchResult(Place item) {
-    // searchResults.clear();
+    searchResults.clear();
     searchResults.add(item);
-    _hereMapController.camera.lookAtPoint(item.geoCoordinates);
+    _hereMapController.camera.flyTo(item.geoCoordinates);
     searchResultState = SearchResultState.HAS_RESULTS_AUTOCOMPLETE;
     notifyListeners();
   }
@@ -119,21 +109,25 @@ class MapLocationProvider extends ChangeNotifier {
   }
 
   Future<void> getReverseGeocodeResult({GeoCoordinates geo}) async {
-    print("Geo is " + geo.toString());
     if (geo == null) geo = _hereMapController.camera.state.targetCoordinates;
     _searchEngine.searchByCoordinates(geo, SearchOptions.withDefaults(),
         (error, List<Place> results) {
-      if (error != null) print('Error: $error');
       if (results.isNotEmpty) {
         searchResults = [results.first];
-        print(searchResults.first.toString() + " is the search result");
-        searchResultState = SearchResultState.HAS_RESULTS_AUTOCOMPLETE;
+        searchResultState = SearchResultState.HAS_RESULTS_GEOCODE;
         notifyListeners();
       } else {
         searchResultState = SearchResultState.NO_RESULT;
         notifyListeners();
       }
     });
+  }
+
+  void saveSelectedLocation() {
+    if (searchResults != null && searchResults.isNotEmpty) {
+      _eventProvider.post.location = parseLocation(searchResults.first);
+      notifyListeners();
+    }
   }
 
   HopautLocation.Location parseLocation(Place place) {
@@ -167,7 +161,6 @@ class MapLocationProvider extends ChangeNotifier {
   }
 
   void cleanSearch(DismissDirection dismissDirection) {
-    print('swipe left detected');
     searchResults?.clear();
     searchResultState = SearchResultState.IDLE;
     notifyListeners();
