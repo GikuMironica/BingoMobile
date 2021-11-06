@@ -1,4 +1,5 @@
 import 'package:fluro/fluro.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:here_sdk/mapview.dart';
@@ -196,43 +197,53 @@ class _SearchByMapState extends State<SearchByMap> {
         visible: locationSelectionProvider.searchResults.isNotEmpty &&
             locationSelectionProvider.loadingState == MapLoadingState.LOADED,
         child: Center(
-          child: Dismissible(
-            key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
-            onDismissed: (direction) =>
-                locationSelectionProvider.handleSwipe(direction, context),
-            child: Card(
-              margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Dismissible(
+                key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
+                onDismissed: (direction) =>
+                    locationSelectionProvider.handleSwipe(direction, context),
+                child: Card(
+                  margin:
+                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  elevation: 10,
+                  color: Colors.grey.shade200,
+                  child: Container(
+                    child: ListView.builder(
+                        itemCount:
+                            locationSelectionProvider.searchResults.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: Text(locationSelectionProvider
+                                .searchResults[index].title),
+                            // TODO translation
+                            leading: Container(
+                                width: 30,
+                                height: 150,
+                                //decoration: BoxDecoration(color: Colors.red),
+                                child: Icon(MdiIcons.close,
+                                    color: Colors.black, size: 20)),
+                            trailing: Container(
+                                width: 30,
+                                height: 150,
+                                //decoration: BoxDecoration(color: Colors.green),
+                                child: Icon(MdiIcons.check,
+                                    color: Colors.black, size: 20)),
+                          );
+                        }),
+                  ),
+                ),
               ),
-              elevation: 10,
-              color: Colors.grey.shade200,
-              child: Container(
-                child: ListView.builder(
-                    itemCount: locationSelectionProvider.searchResults.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(locationSelectionProvider
-                            .searchResults[index].title),
-                        // TODO translation
-                        leading: Container(
-                            width: 30,
-                            height: 150,
-                            //decoration: BoxDecoration(color: Colors.red),
-                            child: Icon(MdiIcons.chevronLeft,
-                                color: Colors.red, size: 30)),
-                        trailing: Container(
-                            width: 30,
-                            height: 150,
-                            //decoration: BoxDecoration(color: Colors.green),
-                            child: Icon(MdiIcons.chevronRight,
-                                color: Colors.lightGreen, size: 30)),
-                      );
-                    }),
-              ),
-            ),
+              Icon(MdiIcons.gestureSwipe,
+                  color: Theme.of(context).primaryColor, size: 30)
+            ],
           ),
         ),
       ),
