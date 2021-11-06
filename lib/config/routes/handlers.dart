@@ -13,7 +13,7 @@ import 'package:hopaut/presentation/screens/authentication/forgot_password.dart'
 import 'package:hopaut/presentation/screens/authentication/register.dart';
 import 'package:hopaut/presentation/screens/events/edit/description.dart';
 import 'package:hopaut/presentation/screens/events/edit/edit_event_page.dart';
-import 'package:hopaut/presentation/screens/events/edit/location/map.dart';
+import 'package:hopaut/presentation/screens/events/location/map.dart';
 import 'package:hopaut/presentation/screens/events/edit/pictures.dart';
 import 'package:hopaut/presentation/screens/events/edit/price.dart';
 import 'package:hopaut/presentation/screens/events/edit/requirements.dart';

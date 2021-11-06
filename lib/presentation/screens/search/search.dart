@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:hopaut/controllers/providers/search_page_provider.dart';
-import 'package:hopaut/controllers/providers/legacy_location_provider.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:hopaut/presentation/screens/search/search_carousel.dart';
@@ -18,7 +15,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  FocusNode _focusNode = FocusNode();
   SearchPageProvider searchProvider;
   LocationServiceProvider locationService;
 
@@ -60,16 +56,16 @@ class _SearchPageState extends State<SearchPage> {
         visible: searchProvider.pageState == SearchPageState.HAS_SEARCH_RESULTS,
         child: SearchPageCarousel(),
       ),
-      _loadingMapDialog()
+      _loadingMapDialog(),
     ]);
   }
 
   Widget _loadingMapDialog() {
     return Visibility(
-        visible: searchProvider.pageState == SearchPageState.SEARCHING,
-        child: overlayBlurBackgroundCircularProgressIndicator(
-            // TODO translations
-            context,
-            'Looking for events'));
+      visible: searchProvider.pageState == SearchPageState.SEARCHING,
+      child: overlayBlurBackgroundCircularProgressIndicator(
+        // TODO translations
+        context,
+        'Looking for events'));
   }
 }

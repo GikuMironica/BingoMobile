@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hopaut/data/domain/coordinate.dart';
@@ -9,19 +10,18 @@ import 'package:location/location.dart' as l;
 
 @singleton
 class LocationServiceProvider extends ChangeNotifier {
-  PermissionStatus _permissionStatus = PermissionStatus.undetermined;
-
   l.Location _location;
   UserLocation userLocation;
 
   LocationServiceProvider() {
     getActualLocation();
+    listenToUpdates();
   }
 
   Future<UserLocation> getActualLocation() async {
     _location = l.Location();
-    bool isLocationEnabled = await _isLocationServiceEnabled();
-    if(!isLocationEnabled){
+    bool isLocationEnabled = await _isLocationServiceEnabledAndAllowed();
+    if (!isLocationEnabled) {
       // TODO handle
       return null;
     }
@@ -31,7 +31,7 @@ class LocationServiceProvider extends ChangeNotifier {
     return userLocation;
   }
 
-  Future<bool> _isLocationServiceEnabled() async{
+  Future<bool> _isLocationServiceEnabledAndAllowed() async {
     bool serviceEnabled;
     l.PermissionStatus isLocationTrackingAllowed;
     serviceEnabled = await _location.serviceEnabled();
@@ -39,15 +39,14 @@ class LocationServiceProvider extends ChangeNotifier {
       // TODO translation
       showNewErrorSnackbar('Location service is disabled');
       var accepted = await _location.requestService();
-      if(!accepted)
-        return false;
+      if (!accepted) return false;
     }
     isLocationTrackingAllowed = await _location.hasPermission();
-    if (isLocationTrackingAllowed != l.PermissionStatus.granted
-        && isLocationTrackingAllowed != l.PermissionStatus.grantedLimited) {
+    if (isLocationTrackingAllowed != l.PermissionStatus.granted &&
+        isLocationTrackingAllowed != l.PermissionStatus.grantedLimited) {
       isLocationTrackingAllowed = await _location.requestPermission();
-      if(isLocationTrackingAllowed != l.PermissionStatus.granted
-        && isLocationTrackingAllowed != l.PermissionStatus.grantedLimited){
+      if (isLocationTrackingAllowed != l.PermissionStatus.granted &&
+          isLocationTrackingAllowed != l.PermissionStatus.grantedLimited) {
         // TODO translate
         showNewErrorSnackbar('Location permission denied');
         return false;
@@ -59,5 +58,26 @@ class LocationServiceProvider extends ChangeNotifier {
   Future<l.LocationData> _getLocation() async {
     l.LocationData locationData = await _location.getLocation();
     return locationData;
+  }
+
+  Future<void> listenToUpdates() async {
+    var _lastLocation;
+    await _location.changeSettings(
+        accuracy: l.LocationAccuracy.high, distanceFilter: 10);
+    _location.onLocationChanged.listen((e) async {
+      if (e != null) {
+        final newLatitude = roundOff(5, e.latitude);
+        final newLongtiude = roundOff(5, e.longitude);
+        if (_lastLocation != null) {
+          if (_lastLocation.latitude != newLatitude &&
+              _lastLocation.longitude != newLongtiude) {
+            userLocation = UserLocation(newLatitude, newLongtiude);
+          }
+        } else {
+          final userLocation = UserLocation(newLatitude, newLongtiude);
+          this.userLocation = userLocation;
+        }
+      }
+    });
   }
 }

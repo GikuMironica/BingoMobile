@@ -7,7 +7,8 @@ class GeolocationProvider extends ChangeNotifier {
   Position _currentPosition;
 
   GeolocationProvider() {
-    getCurrentLocation();
+    //getActualLocation();
+    //onLocationChange();
     // Live location
     // var positionStream = Geolocator.getPositionStream(
     //         distanceFilter: 1, desiredAccuracy: LocationAccuracy.high)
@@ -17,9 +18,9 @@ class GeolocationProvider extends ChangeNotifier {
     // });
   }
 
-  Position get currentPosition => _currentPosition;
+  Position get userLocation => _currentPosition;
 
-  Future<Position> getCurrentLocation() async {
+  Future<Position> getActualLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -48,5 +49,15 @@ class GeolocationProvider extends ChangeNotifier {
     print("LOcations"+_currentPosition.latitude.toString()+" "+_currentPosition.longitude.toString());
     notifyListeners();
     return _currentPosition;
+  }
+
+  Future<void> onLocationChange() async{
+    Geolocator.getPositionStream(distanceFilter: 2,
+        desiredAccuracy: LocationAccuracy.best).listen((position) {
+          print('Position updated '+position.latitude.toString()+" "+position.longitude.toString());
+          _currentPosition = position;
+          notifyListeners();
+    });
+
   }
 }

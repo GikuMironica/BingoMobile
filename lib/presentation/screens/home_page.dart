@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
         title: ("Hosted"),
       ),
       HopautNavBarItem(
-        svg: MdiIcons.balloon,
+        svg: MdiIcons.calendar,
         title: ("Joined"),
       ),
       HopautNavBarItem(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'gradient_box_decoration.dart';
 
-Container BasicButton({String label, Function onPressed}) {
+Container BasicButton({String label, void Function() onPressed}) {
   return Container(
       width: 200,
       height: 50.0,
@@ -26,7 +26,5 @@ Container BasicButton({String label, Function onPressed}) {
                 ),
               ),
             ),
-          )
-      )
-  );
+          )));
 }

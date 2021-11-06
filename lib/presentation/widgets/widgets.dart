@@ -165,12 +165,12 @@ SnackBar _errorSnackBar(String message) {
       ),
       behavior: SnackBarBehavior.floating,
       duration: Duration(seconds: 4),
-      backgroundColor: HATheme.HOPAUT_PINK);
+      backgroundColor: HATheme.HOPAUT_PINK.withOpacity(0.7));
 }
 
 void showNewErrorSnackbar(String message) {
   Fluttertoast.showToast(
-      backgroundColor: Color(0xFFed2f65),
+      backgroundColor: HATheme.HOPAUT_PINK.withOpacity(0.7),
       textColor: Colors.white,
       toastLength: Toast.LENGTH_LONG,
       msg: message);
