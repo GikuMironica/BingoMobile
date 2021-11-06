@@ -244,9 +244,9 @@ class SearchPageProvider extends ChangeNotifier {
   }
 
   void onSliderChangeEnd() {
-    Future.delayed(Duration(milliseconds: 500), () {
-      searchEvents();
-    });
+    // Future.delayed(Duration(milliseconds: 500), () {
+    //   searchEvents();
+    // });
   }
 
   Future<void> updateUserLocation({bool isInitalizeAction = false}) async {

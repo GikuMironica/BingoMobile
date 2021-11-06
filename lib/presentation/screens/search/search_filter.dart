@@ -166,7 +166,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                         onChanged: (v) {
                           provider.updateSearchRadius(v);
                         },
-                        onChangeEnd: (v) => provider.onSliderChangeEnd(),
+                        //onChangeEnd: (v) => provider.onSliderChangeEnd(),
                         activeColor: Theme.of(context).primaryColor,
                         inactiveColor: Color(0xFF707070).withOpacity(0.67),
                       ),

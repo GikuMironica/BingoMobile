@@ -22,34 +22,40 @@ enum SearchResultState {
 enum MapLoadingState { LOADING, LOADED, ERROR }
 
 class MapLocationProvider extends ChangeNotifier {
-  LocationServiceProvider _locationManager = getIt<LocationServiceProvider>();
+  // fields
+  final double _distanceToEarthInMeters = 2000;
+  final double _autoCompleteSearchRadius = 50000;
+
+  MapScheme mapScheme;
+  List<Place> searchResults;
+  LocationServiceProvider _locationManager;
   HereMapController _hereMapController;
   SearchEngine _searchEngine;
   SearchResultState searchResultState;
   MapLoadingState _loadingState;
   TextEditingController searchBarController;
-  EventProvider _eventProvider = getIt<EventProvider>();
-  final double distanceToEarthInMeters = 2000;
-  final double _autoCompleteSearchRadius = 50000;
-  MapScheme mapScheme = MapScheme.greyDay;
+  EventProvider _eventProvider;
 
-  List<Place> searchResults = [];
+  // getters
+  HereMapController get mapController => _hereMapController;
+  MapLoadingState get loadingState => _loadingState;
 
   MapLocationProvider() {
+    this._locationManager = getIt<LocationServiceProvider>();
+    this._eventProvider = getIt<EventProvider>();
+    this.mapScheme = MapScheme.greyDay;
+    this.searchResults = [];
     this.searchResultState = SearchResultState.IDLE;
     this._loadingState = MapLoadingState.LOADING;
     this._searchEngine = SearchEngine();
     this.searchBarController = TextEditingController();
   }
 
-  HereMapController get mapController => _hereMapController;
-
   void onMapCreated(HereMapController hereMapController) {
+    _loadingState = MapLoadingState.LOADING;
     _hereMapController = hereMapController;
     _hereMapController.mapScene.loadSceneForMapScheme(
         mapScheme, (MapError err) => _initializeMap(_hereMapController, err));
-    _loadingState = MapLoadingState.LOADED;
-    notifyListeners();
   }
 
   void _initializeMap(HereMapController hereMapController, MapError error) {
@@ -66,11 +72,14 @@ class MapLocationProvider extends ChangeNotifier {
           : GeoCoordinates(location.latitude, location.longitude);
 
       _hereMapController.camera.flyToWithOptionsAndDistance(stateCoordinates,
-          distanceToEarthInMeters, MapCameraFlyToOptions.withDefaults());
+          _distanceToEarthInMeters, MapCameraFlyToOptions.withDefaults());
 
       _setTapGestureHandler();
+      _loadingState = MapLoadingState.LOADED;
+      notifyListeners();
     } else {
       _loadingState = MapLoadingState.ERROR;
+      notifyListeners();
     }
   }
 
@@ -90,7 +99,7 @@ class MapLocationProvider extends ChangeNotifier {
     searchResults.clear();
     searchResults.add(item);
     _hereMapController.camera.flyToWithOptionsAndDistance(item.geoCoordinates,
-        distanceToEarthInMeters, MapCameraFlyToOptions.withDefaults());
+        _distanceToEarthInMeters, MapCameraFlyToOptions.withDefaults());
     searchResultState = SearchResultState.HAS_RESULTS_AUTOCOMPLETE;
     notifyListeners();
   }
@@ -184,6 +193,11 @@ class MapLocationProvider extends ChangeNotifier {
       saveSelectedLocation();
       Application.router.navigateTo(context, Routes.createEvent,
           replace: true, transition: TransitionType.cupertino);
+      setMapLoadingState(MapLoadingState.LOADING);
     }
+  }
+
+  void setMapLoadingState(MapLoadingState loadingState) {
+    _loadingState = loadingState;
   }
 }

@@ -8,6 +8,7 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/controllers/providers/map_location_provider.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
@@ -50,9 +51,13 @@ class _SearchByMapState extends State<SearchByMap> {
           leading: IconButton(
               icon: HATheme.backButton,
               color: Colors.white,
-              onPressed: () => Application.router.navigateTo(
-                  context, Routes.createEvent,
-                  replace: true, transition: TransitionType.cupertino)),
+              onPressed: () => {
+                    Application.router
+                        .navigateTo(context, Routes.createEvent,
+                            replace: true, transition: TransitionType.cupertino)
+                        .whenComplete(() => locationSelectionProvider
+                            .setMapLoadingState(MapLoadingState.LOADING)),
+                  }),
           title: Text(
             // TODO translation
             'Choose Location',
@@ -67,102 +72,9 @@ class _SearchByMapState extends State<SearchByMap> {
       children: [
         _map(locationSelectionProvider),
         _searchBox(locationSelectionProvider),
-        _selectedLocation(locationSelectionProvider)
+        _selectedLocation(locationSelectionProvider),
+        _loadingMapDialog(),
       ],
-    );
-  }
-
-  Widget _selectedLocation(MapLocationProvider locationSelectionProvider) {
-    return SafeArea(
-      child: Visibility(
-        visible: locationSelectionProvider.searchResults.isNotEmpty,
-        child: Center(
-          child: Dismissible(
-            key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
-            onDismissed: (direction) =>
-                locationSelectionProvider.handleSwipe(direction, context),
-            child: Card(
-              elevation: 10,
-              color: Colors.grey.shade200,
-              child: Container(
-                //decoration: BoxDecoration(
-                // color: Colors.grey.shade100.withOpacity(0.85),
-                // border: Border.all(),
-                // borderRadius: BorderRadius.circular(5),
-                //),
-                child: ListView.builder(
-                    itemCount: locationSelectionProvider.searchResults.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(locationSelectionProvider
-                            .searchResults[index].title),
-                        // TODO translation
-                        leading: Container(
-                            width: 30,
-                            height: 150,
-                            //decoration: BoxDecoration(color: Colors.red),
-                            child: Icon(MdiIcons.chevronLeft,
-                                color: Colors.red, size: 30)),
-                        trailing: Container(
-                            width: 30,
-                            height: 150,
-                            //decoration: BoxDecoration(color: Colors.green),
-                            child: Icon(MdiIcons.chevronRight,
-                                color: Colors.lightGreen, size: 30)),
-                      );
-                    }),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _searchBox(MapLocationProvider locationSelectionProvider) {
-    return SafeArea(
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.9),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey[300].withOpacity(0.7)),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.07),
-                      blurRadius: 3.0,
-                      spreadRadius: 2.0,
-                      offset: Offset(0, 1.5))
-                ]),
-            child: TypeAheadField(
-              textFieldConfiguration: TextFieldConfiguration(
-                  keyboardType: TextInputType.text,
-                  controller: locationSelectionProvider.searchBarController,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(12.0),
-                    // TODO translation
-                    hintText: 'Search in radius of 50km',
-                    border: InputBorder.none,
-                  )),
-              suggestionsCallback: (pattern) async =>
-                  await locationSelectionProvider
-                      .getAutocompleteResult(pattern),
-              itemBuilder: (context, Place suggestion) => ListTile(
-                title: Text(suggestion.title),
-              ),
-              onSuggestionSelected: (Place suggestion) =>
-                  locationSelectionProvider.addToSearchResult(suggestion),
-              hideOnEmpty: true,
-              hideOnError: true,
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -213,5 +125,127 @@ class _SearchByMapState extends State<SearchByMap> {
         ),
       ),
     ]);
+  }
+
+  Widget _searchBox(MapLocationProvider locationSelectionProvider) {
+    return SafeArea(
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Card(
+          color: Colors.white.withOpacity(0.9),
+          elevation: 4.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
+          child: Row(
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Ionicons.search_outline,
+                        color: Color(0xFFED2F65)),
+                    onPressed: () => {},
+                  ),
+                  Container(
+                      height: 25,
+                      child: VerticalDivider(
+                        width: 10,
+                        color: Theme.of(context).primaryColor,
+                      )),
+                ],
+              ),
+              Expanded(
+                child: TypeAheadField(
+                  textFieldConfiguration: TextFieldConfiguration(
+                      keyboardType: TextInputType.text,
+                      controller: locationSelectionProvider.searchBarController,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(12.0),
+                        // TODO translation
+                        hintText: 'Search in the radius of 50km',
+                        hintStyle: TextStyle(
+                          color: Color(0xFF818181).withOpacity(0.69),
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        border: InputBorder.none,
+                      )),
+                  suggestionsCallback: (pattern) async =>
+                      await locationSelectionProvider
+                          .getAutocompleteResult(pattern),
+                  itemBuilder: (context, Place suggestion) => ListTile(
+                    title: Text(suggestion.title),
+                  ),
+                  onSuggestionSelected: (Place suggestion) =>
+                      locationSelectionProvider.addToSearchResult(suggestion),
+                  hideOnEmpty: true,
+                  hideOnError: true,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _selectedLocation(MapLocationProvider locationSelectionProvider) {
+    return SafeArea(
+      child: Visibility(
+        visible: locationSelectionProvider.searchResults.isNotEmpty &&
+            locationSelectionProvider.loadingState == MapLoadingState.LOADED,
+        child: Center(
+          child: Dismissible(
+            key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
+            onDismissed: (direction) =>
+                locationSelectionProvider.handleSwipe(direction, context),
+            child: Card(
+              margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              elevation: 10,
+              color: Colors.grey.shade200,
+              child: Container(
+                child: ListView.builder(
+                    itemCount: locationSelectionProvider.searchResults.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(locationSelectionProvider
+                            .searchResults[index].title),
+                        // TODO translation
+                        leading: Container(
+                            width: 30,
+                            height: 150,
+                            //decoration: BoxDecoration(color: Colors.red),
+                            child: Icon(MdiIcons.chevronLeft,
+                                color: Colors.red, size: 30)),
+                        trailing: Container(
+                            width: 30,
+                            height: 150,
+                            //decoration: BoxDecoration(color: Colors.green),
+                            child: Icon(MdiIcons.chevronRight,
+                                color: Colors.lightGreen, size: 30)),
+                      );
+                    }),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _loadingMapDialog() {
+    return Visibility(
+        visible:
+            locationSelectionProvider.loadingState == MapLoadingState.LOADING,
+        child: overlayBlurBackgroundCircularProgressIndicator(
+            // TODO translations
+            context,
+            'Loading map'));
   }
 }
