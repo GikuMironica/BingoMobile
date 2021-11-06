@@ -44,8 +44,8 @@ class EventProvider extends ChangeNotifier {
     _post = post;
   }
 
-  void setMiniPost(int index, String listType) {
-    _miniPost = _eventsMap[listType].events[index];
+  void setMiniPost(MiniPost miniPost) {
+    _miniPost = miniPost;
   }
 
   Future<void> fetchEventList(String type) async {
@@ -185,6 +185,8 @@ class EventProvider extends ChangeNotifier {
 
   void reset() {
     _initEventMap();
+    isDateValid = true;
+    eventLoadingStatus = Idle();
     notifyListeners();
   }
 

@@ -2,8 +2,6 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
@@ -13,8 +11,8 @@ import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/mini_post_card.dart';
-import 'package:hopaut/controllers/providers/legacy_location_provider.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
+import 'package:injectable/injectable.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
@@ -31,6 +29,7 @@ enum SearchPageState {
 
 enum MapState { LOADING, LOADED }
 
+@lazySingleton
 class SearchPageProvider extends ChangeNotifier {
   final EventRepository _eventRepository;
 
@@ -266,7 +265,6 @@ class SearchPageProvider extends ChangeNotifier {
         ? mapController.camera.flyToWithOptionsAndDistance(geoCoordinates,
             searchRadius * 5000, MapCameraFlyToOptions.withDefaults())
         : mapController.camera.flyTo(geoCoordinates);
-
     // Show the user on the map.
     MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
         'assets/icons/map/radio-button-off-outline.svg', 48, 48);
