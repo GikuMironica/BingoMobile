@@ -14,8 +14,6 @@ import 'package:hopaut/provider_list.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/services/dio_service.dart';
 import 'package:hopaut/services/secure_storage_service.dart';
-import 'package:hopaut/controllers/providers/settings_provider.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'init.dart';
 import 'package:flutter/material.dart' hide Router;
@@ -29,27 +27,13 @@ class HopAut extends StatefulWidget {
 class _HopAutState extends State<HopAut> {
   FluroRouter router;
   GlobalKey globals;
-  String nextRoute;
 
   @override
   void initState() {
     router = FluroRouter();
     Routes.configureRoutes(router);
     Application.router = router;
-    //initializePushNotifications();
     super.initState();
-  }
-
-  Future<void> initializePushNotifications() async {
-    OneSignal.shared
-        .setInFocusDisplayType(OSNotificationDisplayType.notification);
-    OneSignal.shared
-        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
-      setState(() {
-        // TODO - Test if it will redirect to event
-        nextRoute = result.notification.payload.additionalData['event'];
-      });
-    });
   }
 
   Future<bool> onAppStart() async {
@@ -73,31 +57,6 @@ class _HopAutState extends State<HopAut> {
       }
     }
     return true;
-  }
-
-  Future<void> init() async {
-    try {
-      bool areNotificationsAllowed = true;
-      await Future.wait([
-        SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
-        OneSignal.shared.init("fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
-            iOSSettings: {
-              OSiOSSettings.autoPrompt: false,
-              OSiOSSettings.inAppLaunchUrl: false
-            }),
-        // TODO - fix notification prompt.
-        OneSignal.shared
-            .promptUserForPushNotificationPermission(fallbackToSettings: true)
-            .then((result) => areNotificationsAllowed = result),
-      ]);
-
-      SettingsProvider _settingsService = getIt<SettingsProvider>();
-      // TODO - refactor
-      //_settingsService.togglePushNotifications(areNotificationsAllowed ?? true);
-
-    } on HiveError catch (err) {
-      print('Authbox not found');
-    }
   }
 
   @override
@@ -124,7 +83,7 @@ class _HopAutState extends State<HopAut> {
               future: onAppStart(),
               builder: (context, AsyncSnapshot<bool> snapshot) {
                 return snapshot.hasData
-                    ? Initialization(route: nextRoute)
+                    ? Initialization()
                     : Container(
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,

@@ -27,7 +27,6 @@ class AuthenticationService with ChangeNotifier {
   Identity _identity;
   User _user;
   bool lock = false;
-  bool oneSignalSettings = false;
 
   AuthenticationService()
       : _secureStorageService = getIt<SecureStorageService>(),
@@ -68,17 +67,6 @@ class AuthenticationService with ChangeNotifier {
     List<dynamic> allResult =
         await Future.wait([_userRepository.get(_identity.id)]);
     setUser(allResult.first);
-  }
-
-  Future<void> initializeOneSignalSubscription(
-      bool notificationsAllowed) async {
-    if (notificationsAllowed ?? true) {
-      await Future.wait([
-        OneSignal.shared.setSubscription(notificationsAllowed),
-        OneSignal.shared.setExternalUserId(currentIdentity.id)
-      ]);
-      oneSignalSettings = true;
-    }
   }
 
   void setUser(User user) {
@@ -156,12 +144,9 @@ class AuthenticationService with ChangeNotifier {
 
     setIdentity(null);
     setUser(null);
-    if (oneSignalSettings) {
-      await Future.wait([
-        OneSignal.shared.removeExternalUserId(),
-        OneSignal.shared.setSubscription(false)
-      ]);
-      oneSignalSettings = false;
-    }
+    await Future.wait([
+      OneSignal.shared.removeExternalUserId(),
+      OneSignal.shared.setSubscription(false)
+    ]);
   }
 }

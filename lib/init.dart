@@ -2,16 +2,13 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/presentation/screens/home_page.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:provider/provider.dart';
 
 import 'data/models/user.dart';
 
 class Initialization extends StatefulWidget {
-  final String route;
-
-  Initialization({this.route});
+  Initialization();
 
   @override
   _InitializationState createState() => _InitializationState();
@@ -36,14 +33,12 @@ class _InitializationState extends State<Initialization> {
               transition: TransitionType.fadeIn,
               transitionDuration: Duration(milliseconds: 200)));
     } else {
-      widget.route == null
-          ? Future.delayed(
-              Duration(milliseconds: 1),
-              () => Application.router.navigateTo(context, '/home',
-                  replace: true,
-                  transition: TransitionType.fadeIn,
-                  transitionDuration: Duration(milliseconds: 200)))
-          : HomePage(route: widget.route);
+      Future.delayed(
+          Duration(milliseconds: 1),
+          () => Application.router.navigateTo(context, '/home',
+              replace: true,
+              transition: TransitionType.fadeIn,
+              transitionDuration: Duration(milliseconds: 200)));
     }
     return Container(
         width: MediaQuery.of(context).size.width,
