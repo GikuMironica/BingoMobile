@@ -1,7 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
@@ -36,7 +35,7 @@ class SettingsProvider with ChangeNotifier {
 
   Future<void> initializeSharedPreferences() async {
     _preferences = await SharedPreferences.getInstance();
-    pushNotifications = _preferences.getBool('HA_PUSH_NOTIFICATIONS') ?? true;
+    pushNotifications = _preferences.getBool('HA_PUSH_NOTIFICATIONS');
   }
 
   void getPackageInfo() async {
@@ -75,6 +74,7 @@ class SettingsProvider with ChangeNotifier {
           replace: true, transition: TransitionType.fadeIn);
       //  TODO translate
       showNewErrorSnackbar('Account deleted');
+
       await authService.logout();
     } else {
       showNewErrorSnackbar('Unable to delete account');
