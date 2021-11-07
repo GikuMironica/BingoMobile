@@ -30,43 +30,25 @@ class _InitializationState extends State<Initialization> {
     _user = Provider.of<AuthenticationService>(context).user;
     if (_user == null) {
       Future.delayed(
-          Duration(milliseconds: 500),
+          Duration(milliseconds: 1),
           () => Application.router.navigateTo(context, '/login',
               replace: true,
               transition: TransitionType.fadeIn,
-              transitionDuration: Duration(milliseconds: 500)));
+              transitionDuration: Duration(milliseconds: 200)));
     } else {
       widget.route == null
           ? Future.delayed(
-              Duration(milliseconds: 500),
+              Duration(milliseconds: 1),
               () => Application.router.navigateTo(context, '/home',
                   replace: true,
                   transition: TransitionType.fadeIn,
-                  transitionDuration: Duration(milliseconds: 0)))
+                  transitionDuration: Duration(milliseconds: 200)))
           : HomePage(route: widget.route);
     }
-
-    return Stack(children: [
-      Container(
+    return Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         color: Colors.white,
-        child: Center(
-          child: Image.asset(
-            'assets/logo/logo_no_bg.png',
-            fit: BoxFit.contain,
-            width: MediaQuery.of(context).size.width * 0.7,
-          ),
-        ),
-      ),
-      Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.2),
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: CupertinoActivityIndicator(),
-        ),
-      )
-    ]);
+        child: Container());
   }
 }

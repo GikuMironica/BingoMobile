@@ -1,7 +1,6 @@
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-
 import 'config/injection.dart';
 import 'controllers/providers/account_provider.dart';
 import 'controllers/providers/change_password_provider.dart';

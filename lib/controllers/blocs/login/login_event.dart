@@ -10,7 +10,6 @@ import 'login_state.dart';
 
 abstract class LoginEvent extends BaseEvent {
   AuthenticationService authService = getIt<AuthenticationService>();
-  SettingsProvider settingsService = getIt<SettingsProvider>();
 }
 
 // Event 1
@@ -64,7 +63,7 @@ class LoginClicked extends LoginEvent {
       result = await authService.loginWithEmail(
           loginState.username.trim(), loginState.password.trim());
       if (result.isSuccessful) {
-        await authService.refreshUser(settingsService.pushNotifications);
+        await authService.refreshUser();
       }
       yield result.isSuccessful
           ? loginState.copyWith(formStatus: SubmissionSuccess())
@@ -88,7 +87,7 @@ class FacebookLoginClicked extends LoginEvent {
     try {
       bool result = await authService.loginWithFb();
       if (result) {
-        await authService.refreshUser(settingsService.pushNotifications);
+        await authService.refreshUser();
       }
       yield result
           ? loginState.copyWith(formStatus: SubmissionSuccess())
@@ -96,7 +95,7 @@ class FacebookLoginClicked extends LoginEvent {
           : loginState.copyWith(
               formStatus: SubmissionFailed("Error, something went wrong"));
     } catch (e) {
-      yield loginState.copyWith(formStatus: SubmissionFailed(e.toString()));
+      yield loginState.copyWith(formStatus: SubmissionFailed("Internal error"));
     }
   }
 }
