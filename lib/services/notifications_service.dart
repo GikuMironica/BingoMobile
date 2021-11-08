@@ -2,19 +2,19 @@ import 'package:flutter/services.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/settings_provider.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
+import 'package:hopaut/services/authentication_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'dart:io' show Platform;
 
-@lazySingleton
+@singleton
 class OneSignalNotificationService {
   SettingsProvider _settingsProvider;
+  AuthenticationService _authenticationService;
 
-  OneSignalNotificationService() {
+  Future<void> initializeNotificationService() async {
     _settingsProvider = getIt<SettingsProvider>();
-  }
-
-  Future<void> initializeNotificationService(String userId) async {
+    _authenticationService = getIt<AuthenticationService>();
     bool areNotificationsAllowed = true;
     await Future.wait([
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
@@ -29,25 +29,23 @@ class OneSignalNotificationService {
           .then((result) => areNotificationsAllowed = result),
     ]);
 
-    _toggleNotifications(areNotificationsAllowed);
+    await _initializeNotificationPreferences(areNotificationsAllowed);
 
     if (_settingsProvider.pushNotifications) {
       _configureNotificationService();
-      await _initializeOneSignalSubscription(userId);
+      await _initializeOneSignalSubscription(_authenticationService.user.id);
+      showNewErrorSnackbar('notifications on!');
     }
-    showNewErrorSnackbar('OneSignal initialized!');
     return;
   }
 
-  void _toggleNotifications(bool areNotificationsAllowed) {
-    if (Platform.isIOS) {
-      _settingsProvider.togglePushNotifications(areNotificationsAllowed);
-    } else {
-      // if shared pref for notifications is null, app is ran for first time
-      // set pref to true for android, because they enabled on android anyways
-      if (_settingsProvider.pushNotifications == null) {
-        _settingsProvider.togglePushNotifications(true);
-      }
+  Future<void> _initializeNotificationPreferences(
+      bool areNotificationsAllowed) async {
+    // if shared pref for notifications is null, app is ran for first time
+    // set pref to true for android, because they enabled on android anyways
+    if (_settingsProvider.pushNotifications == null) {
+      await _settingsProvider
+          .togglePushNotificationsPreference(areNotificationsAllowed);
     }
   }
 
@@ -74,5 +72,14 @@ class OneSignalNotificationService {
       OneSignal.shared.setSubscription(true),
       OneSignal.shared.setExternalUserId(userId)
     ]);
+  }
+
+  Future<void> unsubscribeFromNotificationsServer() async {
+    await Future.wait([
+      OneSignal.shared.removeExternalUserId(),
+      OneSignal.shared.setSubscription(false)
+    ]);
+    // TODO translations
+    showNewErrorSnackbar('Notifications turned off');
   }
 }

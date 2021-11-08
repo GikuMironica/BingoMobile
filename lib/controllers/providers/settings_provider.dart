@@ -8,6 +8,7 @@ import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/services/authentication_service.dart';
+import 'package:hopaut/services/notifications_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,18 +17,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SettingsProvider with ChangeNotifier {
   PackageInfo _packageInfo;
   SharedPreferences _preferences;
+  UserRepository _userRepository;
+  OneSignalNotificationService _oneSignalNotificationService;
+
   BaseFormStatus deleteFormStatus;
   String deleteAccountEmail;
-  bool get isDeleteAccountEmailValid =>
-      EmailValidator.validate(deleteAccountEmail.trim());
-  UserRepository _userRepository;
-  String get appVersion => _packageInfo.version;
-
   bool pushNotifications;
 
+  bool get isDeleteAccountEmailValid =>
+      EmailValidator.validate(deleteAccountEmail.trim());
+  String get appVersion => _packageInfo.version;
+
   SettingsProvider() {
-    deleteAccountEmail = "";
+    _oneSignalNotificationService = getIt<OneSignalNotificationService>();
     _userRepository = getIt<UserRepository>();
+    deleteAccountEmail = "";
     deleteFormStatus = Idle();
     getPackageInfo();
     initializeSharedPreferences();
@@ -42,10 +46,18 @@ class SettingsProvider with ChangeNotifier {
     _packageInfo = await PackageInfo.fromPlatform();
   }
 
-  void togglePushNotifications(bool value) {
+  Future<void> togglePushNotificationsPreference(bool value) async {
     pushNotifications = value;
-    _preferences.setBool('HA_PUSH_NOTIFICATIONS', pushNotifications);
+    await _preferences.setBool('HA_PUSH_NOTIFICATIONS', pushNotifications);
     notifyListeners();
+  }
+
+  Future<void> togglePushNotifications(bool value) async {
+    await togglePushNotificationsPreference(value);
+    value
+        ? await _oneSignalNotificationService.initializeNotificationService()
+        : await _oneSignalNotificationService
+            .unsubscribeFromNotificationsServer();
   }
 
   void emailChange(String value) {

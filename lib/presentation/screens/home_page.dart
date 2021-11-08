@@ -29,8 +29,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _authenticationService = getIt<AuthenticationService>();
     _notificationsService = getIt<OneSignalNotificationService>();
-    _notificationsService
-        .initializeNotificationService(_authenticationService.user.id);
+    _notificationsService.initializeNotificationService();
     _controller = PersistentTabController(initialIndex: 0);
     super.initState();
     // If user clicked on notification, redirect to correct screen.
@@ -38,22 +37,22 @@ class _HomePageState extends State<HomePage> {
     //   WidgetsBinding.instance.addPostFrameCallback(
     //       (_) => Application.router.navigateTo(context, widget.route));
     //}
-    getIt<AuthenticationService>().user.fullName.isEmpty
-        ? WidgetsBinding.instance.addPostFrameCallback((_) async {
-            await Navigator.of(context).push(PageRouteBuilder(
-                opaque: false,
-                pageBuilder: (BuildContext context, _, __) =>
-                    // TODO - Translate
-                    FullscreenDialog(
-                      svgAsset: 'assets/icons/svg/complete_register.svg',
-                      header: 'Hey there!',
-                      message:
-                          'Complete the registration by entering your name to create or join events',
-                      buttonText: 'Settings',
-                      route: Routes.editAccount,
-                    )));
-          })
-        : null;
+    if (_authenticationService.user.fullName.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await Navigator.of(context).push(PageRouteBuilder(
+            opaque: false,
+            pageBuilder: (BuildContext context, _, __) =>
+                // TODO - Translate
+                FullscreenDialog(
+                  svgAsset: 'assets/icons/svg/complete_register.svg',
+                  header: 'Hey there!',
+                  message:
+                      'Complete the registration by entering your name to create or join events',
+                  buttonText: 'Settings',
+                  route: Routes.editAccount,
+                )));
+      });
+    }
   }
 
   // TODO move all state management to a provider!

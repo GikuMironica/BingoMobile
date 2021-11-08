@@ -9,10 +9,10 @@ import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/authentication_repository.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
 import 'package:hopaut/services/dio_service.dart';
+import 'package:hopaut/services/notifications_service.dart';
 import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:hopaut/data/domain/login_result.dart';
 import 'package:hopaut/controllers/providers/settings_provider.dart';
 
@@ -23,6 +23,7 @@ class AuthenticationService with ChangeNotifier {
 
   final UserRepository _userRepository;
   final AuthenticationRepository _authenticationRepository;
+  final OneSignalNotificationService _oneSignalNotificationService;
 
   Identity _identity;
   User _user;
@@ -32,7 +33,8 @@ class AuthenticationService with ChangeNotifier {
       : _secureStorageService = getIt<SecureStorageService>(),
         _userRepository = getIt<UserRepository>(),
         _dioService = getIt<DioService>(),
-        _authenticationRepository = getIt<AuthenticationRepository>();
+        _authenticationRepository = getIt<AuthenticationRepository>(),
+        _oneSignalNotificationService = getIt<OneSignalNotificationService>();
 
   Identity get currentIdentity => _identity;
 
@@ -135,6 +137,7 @@ class AuthenticationService with ChangeNotifier {
     await Hive.box('auth').delete('identity');
     _secureStorageService.deleteAll();
     _dioService.removeBearerToken();
+    _oneSignalNotificationService.unsubscribeFromNotificationsServer();
 
     // reset providers
     getIt<SettingsProvider>().resetProvider();
@@ -144,9 +147,5 @@ class AuthenticationService with ChangeNotifier {
 
     setIdentity(null);
     setUser(null);
-    await Future.wait([
-      OneSignal.shared.removeExternalUserId(),
-      OneSignal.shared.setSubscription(false)
-    ]);
   }
 }
