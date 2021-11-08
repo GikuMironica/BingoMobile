@@ -14,7 +14,7 @@ class LocationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => Application.router.navigateTo(context, Routes.searchByMap,
-          replace: true, transition: TransitionType.cupertino),
+          replace: false, transition: TransitionType.fadeIn),
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.all(12.0),

@@ -112,12 +112,12 @@ class _SettingsState extends State<Settings> {
                                     visible: Platform.isIOS,
                                     child: CupertinoSwitch(
                                       value: settingsMgr.pushNotifications,
-                                      onChanged: (v) => settingsMgr
+                                      onChanged: (v) async => await settingsMgr
                                           .togglePushNotifications(v),
                                     ),
                                     replacement: Switch(
                                       value: settingsMgr.pushNotifications,
-                                      onChanged: (v) => settingsMgr
+                                      onChanged: (v) async => await settingsMgr
                                           .togglePushNotifications(v),
                                     ),
                                   ),
