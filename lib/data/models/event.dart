@@ -1,3 +1,4 @@
+import 'package:hopaut/config/currencies.dart';
 import 'package:hopaut/config/event_types.dart';
 
 class Event {
@@ -7,17 +8,17 @@ class Event {
   String title;
   double entrancePrice;
   String requirements;
-  int eventType;
-  int currency;
+  EventType eventType;
+  Currency currency;
 
   Event(
       {this.id,
-        this.description,
-        this.slots,
-        this.title,
-        this.entrancePrice,
-        this.requirements,
-        this.eventType,
+      this.description,
+      this.slots,
+      this.title,
+      this.entrancePrice,
+      this.requirements,
+      this.eventType,
       this.currency});
 
   Event.fromJson(Map<String, dynamic> json) {
@@ -27,8 +28,9 @@ class Event {
     title = json['Title'];
     entrancePrice = json['EntrancePrice'];
     requirements = json['Requirements'];
-    eventType = json['EventType'];
-    currency = json['Currency'];
+    eventType = EventType.values[(json['EventType'])];
+    currency =
+        json['Currency'] != null ? Currency.values[json['Currency']] : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -39,10 +41,12 @@ class Event {
     data['Title'] = this.title;
     data['EntrancePrice'] = this.entrancePrice;
     data['Requirements'] = this.requirements;
-    data['EventType'] = this.eventType;
-    data['Currency'] = this.currency;
+    data['EventType'] = this.eventType.index;
+    data['Currency'] = this.currency.index;
     return data;
   }
 
-  String get type => eventTypes[eventType];
+  bool isPaidEvent() {
+    return paidEvents.contains(eventType);
+  }
 }

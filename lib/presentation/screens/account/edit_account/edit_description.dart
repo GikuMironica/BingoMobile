@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get_it/get_it.dart';
-import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/data/models/user.dart';
+import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/controllers/providers/account_provider.dart';
+import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/presentation/widgets/inputs/text_area_input.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
-import 'package:hopaut/services/repo_locator/repo_locator.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
+import 'package:hopaut/services/authentication_service.dart';
+import 'package:provider/provider.dart';
 
 class EditAccountDescription extends StatefulWidget {
   @override
@@ -13,97 +14,99 @@ class EditAccountDescription extends StatefulWidget {
 }
 
 class _EditAccountDescriptionState extends State<EditAccountDescription> {
+  AccountProvider _accountProvider;
   TextEditingController _descriptionController;
+  int maxFieldLength;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    _descriptionController = TextEditingController();
-    _descriptionController.text =
-        GetIt.I.get<AuthService>().user.description ?? '';
     super.initState();
+    _descriptionController = TextEditingController();
+    // on initialize screen, controller text is null even if user has description
+    // dirty fix
+    _descriptionController.text =
+        getIt<AuthenticationService>().user.description;
+    maxFieldLength = 250;
   }
 
   @override
   Widget build(BuildContext context) {
+    _accountProvider = Provider.of<AccountProvider>(context, listen: true);
     return Scaffold(
-      appBar: SimpleAppBar(
-        context: context,
-        text: 'Description',
-        actionButtons: [IconButton(icon: Icon(Icons.check), onPressed: () async => updateDescription(_descriptionController.text.trim(), context))],
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 12),
-              child: Text(
-                'Description',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Container(
-              height: 192.0,
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: TextField(
-                controller: _descriptionController,
-                onChanged: (v) {},
-                maxLengthEnforced: true,
-                maxLength: 250,
-                maxLines: 4,
-                inputFormatters: [LengthLimitingTextInputFormatter(250)],
-                decoration: InputDecoration(
-                  counterText: '',
-                  contentPadding: EdgeInsets.all(12.0),
-                  border: InputBorder.none,
+        appBar: SimpleAppBar(
+            context: context,
+            // TODO translation
+            text: 'Description',
+            actionButtons: _accountProvider.validateDescription(
+                    _descriptionController.text, maxFieldLength)
+                ? [
+                    IconButton(
+                        icon: Icon(Icons.check),
+                        onPressed: () async =>
+                            await _accountProvider.updateDescriptionAsync(
+                                _descriptionController.text.trim(), context))
+                  ]
+                : null),
+        body: Container(
+            height: MediaQuery.of(context).size.height,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(20.0),
+              child: Builder(
+                  builder: (context) => _editProfileDescriptionForm(context)),
+            )));
+  }
+
+  Widget _editProfileDescriptionForm(BuildContext context) {
+    if (_accountProvider.formStatus is Failed) {
+      // Translation
+      Future.delayed(Duration.zero, () async {
+        // TODO - translation
+        showSnackBarWithError(
+            context: context, message: "Error, Something went wrong");
+      });
+      _accountProvider.formStatus = new Idle();
+    }
+    return _accountProvider.formStatus is Submitted
+        ? overlayBlurBackgroundCircularProgressIndicator(context, 'Updating')
+        : Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 8,
                 ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+                Padding(
+                  padding: EdgeInsets.only(left: 12),
+                  child: Text(
+                    // TODO translation
+                    'Description',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                textAreaInput(
+                  maxLength: maxFieldLength,
+                  controller: _descriptionController,
+                  isStateValid: _accountProvider.validateDescription(
+                      _descriptionController.text, maxFieldLength),
+                  initialValue: _accountProvider.currentIdentity.description,
+                  // TODO translation
+                  validationMessage: "Profile description too long",
+                  onChange: (v) => _accountProvider.onDescriptionChange(
+                      v, _descriptionController),
+                )
+              ],
+            ),
+          );
   }
 
   @override
   void dispose() {
-    _descriptionController.dispose();
     super.dispose();
-  }
-
-  Future<void> updateDescription(
-      String newDescription, BuildContext context) async {
-    bool descriptionHasChanged =
-        GetIt.I.get<AuthService>().user.description != newDescription;
-
-    if (!descriptionHasChanged) {
-      Application.router.pop(context);
-    } else {
-      final User tempUser = User(
-          firstName: GetIt.I.get<AuthService>().user.firstName,
-          lastName: GetIt.I.get<AuthService>().user.lastName,
-          description: newDescription);
-      var response = await GetIt.I
-          .get<RepoLocator>()
-          .users
-          .update(GetIt.I.get<AuthService>().currentIdentity.userId, tempUser);
-
-      if(response is User){
-        GetIt.I.get<AuthService>().setUser(response);
-        Application.router.pop(context);
-      } else {
-
-      }
-    }
+    _descriptionController.dispose();
   }
 }

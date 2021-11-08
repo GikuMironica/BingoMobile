@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/services/date_formatter.dart';
+import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/data/models/picture.dart';
+import 'package:hopaut/services/date_formatter_service.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
 
@@ -26,27 +28,37 @@ class Post {
   int voucherDataId;
   int announcementsDataId;
   int attendanceDataId;
-  List<String> pictures;
+  List<Picture> pictures;
   List<String> tags;
 
   Post(
       {this.id,
-        this.postTime,
-        this.eventTime,
-        this.endTime,
-        this.activeFlag,
-        this.location,
-        this.userId,
-        this.hostRating,
-        this.isAttending,
-        this.availableSlots,
-        this.event,
-        this.repeatablePropertyDataId,
-        this.voucherDataId,
-        this.announcementsDataId,
-        this.attendanceDataId,
-        this.pictures,
-        this.tags});
+      this.postTime,
+      this.eventTime,
+      this.endTime,
+      this.activeFlag,
+      this.location,
+      this.userId,
+      this.hostRating,
+      this.isAttending,
+      this.availableSlots,
+      this.event,
+      this.repeatablePropertyDataId,
+      this.voucherDataId,
+      this.announcementsDataId,
+      this.attendanceDataId,
+      this.pictures,
+      this.tags}) {
+    if (pictures == null) {
+      pictures = List<Picture>();
+    }
+    if (event == null) {
+      event = Event();
+    }
+    if (tags == null) {
+      tags = List<String>();
+    }
+  }
 
   Post.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
@@ -54,9 +66,8 @@ class Post {
     eventTime = json['EventTime'];
     endTime = json['EndTime'];
     activeFlag = json['ActiveFlag'];
-    location = json['Location'] != null
-        ? Location.fromJson(json['Location'])
-        : null;
+    location =
+        json['Location'] != null ? Location.fromJson(json['Location']) : null;
     userId = json['UserId'];
     hostRating = json['HostRating'];
     isAttending = json['IsAttending'];
@@ -66,7 +77,11 @@ class Post {
     voucherDataId = json['VoucherDataId'];
     announcementsDataId = json['AnnouncementsDataId'];
     attendanceDataId = json['AttendanceDataId'];
-    pictures = json['Pictures'].cast<String>();
+    List<String> picturePaths = json['Pictures'].cast<String>();
+    pictures = List();
+    picturePaths.forEach((path) {
+      pictures.add(Picture(path));
+    });
     tags = json['Tags'].cast<String>();
   }
 
@@ -76,13 +91,14 @@ class Post {
     data['EndTime'] = this.endTime;
     data['Location'] = this.location.toJson();
     data['Event'] = this.event.toJson();
-    data['Pictures'] = this.pictures;
+    data['Pictures'] = picturePaths();
     data['Tags'] = this.tags ?? null;
     return data;
   }
 
-  Future<Map<String, dynamic>> toMultipartJson() async {
+  Future<Map<String, dynamic>> toMultipartJson(bool isUpdate) async {
     final Map<String, dynamic> data = Map<String, dynamic>();
+    String eventPrefix = isUpdate ? "UpdatedEvent" : "Event";
     data['EventTime'] = this.eventTime;
     data['EndTime'] = this.endTime;
     if (this.location != null) {
@@ -95,56 +111,91 @@ class Post {
       data['UserLocation.Country'] = this.location.country;
     }
     if (this.event != null) {
-      data['Event.Description'] = this.event.description;
-      data['Event.Requirements'] = this.event.requirements;
-      data['Event.Slots'] = this.event.slots;
-      data['Event.Title'] = this.event.title;
-      data['Event.Currency'] = this.event.currency;
-      data['Event.EntrancePrice'] = this.event.entrancePrice;
-      data['Event.EventType'] = this.event.eventType;
+      data['$eventPrefix.Description'] = this.event.description;
+      data['$eventPrefix.Requirements'] = this.event.requirements;
+      data['$eventPrefix.Slots'] = this.event.slots;
+      data['$eventPrefix.Title'] = this.event.title;
+      data['$eventPrefix.Currency'] =
+          this.event.currency != null ? this.event.currency.index : null;
+      data['$eventPrefix.EntrancePrice'] = this.event.entrancePrice;
+      data['$eventPrefix.EventType'] = this.event.eventType.index;
     }
-    if(pictures.isNotEmpty){
+    if (pictures.isNotEmpty) {
       String mimeType = mimeFromExtension('webp');
       String mimee = mimeType.split('/')[0];
       String type = mimeType.split('/')[1];
-      if(pictures[0] != null) data['Picture1'] = await MultipartFile.fromFile(File(pictures[0]).absolute.path, filename: '0.webp', contentType: MediaType(mimee, type));
-      if(pictures[1] != null) data['Picture2'] = await MultipartFile.fromFile(File(pictures[1]).absolute.path, filename: '1.webp', contentType: MediaType(mimee, type));
-      if(pictures[2] != null) data['Picture3'] = await MultipartFile.fromFile(File(pictures[2]).absolute.path, filename: '2.webp', contentType: MediaType(mimee, type));
+      List<String> ramainingGuids = [];
+      for (int i = 0; i < pictures.length; i++) {
+        if (pictures[i].path.contains("/")) {
+          data['Picture${i + 1}'] = await MultipartFile.fromFile(
+              File(pictures[i].path).absolute.path,
+              filename: '${i + 1}.webp',
+              contentType: MediaType(mimee, type));
+        } else {
+          ramainingGuids.add(pictures[i].path);
+        }
+      }
+      if (ramainingGuids.isNotEmpty) {
+        data["RemainingImagesGuids"] = ramainingGuids;
+      }
     }
-    data['Tags'] = this.tags ?? null;
+    data[isUpdate ? 'TagNames' : 'Tags'] = this.tags ?? null;
     return data;
   }
 
-  String get timeRange => GetIt.I.get<DateFormatter>().formatTimeRange(eventTime, endTime);
-  double get entryPrice => event.entrancePrice != 0.0 ? event.entrancePrice : null;
+  String get timeRange =>
+      getIt<DateFormatterService>().formatTimeRange(eventTime, endTime);
+  String get dateRange =>
+      getIt<DateFormatterService>().formatDateRange(eventTime, endTime);
+  double get entryPrice =>
+      event.entrancePrice != 0.0 ? event.entrancePrice : null;
 
-  List<String> pictureUrls() {
-    List<String> pics = List();
-    for (String picture in pictures){
-
-      if(picture != null) pics.add("${WEB.IMAGES}/$picture.webp");
+  List<String> picturePaths() {
+    List<String> paths = List();
+    for (Picture picture in pictures) {
+      if (picture != null) {
+        paths.add(picture.url);
+      }
     }
-    return pics;
+    return paths;
   }
 
-  DateTime get startTimeAsDateTime => DateTime.fromMillisecondsSinceEpoch(eventTime * 1000);
-  DateTime get endTimeAsDateTime => DateTime.fromMillisecondsSinceEpoch(endTime * 1000);
+  List<String> pictureUrls() {
+    List<String> urls = List();
+    for (Picture picture in pictures) {
+      if (picture != null) {
+        urls.add(picture.url);
+      }
+    }
+    return urls;
+  }
+
+  List<ImageProvider> getImages() {
+    List<ImageProvider> images = List();
+    for (Picture picture in pictures) {
+      if (picture != null) {
+        images.add(picture.image);
+      }
+    }
+    return images;
+  }
+
+  DateTime get startTimeAsDateTime =>
+      DateTime.fromMillisecondsSinceEpoch(eventTime * 1000);
+  DateTime get endTimeAsDateTime =>
+      DateTime.fromMillisecondsSinceEpoch(endTime * 1000);
 
   String get hostRatingAsString => hostRating.toStringAsFixed(2);
 
-  void setTitle(String string) {
-    this.event.title = string;
+  void setPicture(Picture picture, [int index]) async {
+    if (index != null && index < Constraint.pictureMaxCount) {
+      pictures[index] = picture;
+    } else if (pictures.length < Constraint.pictureMaxCount) {
+      pictures.add(picture);
+    }
   }
 
-  void setLocation(Location location){
-    this.location = location;
-  }
-
-  void setEndTime(int int){
-    this.endTime = int;
-  }
-
-  void setStartTime(int int){
-    this.eventTime = int;
+  void removePicture(Picture picture) {
+    pictures.remove(picture);
   }
 }

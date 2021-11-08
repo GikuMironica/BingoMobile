@@ -1,32 +1,34 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/init.dart';
-import 'package:hopaut/presentation/screens/account/account_page/account_page.dart';
-import 'package:hopaut/presentation/screens/account/edit_account/edit_account.dart';
+import 'package:hopaut/presentation/screens/account/account_page.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/edit_profile.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_description.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_name.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_profile_picture.dart';
 import 'package:hopaut/presentation/screens/announcements/announcement_screen.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_index.dart';
 import 'package:hopaut/presentation/screens/announcements/announcements_user_events_list.dart';
-import 'package:hopaut/presentation/screens/events/create_event.dart';
-import 'package:hopaut/presentation/screens/events/create_event/create_event.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/description.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/edit_event.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/location/map.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/pictures.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/requirements.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/tags.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/time.dart';
-import 'package:hopaut/presentation/screens/events/edit_event/title.dart';
-import 'package:hopaut/presentation/screens/events/event_list/event_list.dart';
+import 'package:hopaut/presentation/screens/authentication/forgot_password.dart';
+import 'package:hopaut/presentation/screens/authentication/register.dart';
+import 'package:hopaut/presentation/screens/events/edit/description.dart';
+import 'package:hopaut/presentation/screens/events/edit/edit_event_page.dart';
+import 'package:hopaut/presentation/screens/events/location/map.dart';
+import 'package:hopaut/presentation/screens/events/edit/pictures.dart';
+import 'package:hopaut/presentation/screens/events/edit/price.dart';
+import 'package:hopaut/presentation/screens/events/edit/requirements.dart';
+import 'package:hopaut/presentation/screens/events/edit/slots.dart';
+import 'package:hopaut/presentation/screens/events/edit/tags.dart';
+import 'package:hopaut/presentation/screens/events/edit/time.dart';
+import 'package:hopaut/presentation/screens/events/edit/title.dart';
 import 'package:hopaut/presentation/screens/events/event_page.dart';
-import 'package:hopaut/presentation/screens/events/rate_event/rate_event.dart';
+import 'package:hopaut/presentation/screens/events/rate_event.dart';
+import 'package:hopaut/presentation/screens/events/create/create_event_page.dart';
 import 'package:hopaut/presentation/screens/home_page.dart';
-import 'package:hopaut/presentation/screens/authentication/login/login.dart';
-import 'package:hopaut/presentation/screens/registration/registration.dart';
+import 'package:hopaut/presentation/screens/authentication/login.dart';
 import 'package:hopaut/presentation/screens/settings/change_password.dart';
 import 'package:hopaut/presentation/screens/settings/settings.dart';
+import 'package:hopaut/presentation/widgets/dialogs/fullscreen_dialog.dart';
 import 'package:hopaut/presentation/widgets/webview_widget.dart';
 
 var rootHandler = new Handler(
@@ -37,6 +39,11 @@ var rootHandler = new Handler(
 var homeHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return HomePage();
+});
+
+var fullscreenDialogHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return FullscreenDialog();
 });
 
 var accountHandler = new Handler(
@@ -79,6 +86,11 @@ var changePasswordHandler = new Handler(
   return ChangePasswordPage();
 });
 
+var forgotPasswordHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return ForgotPasswordPage();
+});
+
 var eventPageHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return EventPage(postId: int.parse(params["id"][0]));
@@ -97,11 +109,6 @@ var createEventHandler = new Handler(
 var editEventHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return EditEventPage();
-});
-
-var eventListHandler = new Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return EventList();
 });
 
 var editEventDescriptionHandler = new Handler(
@@ -124,11 +131,20 @@ var editEventTitleHandler = new Handler(
   return EditPostTitle();
 });
 
-var locationSearchPageHandler = Handler(
-  handlerFunc: (BuildContext ctx, Map<String, List<String>> params) {
-    return SearchByMap();
-  }
-);
+var editEventSlotsHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return EditSlotsPage();
+});
+
+var editEventPriceHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return EditPricePage();
+});
+
+var locationSearchPageHandler =
+    Handler(handlerFunc: (BuildContext ctx, Map<String, List<String>> params) {
+  return SearchByMap();
+});
 
 var editEventTimeHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -159,10 +175,15 @@ var announcementScreen = new Handler(
 
 var tosHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return WebvPage('Terms of Services', 'https://hopaut.com/');
+  return WebvPage('Terms of Services', 'https://hopaut.com/legal/terms');
 });
 
 var ppHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return WebvPage('Terms of Services', 'https://hopaut.com/');
+  return WebvPage('Privacy Policy', 'https://hopaut.com/legal/privacy');
+});
+
+var imprintHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return WebvPage('Imprint', 'https://hopaut.com/legal/impressum');
 });
