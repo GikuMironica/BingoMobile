@@ -48,26 +48,23 @@ class _DropDownWidgetState<T> extends State<DropDownWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      Container(
-          height: 48.0,
-          margin: EdgeInsets.only(bottom: 5.0),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(8),
-          )),
-      DropdownButtonFormField<T>(
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.0),
+      margin: EdgeInsets.only(bottom: 24.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(7.0),
+      ),
+      child: DropdownButtonFormField<T>(
         value: widget.value,
         onChanged: widget.onChanged,
         // focusNode: _focus,
         validator: widget.validator,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
         onSaved: widget.onSaved,
         items: widget.list
             ?.map((T e) => DropdownMenuItem<T>(value: e, child: Text('$e')))
             ?.toList(),
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(12.0),
           filled: _focus.hasFocus,
           hintText: widget.hintText,
           hintStyle: TextStyle(
@@ -77,10 +74,10 @@ class _DropDownWidgetState<T> extends State<DropDownWidget<T>> {
           labelText: widget.labelText,
           prefixIcon: widget.prefixIcon,
           border: InputBorder.none,
-          //fillColor: Color(0xFFF5F5F5).withOpacity(0.64),
+          fillColor: Color(0xFFF5F5F5).withOpacity(0.64),
           focusColor: Color(0xFFF5F5F5).withOpacity(0.64),
         ),
       ),
-    ]);
+    );
   }
 }

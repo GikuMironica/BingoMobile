@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/screens/home_page.dart';
-import 'package:hopaut/services/authentication_service.dart';
+import 'package:hopaut/services/auth_service/auth_service.dart';
 import 'package:provider/provider.dart';
 
 import 'data/models/user.dart';
@@ -27,14 +27,14 @@ class _InitializationState extends State<Initialization> {
 
   @override
   Widget build(BuildContext context) {
-    _user = Provider.of<AuthenticationService>(context).user;
+    _user = Provider.of<AuthService>(context).user;
     if (_user == null) {
       Future.delayed(
           Duration(milliseconds: 500),
           () => Application.router.navigateTo(context, '/login',
               replace: true,
               transition: TransitionType.fadeIn,
-              transitionDuration: Duration(milliseconds: 500)));
+              transitionDuration: Duration(milliseconds: 0)));
     } else {
       widget.route == null
           ? Future.delayed(

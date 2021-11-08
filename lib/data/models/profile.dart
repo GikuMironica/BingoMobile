@@ -1,5 +1,6 @@
 import 'package:hopaut/config/constants.dart';
 
+
 class Profile {
   String firstName;
   String lastName;
@@ -18,17 +19,14 @@ class Profile {
 
   String get getFullName => "$firstName $lastName";
 
-  String get getInitials =>
-      "${firstName.substring(0, 1)}${lastName.substring(0, 1)}";
+  String get getInitials => "${firstName.substring(0,1)}${lastName.substring(0,1)}";
 
   String get getProfilePicture {
-    if (profilePicture != null) {
-      if (profilePicture.startsWith("http")) {
-        return profilePicture;
-      } else {
+    if(profilePicture != null){
+      if(profilePicture.startsWith("http")){ return profilePicture; }
+      else {
         return "${WEB.PROFILE_PICTURES}/$profilePicture.webp";
       }
     }
-    return null;
   }
 }

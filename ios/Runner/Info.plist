@@ -1,88 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-	<dict>
-		<key>CFBundleDevelopmentRegion</key>
-		<string>$(DEVELOPMENT_LANGUAGE)</string>
-		<key>CFBundleExecutable</key>
-		<string>$(EXECUTABLE_NAME)</string>
-		<key>CFBundleIdentifier</key>
-		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-		<key>CFBundleInfoDictionaryVersion</key>
-		<string>6.0</string>
-		<key>CFBundleName</key>
-		<string>Hopaut</string>
-		<key>CFBundlePackageType</key>
-		<string>APPL</string>
-		<key>CFBundleShortVersionString</key>
-		<string>$(FLUTTER_BUILD_NAME)</string>
-		<key>CFBundleSignature</key>
-		<string>????</string>
-		<key>CFBundleURLTypes</key>
-		<array>
-			<dict>
-				<key>CFBundleURLSchemes</key>
-				<array>
-					<string>fb218732049417470</string>
-				</array>
-			</dict>
-		</array>
-		<key>CFBundleVersion</key>
-		<string>$(FLUTTER_BUILD_NUMBER)</string>
-		<key>FacebookAppID</key>
-		<string>218732049417470</string>
-		<key>FacebookDisplayName</key>
-		<string>HopAut</string>
-		<key>HERECredentials</key>
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>HopAut</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(FLUTTER_BUILD_NAME)</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
 		<dict>
-			<key>AccessKeyId</key>
-			<string>jhGYNi0TwTYhkR_gHINssw</string>
-			<key>AccessKeySecret</key>
-			<string>ERW6aOR-thhVDaEK87acFczpXSoOH3YxtNrid1ecwI80HpYJ3pMwT1CeW_xwXX5JYfvKu1QShU683rYdnfGhUQ</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb218732049417470</string>
+			</array>
 		</dict>
-		<key>LSApplicationQueriesSchemes</key>
-		<array>
-			<string>fbapi</string>
-			<string>fb-messenger-share-api</string>
-			<string>fbauth2</string>
-			<string>fbshareextension</string>
-		</array>
-		<key>LSRequiresIPhoneOS</key>
-		<true/>
-		<key>NSCameraUsageDescription</key>
-		<string>For choosing pictures in the app via Camera</string>
-		<key>NSLocationWhenInUseUsageDescription</key>
-		<string>This app needs access to location services while using.</string>
-		<key>NSLocationAlwaysUsageDescription</key>
-		<string>This app needs access to location services while using.</string>
-		<key>NSPhotoLibraryUsageDescription</key>
-		<string>For choosing pictures in the app.</string>
-		<key>UIBackgroundModes</key>
-		<array>
-			<string>remote-notification</string>
-		</array>
-		<key>UILaunchStoryboardName</key>
-		<string>LaunchScreen</string>
-		<key>UIMainStoryboardFile</key>
-		<string>Main</string>
-		<key>UISupportedInterfaceOrientations</key>
-		<array>
-			<string>UIInterfaceOrientationPortrait</string>
-			<string>UIInterfaceOrientationLandscapeLeft</string>
-			<string>UIInterfaceOrientationLandscapeRight</string>
-		</array>
-		<key>UISupportedInterfaceOrientations~ipad</key>
-		<array>
-			<string>UIInterfaceOrientationPortrait</string>
-			<string>UIInterfaceOrientationPortraitUpsideDown</string>
-			<string>UIInterfaceOrientationLandscapeLeft</string>
-			<string>UIInterfaceOrientationLandscapeRight</string>
-		</array>
-		<key>UIViewControllerBasedStatusBarAppearance</key>
-		<false/>
-		<key>io.flutter.embedded_views_preview</key>
-		<true/>
-		<key>UIStatusBarHidden</key>
-		<false/>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FacebookAppID</key>
+	<string>218732049417470</string>
+	<key>FacebookDisplayName</key>
+	<string>HopAut</string>
+	<key>HERECredentials</key>
+	<dict>
+		<key>AccessKeyId</key>
+		<string>jhGYNi0TwTYhkR_gHINssw</string>
+		<key>AccessKeySecret</key>
+		<string>ERW6aOR-thhVDaEK87acFczpXSoOH3YxtNrid1ecwI80HpYJ3pMwT1CeW_xwXX5JYfvKu1QShU683rYdnfGhUQ</string>
 	</dict>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>For choosing pictures in the app via Camera</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to location when open.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>For choosing pictures in the app.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+</dict>
 </plist>

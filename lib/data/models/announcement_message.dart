@@ -5,6 +5,8 @@ class AnnouncementMessage {
   int timestamp;
   String error;
 
+  String get text => message;
+
   AnnouncementMessage({this.id, this.postId, this.message, this.timestamp});
   AnnouncementMessage.error({this.error});
 

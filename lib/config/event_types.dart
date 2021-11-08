@@ -1,30 +1,24 @@
-enum EventType {
-  defaultType,
-  houseParty,
-  club,
-  bar,
-  bikerMeet,
-  bicycleMeet,
-  carMeet,
-  streetParty,
-  marathon,
-  other
-}
-
-const Map<EventType, String> eventTypeStrings = {
-  EventType.houseParty: "House Party",
-  EventType.club: "Club",
-  EventType.bar: "Bar",
-  EventType.bikerMeet: "Biker Meet",
-  EventType.bicycleMeet: "Bicycle Meet",
-  EventType.carMeet: "Car Meet",
-  EventType.streetParty: "Street Party",
-  EventType.marathon: "Marathon",
-  EventType.other: "Other"
+Map<int, String> eventTypes = {
+  1: "House Party",
+  2: "Club",
+  3: "Bar",
+  4: "Biker Meet",
+  5: "Bicycle Meet",
+  6: "Car Meet",
+  7: "Street Party",
+  8: "Marathon",
+  9: "Other"
 };
 
-const List<EventType> paidEvents = [
-  EventType.houseParty,
-  EventType.club,
-  EventType.bar
+// Todo: Remove the map above, it's redundant.
+const List<String> EVENT_TYPES = [
+  'House Party',
+  'Club',
+  'Bar',
+  'Biker Meet',
+  'Bicycle Meet',
+  'Car Meet',
+  'Street Party',
+  'Marathon',
+  'Other'
 ];
