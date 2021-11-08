@@ -100,7 +100,7 @@ class SearchPageProvider extends ChangeNotifier {
         _cardList.add(InkWell(
           onTap: () async => await Application.router.navigateTo(
               context, '/event/${mp.postId}',
-              transition: TransitionType.cupertino),
+              transition: TransitionType.fadeIn),
           child: MiniPostCard(miniPost: mp),
         ));
       }
