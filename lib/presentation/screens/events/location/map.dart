@@ -53,11 +53,12 @@ class _SearchByMapState extends State<SearchByMap> {
               icon: HATheme.backButton,
               color: Colors.white,
               onPressed: () => {
-                    Application.router
-                        .navigateTo(context, Routes.createEvent,
-                            replace: true, transition: TransitionType.cupertino)
-                        .whenComplete(() => locationSelectionProvider
-                            .setMapLoadingState(MapLoadingState.LOADING)),
+                    Application.router.pop(context)
+                    // Application.router
+                    //     .navigateTo(context, Routes.createEvent,
+                    //         replace: true, transition: TransitionType.cupertino)
+                    //     .whenComplete(() => locationSelectionProvider
+                    //         .setMapLoadingState(MapLoadingState.LOADING)),
                   }),
           title: Text(
             // TODO translation

@@ -1,4 +1,5 @@
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hopaut/config/constants.dart';
@@ -169,6 +170,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                 ),
                 body: CustomScrollView(
                   controller: _scrollController,
+                  physics: AlwaysScrollableScrollPhysics(),
                   slivers: <Widget>[
                     SliverAppBar(
                       pinned: true,
@@ -228,8 +230,9 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                             icon: Icon(Icons.edit),
                             onPressed: () {
                               provider.setPost(post);
-                              Application.router
-                                  .navigateTo(context, '/edit-event');
+                              Application.router.navigateTo(
+                                  context, '/edit-event',
+                                  transition: TransitionType.cupertino);
                             },
                           ),
                         ),
@@ -394,8 +397,9 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                 DateTime.now()
                                     .isAfter(post.startTimeAsDateTime),
                             child: InkWell(
-                              onTap: () => Application.router
-                                  .navigateTo(context, '/rate-event/$postId'),
+                              onTap: () => Application.router.navigateTo(
+                                  context, '/rate-event/$postId',
+                                  transition: TransitionType.cupertino),
                               child: ListTile(
                                   contentPadding:
                                       EdgeInsets.symmetric(vertical: 4),
@@ -464,8 +468,9 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                             child: InkWell(
                               onTap: () {
                                 provider.setPost(post);
-                                Application.router
-                                    .navigateTo(context, '/edit-event');
+                                Application.router.navigateTo(
+                                    context, '/edit-event',
+                                    transition: TransitionType.cupertino);
                               },
                               child: ListTile(
                                   contentPadding:

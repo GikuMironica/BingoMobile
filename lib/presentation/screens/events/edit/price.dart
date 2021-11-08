@@ -80,8 +80,6 @@ class _EditPricePageState extends State<EditPricePage> {
                                     formKey.currentState.save();
                                     bool res = await provider.updateEvent();
                                     if (res) {
-                                      provider.miniPost.title =
-                                          provider.post.event.title;
                                       Fluttertoast.showToast(
                                           msg:
                                               'Event Price updated'); //TODO: translation
