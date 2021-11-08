@@ -1,3 +1,4 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -48,12 +49,11 @@ class EventsListView extends StatelessWidget {
                                 delegate: SliverChildBuilderDelegate(
                                   (ctx, index) => InkWell(
                                     onTap: () async {
-                                      provider.setMiniPost(provider
-                                          .eventsMap[listType].events[index]);
                                       int id = provider.eventsMap[listType]
                                           .events[index].postId;
-                                      await Application.router
-                                          .navigateTo(context, '/event/$id');
+                                      await Application.router.navigateTo(
+                                          context, '/event/$id',
+                                          transition: TransitionType.cupertino);
                                     },
                                     child: MiniPostCard(
                                       miniPost: provider

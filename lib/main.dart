@@ -133,7 +133,7 @@ class _HopAutState extends State<HopAut> {
             lazy: true,
           ),
           ChangeNotifierProvider<SearchPageProvider>(
-            create: (_) => SearchPageProvider(),
+            create: (_) => getIt<SearchPageProvider>(),
             lazy: true,
           ),
           ChangeNotifierProvider<EventProvider>(

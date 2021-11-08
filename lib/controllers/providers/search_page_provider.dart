@@ -1,9 +1,11 @@
 import 'dart:typed_data';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:hopaut/data/domain/coordinate.dart';
 import 'package:hopaut/data/models/mini_post.dart';
@@ -92,20 +94,18 @@ class SearchPageProvider extends ChangeNotifier {
   }
 
   void buildMiniPostCards() {
-    if (_searchResults != null) {
-      if (_searchResults.isNotEmpty) {
-        for (MiniPost mp in _searchResults) {
-          _cardList.add(InkWell(
-            onTap: () => pushNewScreen(context,
-                screen: EventPage(postId: mp.postId),
-                withNavBar: false,
-                pageTransitionAnimation: PageTransitionAnimation.scale),
-            child: MiniPostCard(miniPost: mp),
-          ));
-        }
-        _pageState = SearchPageState.HAS_SEARCH_RESULTS;
-        notifyListeners();
+    if (_searchResults != null && _searchResults.isNotEmpty) {
+      _cardList?.clear();
+      for (MiniPost mp in _searchResults) {
+        _cardList.add(InkWell(
+          onTap: () async => await Application.router.navigateTo(
+              context, '/event/${mp.postId}',
+              transition: TransitionType.cupertino),
+          child: MiniPostCard(miniPost: mp),
+        ));
       }
+      _pageState = SearchPageState.HAS_SEARCH_RESULTS;
+      notifyListeners();
     }
   }
 
@@ -285,6 +285,16 @@ class SearchPageProvider extends ChangeNotifier {
         GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.09));
     _hereMapController.mapScene.addMapPolygon(_mapPolygon);
     notifyListeners();
+  }
+
+  MiniPost getMiniPostById(int postId) {
+    if (_searchResults == null) {
+      return null;
+    }
+    MiniPost result = _searchResults.firstWhere(
+        (miniPost) => miniPost.postId == postId,
+        orElse: () => null);
+    return result;
   }
 
   @override

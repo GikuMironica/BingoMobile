@@ -76,8 +76,6 @@ class _EditSlotsPageState extends State<EditSlotsPage> {
                                     formKey.currentState.save();
                                     bool res = await provider.updateEvent();
                                     if (res) {
-                                      provider.miniPost.title =
-                                          provider.post.event.title;
                                       Fluttertoast.showToast(
                                           msg:
                                               'Event Price updated'); //TODO: translation

@@ -90,8 +90,7 @@ class _EditPostTitleState extends State<EditPostTitle> {
                                     formKey.currentState.save();
                                     bool res = await provider.updateEvent();
                                     if (res) {
-                                      provider.miniPost.title =
-                                          provider.post.event.title;
+                                      provider.updateMiniPost();
                                       Fluttertoast.showToast(
                                           msg:
                                               'Event Title updated'); //TODO: translation

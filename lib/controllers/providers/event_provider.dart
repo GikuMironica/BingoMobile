@@ -3,9 +3,10 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/api.dart';
 import 'package:hopaut/config/constants/constraint.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/controllers/providers/search_page_provider.dart';
 import 'package:hopaut/data/models/event_list.dart';
-import 'package:hopaut/data/models/location.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/picture.dart';
 import 'package:hopaut/data/models/post.dart';
@@ -22,7 +23,6 @@ class EventProvider extends ChangeNotifier {
   TagRepository _tagRepository;
   HashMap<String, EventList> _eventsMap;
   Post _post;
-  MiniPost _miniPost;
 
   bool isDateValid = true;
 
@@ -38,14 +38,19 @@ class EventProvider extends ChangeNotifier {
 
   HashMap<String, EventList> get eventsMap => _eventsMap;
   Post get post => _post;
-  MiniPost get miniPost => _miniPost;
 
   void setPost(Post post) {
     _post = post;
   }
 
-  void setMiniPost(MiniPost miniPost) {
-    _miniPost = miniPost;
+  MiniPost getActiveMiniPost() {
+    if (_eventsMap[API.MY_ACTIVE] == null) {
+      return null;
+    }
+
+    return _eventsMap[API.MY_ACTIVE].events.firstWhere(
+        (miniPost) => miniPost.postId == _post.id,
+        orElse: () => null);
   }
 
   Future<void> fetchEventList(String type) async {
@@ -119,24 +124,29 @@ class EventProvider extends ChangeNotifier {
     return suggestionList;
   }
 
-  void setPostDescription(String text) {
-    _post.event.description = text;
-    notifyListeners();
-  }
+  void updateMiniPost() {
+    MiniPost eventProviderMiniPost = getActiveMiniPost();
+    MiniPost searchPageProvicerMiniPost =
+        getIt<SearchPageProvider>().getMiniPostById(post.id);
+    Picture thumbnail = post.pictures.isNotEmpty ? post.pictures[0] : null;
 
-  void setPostRequirements(String text) {
-    _post.event.requirements = text;
-    notifyListeners();
-  }
+    if (eventProviderMiniPost != null) {
+      eventProviderMiniPost.thumbnail = thumbnail;
+      eventProviderMiniPost.title = post.event.title;
+      eventProviderMiniPost.address = post.location.address;
+      eventProviderMiniPost.startTime = post.eventTime;
+      eventProviderMiniPost.endTime = post.endTime;
+    }
 
-  void setPostTags(List<String> text) {
-    _post.tags = text;
-    notifyListeners();
-  }
-
-  void setPostTitle(String text) {
-    _post.event.title = text;
-    notifyListeners();
+    if (searchPageProvicerMiniPost != null) {
+      print("here");
+      searchPageProvicerMiniPost.thumbnail = thumbnail;
+      searchPageProvicerMiniPost.title = post.event.title;
+      searchPageProvicerMiniPost.address = post.location.address;
+      searchPageProvicerMiniPost.startTime = post.eventTime;
+      searchPageProvicerMiniPost.endTime = post.endTime;
+      getIt<SearchPageProvider>().buildMiniPostCards();
+    }
   }
 
   bool validateTitle(String value) {
@@ -175,8 +185,6 @@ class EventProvider extends ChangeNotifier {
       GlobalKey<FormState> formKey,
       TextEditingController startDateController,
       TextEditingController endDateController) {
-    post.location =
-        Location(id: 100, latitude: 48.405218, longitude: 10.001187);
     validateDates(startDateController, endDateController);
     return formKey.currentState.validate() &&
         post.location != null &&

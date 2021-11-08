@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/controllers/providers/search_page_provider.dart';
 import 'package:hopaut/presentation/screens/events/create/picture_list.dart';
 import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
@@ -69,10 +71,7 @@ class EditPostPictures extends StatelessWidget {
                                   formKey.currentState.save();
                                   bool res = await provider.updateEvent();
                                   if (res) {
-                                    provider.miniPost.thumbnail =
-                                        provider.post.pictures.isNotEmpty
-                                            ? provider.post.pictures[0]
-                                            : null;
+                                    provider.updateMiniPost();
                                     Fluttertoast.showToast(
                                         msg:
                                             'Event Pictures updated'); //TODO: translation

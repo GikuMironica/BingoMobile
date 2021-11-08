@@ -1,18 +1,13 @@
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
-import 'package:hopaut/data/models/post.dart';
-import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/screens/events/create/time_picker.dart';
 import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
-import 'package:hopaut/services/date_formatter_service.dart';
 import 'package:provider/provider.dart';
 
 class EditPostTime extends StatefulWidget {
@@ -90,10 +85,7 @@ class _EditPostTimeState extends State<EditPostTime> {
                                     int.parse(endDateController.text);
                                 bool res = await provider.updateEvent();
                                 if (res) {
-                                  provider.miniPost.startTime =
-                                      provider.post.eventTime;
-                                  provider.miniPost.endTime =
-                                      provider.post.endTime;
+                                  provider.updateMiniPost();
                                   Fluttertoast.showToast(
                                       msg:
                                           'Event Time updated'); //TODO: translation
