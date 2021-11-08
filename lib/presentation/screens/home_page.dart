@@ -3,6 +3,7 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/screens/events/event_list_page.dart';
 import 'package:hopaut/presentation/screens/account/account_page.dart';
 import 'package:hopaut/presentation/screens/search/search.dart';
+import 'package:hopaut/services/notifications_service.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:hopaut/presentation/widgets/dialogs/fullscreen_dialog.dart';
@@ -21,15 +22,22 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PersistentTabController _controller;
+  OneSignalNotificationService _notificationsService;
+  AuthenticationService _authenticationService;
 
   @override
   void initState() {
+    _authenticationService = getIt<AuthenticationService>();
+    _notificationsService = getIt<OneSignalNotificationService>();
+    _notificationsService
+        .initializeNotificationService(_authenticationService.user.id);
     _controller = PersistentTabController(initialIndex: 0);
     super.initState();
-    if (widget.route != null) {
-      WidgetsBinding.instance.addPostFrameCallback(
-          (_) => Application.router.navigateTo(context, widget.route));
-    }
+    // If user clicked on notification, redirect to correct screen.
+    // if (widget.route != null) {
+    //   WidgetsBinding.instance.addPostFrameCallback(
+    //       (_) => Application.router.navigateTo(context, widget.route));
+    //}
     getIt<AuthenticationService>().user.fullName.isEmpty
         ? WidgetsBinding.instance.addPostFrameCallback((_) async {
             await Navigator.of(context).push(PageRouteBuilder(

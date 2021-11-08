@@ -100,7 +100,7 @@ class SearchPageProvider extends ChangeNotifier {
         _cardList.add(InkWell(
           onTap: () async => await Application.router.navigateTo(
               context, '/event/${mp.postId}',
-              transition: TransitionType.cupertino),
+              transition: TransitionType.fadeIn),
           child: MiniPostCard(miniPost: mp),
         ));
       }
@@ -261,10 +261,8 @@ class SearchPageProvider extends ChangeNotifier {
 
     GeoCoordinates geoCoordinates =
         GeoCoordinates(userPosition.latitude, userPosition.longitude);
-    isInitalizeAction
-        ? mapController.camera.flyToWithOptionsAndDistance(geoCoordinates,
-            searchRadius * 5000, MapCameraFlyToOptions.withDefaults())
-        : mapController.camera.flyTo(geoCoordinates);
+    mapController.camera.flyToWithOptionsAndDistance(geoCoordinates,
+        searchRadius * 5000, MapCameraFlyToOptions.withDefaults());
     // Show the user on the map.
     MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
         'assets/icons/map/radio-button-off-outline.svg', 48, 48);

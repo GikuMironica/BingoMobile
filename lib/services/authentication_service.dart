@@ -27,7 +27,6 @@ class AuthenticationService with ChangeNotifier {
   Identity _identity;
   User _user;
   bool lock = false;
-  bool oneSignalSettings = false;
 
   AuthenticationService()
       : _secureStorageService = getIt<SecureStorageService>(),
@@ -42,7 +41,8 @@ class AuthenticationService with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> writeTokenToKeychain({String token, String refreshToken}) async {
+  Future<void> writeTokenToSecureStorage(
+      {String token, String refreshToken}) async {
     await Future.wait([
       _secureStorageService.write(key: 'token', value: token),
       _secureStorageService.write(key: 'refreshToken', value: refreshToken)
@@ -53,7 +53,7 @@ class AuthenticationService with ChangeNotifier {
     final Map<String, dynamic> parsedData = Jwt.parseJwt(data['Token']);
     await Future.wait([
       Hive.box('auth').put('identity', parsedData),
-      writeTokenToKeychain(
+      writeTokenToSecureStorage(
           token: data['Token'], refreshToken: data['RefreshToken'])
     ]);
 
@@ -63,26 +63,10 @@ class AuthenticationService with ChangeNotifier {
 
   User get user => _user;
 
-  Future<void> refreshUser(bool notificationsAllowed) async {
-    List<dynamic> allResult = await Future.wait([
-      _userRepository.get(_identity.id),
-      // On false will be initialized
-      !oneSignalSettings
-          ? initializeOneSignalSubscription(notificationsAllowed ?? true)
-          : null
-    ]);
+  Future<void> refreshUser() async {
+    List<dynamic> allResult =
+        await Future.wait([_userRepository.get(_identity.id)]);
     setUser(allResult.first);
-  }
-
-  Future<void> initializeOneSignalSubscription(
-      bool notificationsAllowed) async {
-    if (notificationsAllowed) {
-      await Future.wait([
-        OneSignal.shared.setSubscription(notificationsAllowed),
-        OneSignal.shared.setExternalUserId(currentIdentity.id)
-      ]);
-      oneSignalSettings = true;
-    }
   }
 
   void setUser(User user) {
@@ -160,12 +144,9 @@ class AuthenticationService with ChangeNotifier {
 
     setIdentity(null);
     setUser(null);
-    if (oneSignalSettings) {
-      await Future.wait([
-        OneSignal.shared.removeExternalUserId(),
-        OneSignal.shared.setSubscription(false)
-      ]);
-      oneSignalSettings = false;
-    }
+    await Future.wait([
+      OneSignal.shared.removeExternalUserId(),
+      OneSignal.shared.setSubscription(false)
+    ]);
   }
 }
