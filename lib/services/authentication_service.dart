@@ -110,7 +110,6 @@ class AuthenticationService with ChangeNotifier {
     if (_identity != null) {
       if (DateTime.now()
           .isAfter(DateTime.fromMillisecondsSinceEpoch(_identity.expiry))) {
-        print('Refreshing Token');
         // TODO - jwttoken is read twice on startup
         dynamic token = await _secureStorageService.read(key: 'token');
         dynamic refreshToken =
@@ -118,8 +117,8 @@ class AuthenticationService with ChangeNotifier {
         Map<String, dynamic> _refreshResult =
             await _authenticationRepository.refresh(token, refreshToken);
         if (_refreshResult.containsKey('Token')) {
-          print('Token successfully refreshed');
           await applyToken(_refreshResult);
+          return true;
         }
       } else {
         print('Attempted to refresh, but it\'s too early.');
