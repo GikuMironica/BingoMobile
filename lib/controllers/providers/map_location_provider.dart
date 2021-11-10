@@ -149,7 +149,7 @@ class MapLocationProvider extends ChangeNotifier {
   void saveSelectedLocation() {
     if (searchResults != null && searchResults.isNotEmpty) {
       _eventProvider.post.location = parseLocation(searchResults.first);
-      notifyListeners();
+      _eventProvider.notifyListeners();
     }
   }
 
@@ -191,8 +191,7 @@ class MapLocationProvider extends ChangeNotifier {
       notifyListeners();
     } else if (dismissDirection == DismissDirection.startToEnd) {
       saveSelectedLocation();
-      Application.router.navigateTo(context, Routes.createEvent,
-          replace: true, transition: TransitionType.cupertino);
+      Application.router.pop(context, true);
       setMapLoadingState(MapLoadingState.LOADING);
     }
   }
