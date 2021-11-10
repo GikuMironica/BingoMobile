@@ -1,5 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -58,6 +59,23 @@ class EditEventPage extends StatelessWidget {
               ),
               Divider(),
               ListTile(
+                onTap: () async {
+                  bool isUpdated = await Application.router.navigateTo(
+                      context, Routes.searchByMap,
+                      replace: false, transition: TransitionType.fadeIn);
+                  if (isUpdated) {
+                    bool res = await provider.updateEvent();
+                    if (res) {
+                      provider.updateMiniPost();
+                      Fluttertoast.showToast(
+                          msg: 'Event Location updated'); //TODO: translation
+                    } else {
+                      Fluttertoast.showToast(
+                          msg:
+                              'Unable to update location.'); //TODO: translation
+                    }
+                  }
+                },
                 leading: Icon(MdiIcons.mapMarker),
                 title: Text('Location'),
               ),

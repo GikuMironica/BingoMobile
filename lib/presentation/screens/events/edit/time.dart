@@ -8,6 +8,7 @@ import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
+import 'package:hopaut/utils/date_time_from_seconds.dart';
 import 'package:provider/provider.dart';
 
 class EditPostTime extends StatefulWidget {
@@ -52,6 +53,10 @@ class _EditPostTimeState extends State<EditPostTime> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       TimePicker(
+                          initStartDate:
+                              dateTimeFromSeconds(provider.post.eventTime),
+                          initEndDate:
+                              dateTimeFromSeconds(provider.post.endTime),
                           isValid: provider.isDateValid,
                           onConfirmStart: (startTime) => startDateController
                                   .text =

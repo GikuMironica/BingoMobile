@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 import 'package:intl/intl.dart';
 
 class TimePicker extends StatefulWidget {
   final Function(DateTime) onConfirmStart;
   final Function(DateTime) onConfirmEnd;
+  final DateTime initStartDate;
+  final DateTime initEndDate;
   final bool isValid;
 
-  TimePicker({this.onConfirmStart, this.onConfirmEnd, this.isValid});
+  TimePicker(
+      {this.onConfirmStart,
+      this.onConfirmEnd,
+      this.initStartDate,
+      this.initEndDate,
+      this.isValid});
 
   @override
-  _TimePickerState createState() => _TimePickerState();
+  _TimePickerState createState() =>
+      _TimePickerState(initStartDate, initEndDate);
 }
 
 class _TimePickerState extends State<TimePicker> {
@@ -19,6 +26,11 @@ class _TimePickerState extends State<TimePicker> {
 
   DateTime startDate;
   DateTime endDate;
+
+  _TimePickerState(DateTime initStartDate, DateTime initEndDate) {
+    startDate = initStartDate;
+    endDate = initEndDate;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +51,11 @@ class _TimePickerState extends State<TimePicker> {
                 setState(() {
                   startDate = date;
                   widget.onConfirmStart(date);
-                  if (endDate != null && startDate.compareTo(endDate) > 0) {
+                  if (endDate != null &&
+                      (startDate.add(Duration(minutes: 30)).isAfter(endDate) ||
+                          startDate
+                              .add(Duration(hours: 12))
+                              .isBefore(endDate))) {
                     endDate = null;
                   }
                 });
