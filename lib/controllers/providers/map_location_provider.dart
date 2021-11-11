@@ -87,6 +87,10 @@ class MapLocationProvider extends ChangeNotifier {
     _hereMapController.gestures.tapListener =
         TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) {
       FocusManager.instance.primaryFocus?.unfocus();
+      searchResults?.clear();
+      searchResultState = SearchResultState.IDLE;
+      _eventProvider.post.location = null;
+      notifyListeners();
     });
   }
 
@@ -146,13 +150,6 @@ class MapLocationProvider extends ChangeNotifier {
     });
   }
 
-  void saveSelectedLocation() {
-    if (searchResults != null && searchResults.isNotEmpty) {
-      _eventProvider.post.location = parseLocation(searchResults.first);
-      _eventProvider.notifyListeners();
-    }
-  }
-
   HopautLocation.Location parseLocation(Place place) {
     Map<String, dynamic> map = Map();
     map['placeType'] = place.type.toString();
@@ -183,16 +180,16 @@ class MapLocationProvider extends ChangeNotifier {
     getReverseGeocodeResult(geo: geoCoordinates);
   }
 
-  void handleSwipe(DismissDirection dismissDirection, BuildContext context) {
-    if (dismissDirection == DismissDirection.endToStart) {
-      searchResults?.clear();
-      searchResultState = SearchResultState.IDLE;
-      _eventProvider.post.location = null;
-      notifyListeners();
-    } else if (dismissDirection == DismissDirection.startToEnd) {
-      saveSelectedLocation();
-      Application.router.pop(context, true);
-      setMapLoadingState(MapLoadingState.LOADING);
+  void handleSaveClick(BuildContext context) {
+    saveSelectedLocation();
+    Application.router.pop(context, true);
+    setMapLoadingState(MapLoadingState.LOADING);
+  }
+
+  void saveSelectedLocation() {
+    if (searchResults != null && searchResults.isNotEmpty) {
+      _eventProvider.post.location = parseLocation(searchResults.first);
+      _eventProvider.notifyListeners();
     }
   }
 
