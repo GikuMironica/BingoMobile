@@ -69,9 +69,8 @@ class EditEventPage extends StatelessWidget {
               ),
               Divider(),
               ListTile(
-                onTap: () => Application.router.navigateTo(
-                    context, Routes.editEventTime,
-                    transition: TransitionType.cupertino),
+                onTap: () async => await _navigateAndDisplayResult(
+                    context, Routes.editEventTime),
                 leading: Icon(ClockIcon(provider.post.timeRange)),
                 title: Text('Time'),
               ),

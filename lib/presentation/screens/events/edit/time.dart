@@ -19,11 +19,13 @@ class EditPostTime extends StatefulWidget {
 class _EditPostTimeState extends State<EditPostTime> {
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(
+        key: _scaffoldkey,
         appBar: AppBar(
           elevation: 0,
           flexibleSpace: Container(
@@ -31,7 +33,7 @@ class _EditPostTimeState extends State<EditPostTime> {
           ),
           leading: IconButton(
             icon: HATheme.backButton,
-            onPressed: () => Application.router.pop(context),
+            onPressed: () => Application.router.pop(context, false),
           ),
           title: Text('Edit Time'),
         ),
@@ -42,69 +44,57 @@ class _EditPostTimeState extends State<EditPostTime> {
                     context,
                     "Updating event"),
               )
-            : SingleChildScrollView(
+            : Container(
                 padding: EdgeInsets.all(24.0),
-                physics: ClampingScrollPhysics(),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                      minHeight: MediaQuery.of(context).size.height * 0.8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      TimePicker(
-                          initStartDate:
-                              dateTimeFromSeconds(provider.post.eventTime),
-                          initEndDate:
-                              dateTimeFromSeconds(provider.post.endTime),
-                          isValid: provider.isDateValid,
-                          onConfirmStart: (startTime) => startDateController
-                                  .text =
-                              (startTime.toUtc().millisecondsSinceEpoch / 1000)
+                height: MediaQuery.of(context).size.height * 0.9,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    TimePicker(
+                        initStartDate:
+                            dateTimeFromSeconds(provider.post.eventTime),
+                        initEndDate: dateTimeFromSeconds(provider.post.endTime),
+                        isValid: provider.isDateValid,
+                        onConfirmStart: (startTime) => startDateController
+                                .text =
+                            (startTime.toUtc().millisecondsSinceEpoch / 1000)
+                                .round()
+                                .toString(),
+                        onConfirmEnd: (endTime) {
+                          endDateController.text =
+                              (endTime.toUtc().millisecondsSinceEpoch / 1000)
                                   .round()
-                                  .toString(),
-                          onConfirmEnd: (endTime) {
-                            endDateController.text =
-                                (endTime.toUtc().millisecondsSinceEpoch / 1000)
-                                    .round()
-                                    .toString();
-                            provider.validateDates(
-                                startDateController, endDateController);
-                          }),
-                      Container(
-                        decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.green),
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        height: 50,
-                        child: authButton(
-                            label: "Save", //TODO: translation
-                            context: context,
-                            isStateValid: true,
-                            onPressed: () async {
-                              if (provider.isDateValid) {
-                                provider.post.eventTime =
-                                    int.parse(startDateController.text);
-                                provider.post.endTime =
-                                    int.parse(endDateController.text);
-                                bool res = await provider.updateEvent();
-                                if (res) {
-                                  provider.updateMiniPost();
-                                  Fluttertoast.showToast(
-                                      msg:
-                                          'Event Time updated'); //TODO: translation
-                                  Application.router.pop(context);
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg:
-                                          'Unable to update time.'); //TODO: translation
-                                }
+                                  .toString();
+                          provider.validateDates(
+                              startDateController, endDateController);
+                        }),
+                    Container(
+                      padding: EdgeInsets.only(bottom: 50),
+                      child: authButton(
+                          label: "Save", //TODO: translation
+                          context: context,
+                          isStateValid: true,
+                          onPressed: () async {
+                            if (provider.isDateValid) {
+                              provider.post.eventTime =
+                                  int.parse(startDateController.text);
+                              provider.post.endTime =
+                                  int.parse(endDateController.text);
+                              bool res = await provider.updateEvent();
+                              if (res) {
+                                provider.updateMiniPost();
+                                Application.router.pop(context, true);
+                              } else {
+                                //TODO translate
+                                showSnackBarWithError(
+                                    message: "Please select a valid time frame",
+                                    scaffoldKey: _scaffoldkey);
                               }
-                            }),
-                      ),
-                    ],
-                  ),
+                            }
+                          }),
+                    ),
+                  ],
                 ),
               ),
       );

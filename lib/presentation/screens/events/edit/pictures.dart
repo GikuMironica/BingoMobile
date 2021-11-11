@@ -40,44 +40,42 @@ class EditPostPictures extends StatelessWidget {
                 )
               : Container(
                   padding: EdgeInsets.all(24.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.9,
-                    child: Form(
-                      key: formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          PictureList(
-                            selectPicture: provider.selectPicture,
-                            onSaved: (value) => provider.post.pictures = value,
-                            initialValue: provider.post.pictures,
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(bottom: 50),
-                            child: authButton(
-                              label: "Update", //TODO: translation
-                              context: context,
-                              isStateValid: true,
-                              onPressed: () async {
-                                if (formKey.currentState.validate()) {
-                                  formKey.currentState.save();
-                                  bool res = await provider.updateEvent();
-                                  if (!res) {
-                                    provider.updateMiniPost();
-                                    Application.router.pop(context, true);
-                                  } else {
-                                    //TODO translate
-                                    showSnackBarWithError(
-                                        message: "Unable to update pictures",
-                                        scaffoldKey: _scaffoldkey);
-                                  }
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        PictureList(
+                          selectPicture: provider.selectPicture,
+                          onSaved: (value) => provider.post.pictures = value,
+                          initialValue: provider.post.pictures,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(bottom: 50),
+                          child: authButton(
+                            label: "Update", //TODO: translation
+                            context: context,
+                            isStateValid: true,
+                            onPressed: () async {
+                              if (formKey.currentState.validate()) {
+                                formKey.currentState.save();
+                                bool res = await provider.updateEvent();
+                                if (res) {
+                                  provider.updateMiniPost();
+                                  Application.router.pop(context, true);
+                                } else {
+                                  //TODO translate
+                                  showSnackBarWithError(
+                                      message: "Unable to update pictures",
+                                      scaffoldKey: _scaffoldkey);
                                 }
-                              },
-                            ),
+                              }
+                            },
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ));

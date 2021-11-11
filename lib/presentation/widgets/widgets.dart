@@ -159,7 +159,7 @@ void showSnackBarWithError(
 
 SnackBar _errorSnackBar(String message) {
   return SnackBar(
-      margin: EdgeInsets.only(bottom: 60),
+      margin: EdgeInsets.only(bottom: 20),
       content: Text(
         message,
         textAlign: TextAlign.center,
