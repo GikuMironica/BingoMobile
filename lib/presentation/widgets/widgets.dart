@@ -159,6 +159,7 @@ void showSnackBarWithError(
 
 SnackBar _errorSnackBar(String message) {
   return SnackBar(
+      margin: EdgeInsets.only(bottom: 60),
       content: Text(
         message,
         textAlign: TextAlign.center,
@@ -199,7 +200,7 @@ SnackBar _successSnackBar(String message) {
               message,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: HATheme.HOPAUT_PINK,
+                  color: HATheme.HOPAUT_SECONDARY,
                   fontSize: 15,
                   fontWeight: FontWeight.bold),
             )),
@@ -211,7 +212,7 @@ SnackBar _successSnackBar(String message) {
 
 Widget _successIcon() {
   return Image.asset(
-    'assets/icons/success.png',
+    'assets/icons/check64.png',
     height: 30,
     width: 30,
   );

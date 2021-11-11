@@ -102,7 +102,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                             child: Text(
                               '❮',
                               style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Colors.black54,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14),
                             ),
@@ -139,7 +139,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                             child: Text(
                               '❯',
                               style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Colors.black54,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14),
                             ),
@@ -167,8 +167,8 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                           provider.updateSearchRadius(v);
                         },
                         //onChangeEnd: (v) => provider.onSliderChangeEnd(),
-                        activeColor: Theme.of(context).primaryColor,
-                        inactiveColor: Color(0xFF707070).withOpacity(0.67),
+                        activeColor: Colors.black54,
+                        inactiveColor: HATheme.HOPAUT_GREY.withOpacity(0.5),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -212,8 +212,8 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                                 onChanged: (v) => provider.filterToggleToday(),
                                 materialTapTargetSize:
                                     MaterialTapTargetSize.shrinkWrap,
-                                activeColor: Theme.of(context).primaryColor,
-                                inactiveColor: Theme.of(context).primaryColor,
+                                activeColor: HATheme.HOPAUT_PINK,
+                                inactiveColor: HATheme.HOPAUT_PINK,
                               ),
                             ],
                           ),
@@ -327,9 +327,9 @@ Widget _filterEventType(
             CircularCheckBox(
               value: value,
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              activeColor: Theme.of(context).primaryColor,
+              activeColor: HATheme.HOPAUT_PINK,
               disabledColor: Color(0xFFE7E7E7),
-              inactiveColor: Theme.of(context).primaryColor,
+              inactiveColor: HATheme.HOPAUT_PINK,
               onChanged: onTap,
             ),
             Text(

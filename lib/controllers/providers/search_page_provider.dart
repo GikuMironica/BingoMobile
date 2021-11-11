@@ -3,6 +3,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -279,8 +280,8 @@ class SearchPageProvider extends ChangeNotifier {
     if (_mapPolygon != null) {
       _hereMapController.mapScene.removeMapPolygon(_mapPolygon);
     }
-    _mapPolygon = MapPolygon(
-        GeoPolygon.withGeoCircle(geoCircle), Colors.pink.withOpacity(0.09));
+    _mapPolygon = MapPolygon(GeoPolygon.withGeoCircle(geoCircle),
+        HATheme.HOPAUT_SECONDARY.withOpacity(0.15));
     _hereMapController.mapScene.addMapPolygon(_mapPolygon);
     notifyListeners();
   }

@@ -49,7 +49,7 @@ class HopautNavBar extends StatelessWidget {
           Flexible(
               child: Icon(
             item.svg,
-            color: isSelected ? HATheme.HOPAUT_PINK : Colors.grey,
+            color: isSelected ? HATheme.HOPAUT_PINK : Colors.grey.shade500,
           )),
           Material(
             type: MaterialType.transparency,

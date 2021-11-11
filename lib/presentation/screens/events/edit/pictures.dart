@@ -2,10 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
-import 'package:hopaut/controllers/providers/search_page_provider.dart';
 import 'package:hopaut/presentation/screens/events/create/picture_list.dart';
 import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
@@ -15,11 +13,13 @@ import 'package:provider/provider.dart';
 
 class EditPostPictures extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(
+          key: _scaffoldkey,
           appBar: AppBar(
             elevation: 0,
             flexibleSpace: Container(
@@ -27,7 +27,7 @@ class EditPostPictures extends StatelessWidget {
             ),
             leading: IconButton(
               icon: HATheme.backButton,
-              onPressed: () => Application.router.pop(context),
+              onPressed: () => Application.router.pop(context, false),
             ),
             title: Text('Edit Pictures'), // TODO: translation
           ),
@@ -38,48 +38,39 @@ class EditPostPictures extends StatelessWidget {
                       context,
                       "Updating event"),
                 )
-              : SingleChildScrollView(
+              : Container(
                   padding: EdgeInsets.all(24.0),
-                  physics: ClampingScrollPhysics(),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height * 0.8),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.9,
                     child: Form(
                       key: formKey,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
+                        children: [
                           PictureList(
                             selectPicture: provider.selectPicture,
                             onSaved: (value) => provider.post.pictures = value,
                             initialValue: provider.post.pictures,
                           ),
                           Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.grey[200]),
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            height: 50,
+                            padding: EdgeInsets.only(bottom: 50),
                             child: authButton(
-                              label: "Save", //TODO: translation
+                              label: "Update", //TODO: translation
                               context: context,
                               isStateValid: true,
                               onPressed: () async {
                                 if (formKey.currentState.validate()) {
                                   formKey.currentState.save();
                                   bool res = await provider.updateEvent();
-                                  if (res) {
+                                  if (!res) {
                                     provider.updateMiniPost();
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            'Event Pictures updated'); //TODO: translation
-                                    Application.router.pop(context);
+                                    Application.router.pop(context, true);
                                   } else {
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            'Unable to update pictures.'); //TODO: translation
+                                    //TODO translate
+                                    showSnackBarWithError(
+                                        message: "Unable to update pictures",
+                                        scaffoldKey: _scaffoldkey);
                                   }
                                 }
                               },

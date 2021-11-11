@@ -9,10 +9,13 @@ import 'package:hopaut/presentation/widgets/clock_icons.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EditEventPage extends StatelessWidget {
+  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     // TODO: Check if the user is the owner of the event.
@@ -20,6 +23,7 @@ class EditEventPage extends StatelessWidget {
     // TODO: Create an Error page that allows the user to return to the home page.
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(
+        key: _scaffoldkey,
         appBar: AppBar(
           leading: IconButton(
             splashColor: Colors.transparent,
@@ -43,9 +47,8 @@ class EditEventPage extends StatelessWidget {
               ),
               Divider(),
               ListTile(
-                onTap: () => Application.router.navigateTo(
-                    context, Routes.editEventPictures,
-                    transition: TransitionType.cupertino),
+                onTap: () async => await _navigateAndDisplayResult(
+                    context, Routes.editEventPictures),
                 leading: Icon(Icons.photo),
                 title: Text('Pictures'),
               ),
@@ -59,23 +62,8 @@ class EditEventPage extends StatelessWidget {
               ),
               Divider(),
               ListTile(
-                onTap: () async {
-                  bool isUpdated = await Application.router.navigateTo(
-                      context, Routes.searchByMap,
-                      replace: false, transition: TransitionType.fadeIn);
-                  if (isUpdated) {
-                    bool res = await provider.updateEvent();
-                    if (res) {
-                      provider.updateMiniPost();
-                      Fluttertoast.showToast(
-                          msg: 'Event Location updated'); //TODO: translation
-                    } else {
-                      Fluttertoast.showToast(
-                          msg:
-                              'Unable to update location.'); //TODO: translation
-                    }
-                  }
-                },
+                onTap: () async => await _navigateAndDisplayResult(
+                    context, Routes.searchByMap),
                 leading: Icon(MdiIcons.mapMarker),
                 title: Text('Location'),
               ),
@@ -146,5 +134,14 @@ class EditEventPage extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Future _navigateAndDisplayResult(BuildContext context, String routes) async {
+    var result = await Application.router
+        .navigateTo(context, routes, transition: TransitionType.cupertino);
+    if (result) {
+      // TODO translation
+      showSuccessSnackBar(scaffoldKey: _scaffoldkey, message: "Event updated");
+    }
   }
 }
