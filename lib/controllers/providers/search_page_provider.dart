@@ -49,7 +49,7 @@ class SearchPageProvider extends ChangeNotifier {
   LocationServiceProvider _locationManager;
   MapMarker _userMarker;
 
-  double searchRadius = 1.0;
+  double searchRadius = 7.0;
   double onCarouselSwipeLookFromDistance = 3000;
 
   CarouselController carouselController;
@@ -261,8 +261,8 @@ class SearchPageProvider extends ChangeNotifier {
 
     GeoCoordinates geoCoordinates =
         GeoCoordinates(userPosition.latitude, userPosition.longitude);
-    mapController.camera.flyToWithOptionsAndDistance(geoCoordinates,
-        searchRadius * 5000, MapCameraFlyToOptions.withDefaults());
+    mapController.camera.flyToWithOptionsAndDistance(
+        geoCoordinates, 2000, MapCameraFlyToOptions.withDefaults());
     // Show the user on the map.
     MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
         'assets/icons/map/radio-button-off-outline.svg', 48, 48);

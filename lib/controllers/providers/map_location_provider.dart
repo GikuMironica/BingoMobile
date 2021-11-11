@@ -199,4 +199,10 @@ class MapLocationProvider extends ChangeNotifier {
   void setMapLoadingState(MapLoadingState loadingState) {
     _loadingState = loadingState;
   }
+
+  void dropSelection() {
+    searchResults?.clear();
+    searchResultState = SearchResultState.IDLE;
+    notifyListeners();
+  }
 }

@@ -35,6 +35,7 @@ class _RateEventState extends State<RateEvent> {
             icon: Icon(Icons.arrow_back),
             onPressed: () => Application.router.pop(context),
           ),
+          // TODO translation
           title: Text('Rate Event'),
           flexibleSpace: Container(
             decoration: decorationGradient(),
