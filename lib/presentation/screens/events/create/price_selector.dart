@@ -5,18 +5,19 @@ import 'package:hopaut/presentation/widgets/currency_icons.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 
 class PriceSelector extends StatelessWidget {
+  final String title;
   final void Function(String) onChanged;
   final FormFieldSetter<String> onSaved;
   final String initialValue;
 
-  PriceSelector({this.onChanged, this.onSaved, this.initialValue});
+  PriceSelector({this.title, this.onChanged, this.onSaved, this.initialValue});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        FieldTitle(title: "Entrance Price"),
+        title != null ? FieldTitle(title: title) : Container(),
         Container(
           height: 48.0,
           margin: EdgeInsets.only(bottom: 24.0),
