@@ -31,6 +31,7 @@ class EditEventPage extends StatelessWidget {
             icon: HATheme.backButton,
             onPressed: () => Application.router.pop(context),
           ),
+          // TODO translation
           title: Text('Edit Event'),
           flexibleSpace: Container(
             decoration: decorationGradient(),
@@ -54,9 +55,8 @@ class EditEventPage extends StatelessWidget {
               ),
               Divider(),
               ListTile(
-                onTap: () => Application.router.navigateTo(
-                    context, Routes.editEventTitle,
-                    transition: TransitionType.cupertino),
+                onTap: () async => await _navigateAndDisplayResult(
+                    context, Routes.editEventTitle),
                 leading: Icon(MdiIcons.alphabeticalVariant),
                 title: Text('Title'),
               ),
