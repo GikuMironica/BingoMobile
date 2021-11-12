@@ -29,12 +29,11 @@ class OneSignalNotificationService {
           .then((result) => areNotificationsAllowed = result),
     ]);
 
-    await _initializeNotificationPreferences(areNotificationsAllowed);
+    await _initializeNotificationPreferences(areNotificationsAllowed??true);
 
     if (_settingsProvider.pushNotifications) {
       _configureNotificationService();
       await _initializeOneSignalSubscription(_authenticationService.user.id);
-      showNewErrorSnackbar('notifications on!');
     }
     return;
   }
@@ -79,7 +78,5 @@ class OneSignalNotificationService {
       OneSignal.shared.removeExternalUserId(),
       OneSignal.shared.setSubscription(false)
     ]);
-    // TODO translations
-    showNewErrorSnackbar('Notifications turned off');
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -19,7 +18,7 @@ class EditPostTitle extends StatefulWidget {
 class _EditPostTitleState extends State<EditPostTitle> {
   final formKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
-  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _titleScaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -31,7 +30,7 @@ class _EditPostTitleState extends State<EditPostTitle> {
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(
-          key: _scaffoldkey,
+          key: _titleScaffoldKey,
           appBar: AppBar(
             elevation: 0,
             flexibleSpace: Container(
@@ -90,7 +89,7 @@ class _EditPostTitleState extends State<EditPostTitle> {
                                     //TODO translate
                                     showSnackBarWithError(
                                         message: "Unable to update title",
-                                        scaffoldKey: _scaffoldkey);
+                                        scaffoldKey: _titleScaffoldKey);
                                   }
                                 }
                               }),
