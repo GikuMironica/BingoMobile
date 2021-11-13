@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -19,6 +18,8 @@ class EditPostTitle extends StatefulWidget {
 class _EditPostTitleState extends State<EditPostTitle> {
   final formKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
+  final GlobalKey<ScaffoldState> _titleScaffoldKey =
+      new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -30,14 +31,14 @@ class _EditPostTitleState extends State<EditPostTitle> {
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(
+          key: _titleScaffoldKey,
           appBar: AppBar(
-            elevation: 0,
             flexibleSpace: Container(
               decoration: decorationGradient(),
             ),
             leading: IconButton(
               icon: HATheme.backButton,
-              onPressed: () => Application.router.pop(context),
+              onPressed: () => Application.router.pop(context, false),
             ),
             title: Text('Edit Title'),
           ),
@@ -48,63 +49,52 @@ class _EditPostTitleState extends State<EditPostTitle> {
                       context,
                       "Updating event"),
                 )
-              : SingleChildScrollView(
+              : Container(
                   padding: EdgeInsets.all(24.0),
-                  physics: ClampingScrollPhysics(),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height * 0.72),
-                    child: Form(
-                      key: formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          valueInput(
-                            controller: titleController,
-                            isStateValid:
-                                provider.validateTitle(titleController.text),
-                            initialValue: provider.post.event.title,
-                            validationMessage:
-                                "Please provide a valid title.", // TODO: translation
-                            maxLength: Constraint.titleMaxLength,
-                            onSaved: (value) => provider.post.event.title =
-                                titleController.text,
-                            onChange: (value) =>
-                                provider.onFieldChange(titleController, value),
-                            hintText: 'Event Title', //TODO: translation
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.green),
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            height: 50,
-                            child: authButton(
-                                label: "Save", //TODO: translation
-                                context: context,
-                                isStateValid: true,
-                                onPressed: () async {
-                                  if (formKey.currentState.validate()) {
-                                    formKey.currentState.save();
-                                    bool res = await provider.updateEvent();
-                                    if (res) {
-                                      provider.updateMiniPost();
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              'Event Title updated'); //TODO: translation
-                                      Application.router.pop(context);
-                                    } else {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              'Unable to update title.'); //TODO: translation
-                                    }
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        valueInput(
+                          controller: titleController,
+                          isStateValid:
+                              provider.validateTitle(titleController.text),
+                          initialValue: provider.post.event.title,
+                          validationMessage:
+                              "Please provide a valid title.", // TODO: translation
+                          maxLength: Constraint.titleMaxLength,
+                          onSaved: (value) =>
+                              provider.post.event.title = titleController.text,
+                          onChange: (value) =>
+                              provider.onFieldChange(titleController, value),
+                          hintText: 'Event Title', //TODO: translation
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(bottom: 50),
+                          child: authButton(
+                              label: "Save", //TODO: translation
+                              context: context,
+                              isStateValid: true,
+                              onPressed: () async {
+                                if (formKey.currentState.validate()) {
+                                  formKey.currentState.save();
+                                  bool res = await provider.updateEvent();
+                                  if (res) {
+                                    provider.updateMiniPost();
+                                    Application.router.pop(context, true);
+                                  } else {
+                                    //TODO translate
+                                    showSnackBarWithError(
+                                        message: "Unable to update title",
+                                        scaffoldKey: _titleScaffoldKey);
                                   }
-                                }),
-                          ),
-                        ],
-                      ),
+                                }
+                              }),
+                        ),
+                      ],
                     ),
                   ),
                 ));

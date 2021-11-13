@@ -52,6 +52,7 @@ class _SearchByMapState extends State<SearchByMap> {
               color: Colors.white,
               onPressed: () => {
                     Application.router.pop(context),
+                    locationSelectionProvider.dropSelection(),
                     locationSelectionProvider
                         .setMapLoadingState(MapLoadingState.LOADING)
                   }),
@@ -193,53 +194,37 @@ class _SearchByMapState extends State<SearchByMap> {
         visible: locationSelectionProvider.searchResults.isNotEmpty &&
             locationSelectionProvider.loadingState == MapLoadingState.LOADED,
         child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Dismissible(
-                key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
-                onDismissed: (direction) =>
-                    locationSelectionProvider.handleSwipe(direction, context),
-                child: Card(
-                  margin:
-                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  elevation: 10,
-                  color: Colors.grey.shade200,
-                  child: Container(
-                    child: ListView.builder(
-                        itemCount:
-                            locationSelectionProvider.searchResults.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            title: Text(locationSelectionProvider
-                                .searchResults[index].title),
-                            // TODO translation
-                            leading: Container(
-                                width: 30,
-                                height: 150,
-                                //decoration: BoxDecoration(color: Colors.red),
-                                child: Icon(MdiIcons.close,
-                                    color: Colors.black, size: 20)),
-                            trailing: Container(
-                                width: 30,
-                                height: 150,
-                                //decoration: BoxDecoration(color: Colors.green),
-                                child: Icon(MdiIcons.check,
-                                    color: Colors.black, size: 20)),
-                          );
-                        }),
-                  ),
-                ),
-              ),
-              Icon(MdiIcons.gestureSwipe,
-                  color: Theme.of(context).primaryColor, size: 30)
-            ],
+          child: Card(
+            margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            elevation: 10,
+            color: Colors.grey.shade200,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+              child: ListView.builder(
+                  itemCount: locationSelectionProvider.searchResults.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                          locationSelectionProvider.searchResults[index].title),
+                      // TODO translation
+                      trailing: GestureDetector(
+                        onTap: () =>
+                            locationSelectionProvider.handleSaveClick(context),
+                        child: Container(
+                            width: 35,
+                            height: 150,
+                            //decoration: BoxDecoration(color: Colors.green),
+                            child: Icon(MdiIcons.check,
+                                color: HATheme.HOPAUT_SECONDARY, size: 35)),
+                      ),
+                    );
+                  }),
+            ),
           ),
         ),
       ),

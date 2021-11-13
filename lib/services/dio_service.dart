@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:hopaut/config/dio_base_options.dart';
+import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/services/authentication_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -12,7 +14,6 @@ class DioService {
     _dio.options.headers.addAll({
       Headers.contentTypeHeader: 'application/json',
     });
-    print('Dio initalized - BaseUrl: ${_dio.options.baseUrl}');
     // For development:
     _dio.interceptors.add(PrettyDioLogger(
       request: true,
@@ -34,7 +35,10 @@ class DioService {
             }
             _dio.options.headers[HttpHeaders.contentTypeHeader] =
                 requestOptions.headers[HttpHeaders.contentTypeHeader];
-            return _dio.request(requestOptions.path);
+            var authService = getIt<AuthenticationService>();
+            var refreshResult = await authService.refreshToken();
+
+            return await _dio.request(requestOptions.path);
           } else {
             return error;
           }

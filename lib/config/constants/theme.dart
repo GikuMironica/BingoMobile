@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 class HATheme {
   static const Color HOPAUT_ORANGE = Color(0xFFFFBE6A);
   static const Color HOPAUT_PINK = Color(0xFFED2F65);
+  static const Color HOPAUT_SECONDARY = Color(0xFF0f8063);
+  static const Color HOPAUT_GREY = Color(0xFFc3bfbf);
 
   static Icon backButton =
       Platform.isIOS ? Icon(Icons.arrow_back_ios) : Icon(Icons.arrow_back);

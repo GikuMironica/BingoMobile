@@ -139,7 +139,6 @@ class EventProvider extends ChangeNotifier {
     }
 
     if (searchPageProvicerMiniPost != null) {
-      print("here");
       searchPageProvicerMiniPost.thumbnail = thumbnail;
       searchPageProvicerMiniPost.title = post.event.title;
       searchPageProvicerMiniPost.address = post.location.address;
