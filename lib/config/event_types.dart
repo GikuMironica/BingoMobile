@@ -7,7 +7,7 @@ enum EventType {
   bicycleMeet,
   carMeet,
   streetParty,
-  marathon,
+  sport,
   other
 }
 
@@ -19,7 +19,7 @@ const Map<EventType, String> eventTypeStrings = {
   EventType.bicycleMeet: "Bicycle Meet",
   EventType.carMeet: "Car Meet",
   EventType.streetParty: "Street Party",
-  EventType.marathon: "Marathon",
+  EventType.sport: "Sport",
   EventType.other: "Other"
 };
 

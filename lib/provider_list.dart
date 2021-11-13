@@ -30,8 +30,6 @@ List<SingleChildWidget> providerList = [
     create: (_) => getIt<EventProvider>(),
     lazy: true,
   ),
-  ChangeNotifierProvider<GeolocationProvider>(
-      create: (context) => getIt<GeolocationProvider>()),
   ChangeNotifierProvider<LocationServiceProvider>(
       create: (context) => getIt<LocationServiceProvider>()),
   ChangeNotifierProvider<MapLocationProvider>(
