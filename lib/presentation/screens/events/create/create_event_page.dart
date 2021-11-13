@@ -10,7 +10,7 @@ import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/presentation/screens/events/create/picture_list.dart';
 import 'package:hopaut/presentation/screens/events/create/tags.dart';
 import 'package:hopaut/presentation/screens/events/create/time_picker.dart';
-import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
+import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/inputs/basic_input.dart';
@@ -158,7 +158,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                               //hintText:
                               //'Event Requirements (Optional)', //TODO: write example requirements + translation
                             ),
-                            authButton(
+                            persistButton(
                                 label: "Save", //TODO: translation
                                 context: context,
                                 isStateValid: true,

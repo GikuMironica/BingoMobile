@@ -48,6 +48,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                   Expanded(
                     child: TextField(
                       onChanged: (v) => provider.updateTag(v),
+                      onTap: () => provider.toggleFilter(),
                       //focusNode: _focusNode,
                       decoration: InputDecoration(
                         border: InputBorder.none,

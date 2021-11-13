@@ -3,7 +3,7 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
-import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
+import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/inputs/text_area_input.dart';
@@ -74,7 +74,7 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
                     ),
                     Container(
                       padding: EdgeInsets.only(bottom: 50),
-                      child: authButton(
+                      child: persistButton(
                           label: "Save", //TODO: translation
                           context: context,
                           isStateValid: true,

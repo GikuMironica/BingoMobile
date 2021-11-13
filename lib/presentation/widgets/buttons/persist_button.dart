@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'gradient_box_decoration.dart';
-import 'package:hopaut/config/routes/application.dart';
-import 'package:fluro/fluro.dart';
 
-
-Widget authButton({
+Widget persistButton({
   @required String label,
   @required BuildContext context,
   @required bool isStateValid,

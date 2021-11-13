@@ -52,6 +52,12 @@ class MapLocationProvider extends ChangeNotifier {
   }
 
   void onMapCreated(HereMapController hereMapController) {
+    if (_eventProvider.post.location==null){
+      searchBarController.text = "";
+      searchResults?.clear();
+    }else{
+      searchBarController.text = _eventProvider.post.location?.address ?? "";
+    }
     _loadingState = MapLoadingState.LOADING;
     notifyListeners();
     _hereMapController = hereMapController;
