@@ -33,7 +33,6 @@ class _EditPostTitleState extends State<EditPostTitle> {
       return Scaffold(
           key: _titleScaffoldKey,
           appBar: AppBar(
-            elevation: 0,
             flexibleSpace: Container(
               decoration: decorationGradient(),
             ),

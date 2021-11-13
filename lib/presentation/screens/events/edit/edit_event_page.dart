@@ -4,24 +4,31 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
+import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/clock_icons.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
-import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
-class EditEventPage extends StatelessWidget {
+class EditEventPage extends StatefulWidget {
+  @override
+  _EditEventPageState createState() => _EditEventPageState();
+}
+
+class _EditEventPageState extends State<EditEventPage> {
+  EventProvider provider;
+
   final GlobalKey<ScaffoldState> _editEventScaffoldKey =
       new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+    provider = Provider.of<EventProvider>(context, listen: true);
     // TODO: Check if the user is the owner of the event.
     // TODO: If not, then throw an error page.
     // TODO: Create an Error page that allows the user to return to the home page.
-    return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(
         key: _editEventScaffoldKey,
         appBar: AppBar(
@@ -96,9 +103,8 @@ class EditEventPage extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       ListTile(
-                        onTap: () => Application.router.navigateTo(
-                            context, Routes.editEventPrice,
-                            transition: TransitionType.cupertino),
+                        onTap: () async => await _navigateAndDisplayResult(
+                            context, Routes.editEventPrice),
                         leading: Icon(MdiIcons.cash),
                         title: Text('Entrance Price'),
                       ),
@@ -107,25 +113,22 @@ class EditEventPage extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  onTap: () => Application.router.navigateTo(
-                      context, Routes.editEventDescription,
-                      transition: TransitionType.cupertino),
+                  onTap: () async => await _navigateAndDisplayResult(
+                      context, Routes.editEventDescription),
                   leading: Icon(MdiIcons.text),
                   title: Text('Description'),
                 ),
                 Divider(),
                 ListTile(
-                  onTap: () => Application.router.navigateTo(
-                      context, Routes.editEventRequirements,
-                      transition: TransitionType.cupertino),
+                  onTap: () async => await _navigateAndDisplayResult(
+                      context, Routes.editEventRequirements),
                   leading: Icon(MdiIcons.clipboardAlertOutline),
                   title: Text('Requirements'),
                 ),
                 Divider(),
                 ListTile(
-                  onTap: () => Application.router.navigateTo(
-                      context, Routes.editEventTags,
-                      transition: TransitionType.cupertino),
+                  onTap: () async => await _navigateAndDisplayResult(
+                      context, Routes.editEventTags),
                   leading: Icon(MdiIcons.tag),
                   title: Text('Tags'),
                 ),
@@ -134,7 +137,6 @@ class EditEventPage extends StatelessWidget {
           ),
         ),
       );
-    });
   }
 
   Future<void> _navigateAndDisplayResult(
@@ -144,7 +146,7 @@ class EditEventPage extends StatelessWidget {
     if (result != null && result) {
       // TODO translation
       showSuccessSnackBar(
-          scaffoldKey: _editEventScaffoldKey, message: "Event updated");
+          context: context, message: "Event updated");
     }
   }
 }

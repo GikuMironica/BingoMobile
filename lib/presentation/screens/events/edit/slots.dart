@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
@@ -25,7 +24,6 @@ class _EditSlotsPageState extends State<EditSlotsPage> {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(
           appBar: AppBar(
-            elevation: 0,
             flexibleSpace: Container(
               decoration: decorationGradient(),
             ),
@@ -42,41 +40,45 @@ class _EditSlotsPageState extends State<EditSlotsPage> {
                       context,
                       "Updating event"),
                 )
-              : Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    EventTextField(
-                      initialValue: provider.post.event.slots.toString(),
-                      onChanged: (v) => slots = int.parse(v),
-                      onSaved: (v) => provider.post.event.slots = slots,
-                      textInputType: TextInputType.number,
-                      textHint: "Slots", //TODO: translation
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 50),
-                      child: authButton(
-                          label: "Save", //TODO: translation
-                          context: context,
-                          isStateValid: true,
-                          onPressed: () async {
-                            if (formKey.currentState.validate()) {
-                              formKey.currentState.save();
-                              bool res = await provider.updateEvent();
-                              if (res) {
-                                Application.router.pop(context, true);
-                              } else {
-                                //TODO translate
-                                showSnackBarWithError(
-                                    message: "Please select amount of slots",
-                                    scaffoldKey: _scaffoldkey);
+              : Container(
+                padding: EdgeInsets.all(24.0),
+                height: MediaQuery.of(context).size.height * 0.9,
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      EventTextField(
+                        initialValue: provider.post.event.slots.toString(),
+                        onChanged: (v) => slots = int.parse(v),
+                        onSaved: (v) => provider.post.event.slots = slots,
+                        textInputType: TextInputType.number,
+                        textHint: "Slots", //TODO: translation
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(bottom: 50),
+                        child: authButton(
+                            label: "Save", //TODO: translation
+                            context: context,
+                            isStateValid: true,
+                            onPressed: () async {
+                              if (formKey.currentState.validate()) {
+                                formKey.currentState.save();
+                                bool res = await provider.updateEvent();
+                                if (res) {
+                                  Application.router.pop(context, true);
+                                } else {
+                                  //TODO translate
+                                  showSnackBarWithError(
+                                      message: "Please select amount of slots",
+                                      scaffoldKey: _scaffoldkey);
+                                }
                               }
-                            }
-                          }),
-                    ),
-                  ],
+                            }),
+                      ),
+                    ],
+                  ),
                 ),
               ));
     });

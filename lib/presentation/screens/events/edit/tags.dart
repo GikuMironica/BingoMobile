@@ -17,11 +17,13 @@ class EditPostTags extends StatefulWidget {
 
 class _EditPostTagsState extends State<EditPostTags> {
   final formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(
+        key: _scaffoldkey,
           appBar: AppBar(
             elevation: 0,
             flexibleSpace: Container(
@@ -40,57 +42,46 @@ class _EditPostTagsState extends State<EditPostTags> {
                       context,
                       "Updating event"),
                 )
-              : SingleChildScrollView(
-                  padding: EdgeInsets.all(24.0),
-                  physics: ClampingScrollPhysics(),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height * 0.8),
-                    child: Form(
-                      key: formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Tags(
-                              post: provider.post,
-                              getTagSuggestions: (pattern, currentTags) =>
-                                  provider.getTagSuggestions(
-                                      pattern, currentTags)),
-                          Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.green),
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            height: 50,
-                            child: authButton(
-                              label: "Save", //TODO: translation
-                              context: context,
-                              isStateValid: true,
-                              onPressed: () async {
-                                if (formKey.currentState.validate()) {
-                                  formKey.currentState.save();
-                                  bool res = await provider.updateEvent();
-                                  if (res) {
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            'Event Tags updated'); //TODO: translation
-                                    Application.router.pop(context);
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            'Unable to update tags.'); //TODO: translation
-                                  }
-                                }
-                              },
-                            ),
-                          ),
-                        ],
+              : Container(
+                padding: EdgeInsets.all(24.0),
+                height: MediaQuery.of(context).size.height * 0.9,
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Tags(
+                          post: provider.post,
+                          getTagSuggestions: (pattern, currentTags) =>
+                              provider.getTagSuggestions(
+                                  pattern, currentTags)),
+                      Container(
+                        padding: EdgeInsets.only(bottom: 50),
+                        child: authButton(
+                          label: "Save", //TODO: translation
+                          context: context,
+                          isStateValid: true,
+                          onPressed: () async {
+                            if (formKey.currentState.validate()) {
+                              formKey.currentState.save();
+                              bool res = await provider.updateEvent();
+                              if (res) {
+                                Application.router.pop(context, true);
+                              } else {
+                                //TODO translate
+                                showSnackBarWithError(
+                                    message: "Failed to update tags",
+                                    scaffoldKey: _scaffoldkey);
+                              }
+                            }
+                          },
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ));
+                ),
+              ));
     });
   }
 }

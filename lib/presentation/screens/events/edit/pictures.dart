@@ -20,7 +20,6 @@ class EditPostPictures extends StatelessWidget {
       return Scaffold(
           key: _scaffoldkey,
           appBar: AppBar(
-            elevation: 0,
             flexibleSpace: Container(
               decoration: decorationGradient(),
             ),

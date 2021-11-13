@@ -18,6 +18,7 @@ class EditPricePage extends StatefulWidget {
 }
 
 class _EditPricePageState extends State<EditPricePage> {
+  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
   double price;
 
@@ -25,8 +26,8 @@ class _EditPricePageState extends State<EditPricePage> {
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(
+        key: _scaffoldkey,
           appBar: AppBar(
-            elevation: 0,
             flexibleSpace: Container(
               decoration: decorationGradient(),
             ),
@@ -43,60 +44,49 @@ class _EditPricePageState extends State<EditPricePage> {
                       context,
                       "Updating event"),
                 )
-              : SingleChildScrollView(
-                  padding: EdgeInsets.all(24.0),
-                  physics: ClampingScrollPhysics(),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height * 0.72),
-                    child: Form(
-                      key: formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          PriceSelector(
-                              initialValue:
-                                  provider.post.event.entrancePrice.toString(),
-                              onChanged: (v) => price = double.parse(v),
-                              onSaved: (v) {
-                                provider.post.event.entrancePrice = price;
-                                provider.post.event.currency = Currency
-                                    .eur; //TODO: remove this line when we can select currencies
-                              }),
-                          Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.green),
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            height: 50,
-                            child: authButton(
-                                label: "Save", //TODO: translation
-                                context: context,
-                                isStateValid: true,
-                                onPressed: () async {
-                                  if (formKey.currentState.validate()) {
-                                    formKey.currentState.save();
-                                    bool res = await provider.updateEvent();
-                                    if (res) {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              'Event Price updated'); //TODO: translation
-                                      Application.router.pop(context);
-                                    } else {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              'Unable to update price.'); //TODO: translation
-                                    }
-                                  }
-                                }),
-                          ),
-                        ],
+              : Container(
+                padding: EdgeInsets.all(24.0),
+                height: MediaQuery.of(context).size.height * 0.9,
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      PriceSelector(
+                          initialValue:
+                              provider.post.event.entrancePrice.toString(),
+                          onChanged: (v) => price = double.parse(v),
+                          onSaved: (v) {
+                            provider.post.event.entrancePrice = price;
+                            provider.post.event.currency = Currency
+                                .eur; //TODO: remove this line when we can select currencies
+                          }),
+                      Container(
+                        padding: EdgeInsets.only(bottom: 50),
+                        child: authButton(
+                            label: "Save", //TODO: translation
+                            context: context,
+                            isStateValid: true,
+                            onPressed: () async {
+                              if (formKey.currentState.validate()) {
+                                formKey.currentState.save();
+                                bool res = await provider.updateEvent();
+                                if (res) {
+                                  Application.router.pop(context, true);
+                                } else {
+                                  //TODO translate
+                                  showSnackBarWithError(
+                                      message: "Please input a valid price",
+                                      scaffoldKey: _scaffoldkey);
+                                }
+                              }
+                            }),
                       ),
-                    ),
+                    ],
                   ),
-                ));
+                ),
+              ));
     });
   }
 }
