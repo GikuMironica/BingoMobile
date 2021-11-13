@@ -114,6 +114,7 @@ class MapLocationProvider extends ChangeNotifier {
 
   void cleanSearchResult(){
     FocusManager.instance.primaryFocus?.unfocus();
+    searchBarController.text = "";
     searchResults?.clear();
     searchResultState = SearchResultState.IDLE;
     notifyListeners();
