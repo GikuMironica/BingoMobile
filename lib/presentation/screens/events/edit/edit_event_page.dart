@@ -82,9 +82,8 @@ class EditEventPage extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       ListTile(
-                        onTap: () => Application.router.navigateTo(
-                            context, Routes.editEventSlots,
-                            transition: TransitionType.cupertino),
+                        onTap: () async => await _navigateAndDisplayResult(
+                            context, Routes.editEventSlots),
                         leading: Icon(MdiIcons.clipboardListOutline),
                         title: Text('Slots'),
                       ),
