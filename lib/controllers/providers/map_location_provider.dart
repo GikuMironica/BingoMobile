@@ -87,30 +87,29 @@ class MapLocationProvider extends ChangeNotifier {
   void _setTapGestureHandler() {
     _hereMapController.gestures.tapListener =
         TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) {
-          _cleanSearchResult();
+          cleanSearchResult();
     });
     _hereMapController.gestures.doubleTapListener =
         DoubleTapListener.fromLambdas(lambda_onDoubleTap: (Point2D touchPoint){
-          _cleanSearchResult();
+          cleanSearchResult();
         });
     _hereMapController.gestures.panListener =
         PanListener.fromLambdas(
             lambda_onPan: (
                 GestureState state, Point2D touchPoint, Point2D secondTouchPoint, double val){
-          _cleanSearchResult();
+          cleanSearchResult();
     });
     _hereMapController.gestures.twoFingerPanListener =
         TwoFingerPanListener.fromLambdas(
             lambda_onTwoFingerPan: (GestureState state, Point2D touchPoint, Point2D secondTouchPoint, double val){
-          _cleanSearchResult();
+          cleanSearchResult();
         });
   }
 
-  void _cleanSearchResult(){
+  void cleanSearchResult(){
     FocusManager.instance.primaryFocus?.unfocus();
     searchResults?.clear();
     searchResultState = SearchResultState.IDLE;
-    _eventProvider.post.location = null;
     notifyListeners();
   }
 
@@ -215,11 +214,5 @@ class MapLocationProvider extends ChangeNotifier {
 
   void setMapLoadingState(MapLoadingState loadingState) {
     _loadingState = loadingState;
-  }
-
-  void dropSelection() {
-    searchResults?.clear();
-    searchResultState = SearchResultState.IDLE;
-    notifyListeners();
   }
 }

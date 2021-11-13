@@ -52,7 +52,7 @@ class _SearchByMapState extends State<SearchByMap> {
               color: Colors.white,
               onPressed: () => {
                     Application.router.pop(context),
-                    locationSelectionProvider.dropSelection(),
+                    locationSelectionProvider.cleanSearchResult(),
                     locationSelectionProvider
                         .setMapLoadingState(MapLoadingState.LOADING)
                   }),
