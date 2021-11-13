@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/screens/events/create/tag_chip.dart';
-import 'package:hopaut/presentation/widgets/text/subtitle.dart';
 
 class Tags extends StatefulWidget {
   final Post post;
@@ -30,16 +29,8 @@ class _TagsState extends State<Tags> {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Subtitle(label: 'Tags'), //TODO: translation
-              Text(
-                'You are able to add up to 5 tags.', //TODO: translation
-                style: TextStyle(color: Colors.black87),
-              )
-            ],
-          ),
+          child: Text('You are able to add up to 5 tags.', //TODO: translation
+              style: TextStyle(color: Colors.black87)),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 2.0),

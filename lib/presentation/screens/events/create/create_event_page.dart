@@ -59,6 +59,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                 )
               : SingleChildScrollView(
                   controller: scrollController,
+                  reverse: true,
                   physics: ClampingScrollPhysics(),
                   padding: EdgeInsets.all(24.0),
                   child: Form(
@@ -116,6 +117,14 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                   provider.validateDates(
                                       startDateController, endDateController);
                                 }),
+                            Divider(),
+                            FieldTitle(title: "Tags"), //TODO: translation
+                            Tags(
+                                post: provider.post,
+                                getTagSuggestions: (pattern, currentTags) =>
+                                    provider.getTagSuggestions(
+                                        pattern, currentTags)),
+                            Divider(),
                             FieldTitle(
                                 title: "Description"), //TODO: translation
                             textAreaInput(
@@ -132,6 +141,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                   descriptionController, value),
                               // hintText: 'Event Description', //TODO: write an example description + translation
                             ),
+                            Divider(),
                             FieldTitle(
                                 title: "Requirements"), //TODO: translation
                             textAreaInput(
@@ -148,12 +158,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
                               //hintText:
                               //'Event Requirements (Optional)', //TODO: write example requirements + translation
                             ),
-                            Divider(),
-                            Tags(
-                                post: provider.post,
-                                getTagSuggestions: (pattern, currentTags) =>
-                                    provider.getTagSuggestions(
-                                        pattern, currentTags)),
                             authButton(
                                 label: "Save", //TODO: translation
                                 context: context,

@@ -52,17 +52,17 @@ class EventListPage extends StatelessWidget {
                     HopAutAppBar(
                       title: title,
                       actions: <Widget>[
-                        IconButton(
-                          icon: SvgPicture.asset(
-                            'assets/icons/svg/paper-plane-outline.svg',
-                            color: Colors.white,
-                            height: 24,
-                          ),
-                          onPressed: () async {
-                            await Application.router
-                                .navigateTo(context, '/announcements');
-                          },
-                        )
+                        // IconButton(
+                        //   icon: SvgPicture.asset(
+                        //     'assets/icons/svg/paper-plane-outline.svg',
+                        //     color: Colors.white,
+                        //     height: 24,
+                        //   ),
+                        //   onPressed: () async {
+                        //     await Application.router
+                        //         .navigateTo(context, '/announcements');
+                        //   },
+                        // )
                       ],
                     ),
                     SliverPersistentHeader(

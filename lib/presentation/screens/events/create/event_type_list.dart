@@ -51,6 +51,7 @@ class _EventTypeListState extends State<EventTypeList> {
           : Container(),
       paidEvents.contains(value)
           ? PriceSelector(
+              title: "Entrance Price", //TODO: translation
               onChanged: (v) => price = double.parse(v),
               onSaved: (v) {
                 widget.post.event.entrancePrice = price;
