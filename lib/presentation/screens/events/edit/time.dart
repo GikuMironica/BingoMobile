@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/presentation/screens/events/create/time_picker.dart';
@@ -20,6 +21,13 @@ class _EditPostTimeState extends State<EditPostTime> {
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    startDateController.text = getIt<EventProvider>().post.eventTime.toString();
+    endDateController.text = getIt<EventProvider>().post.endTime.toString();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -13,7 +13,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 
 class EditEventPage extends StatelessWidget {
-  final GlobalKey<ScaffoldState> _editEventScaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _editEventScaffoldKey =
+      new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +41,7 @@ class EditEventPage extends StatelessWidget {
           physics: ClampingScrollPhysics(),
           padding: EdgeInsets.all(8.0),
           child: Builder(
-            builder: (context) =>
-            Column(
+            builder: (context) => Column(
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -77,7 +77,8 @@ class EditEventPage extends StatelessWidget {
                 ),
                 Divider(),
                 Visibility(
-                  visible: provider.post.event.eventType == EventType.houseParty,
+                  visible:
+                      provider.post.event.eventType == EventType.houseParty,
                   child: Column(
                     children: <Widget>[
                       ListTile(
@@ -137,12 +138,14 @@ class EditEventPage extends StatelessWidget {
     });
   }
 
-  Future<void> _navigateAndDisplayResult(BuildContext context, String routes) async {
-    var result = await Application.router
+  Future<void> _navigateAndDisplayResult(
+      BuildContext context, String routes) async {
+    bool result = await Application.router
         .navigateTo(context, routes, transition: TransitionType.cupertino);
-    if (result) {
+    if (result != null && result) {
       // TODO translation
-      showSuccessSnackBar(scaffoldKey: _editEventScaffoldKey, message: "Event updated");
+      showSuccessSnackBar(
+          scaffoldKey: _editEventScaffoldKey, message: "Event updated");
     }
   }
 }

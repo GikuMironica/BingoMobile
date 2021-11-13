@@ -18,7 +18,8 @@ class EditPostTitle extends StatefulWidget {
 class _EditPostTitleState extends State<EditPostTitle> {
   final formKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
-  final GlobalKey<ScaffoldState> _titleScaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _titleScaffoldKey =
+      new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
