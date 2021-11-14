@@ -131,6 +131,7 @@ class MapLocationProvider extends ChangeNotifier {
     _hereMapController.camera.flyToWithOptionsAndDistance(item.geoCoordinates,
         _distanceToEarthInMeters, MapCameraFlyToOptions.withDefaults());
     searchResultState = SearchResultState.HAS_RESULTS_AUTOCOMPLETE;
+    searchBarController.text = item.address.street+" "+item.address.houseNumOrName;
     notifyListeners();
   }
 
