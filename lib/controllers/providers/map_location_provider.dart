@@ -11,6 +11,7 @@ import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:hopaut/data/domain/coordinate.dart';
 import 'package:hopaut/data/models/location.dart' as HopautLocation;
+import 'package:injectable/injectable.dart';
 
 enum SearchResultState {
   IDLE,
@@ -21,6 +22,7 @@ enum SearchResultState {
 
 enum MapLoadingState { LOADING, LOADED, ERROR }
 
+@lazySingleton
 class MapLocationProvider extends ChangeNotifier {
   // fields
   final double _distanceToEarthInMeters = 2000;
@@ -52,7 +54,14 @@ class MapLocationProvider extends ChangeNotifier {
   }
 
   void onMapCreated(HereMapController hereMapController) {
+    if (_eventProvider.post.location==null){
+      searchBarController.text = "";
+      searchResults?.clear();
+    }else{
+      searchBarController.text = _eventProvider.post.location?.address ?? "";
+    }
     _loadingState = MapLoadingState.LOADING;
+    notifyListeners();
     _hereMapController = hereMapController;
     _hereMapController.mapScene.loadSceneForMapScheme(
         mapScheme, (MapError err) => _initializeMap(_hereMapController, err));
@@ -86,12 +95,31 @@ class MapLocationProvider extends ChangeNotifier {
   void _setTapGestureHandler() {
     _hereMapController.gestures.tapListener =
         TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) {
-      FocusManager.instance.primaryFocus?.unfocus();
-      searchResults?.clear();
-      searchResultState = SearchResultState.IDLE;
-      _eventProvider.post.location = null;
-      notifyListeners();
+          cleanSearchResult();
     });
+    _hereMapController.gestures.doubleTapListener =
+        DoubleTapListener.fromLambdas(lambda_onDoubleTap: (Point2D touchPoint){
+          cleanSearchResult();
+        });
+    _hereMapController.gestures.panListener =
+        PanListener.fromLambdas(
+            lambda_onPan: (
+                GestureState state, Point2D touchPoint, Point2D secondTouchPoint, double val){
+          cleanSearchResult();
+    });
+    _hereMapController.gestures.twoFingerPanListener =
+        TwoFingerPanListener.fromLambdas(
+            lambda_onTwoFingerPan: (GestureState state, Point2D touchPoint, Point2D secondTouchPoint, double val){
+          cleanSearchResult();
+        });
+  }
+
+  void cleanSearchResult(){
+    FocusManager.instance.primaryFocus?.unfocus();
+    searchBarController.text = "";
+    searchResults?.clear();
+    searchResultState = SearchResultState.IDLE;
+    notifyListeners();
   }
 
   void getGeoLocation() {
@@ -105,6 +133,7 @@ class MapLocationProvider extends ChangeNotifier {
     _hereMapController.camera.flyToWithOptionsAndDistance(item.geoCoordinates,
         _distanceToEarthInMeters, MapCameraFlyToOptions.withDefaults());
     searchResultState = SearchResultState.HAS_RESULTS_AUTOCOMPLETE;
+    searchBarController.text = item.address.street+" "+item.address.houseNumOrName;
     notifyListeners();
   }
 
@@ -195,11 +224,5 @@ class MapLocationProvider extends ChangeNotifier {
 
   void setMapLoadingState(MapLoadingState loadingState) {
     _loadingState = loadingState;
-  }
-
-  void dropSelection() {
-    searchResults?.clear();
-    searchResultState = SearchResultState.IDLE;
-    notifyListeners();
   }
 }

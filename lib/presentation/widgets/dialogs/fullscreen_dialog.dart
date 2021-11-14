@@ -16,10 +16,10 @@ class FullscreenDialog extends StatelessWidget {
   FullscreenDialog(
       {this.asset,
       this.svgAsset,
-      @required this.header,
-      @required this.message,
-      @required this.buttonText,
-      @required this.route});
+      this.header,
+      this.message,
+      this.buttonText,
+      this.route});
 
   @override
   Widget build(BuildContext context) {

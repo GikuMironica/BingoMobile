@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 
 class EventTextField extends StatefulWidget {
@@ -37,24 +38,27 @@ class _EventTextFieldState extends State<EventTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         widget.title != null ? FieldTitle(title: widget.title) : Container(),
-        Container(
-          height: widget.height,
-          margin: EdgeInsets.only(bottom: 24.0),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: TextFormField(
-            initialValue: widget.initialValue,
-            maxLines: widget.expand ? 6 : 1,
-            onChanged: widget.onChanged,
-            onSaved: widget.onSaved,
-            keyboardType: widget.textInputType,
-            inputFormatters: widget.inputFormatter,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.all(12.0),
-              border: InputBorder.none,
-              hintText: widget.textHint,
+        Card(
+          elevation: HATheme.WIDGET_ELEVATION,
+          color: Colors.transparent,
+          child: Container(
+            height: widget.height,
+            decoration: BoxDecoration(
+              color: HATheme.BASIC_INPUT_COLOR,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: TextFormField(
+              initialValue: widget.initialValue,
+              maxLines: widget.expand ? 6 : 1,
+              onChanged: widget.onChanged,
+              onSaved: widget.onSaved,
+              keyboardType: widget.textInputType,
+              inputFormatters: widget.inputFormatter,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(12.0),
+                border: InputBorder.none,
+                hintText: widget.textHint,
+              ),
             ),
           ),
         )

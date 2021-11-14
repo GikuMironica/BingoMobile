@@ -48,6 +48,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                   Expanded(
                     child: TextField(
                       onChanged: (v) => provider.updateTag(v),
+                      onTap: () => provider.toggleFilter(),
                       //focusNode: _focusNode,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -276,8 +277,8 @@ List<Widget> _carouselFilterItems(
     _filterEventType(
         context: context,
         type: 'Marathon',
-        value: provider.searchQuery.eventTypes[EventType.marathon],
-        onTap: (v) => provider.filterToggleEventType(EventType.marathon)),
+        value: provider.searchQuery.eventTypes[EventType.sport],
+        onTap: (v) => provider.filterToggleEventType(EventType.sport)),
     _filterEventType(
         context: context,
         type: 'Other',

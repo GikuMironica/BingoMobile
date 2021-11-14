@@ -43,7 +43,8 @@ class _EventTypeListState extends State<EventTypeList> {
       ),
       value == EventType.houseParty
           ? EventTextField(
-              title: "Slots", //TODO: translation
+              // TODO can we use spinner?
+              title: "Guests number", //TODO: translation
               onChanged: (v) => slots = int.parse(v),
               onSaved: (v) => widget.post.event.slots = slots,
               textInputType: TextInputType.number,

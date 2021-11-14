@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hopaut/config/constants/theme.dart';
 
 Widget valueInput(
     {@required bool isStateValid,
@@ -12,15 +13,18 @@ Widget valueInput(
     String hintText}) {
   return Stack(
     children: [
-      Container(
-          height: 48.0,
-          margin: EdgeInsets.only(bottom: 5.0),
-          decoration: BoxDecoration(
-            border: Border.all(
-                color: !isStateValid ? Colors.red[100] : Colors.transparent),
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(8),
-          )),
+      Card(
+        color: Colors.transparent,
+        elevation: HATheme.WIDGET_ELEVATION,
+        child: Container(
+            height: 48.0,
+            decoration: BoxDecoration(
+             // border: Border.all(
+             //     color: !isStateValid ? Colors.red[100] : Colors.transparent),
+              color: HATheme.BASIC_INPUT_COLOR,
+              borderRadius: BorderRadius.circular(8),
+            )),
+      ),
       TextFormField(
         inputFormatters: [
           LengthLimitingTextInputFormatter(maxLength),

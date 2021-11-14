@@ -4,7 +4,7 @@ import 'package:hopaut/controllers/blocs/forgot_password/forgotpassword_bloc.dar
 import 'package:hopaut/controllers/blocs/forgot_password/forgotpassword_event.dart';
 import 'package:hopaut/controllers/blocs/forgot_password/forgotpassword_state.dart';
 import 'package:hopaut/controllers/blocs/forgot_password/forgotpassword_status.dart';
-import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
+import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/dialogs/fullscreen_dialog.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';
@@ -117,7 +117,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     return Column(children: [
       BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
           builder: (context, state) {
-        return authButton(
+        return persistButton(
             // TODO - Translate
             label: 'Send request',
             context: context,

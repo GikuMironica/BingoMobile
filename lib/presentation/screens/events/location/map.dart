@@ -52,7 +52,7 @@ class _SearchByMapState extends State<SearchByMap> {
               color: Colors.white,
               onPressed: () => {
                     Application.router.pop(context),
-                    locationSelectionProvider.dropSelection(),
+                    locationSelectionProvider.cleanSearchResult(),
                     locationSelectionProvider
                         .setMapLoadingState(MapLoadingState.LOADING)
                   }),
@@ -194,37 +194,54 @@ class _SearchByMapState extends State<SearchByMap> {
         visible: locationSelectionProvider.searchResults.isNotEmpty &&
             locationSelectionProvider.loadingState == MapLoadingState.LOADED,
         child: Center(
-          child: Card(
-            margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            elevation: 10,
-            color: Colors.grey.shade200,
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-              child: ListView.builder(
-                  itemCount: locationSelectionProvider.searchResults.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(
-                          locationSelectionProvider.searchResults[index].title),
-                      // TODO translation
-                      trailing: GestureDetector(
-                        onTap: () =>
-                            locationSelectionProvider.handleSaveClick(context),
-                        child: Container(
-                            width: 35,
-                            height: 150,
-                            //decoration: BoxDecoration(color: Colors.green),
-                            child: Icon(MdiIcons.check,
-                                color: HATheme.HOPAUT_SECONDARY, size: 35)),
-                      ),
-                    );
-                  }),
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Card(
+                margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 24.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                elevation: 10,
+                color: Colors.grey.shade200,
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                  child: ListView.builder(
+                      itemCount: locationSelectionProvider.searchResults.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(
+                              locationSelectionProvider.searchResults[index].title),
+                          // TODO translation
+                          trailing: GestureDetector(
+                            onTap: () =>
+                                locationSelectionProvider.handleSaveClick(context),
+                            child: Container(
+                                width: 35,
+                                height: 150,
+                                //decoration: BoxDecoration(color: Colors.green),
+                                child: Icon(MdiIcons.check,
+                                    color: HATheme.HOPAUT_SECONDARY, size: 35)),
+                          ),
+                        );
+                      }),
+                ),
+              ),
+              Card(
+                elevation: 15,
+                // TODO translation
+                color: Colors.transparent,
+                child: Text('Touch the map to dismiss selection',
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w700,
+                  )),
+              )
+            ],
           ),
         ),
       ),

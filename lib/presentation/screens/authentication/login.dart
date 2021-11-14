@@ -10,7 +10,7 @@ import 'package:hopaut/controllers/blocs/register/register_bloc.dart';
 import 'package:hopaut/presentation/widgets/buttons/facebook_button.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
 import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
-import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
+import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';
 import 'package:hopaut/presentation/widgets/text/text.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
@@ -135,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _loginButtons() {
     return Column(children: [
       BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-        return authButton(
+        return persistButton(
             // TODO - translate
             label: 'Login',
             context: context,

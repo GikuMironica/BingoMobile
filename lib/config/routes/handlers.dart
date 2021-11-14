@@ -27,6 +27,7 @@ import 'package:hopaut/presentation/screens/events/create/create_event_page.dart
 import 'package:hopaut/presentation/screens/home_page.dart';
 import 'package:hopaut/presentation/screens/authentication/login.dart';
 import 'package:hopaut/presentation/screens/settings/change_password.dart';
+import 'package:hopaut/presentation/screens/settings/report_bug.dart';
 import 'package:hopaut/presentation/screens/settings/settings.dart';
 import 'package:hopaut/presentation/widgets/dialogs/fullscreen_dialog.dart';
 import 'package:hopaut/presentation/widgets/webview_widget.dart';
@@ -85,6 +86,11 @@ var changePasswordHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return ChangePasswordPage();
 });
+
+var reportBugHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+      return ReportBug();
+    });
 
 var forgotPasswordHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {

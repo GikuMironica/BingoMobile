@@ -3,7 +3,7 @@ import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/change_password_provider.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
-import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
+import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
@@ -177,7 +177,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     onObscureTap: _passwordProvider.toggleObscureNewPassword,
                     onChange: (v) => _passwordProvider.newPasswordChange(v)),
                 SizedBox(height: 30),
-                authButton(
+                persistButton(
                     context: context,
                     // TODO translation
                     label: 'Change password',

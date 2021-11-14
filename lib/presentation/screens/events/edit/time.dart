@@ -5,7 +5,7 @@ import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/presentation/screens/events/create/time_picker.dart';
-import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
+import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
@@ -27,6 +27,13 @@ class _EditPostTimeState extends State<EditPostTime> {
     super.initState();
     startDateController.text = getIt<EventProvider>().post.eventTime.toString();
     endDateController.text = getIt<EventProvider>().post.endTime.toString();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    endDateController.dispose();
+    startDateController.dispose();
   }
 
   @override
@@ -79,7 +86,7 @@ class _EditPostTimeState extends State<EditPostTime> {
                         }),
                     Container(
                       padding: EdgeInsets.only(bottom: 50),
-                      child: authButton(
+                      child: persistButton(
                           label: "Save", //TODO: translation
                           context: context,
                           isStateValid: true,

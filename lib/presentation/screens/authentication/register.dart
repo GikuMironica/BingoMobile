@@ -7,7 +7,7 @@ import 'package:hopaut/controllers/blocs/register/register_bloc.dart';
 import 'package:hopaut/controllers/blocs/register/register_event.dart';
 import 'package:hopaut/controllers/blocs/register/register_page_status.dart';
 import 'package:hopaut/controllers/blocs/register/register_state.dart';
-import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
+import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/dialogs/fullscreen_dialog.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
 import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
@@ -163,7 +163,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget _registerButton() {
     return Container(child:
         BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
-      return authButton(
+      return persistButton(
           // TODO - Translate
           label: 'Sign Up',
           context: context,

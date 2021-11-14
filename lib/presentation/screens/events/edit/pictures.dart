@@ -4,7 +4,7 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/presentation/screens/events/create/picture_list.dart';
-import 'package:hopaut/presentation/widgets/buttons/auth_button.dart';
+import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
@@ -52,7 +52,7 @@ class EditPostPictures extends StatelessWidget {
                         ),
                         Container(
                           padding: EdgeInsets.only(bottom: 50),
-                          child: authButton(
+                          child: persistButton(
                             label: "Update", //TODO: translation
                             context: context,
                             isStateValid: true,

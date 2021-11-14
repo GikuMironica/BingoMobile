@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:intl/intl.dart';
 
 class TimePicker extends StatefulWidget {
@@ -37,6 +38,9 @@ class _TimePickerState extends State<TimePicker> {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          // TODO refactor - dublicate wigets
+          // One solution would be to remove all logic from this UI element
+          // in the provider that's using it.
           InkWell(
             onTap: () async {
               DateTime minTime = DateTime.now().add(Duration(minutes: 15));
@@ -61,21 +65,25 @@ class _TimePickerState extends State<TimePicker> {
                 });
               }, currentTime: startDate, locale: LocaleType.en);
             },
-            child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(12.0),
-                height: 48,
-                margin: EdgeInsets.only(bottom: 24.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  startDate != null
-                      ? dateFormat.format(startDate)
-                      : 'Start Time', // TODO: translation
-                )),
+            child: Card(
+              elevation: HATheme.WIDGET_ELEVATION,
+              color: Colors.transparent,
+              child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(12.0),
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: HATheme.BASIC_INPUT_COLOR,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    startDate != null
+                        ? dateFormat.format(startDate)
+                        : 'Start Time', // TODO: translation
+                  )),
+            ),
           ),
+          SizedBox(height: 10,),
           InkWell(
             onTap: () async {
               if (startDate != null) {
@@ -91,20 +99,23 @@ class _TimePickerState extends State<TimePicker> {
                 }, currentTime: endDate, locale: LocaleType.en);
               }
             },
-            child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(12.0),
-                height: 48,
-                margin: EdgeInsets.only(bottom: 5.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  endDate != null
-                      ? dateFormat.format(endDate)
-                      : 'End Time', // TODO: translation
-                )),
+            child: Card(
+              elevation: HATheme.WIDGET_ELEVATION,
+              color: Colors.transparent,
+              child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(12.0),
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: HATheme.BASIC_INPUT_COLOR,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    endDate != null
+                        ? dateFormat.format(endDate)
+                        : 'End Time', // TODO: translation
+                  )),
+            ),
           ),
           Container(
             margin: EdgeInsets.only(bottom: 19.0),
