@@ -2,6 +2,7 @@ import 'package:hopaut/services/authentication_service.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'config/injection.dart';
+import 'controllers/providers/ReportBugProvider.dart';
 import 'controllers/providers/account_provider.dart';
 import 'controllers/providers/change_password_provider.dart';
 import 'controllers/providers/event_provider.dart';
@@ -33,7 +34,11 @@ List<SingleChildWidget> providerList = [
   ChangeNotifierProvider<LocationServiceProvider>(
       create: (context) => getIt<LocationServiceProvider>()),
   ChangeNotifierProvider<MapLocationProvider>(
-    create: (_) => MapLocationProvider(),
+    create: (_) => getIt<MapLocationProvider>(),
+    lazy: true,
+  ),
+  ChangeNotifierProvider<ReportBugProvider>(
+    create: (_) => getIt<ReportBugProvider>(),
     lazy: true,
   ),
 ];

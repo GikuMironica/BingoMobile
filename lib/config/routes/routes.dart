@@ -14,12 +14,16 @@ class Routes {
   static String editAccountPicture = editAccount + '/picture';
   static String editAccountName = editAccount + '/name';
   static String editAccountDescription = editAccount + '/description';
-  static String changePassword = '/change_password';
   static String forgotPassword = '/forgot_password';
+
+  // -- SETTINGS --------------------------------------------------------------
+  static String changePassword = '/change_password';
   static String termsOfServices = '/tos';
   static String settings = '/settings';
   static String privacyPolicy = '/privacy_policy';
   static String imprint = '/imprint';
+  static String bug = '/bug';
+
   // -- EVENT -----------------------------------------------------------------
   static String event = '/event/:id';
   static String createEvent = '/create-event';
@@ -53,6 +57,8 @@ class Routes {
     router.define(login, handler: loginHandler);
     router.define(registration, handler: registrationHandler);
     router.define(fullscreenDialog, handler: fullscreenDialogHandler);
+
+    // Settings
     router.define(account, handler: accountHandler);
     router.define(editAccount, handler: editAccountHandler);
     router.define(editAccountName, handler: editAccountNameHandler);
@@ -60,6 +66,7 @@ class Routes {
         handler: editAccountDescriptionHandler);
     router.define(editAccountPicture, handler: editAccountPictureHandler);
     router.define(settings, handler: settingsHandler);
+    router.define(bug, handler: reportBugHandler);
     router.define(changePassword, handler: changePasswordHandler);
     router.define(forgotPassword, handler: forgotPasswordHandler);
     router.define(termsOfServices, handler: tosHandler);

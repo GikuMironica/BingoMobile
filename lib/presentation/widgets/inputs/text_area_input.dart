@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 Widget textAreaInput(
     {@required bool isStateValid,
     @required String validationMessage,
-    @required String initialValue,
     @required void Function(String) onChange,
-    @required int maxLength,
+    int maxLength,
+    String initialValue,
     TextEditingController controller,
     FormFieldSetter<String> onSaved,
     String hintText}) {

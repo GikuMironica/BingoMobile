@@ -28,6 +28,12 @@ class _EditPostTitleState extends State<EditPostTitle> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    titleController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(

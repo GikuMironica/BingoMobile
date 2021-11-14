@@ -28,6 +28,12 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    requirementsController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(

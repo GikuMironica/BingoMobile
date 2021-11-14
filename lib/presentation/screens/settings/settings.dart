@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
@@ -209,8 +210,22 @@ class _SettingsState extends State<Settings> {
                               Text('Feedback',
                                   style: TextStyle(color: Colors.black38)),
                               // TODO bug/rating
-                              InkWellButton('Leave a Rating', () {}),
-                              InkWellButton('Report a bug', () {}),
+                              MergeSemantics(
+                                child: ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text('Leave a rating',
+                                        style: TextStyle(fontSize: 18)),
+                                    trailing: Icon(Icons.arrow_forward_ios),
+                                    onTap: () => {}),
+                              ),
+                              MergeSemantics(
+                                child: ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text('Report a bug',
+                                        style: TextStyle(fontSize: 18)),
+                                    trailing: Icon(Icons.arrow_forward_ios),
+                                    onTap: () => changePage(Routes.bug)),
+                              ),
                             ],
                           ),
                         )),

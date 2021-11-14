@@ -28,6 +28,12 @@ class _EditPostDescriptionState extends State<EditPostDescription> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    descriptionController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(

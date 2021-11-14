@@ -30,6 +30,13 @@ class _EditPostTimeState extends State<EditPostTime> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    endDateController.dispose();
+    startDateController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(
