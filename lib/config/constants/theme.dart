@@ -37,4 +37,8 @@ class HATheme {
 
   static const BoxDecoration GRADIENT_DECORATION =
       BoxDecoration(gradient: APP_GRADIENT);
+
+  static Color BASIC_INPUT_COLOR =
+    Colors.grey[100];
+  static const double WIDGET_ELEVATION = 5;
 }

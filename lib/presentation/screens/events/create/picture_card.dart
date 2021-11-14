@@ -16,7 +16,7 @@ class PictureCard extends StatelessWidget {
         onSet();
       },
       child: Card(
-        elevation: 5,
+        elevation: HATheme.WIDGET_ELEVATION,
         child: Container(
             width: 96,
             height: 96,

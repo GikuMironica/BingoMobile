@@ -94,7 +94,7 @@ class _ReportBugState extends State<ReportBug> {
                     v, _bugController),
               ),
               SizedBox(
-                height: 20,
+                height: 8,
               ),
               FieldTitle(title: "Pictures"), //TODO: translation
               // PictureList(

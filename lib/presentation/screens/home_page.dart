@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/presentation/screens/events/event_list_page.dart';
 import 'package:hopaut/presentation/screens/account/account_page.dart';
 import 'package:hopaut/presentation/screens/search/search.dart';
@@ -68,6 +67,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return PersistentTabView(
+      handleAndroidBackButtonPress: false,
       controller: _controller,
       screens: _buildScreens(),
       confineInSafeArea: true,
@@ -82,7 +82,6 @@ class _HomePageState extends State<HomePage> {
         // )),
         colorBehindNavBar: Colors.white,
       ),
-      popAllScreensOnTapOfSelectedTab: true,
       itemAnimationProperties: ItemAnimationProperties(
         // Navigation Bar's items animation properties.
         duration: Duration(milliseconds: 50),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hopaut/config/constants/theme.dart';
 
 class DropDownWidget<T> extends StatefulWidget {
   final T value;
@@ -49,13 +50,16 @@ class _DropDownWidgetState<T> extends State<DropDownWidget<T>> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      Container(
-          height: 48.0,
-          margin: EdgeInsets.only(bottom: 5.0),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(8),
-          )),
+      Card(
+        elevation: HATheme.WIDGET_ELEVATION,
+        color: Colors.transparent,
+        child: Container(
+            height: 48.0,
+            decoration: BoxDecoration(
+              color: HATheme.BASIC_INPUT_COLOR,
+              borderRadius: BorderRadius.circular(8),
+            )),
+      ),
       DropdownButtonFormField<T>(
         value: widget.value,
         onChanged: widget.onChanged,

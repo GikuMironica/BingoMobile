@@ -200,7 +200,7 @@ SnackBar _successSnackBar(String message) {
               message,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: HATheme.HOPAUT_SECONDARY,
+                  color: HATheme.HOPAUT_SECONDARY_GREEN,
                   fontSize: 15,
                   fontWeight: FontWeight.bold),
             )),

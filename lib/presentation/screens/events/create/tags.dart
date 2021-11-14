@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/presentation/screens/events/create/tag_chip.dart';
 
@@ -29,7 +30,7 @@ class _TagsState extends State<Tags> {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('You are able to add up to 5 tags.', //TODO: translation
+          child: Text('You can to add up to 5 tags.', //TODO: translation
               style: TextStyle(color: Colors.black87)),
         ),
         Padding(
@@ -46,38 +47,41 @@ class _TagsState extends State<Tags> {
                       ))
                   .toList()),
         ),
-        Container(
-          height: 48,
-          margin: EdgeInsets.only(bottom: 24.0),
-          decoration: BoxDecoration(
-            color: tags.length >= 5 ? Colors.grey[400] : Colors.grey[200],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: TypeAheadFormField(
-            onSaved: (value) => widget.post.tags = tags,
-            hideOnError: false,
-            hideOnEmpty: true,
-            textFieldConfiguration: TextFieldConfiguration(
-                enabled: tags.length >= 5 ? false : true,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(12.0),
-                    hintText: 'Add tags', //TODO: translation
-                    border: InputBorder.none)),
-            suggestionsCallback: (pattern) async {
-              return await widget.getTagSuggestions(pattern, tags);
-            },
-            itemBuilder: (context, suggestion) {
-              return ListTile(
-                title: Text(suggestion),
-              );
-            },
-            transitionBuilder: (context, suggestionsBox, controller) {
-              return suggestionsBox;
-            },
-            onSuggestionSelected: (suggestion) {
-              tags.contains(suggestion) ? null : tags.add(suggestion);
-            },
+        Card(
+          elevation: HATheme.WIDGET_ELEVATION,
+          color: Colors.transparent,
+          child: Container(
+            height: 48,
+            decoration: BoxDecoration(
+              color: tags.length >= 5 ? Colors.grey[200] : HATheme.BASIC_INPUT_COLOR,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: TypeAheadFormField(
+              onSaved: (value) => widget.post.tags = tags,
+              hideOnError: false,
+              hideOnEmpty: true,
+              textFieldConfiguration: TextFieldConfiguration(
+                  enabled: tags.length >= 5 ? false : true,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(12.0),
+                      hintText: 'Add tags', //TODO: translation
+                      border: InputBorder.none)),
+              suggestionsCallback: (pattern) async {
+                return await widget.getTagSuggestions(pattern, tags);
+              },
+              itemBuilder: (context, suggestion) {
+                return ListTile(
+                  title: Text(suggestion),
+                );
+              },
+              transitionBuilder: (context, suggestionsBox, controller) {
+                return suggestionsBox;
+              },
+              onSuggestionSelected: (suggestion) {
+                tags.contains(suggestion) ? null : tags.add(suggestion);
+              },
+            ),
           ),
         ),
       ],

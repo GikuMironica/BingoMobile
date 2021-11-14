@@ -11,6 +11,7 @@ import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:hopaut/data/domain/coordinate.dart';
 import 'package:hopaut/data/models/location.dart' as HopautLocation;
+import 'package:injectable/injectable.dart';
 
 enum SearchResultState {
   IDLE,
@@ -21,6 +22,7 @@ enum SearchResultState {
 
 enum MapLoadingState { LOADING, LOADED, ERROR }
 
+@lazySingleton
 class MapLocationProvider extends ChangeNotifier {
   // fields
   final double _distanceToEarthInMeters = 2000;
