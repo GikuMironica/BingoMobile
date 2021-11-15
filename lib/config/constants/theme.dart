@@ -38,7 +38,12 @@ class HATheme {
   static const BoxDecoration GRADIENT_DECORATION =
       BoxDecoration(gradient: APP_GRADIENT);
 
-  static Color BASIC_INPUT_COLOR =
-    Colors.grey[100];
+  static Color BASIC_INPUT_COLOR = Colors.grey[100];
   static const double WIDGET_ELEVATION = 5;
+
+  static TextStyle FIELD_HINT_STYLE = TextStyle(
+    color: const Color(0xFF818181).withOpacity(0.69),
+    fontSize: 14.0,
+    fontWeight: FontWeight.w400,
+  );
 }

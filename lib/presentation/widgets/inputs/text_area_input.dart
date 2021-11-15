@@ -10,19 +10,25 @@ Widget textAreaInput(
     String initialValue,
     TextEditingController controller,
     FormFieldSetter<String> onSaved,
-    String hintText}) {
+    String hintText,
+    // The following 3 parameters are set only in the report bug page.
+    Color backGroundColor,
+    double borderRadius,
+    double elevation}) {
   return Stack(
     children: [
       Card(
         color: Colors.transparent,
-        elevation: HATheme.WIDGET_ELEVATION,
+        elevation: elevation ?? HATheme.WIDGET_ELEVATION,
         child: Container(
             height: 192.0,
             decoration: BoxDecoration(
               // border: Border.all(
               //     color: !isStateValid ? Colors.red[100] : Colors.transparent),
-              color: HATheme.BASIC_INPUT_COLOR,
-              borderRadius: BorderRadius.circular(8),
+              color: backGroundColor ?? HATheme.BASIC_INPUT_COLOR,
+              borderRadius: borderRadius == null
+                  ? BorderRadius.circular(8)
+                  : BorderRadius.circular(borderRadius),
             )),
       ),
       TextFormField(
@@ -41,6 +47,7 @@ Widget textAreaInput(
         maxLength: maxLength,
         decoration: InputDecoration(
           hintText: hintText,
+          hintStyle: HATheme.FIELD_HINT_STYLE,
           isDense: true,
           errorMaxLines: 3,
           contentPadding: EdgeInsets.all(12.0),

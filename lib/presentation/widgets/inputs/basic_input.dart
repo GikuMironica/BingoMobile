@@ -19,8 +19,8 @@ Widget valueInput(
         child: Container(
             height: 48.0,
             decoration: BoxDecoration(
-             // border: Border.all(
-             //     color: !isStateValid ? Colors.red[100] : Colors.transparent),
+              // border: Border.all(
+              //     color: !isStateValid ? Colors.red[100] : Colors.transparent),
               color: HATheme.BASIC_INPUT_COLOR,
               borderRadius: BorderRadius.circular(8),
             )),
@@ -39,6 +39,7 @@ Widget valueInput(
         maxLength: maxLength,
         decoration: InputDecoration(
           hintText: hintText,
+          hintStyle: HATheme.FIELD_HINT_STYLE,
           counterText: "",
           isDense: true,
           errorMaxLines: 3,

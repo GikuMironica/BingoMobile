@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/controllers/providers/ReportBugProvider.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/presentation/screens/events/create/picture_list.dart';
@@ -16,6 +17,7 @@ class ReportBug extends StatefulWidget {
 class _ReportBugState extends State<ReportBug> {
   ReportBugProvider _reportBugProvider;
   TextEditingController _bugController;
+  bool _expanded = false;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -32,26 +34,25 @@ class _ReportBugState extends State<ReportBug> {
             context: context,
             // TODO translation
             text: 'Report Bug',
-            actionButtons: _reportBugProvider.validateBugField(
-                _bugController.text)
-            ? [
-            IconButton(
-                icon: Icon(Icons.check),
-                onPressed: () async =>
-                await _reportBugProvider.reportBugAsync(
-                    _bugController.text.trim(), context))
-            ]
-                : null),
+            actionButtons:
+                _reportBugProvider.validateBugField(_bugController.text)
+                    ? [
+                        IconButton(
+                            icon: Icon(Icons.check),
+                            onPressed: () async =>
+                                await _reportBugProvider.reportBugAsync(
+                                    _bugController.text.trim(), context))
+                      ]
+                    : null),
         body: Container(
             height: MediaQuery.of(context).size.height,
             child: SingleChildScrollView(
               padding: EdgeInsets.all(20.0),
-              child: Builder(
-                  builder: (context) => _editProfileDescriptionForm(context)),
+              child: Builder(builder: (context) => _sendBugReportForm(context)),
             )));
   }
 
-  Widget _editProfileDescriptionForm(BuildContext context) {
+  Widget _sendBugReportForm(BuildContext context) {
     if (_reportBugProvider.reportBugFormStatus is Failed) {
       // Translation
       Future.delayed(Duration.zero, () async {
@@ -63,47 +64,88 @@ class _ReportBugState extends State<ReportBug> {
     }
     return _reportBugProvider.reportBugFormStatus is Submitted
         // TODO translation
-        ? overlayBlurBackgroundCircularProgressIndicator(context, 'Sending report')
+        ? overlayBlurBackgroundCircularProgressIndicator(
+            context, 'Sending report')
         : Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 8,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 12),
-                child: Text(
-                  // TODO translation
-                  'Something isn\'t working as expected?',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 8,
                 ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              textAreaInput(
-                controller: _bugController,
-                isStateValid: _reportBugProvider.validateBugField(
-                    _bugController.text),
-                hintText: 'Please explain briefly what happened and how can we reproduce the issue?',
-                // TODO translation
-                validationMessage: "Description too long",
-                onChange: (v) => _reportBugProvider.onReportChange(
-                    v, _bugController),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              FieldTitle(title: "Pictures"), //TODO: translation
-              // PictureList(
-              //   selectPicture: provider.selectPicture,
-              //   onSaved: (value) => provider.post.pictures = value,
-              // ),
-            ],
-          ),
-        );
+                Padding(
+                  padding: EdgeInsets.only(left: 12),
+                  child: Text(
+                    // TODO translation
+                    'Something isn\'t working as expected?',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                textAreaInput(
+                  borderRadius: 2.0,
+                  elevation: 2.5,
+                  backGroundColor: Colors.white,
+                  controller: _bugController,
+                  isStateValid:
+                      _reportBugProvider.validateBugField(_bugController.text),
+                  hintText:
+                      'Please explain briefly what happened and how can we reproduce the issue?',
+                  // TODO translation
+                  validationMessage: "Description too long",
+                  onChange: (v) =>
+                      _reportBugProvider.onReportChange(v, _bugController),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+                  decoration: BoxDecoration(
+                    // border: Border.all(
+                    //     color: !isStateValid ? Colors.red[100] : Colors.transparent),
+                    color: HATheme.BASIC_INPUT_COLOR,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: ExpansionPanelList(
+                    animationDuration: Duration(milliseconds: 600),
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return ListTile(
+                            title: Text(
+                              'Upload screenshots',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 14),
+                            ),
+                          );
+                        },
+                        body: Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: PictureList(
+                            selectPicture: _reportBugProvider.selectPicture,
+                            onSaved: (value) =>
+                                _reportBugProvider.pictures = value,
+                          ),
+                        ),
+                        isExpanded: _expanded,
+                        canTapOnHeader: true,
+                      ),
+                    ],
+                    dividerColor: Colors.grey,
+                    expansionCallback: (panelIndex, isExpanded) {
+                      _expanded = !_expanded;
+                      setState(() {});
+                    },
+                  ),
+                ),
+                //
+              ],
+            ),
+          );
   }
 
   @override
