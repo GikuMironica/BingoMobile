@@ -1,3 +1,4 @@
+import 'package:hopaut/data/models/bug.dart';
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -18,4 +19,7 @@ class ReportRepository extends Repository {
   void userReport(String userId, int reason, String message) {
     // TODO: Create a hashmap for reason (int) -> reason (String)
   }
+
+  /// Report a bug
+  void bugReport(Bug bug) {}
 }

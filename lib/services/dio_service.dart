@@ -1,6 +1,10 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/dio_base_options.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:dio/dio.dart';
@@ -36,9 +40,19 @@ class DioService {
             _dio.options.headers[HttpHeaders.contentTypeHeader] =
                 requestOptions.headers[HttpHeaders.contentTypeHeader];
             var authService = getIt<AuthenticationService>();
-            var refreshResult = await authService.refreshToken();
+            await authService.refreshToken();
 
             return await _dio.request(requestOptions.path);
+          } else if (error.response.statusCode == 429) {
+            // TODO translation
+            Fluttertoast.cancel();
+            Fluttertoast.showToast(
+                backgroundColor: HATheme.HOPAUT_PINK.withOpacity(0.7),
+                textColor: Colors.white,
+                gravity: ToastGravity.TOP,
+                toastLength: Toast.LENGTH_LONG,
+                msg: 'Exceeded requests quota');
+            return error;
           } else {
             return error;
           }

@@ -12,11 +12,9 @@ import 'package:hopaut/data/domain/coordinate.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
-import 'package:hopaut/presentation/screens/events/event_page.dart';
 import 'package:hopaut/presentation/widgets/mini_post_card.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:injectable/injectable.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -76,7 +74,7 @@ class SearchPageProvider extends ChangeNotifier {
 
   void init() async {
     carouselController = CarouselController();
-    _pageState = SearchPageState.SEARCHING;
+    _pageState = SearchPageState.IDLE;
     _mapState = MapState.LOADING;
     searchQuery = SearchQuery(radius: searchRadius.ceil());
     _filterToggled = false;
@@ -84,6 +82,24 @@ class SearchPageProvider extends ChangeNotifier {
     _locationManager = getIt<LocationServiceProvider>();
   }
 
+  void onMapCreated(HereMapController hereMapController) async {
+    _hereMapController = hereMapController;
+    _setTapGestureHandler();
+    _hereMapController.mapScene.loadSceneForMapScheme(MapScheme.greyDay,
+        (MapError error) async {
+      if (error == null) {
+        _hereMapController.mapScene.setLayerState(
+            MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
+        await updateUserLocation(isInitalizeAction: true);
+        setMapState(MapState.LOADED);
+        searchEvents();
+      } else {
+        print('Map Scene not loaded MapError ${error.toString()}');
+      }
+    });
+  }
+
+  /// STATE MODIFIERS
   void setPageState(SearchPageState searchPageState) {
     _pageState = searchPageState;
     notifyListeners();
@@ -92,6 +108,26 @@ class SearchPageProvider extends ChangeNotifier {
   void setMapState(MapState mapState) {
     _mapState = mapState;
     notifyListeners();
+  }
+
+  /// FILTER RELATED TOGGLERS
+  void toggleFilter() {
+    _filterToggled = !_filterToggled;
+    notifyListeners();
+  }
+
+  void filterToggleEventType(EventType eventType) {
+    searchQuery.eventTypes[eventType] = !searchQuery.eventTypes[eventType];
+    notifyListeners();
+  }
+
+  void filterToggleToday() {
+    searchQuery.today = !searchQuery.today;
+    notifyListeners();
+  }
+
+  void updateTag(String v) {
+    searchQuery.tag = v;
   }
 
   void buildMiniPostCards() {
@@ -112,24 +148,74 @@ class SearchPageProvider extends ChangeNotifier {
 
   //TODO clean old results!
   Future<void> searchEvents() async {
-    setPageState(SearchPageState.SEARCHING);
-    searchQuery.longitude = _locationManager.userLocation.longitude;
-    searchQuery.latitude = _locationManager.userLocation.latitude;
-    searchQuery.radius = searchRadius.ceil();
-    clearSearch();
-    _searchResults = await _eventRepository.search(searchQuery);
-    if (_searchResults != null) {
-      setPageState(SearchPageState.HAS_SEARCH_RESULTS);
-      buildMiniPostCards();
-      _addSearchResultsToMap(_searchResults);
-    } else {
-      setPageState(SearchPageState.NO_SEARCH_RESULT);
-      // TODO translation
-      showNewErrorSnackbar('No events found in this area.');
+    if (pageState != SearchPageState.SEARCHING) {
+      setPageState(SearchPageState.SEARCHING);
+      searchQuery.longitude = _locationManager.userLocation.longitude;
+      searchQuery.latitude = _locationManager.userLocation.latitude;
+      searchQuery.radius = searchRadius.ceil();
+      _clearSearch();
+      _searchResults = await _eventRepository.search(searchQuery);
+      if (_searchResults != null) {
+        setPageState(SearchPageState.HAS_SEARCH_RESULTS);
+        buildMiniPostCards();
+        _addSearchResultsToMap(_searchResults);
+      } else {
+        setPageState(SearchPageState.NO_SEARCH_RESULT);
+        // TODO translation
+        showNewErrorSnackbar('No events found in this area.');
+      }
     }
   }
 
-  void clearSearch() {
+  Future<void> updateUserLocation({bool isInitalizeAction = false}) async {
+    UserLocation userPosition;
+    if (isInitalizeAction) {
+      userPosition = _locationManager.userLocation;
+      if (_locationManager?.userLocation?.latitude == null ||
+          _locationManager?.userLocation?.longitude == null)
+        userPosition = await _locationManager.getActualLocation();
+    } else {
+      userPosition = await _locationManager.getActualLocation();
+    }
+
+    GeoCoordinates geoCoordinates =
+        GeoCoordinates(userPosition.latitude, userPosition.longitude);
+    mapController.camera.flyToWithOptionsAndDistance(
+        geoCoordinates, 2000, MapCameraFlyToOptions.withDefaults());
+    // Show the user on the map.
+    MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
+        'assets/icons/map/radio-button-off-outline.svg', 48, 48);
+    if (_userMarker != null) {
+      _hereMapController.mapScene.removeMapMarker(_userMarker);
+    }
+    _userMarker = MapMarker(geoCoordinates, userMarkerSvg);
+    _hereMapController.mapScene.addMapMarker(_userMarker);
+    _redrawGeoCircle(geoCoordinates);
+  }
+
+  void updateSearchRadius(double v) {
+    searchRadius = v;
+    GeoCoordinates geoCoordinates = GeoCoordinates(
+        _locationManager.userLocation.latitude,
+        _locationManager.userLocation.longitude);
+    _hereMapController.camera.flyToWithOptionsAndDistance(geoCoordinates,
+        searchRadius * 5000, MapCameraFlyToOptions.withDefaults());
+    _redrawGeoCircle(geoCoordinates);
+  }
+
+  MiniPost getMiniPostById(int postId) {
+    if (_searchResults == null) {
+      return null;
+    }
+    MiniPost result = _searchResults.firstWhere(
+        (miniPost) => miniPost.postId == postId,
+        orElse: () => null);
+    return result;
+  }
+
+  /// private methods \/ -----------------------------------------------------
+
+  void _clearSearch() {
     for (MapMarker mapMarker in _mapMarkerList) {
       _hereMapController.mapScene.removeMapMarker(mapMarker);
     }
@@ -139,13 +225,6 @@ class SearchPageProvider extends ChangeNotifier {
     notifyListeners();
     //setPageState(SearchPageState.IDLE);
   }
-
-  void toggleFilter() {
-    _filterToggled = !_filterToggled;
-    notifyListeners();
-  }
-
-  // --------------------------------------------------------------------------
 
   Future<void> _addSearchResultsToMap(List<MiniPost> searchResults) async {
     for (MiniPost miniPost in searchResults) {
@@ -172,23 +251,6 @@ class SearchPageProvider extends ChangeNotifier {
   Future<Uint8List> _loadFileAsUint8List(String filename) async {
     ByteData fileData = await rootBundle.load('assets/icons/map/' + filename);
     return Uint8List.view(fileData.buffer);
-  }
-
-  void onMapCreated(HereMapController hereMapController) async {
-    _hereMapController = hereMapController;
-    _setTapGestureHandler();
-    _hereMapController.mapScene.loadSceneForMapScheme(MapScheme.greyDay,
-        (MapError error) async {
-      if (error == null) {
-        _hereMapController.mapScene.setLayerState(
-            MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
-        await updateUserLocation(isInitalizeAction: true);
-        setMapState(MapState.LOADED);
-        searchEvents();
-      } else {
-        print('Map Scene not loaded MapError ${error.toString()}');
-      }
-    });
   }
 
   _setTapGestureHandler() {
@@ -219,63 +281,7 @@ class SearchPageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void filterToggleEventType(EventType eventType) {
-    searchQuery.eventTypes[eventType] = !searchQuery.eventTypes[eventType];
-    notifyListeners();
-  }
-
-  void filterToggleToday() {
-    searchQuery.today = !searchQuery.today;
-    notifyListeners();
-  }
-
-  void updateTag(String v) {
-    searchQuery.tag = v;
-  }
-
-  void updateSearchRadius(double v) {
-    searchRadius = v;
-    GeoCoordinates geoCoordinates = GeoCoordinates(
-        _locationManager.userLocation.latitude,
-        _locationManager.userLocation.longitude);
-    _hereMapController.camera.flyToWithOptionsAndDistance(geoCoordinates,
-        searchRadius * 5000, MapCameraFlyToOptions.withDefaults());
-    redrawGeoCircle(geoCoordinates);
-  }
-
-  void onSliderChangeEnd() {
-    // Future.delayed(Duration(milliseconds: 500), () {
-    //   searchEvents();
-    // });
-  }
-
-  Future<void> updateUserLocation({bool isInitalizeAction = false}) async {
-    UserLocation userPosition;
-    if (isInitalizeAction) {
-      userPosition = _locationManager.userLocation;
-      if (_locationManager?.userLocation?.latitude == null ||
-          _locationManager?.userLocation?.longitude == null)
-        userPosition = await _locationManager.getActualLocation();
-    } else {
-      userPosition = await _locationManager.getActualLocation();
-    }
-
-    GeoCoordinates geoCoordinates =
-        GeoCoordinates(userPosition.latitude, userPosition.longitude);
-    mapController.camera.flyToWithOptionsAndDistance(
-        geoCoordinates, 2000, MapCameraFlyToOptions.withDefaults());
-    // Show the user on the map.
-    MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
-        'assets/icons/map/radio-button-off-outline.svg', 48, 48);
-    if (_userMarker != null) {
-      _hereMapController.mapScene.removeMapMarker(_userMarker);
-    }
-    _userMarker = MapMarker(geoCoordinates, userMarkerSvg);
-    _hereMapController.mapScene.addMapMarker(_userMarker);
-    redrawGeoCircle(geoCoordinates);
-  }
-
-  void redrawGeoCircle(GeoCoordinates geoCoordinates) {
+  void _redrawGeoCircle(GeoCoordinates geoCoordinates) {
     GeoCircle geoCircle = GeoCircle(geoCoordinates, searchRadius * 1000);
     if (_mapPolygon != null) {
       _hereMapController.mapScene.removeMapPolygon(_mapPolygon);
@@ -284,16 +290,6 @@ class SearchPageProvider extends ChangeNotifier {
         HATheme.HOPAUT_SECONDARY.withOpacity(0.15));
     _hereMapController.mapScene.addMapPolygon(_mapPolygon);
     notifyListeners();
-  }
-
-  MiniPost getMiniPostById(int postId) {
-    if (_searchResults == null) {
-      return null;
-    }
-    MiniPost result = _searchResults.firstWhere(
-        (miniPost) => miniPost.postId == postId,
-        orElse: () => null);
-    return result;
   }
 
   @override

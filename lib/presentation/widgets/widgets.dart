@@ -150,6 +150,7 @@ void showSnackBarWithError(
     {BuildContext context,
     String message,
     GlobalKey<ScaffoldState> scaffoldKey}) {
+  Scaffold.of(context).removeCurrentSnackBar();
   if (scaffoldKey == null) {
     Scaffold.of(context).showSnackBar(_errorSnackBar(message));
   } else {
@@ -181,6 +182,7 @@ void showSuccessSnackBar(
     {BuildContext context,
     String message,
     GlobalKey<ScaffoldState> scaffoldKey}) {
+  Scaffold.of(context).removeCurrentSnackBar();
   if (scaffoldKey == null) {
     Scaffold.of(context).showSnackBar(_successSnackBar(message));
   } else {

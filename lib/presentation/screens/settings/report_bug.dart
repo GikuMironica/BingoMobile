@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/theme.dart';
-import 'package:hopaut/controllers/providers/ReportBugProvider.dart';
+import 'package:hopaut/controllers/providers/reportbug_provider.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/presentation/screens/events/create/picture_list.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
@@ -33,7 +33,7 @@ class _ReportBugState extends State<ReportBug> {
         appBar: SimpleAppBar(
             context: context,
             // TODO translation
-            text: 'Report Bug',
+            text: 'Report an issue',
             actionButtons:
                 _reportBugProvider.validateBugField(_bugController.text)
                     ? [
@@ -95,7 +95,7 @@ class _ReportBugState extends State<ReportBug> {
                   hintText:
                       'Please explain briefly what happened and how can we reproduce the issue?',
                   // TODO translation
-                  validationMessage: "Description too long",
+                  validationMessage: "Description is not valid",
                   onChange: (v) =>
                       _reportBugProvider.onReportChange(v, _bugController),
                 ),
@@ -117,6 +117,7 @@ class _ReportBugState extends State<ReportBug> {
                         headerBuilder: (context, isExpanded) {
                           return ListTile(
                             title: Text(
+                              // TODO translations
                               'Upload screenshots',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 14),
