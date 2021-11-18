@@ -41,6 +41,9 @@ class EventRepository extends Repository {
       }
     } on DioError catch (e) {
       logger.e(e.response.statusMessage);
+    } finally {
+      dio.options.headers
+          .addAll({Headers.contentTypeHeader: 'application/json'});
     }
     return null;
   }

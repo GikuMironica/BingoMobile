@@ -3,7 +3,6 @@ import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/controllers/providers/reportbug_provider.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/presentation/screens/events/create/picture_list.dart';
-import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 import 'package:hopaut/presentation/widgets/inputs/text_area_input.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
@@ -16,14 +15,14 @@ class ReportBug extends StatefulWidget {
 
 class _ReportBugState extends State<ReportBug> {
   ReportBugProvider _reportBugProvider;
-  TextEditingController _bugController;
+  TextEditingController bugController;
   bool _expanded = false;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    _bugController = TextEditingController();
+    bugController = TextEditingController();
   }
 
   @override
@@ -35,13 +34,15 @@ class _ReportBugState extends State<ReportBug> {
             // TODO translation
             text: 'Report an issue',
             actionButtons:
-                _reportBugProvider.validateBugField(_bugController.text)
+                _reportBugProvider.validateBugField(bugController.text)
                     ? [
                         IconButton(
                             icon: Icon(Icons.check),
-                            onPressed: () async =>
-                                await _reportBugProvider.reportBugAsync(
-                                    _bugController.text.trim(), context))
+                            onPressed: () async => {
+                                  _formKey.currentState.save(),
+                                  await _reportBugProvider.reportBugAsync(
+                                      bugController.text.trim(), context)
+                                })
                       ]
                     : null),
         body: Container(
@@ -89,15 +90,15 @@ class _ReportBugState extends State<ReportBug> {
                   borderRadius: 2.0,
                   elevation: 2.5,
                   backGroundColor: Colors.white,
-                  controller: _bugController,
+                  controller: bugController,
                   isStateValid:
-                      _reportBugProvider.validateBugField(_bugController.text),
+                      _reportBugProvider.validateBugField(bugController.text),
                   hintText:
                       'Please explain briefly what happened and how can we reproduce the issue?',
                   // TODO translation
                   validationMessage: "Description is not valid",
                   onChange: (v) =>
-                      _reportBugProvider.onReportChange(v, _bugController),
+                      _reportBugProvider.onReportChange(v, bugController),
                 ),
                 SizedBox(
                   height: 8,
@@ -152,6 +153,6 @@ class _ReportBugState extends State<ReportBug> {
   @override
   void dispose() {
     super.dispose();
-    _bugController.dispose();
+    bugController.dispose();
   }
 }

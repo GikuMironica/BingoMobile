@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get_it/get_it.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
+import 'package:hopaut/data/models/bug.dart';
 import 'package:hopaut/data/models/picture.dart';
+import 'package:hopaut/data/repositories/report_repository.dart';
 import 'package:hopaut/presentation/widgets/dialogs/fullscreen_dialog.dart';
 import 'package:hopaut/utils/image_utilities.dart';
 import 'package:injectable/injectable.dart';
@@ -16,21 +20,31 @@ class ReportBugProvider with ChangeNotifier {
   //state
   BaseFormStatus reportBugFormStatus;
   List<Picture> pictures;
+  ReportRepository _reportRepository;
 
   ReportBugProvider() {
     reportBugFormStatus = Idle();
+    _reportRepository = getIt<ReportRepository>();
   }
 
   bool validateBugField(String text) {
     return text.characters.length <= 300 && text.characters.length > 0;
   }
 
-  Future<bool> reportBugAsync(String trim, BuildContext context) async {
+  Future<void> reportBugAsync(String message, BuildContext context) async {
     reportBugFormStatus = Submitted();
     notifyListeners();
-    // upload bug
 
-    Future.delayed(Duration(milliseconds: 600), () {
+    Bug bugReport = Bug(message: message, pictures: this.pictures);
+    bool result = await _reportRepository.bugReportPostAsync(bugReport);
+
+    if (!result) {
+      reportBugFormStatus = Failed();
+      notifyListeners();
+      return;
+    }
+
+    Future.delayed(Duration(milliseconds: 400), () {
       reportBugFormStatus = Idle();
       Navigator.of(context).pushReplacement(PageRouteBuilder(
           opaque: false,
@@ -40,7 +54,7 @@ class ReportBugProvider with ChangeNotifier {
                 svgAsset: 'assets/icons/svg/thank_you.svg',
                 header: 'Thank you!',
                 message:
-                    'Your input will help our team significantly improve the services we provide you.',
+                    'Your input will significantly help our team improve the services we provide you.',
                 buttonText: 'Back to settings',
                 route: Routes.settings,
               )));

@@ -54,4 +54,7 @@ class API {
   // Report --------------------------------------------------------------------
   static const String REPORT = '/reports';
   static const String USER_REPORT = '/userreports';
+
+  // Bug Report
+  static const String BUG_REPORT = '/bugs';
 }
