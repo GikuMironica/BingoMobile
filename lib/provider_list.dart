@@ -2,6 +2,7 @@ import 'package:hopaut/services/authentication_service.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'config/injection.dart';
+import 'controllers/providers/rating_provider.dart';
 import 'controllers/providers/reportbug_provider.dart';
 import 'controllers/providers/account_provider.dart';
 import 'controllers/providers/change_password_provider.dart';
@@ -39,6 +40,10 @@ List<SingleChildWidget> providerList = [
   ),
   ChangeNotifierProvider<ReportBugProvider>(
     create: (_) => getIt<ReportBugProvider>(),
+    lazy: true,
+  ),
+  ChangeNotifierProvider<RatingProvider>(
+    create: (_) => getIt<RatingProvider>(),
     lazy: true,
   ),
 ];

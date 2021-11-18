@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/data/repositories/rating_repository.dart';
+import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/controllers/providers/rating_provider.dart';
+import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/controllers/providers/event_provider.dart';
+import 'package:hopaut/presentation/widgets/inputs/text_area_input.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class RateEvent extends StatefulWidget {
@@ -18,7 +20,8 @@ class RateEvent extends StatefulWidget {
 
 class _RateEventState extends State<RateEvent> {
   TextEditingController ratingController;
-  int rating = 0;
+  final _formKey = GlobalKey<FormState>();
+  final _globalKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -28,73 +31,88 @@ class _RateEventState extends State<RateEvent> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<EventProvider>(builder: (context, provider, child) {
+    return Consumer<RatingProvider>(builder: (context, provider, child) {
       return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Application.router.pop(context),
+          key: _globalKey,
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Application.router.pop(context),
+            ),
+            // TODO translation
+            title: Text('Rate Event'),
+            flexibleSpace: Container(
+              decoration: decorationGradient(),
+            ),
           ),
-          // TODO translation
-          title: Text('Rate Event'),
-          flexibleSpace: Container(
-            decoration: decorationGradient(),
-          ),
-        ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: ListView(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            children: <Widget>[
-              SizedBox(
-                height: 24,
-              ),
-              StarRating(
-                onChanged: (index) {
-                  setState(() {
-                    rating = index;
-                  });
-                },
-                value: rating,
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 24.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextField(
-                  controller: ratingController,
-                  maxLines: 6,
-                  onChanged: (value) {},
-                  inputFormatters: [LengthLimitingTextInputFormatter(500)],
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(12.0),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              RaisedButton(
-                child: Text('Submit Rating'),
-                onPressed: () async => getIt<RatingRepository>()
-                    .create(_generatePayload(provider)),
-              ),
-            ],
-          ),
-        ),
-      );
+          body: _ratingForm(provider));
     });
   }
 
-  Map<String, dynamic> _generatePayload(EventProvider provider) {
-    Map<String, dynamic> ratingPayload = {
-      'rate': rating,
-      'userId': provider.post.userId,
-      'postId': widget.postId,
-      'feedback': ratingController.text.trim()
-    };
-    return ratingPayload;
+  Widget _ratingForm(RatingProvider provider) {
+    if (provider.ratingFormStatus is Failed) {
+      // Translation
+      Failed formStatus = provider.ratingFormStatus;
+      Future.delayed(Duration.zero, () async {
+        // TODO - translation
+        showSnackBarWithError(
+            scaffoldKey: _globalKey, message: formStatus.errorMessage);
+      });
+      provider.ratingFormStatus = new Idle();
+    }
+    return Stack(
+      children: [
+        Form(
+          key: _formKey,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: 24,
+                ),
+                StarRating(
+                  onChanged: (index) => provider.onRatingChanged(index),
+                  value: provider.rating,
+                ),
+                textAreaInput(
+                  isStateValid:
+                      provider.validateFeedback(ratingController.text),
+                  onChange: (v) =>
+                      provider.onRatingMessageChange(v, ratingController),
+                  // TODO translation
+                  validationMessage: "Provide a brief feedback",
+                ),
+                SizedBox(height: 12),
+                persistButton(
+                    label: "Submit Rating",
+                    context: context,
+                    isStateValid:
+                        provider.validateFeedback(ratingController.text) &&
+                            provider.rating > 0,
+                    onPressed: () async => {
+                          if (_formKey.currentState.validate())
+                            {
+                              await provider.rateUserAsync(
+                                  ratingController.text, widget.postId)
+                            }
+                        })
+                // ),
+              ],
+            ),
+          ),
+        ),
+        Visibility(
+          visible: provider.ratingFormStatus is Submitted,
+          child: Center(
+            // TODO translation
+            child: overlayBlurBackgroundCircularProgressIndicator(
+                context, 'Uploading'),
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -115,7 +133,7 @@ class StarRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Colors.pinkAccent;
+    final color = HATheme.HOPAUT_ORANGE;
     final size = 30.0;
     return Row(
       mainAxisSize: MainAxisSize.min,
