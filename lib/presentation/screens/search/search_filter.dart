@@ -51,16 +51,11 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                       onTap: () => provider.toggleFilter(),
                       //focusNode: _focusNode,
                       decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 8.0),
-                        // TODO translation
-                        hintText: 'Search for events by tag',
-                        hintStyle: TextStyle(
-                          color: Color(0xFF818181).withOpacity(0.69),
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(left: 8.0),
+                          // TODO translation
+                          hintText: 'Search for events by tag',
+                          hintStyle: HATheme.FIELD_HINT_STYLE),
                     ),
                   ),
                   IconButton(

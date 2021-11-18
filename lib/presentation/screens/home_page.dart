@@ -67,7 +67,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return PersistentTabView(
-      handleAndroidBackButtonPress: false,
       controller: _controller,
       screens: _buildScreens(),
       confineInSafeArea: true,
@@ -81,17 +80,6 @@ class _HomePageState extends State<HomePage> {
         //   width: 1.0,
         // )),
         colorBehindNavBar: Colors.white,
-      ),
-      itemAnimationProperties: ItemAnimationProperties(
-        // Navigation Bar's items animation properties.
-        duration: Duration(milliseconds: 50),
-        curve: Curves.ease,
-      ),
-      screenTransitionAnimation: ScreenTransitionAnimation(
-        // Screen transition animation on change of selected tab.
-        animateTabTransition: false,
-        curve: Curves.ease,
-        duration: Duration(milliseconds: 100),
       ),
       navBarStyle: NavBarStyle.custom,
       itemCount: 4,

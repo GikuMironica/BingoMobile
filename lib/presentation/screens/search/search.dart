@@ -20,7 +20,8 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    locationService = Provider.of<LocationServiceProvider>(context, listen: true);
+    locationService =
+        Provider.of<LocationServiceProvider>(context, listen: true);
     searchProvider = Provider.of<SearchPageProvider>(context, listen: true);
     searchProvider.context = context;
     return Scaffold(
@@ -32,9 +33,7 @@ class _SearchPageState extends State<SearchPage> {
             color: Colors.white,
             size: 16,
           ),
-          onPressed: () async => {
-            await searchProvider.updateUserLocation()
-          },
+          onPressed: () async => {await searchProvider.updateUserLocation()},
         ),
         resizeToAvoidBottomInset: false,
         body: _mapPage());
@@ -62,10 +61,11 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _loadingMapDialog() {
     return Visibility(
-      visible: searchProvider.pageState == SearchPageState.SEARCHING,
-      child: overlayBlurBackgroundCircularProgressIndicator(
-        // TODO translations
-        context,
-        'Looking for events'));
+        visible: searchProvider.pageState == SearchPageState.SEARCHING ||
+            searchProvider.mapState == MapState.LOADING,
+        child: overlayBlurBackgroundCircularProgressIndicator(
+            // TODO translations
+            context,
+            'Loading events'));
   }
 }

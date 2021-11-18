@@ -13,7 +13,7 @@ import '../controllers/providers/event_provider.dart' as _i18;
 import '../controllers/providers/legacy_location_provider.dart' as _i21;
 import '../controllers/providers/location_provider.dart' as _i22;
 import '../controllers/providers/map_location_provider.dart' as _i9;
-import '../controllers/providers/ReportBugProvider.dart' as _i13;
+import '../controllers/providers/reportbug_provider.dart' as _i13;
 import '../controllers/providers/search_page_provider.dart' as _i15;
 import '../controllers/providers/settings_provider.dart' as _i26;
 import '../data/repositories/announcement_repository.dart' as _i4;
