@@ -133,16 +133,16 @@ class AuthenticationService with ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await Hive.box('auth').delete('identity');
-    _secureStorageService.deleteAll();
-    _dioService.removeBearerToken();
-    _oneSignalNotificationService.unsubscribeFromNotificationsServer();
-
     // reset providers
     getIt<SettingsProvider>().resetProvider();
     getIt<AccountProvider>().resetProvider();
     getIt<ChangePasswordProvider>().resetProvider();
     getIt<EventProvider>().reset();
+
+    await Hive.box('auth').delete('identity');
+    _secureStorageService.deleteAll();
+    _dioService.removeBearerToken();
+    _oneSignalNotificationService.unsubscribeFromNotificationsServer();
 
     setIdentity(null);
     setUser(null);

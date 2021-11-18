@@ -34,6 +34,7 @@ class DioService {
             RequestOptions requestOptions = error.response.request;
             String requestHeader =
                 requestOptions.headers[HttpHeaders.contentTypeHeader];
+
             if (requestOptions.headers[HttpHeaders.contentTypeHeader] !=
                 'application/json') {
               _dio.options.headers[HttpHeaders.contentTypeHeader] =
@@ -41,10 +42,8 @@ class DioService {
             }
             var authService = getIt<AuthenticationService>();
             await authService.refreshToken();
-
-            requestOptions.headers[HttpHeaders.contentTypeHeader] =
-                requestHeader;
-
+            print(requestHeader);
+            _dio.options.headers[HttpHeaders.contentTypeHeader] = requestHeader;
             return await _dio.request(requestOptions.path);
           } else if (error.response.statusCode == 429) {
             // TODO translation
