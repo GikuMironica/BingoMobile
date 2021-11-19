@@ -47,7 +47,7 @@ class RatingRepository extends Repository {
         // TODO - translation
         return RequestResult(
             isSuccessful: false,
-            errorMessage: "You have already rated this event");
+            errorMessage: "You've rated this event already");
       }
       return RequestResult(
           isSuccessful: false,

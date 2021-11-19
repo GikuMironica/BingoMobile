@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/rating.dart';
 import 'package:hopaut/data/repositories/rating_repository.dart';
 import 'package:hopaut/services/authentication_service.dart';
@@ -30,15 +31,13 @@ class RatingProvider with ChangeNotifier {
     return text.characters.length <= 300 && text.characters.length > 0;
   }
 
-  Future<void> rateUserAsync(String message, int postId) async {
+  Future<void> rateUserAsync(
+      String message, int postId, BuildContext context) async {
+    FocusManager.instance.primaryFocus?.unfocus();
     ratingFormStatus = Submitted();
     notifyListeners();
 
-    Rating rate = Rating(
-        feedback: message,
-        rate: this.rating,
-        postId: postId,
-        userId: _authenticationService.user.id);
+    Rating rate = Rating(feedback: message, rate: this.rating, postId: postId);
 
     var rateJson = rate.toJson();
 
@@ -52,6 +51,7 @@ class RatingProvider with ChangeNotifier {
 
     ratingFormStatus = Idle();
     notifyListeners();
+    Application.router.pop(context, true);
     // Application.pop
   }
 

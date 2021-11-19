@@ -15,7 +15,6 @@ class Rating {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['Rate'] = this.rate;
     data['Feedback'] = this.feedback;
-    data['UserId'] = this.userId;
     data['PostId'] = this.postId;
     return data;
   }

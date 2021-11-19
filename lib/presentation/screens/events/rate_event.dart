@@ -20,6 +20,8 @@ class RateEvent extends StatefulWidget {
 
 class _RateEventState extends State<RateEvent> {
   TextEditingController ratingController;
+  RatingProvider provider;
+
   final _formKey = GlobalKey<FormState>();
   final _globalKey = GlobalKey<ScaffoldState>();
 
@@ -31,32 +33,31 @@ class _RateEventState extends State<RateEvent> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RatingProvider>(builder: (context, provider, child) {
-      return Scaffold(
-          key: _globalKey,
-          appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => Application.router.pop(context),
-            ),
-            // TODO translation
-            title: Text('Rate Event'),
-            flexibleSpace: Container(
-              decoration: decorationGradient(),
-            ),
+    provider = Provider.of<RatingProvider>(context, listen: true);
+    return Scaffold(
+        key: _globalKey,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Application.router.pop(context),
           ),
-          body: _ratingForm(provider));
-    });
+          // TODO translation
+          title: Text('Rate Event'),
+          flexibleSpace: Container(
+            decoration: decorationGradient(),
+          ),
+        ),
+        body: Builder(builder: (context) => _ratingForm(provider, context)));
   }
 
-  Widget _ratingForm(RatingProvider provider) {
+  Widget _ratingForm(RatingProvider provider, BuildContext context) {
     if (provider.ratingFormStatus is Failed) {
       // Translation
       Failed formStatus = provider.ratingFormStatus;
       Future.delayed(Duration.zero, () async {
         // TODO - translation
         showSnackBarWithError(
-            scaffoldKey: _globalKey, message: formStatus.errorMessage);
+            context: context, message: formStatus.errorMessage);
       });
       provider.ratingFormStatus = new Idle();
     }
@@ -95,7 +96,9 @@ class _RateEventState extends State<RateEvent> {
                           if (_formKey.currentState.validate())
                             {
                               await provider.rateUserAsync(
-                                  ratingController.text, widget.postId)
+                                  ratingController.text,
+                                  widget.postId,
+                                  context),
                             }
                         })
                 // ),

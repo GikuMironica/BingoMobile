@@ -397,9 +397,9 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                 DateTime.now()
                                     .isAfter(post.startTimeAsDateTime),
                             child: InkWell(
-                              onTap: () => Application.router.navigateTo(
-                                  context, '/rate-event/$postId',
-                                  transition: TransitionType.cupertino),
+                              onTap: () async =>
+                                  await _navigateAndDisplayResult(
+                                      context, '/rate-event/$postId'),
                               child: ListTile(
                                   contentPadding:
                                       EdgeInsets.symmetric(vertical: 4),
@@ -514,6 +514,16 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                 ),
               ));
     });
+  }
+
+  Future<void> _navigateAndDisplayResult(
+      BuildContext context, String routes) async {
+    bool result = await Application.router
+        .navigateTo(context, routes, transition: TransitionType.cupertino);
+    if (result != null && result) {
+      // TODO translation
+      showSuccessSnackBar(context: context, message: "Host rated");
+    }
   }
 
   @override
