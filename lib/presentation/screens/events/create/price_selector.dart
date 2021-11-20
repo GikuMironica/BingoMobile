@@ -1,3 +1,4 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hopaut/config/constants.dart';
@@ -36,7 +37,10 @@ class PriceSelector extends StatelessWidget {
                     onChanged: onChanged,
                     onSaved: onSaved,
                     initialValue: initialValue,
-                    inputFormatters: [LengthLimitingTextInputFormatter(6)],
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(6),
+                      CurrencyTextInputFormatter()
+                    ],
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: EdgeInsets.zero,

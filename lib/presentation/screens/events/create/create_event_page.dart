@@ -96,7 +96,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
                             EventTypeList(post: provider.post),
                             Divider(),
                             FieldTitle(title: "Location"), //TODO: translation
-                            LocationButton(post: provider.post),
+                            LocationButton(
+                                isValid: provider.isLocationValid,
+                                validate: provider.validateLocation,
+                                post: provider.post),
                             Divider(),
                             FieldTitle(title: "Time"), //TODO: translation
                             TimePicker(

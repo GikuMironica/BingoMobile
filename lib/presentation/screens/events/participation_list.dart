@@ -47,7 +47,7 @@ class _ParticipationListState extends State<ParticipationList> {
         title: Text('Member List'),
         actions: <Widget>[
           Visibility(
-            visible: widget.postType == 1,
+            visible: widget.postType == EventType.houseParty,
             child: IconButton(
               icon: Badge(
                 badgeContent: Text(_requestsCount.toString()),
@@ -82,10 +82,13 @@ class _ParticipationListState extends State<ParticipationList> {
                     ),
                     Divider(),
                     Visibility(
-                      visible: _participators.length > 0,
+                      visible:
+                          _participators != null && _participators.length > 0,
                       child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount: _participators.length,
+                          itemCount: _participators != null
+                              ? _participators.length
+                              : 0,
                           itemBuilder: (context, index) {
                             return ListTile(
                               onTap: () async => showDialog(
@@ -102,7 +105,8 @@ class _ParticipationListState extends State<ParticipationList> {
                               trailing: Wrap(
                                 children: <Widget>[
                                   Visibility(
-                                    visible: widget.postType == 1,
+                                    visible:
+                                        widget.postType == EventType.houseParty,
                                     child: IconButton(
                                       icon: Icon(MdiIcons.windowClose),
                                       onPressed: () {},
