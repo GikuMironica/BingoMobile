@@ -239,12 +239,12 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                     },
                                   ),
                                 ),
-                                IconButton(
+                                /*IconButton(
                                   splashColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   icon: Icon(Icons.share),
                                   onPressed: () {},
-                                )
+                                )*/
                               ],
                             ),
                             SliverPadding(

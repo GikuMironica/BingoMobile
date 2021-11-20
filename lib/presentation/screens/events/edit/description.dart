@@ -56,53 +56,52 @@ class _EditPostDescriptionState extends State<EditPostDescription> {
                     "Updating event"),
               )
             : Container(
-              padding: EdgeInsets.all(24.0),
-              height: MediaQuery.of(context).size.height * 0.9,
-              child: Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    textAreaInput(
-                      controller: descriptionController,
-                      validationMessage:
-                          "Please provide a valid description.", // TODO: translation
-                      isStateValid: provider.validateDescription(
-                          descriptionController.text),
-                      initialValue: provider.post.event.description,
-                      maxLength: Constraint.descriptionMaxLength,
-                      onSaved: (value) => provider.post.event
-                          .description = descriptionController.text,
-                      onChange: (value) => provider.onFieldChange(
-                          descriptionController, value),
-                      hintText: 'Event Description', //TODO: translation
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 50),
-                      child: persistButton(
-                          label: "Save", //TODO: translation
-                          context: context,
-                          isStateValid: true,
-                          onPressed: () async {
-                            if (formKey.currentState.validate()) {
-                              formKey.currentState.save();
-                              bool res = await provider.updateEvent();
-                              if (res) {
-                                Application.router.pop(context, true);
-                              } else {
-                                //TODO translate
-                                showSnackBarWithError(
-                                    message: "Please input a valid description",
-                                    scaffoldKey: _scaffoldkey);
+                padding: EdgeInsets.all(24.0),
+                height: MediaQuery.of(context).size.height * 0.9,
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      textAreaInput(
+                        controller: descriptionController,
+                        validationMessage:
+                            "Please provide a valid description.", // TODO: translation
+                        isStateValid: provider
+                            .validateDescription(descriptionController.text),
+                        initialValue: provider.post.event.description,
+                        maxLength: Constraint.descriptionMaxLength,
+                        onSaved: (value) => provider.post.event.description =
+                            descriptionController.text,
+                        onChange: (value) => provider.onFieldChange(
+                            descriptionController, value),
+                        hintText: 'Event Description', //TODO: translation
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(bottom: 50),
+                        child: persistButton(
+                            label: "Save", //TODO: translation
+                            context: context,
+                            isStateValid: true,
+                            onPressed: () async {
+                              if (formKey.currentState.validate()) {
+                                formKey.currentState.save();
+                                bool res = await provider.updateEvent();
+                                if (res) {
+                                  Application.router.pop(context, true);
+                                } else {
+                                  //TODO translate
+                                  showNewErrorSnackbar(
+                                      "Please input a valid description");
+                                }
                               }
-                            }
-                          }),
-                    ),
-                  ],
+                            }),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
       );
     });
   }

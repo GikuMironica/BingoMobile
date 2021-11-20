@@ -19,6 +19,7 @@ class EditSlotsPage extends StatefulWidget {
 class _EditSlotsPageState extends State<EditSlotsPage> {
   final formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+  EventProvider provider;
   int slots;
 
   @override
@@ -29,26 +30,27 @@ class _EditSlotsPageState extends State<EditSlotsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<EventProvider>(builder: (context, provider, child) {
-      return Scaffold(
-          appBar: AppBar(
-            flexibleSpace: Container(
-              decoration: decorationGradient(),
-            ),
-            leading: IconButton(
-              icon: HATheme.backButton,
-              onPressed: () => Application.router.pop(context),
-            ),
-            title: Text('Edit Slots'), //TODO: translation
+    provider = Provider.of<EventProvider>(context, listen: true);
+    return Scaffold(
+        appBar: AppBar(
+          flexibleSpace: Container(
+            decoration: decorationGradient(),
           ),
-          body: provider.eventLoadingStatus is Submitted
-              ? Container(
-                  child: overlayBlurBackgroundCircularProgressIndicator(
-                      // TODO translations
-                      context,
-                      "Updating event"),
-                )
-              : Container(
+          leading: IconButton(
+            icon: HATheme.backButton,
+            onPressed: () => Application.router.pop(context),
+          ),
+          title: Text('Edit Slots'), //TODO: translation
+        ),
+        body: provider.eventLoadingStatus is Submitted
+            ? Container(
+                child: overlayBlurBackgroundCircularProgressIndicator(
+                    // TODO translations
+                    context,
+                    "Updating event"),
+              )
+            : Builder(
+                builder: (context) => Container(
                   padding: EdgeInsets.all(24.0),
                   height: MediaQuery.of(context).size.height * 0.9,
                   child: Form(
@@ -62,7 +64,7 @@ class _EditSlotsPageState extends State<EditSlotsPage> {
                           onChanged: (v) => slots = int.parse(v),
                           onSaved: (v) => provider.post.event.slots = slots,
                           textInputType: TextInputType.number,
-                          textHint: "Slots", //TODO: translation
+                          textHint: "Available Places", //TODO: translation
                         ),
                         Container(
                           padding: EdgeInsets.only(bottom: 50),
@@ -79,10 +81,8 @@ class _EditSlotsPageState extends State<EditSlotsPage> {
                                     Application.router.pop(context, true);
                                   } else {
                                     //TODO translate
-                                    showSnackBarWithError(
-                                        message:
-                                            "Please select amount of slots",
-                                        scaffoldKey: _scaffoldkey);
+                                    showNewErrorSnackbar(
+                                        "Please select a valid amount of available places");
                                   }
                                 }
                               }),
@@ -90,7 +90,7 @@ class _EditSlotsPageState extends State<EditSlotsPage> {
                       ],
                     ),
                   ),
-                ));
-    });
+                ),
+              ));
   }
 }

@@ -83,9 +83,8 @@ class _EditPricePageState extends State<EditPricePage> {
                                     Application.router.pop(context, true);
                                   } else {
                                     //TODO translate
-                                    showSnackBarWithError(
-                                        message: "Please input a valid price",
-                                        scaffoldKey: _scaffoldkey);
+                                    showNewErrorSnackbar(
+                                        "Please input a valid price");
                                   }
                                 }
                               }),

@@ -93,9 +93,8 @@ class _EditPostTitleState extends State<EditPostTitle> {
                                     Application.router.pop(context, true);
                                   } else {
                                     //TODO translate
-                                    showSnackBarWithError(
-                                        message: "Unable to update title",
-                                        scaffoldKey: _titleScaffoldKey);
+                                    showNewErrorSnackbar(
+                                        "Unable to update title");
                                   }
                                 }
                               }),

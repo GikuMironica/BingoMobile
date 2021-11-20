@@ -56,53 +56,52 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
                     "Updating event"),
               )
             : Container(
-              padding: EdgeInsets.all(24.0),
-              height: MediaQuery.of(context).size.height * 0.9,
-              child: Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    textAreaInput(
-                      controller: requirementsController,
-                      validationMessage: "",
-                      isStateValid: provider.validateRequirements(
-                          requirementsController.text),
-                      initialValue: provider.post.event.requirements,
-                      maxLength: Constraint.requirementsMaxLength,
-                      onSaved: (value) => provider.post.event
-                          .requirements = requirementsController.text,
-                      onChange: (value) => provider.onFieldChange(
-                          requirementsController, value),
-                      hintText:
-                          'Event Requirements (Optional)', //TODO: translation
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 50),
-                      child: persistButton(
-                          label: "Save", //TODO: translation
-                          context: context,
-                          isStateValid: true,
-                          onPressed: () async {
-                            if (formKey.currentState.validate()) {
-                              formKey.currentState.save();
-                              bool res = await provider.updateEvent();
-                              if (res) {
-                                Application.router.pop(context, true);
-                              } else {
-                                //TODO translate
-                                showSnackBarWithError(
-                                    message: "Failed to update requirements",
-                                    scaffoldKey: _scaffoldkey);
+                padding: EdgeInsets.all(24.0),
+                height: MediaQuery.of(context).size.height * 0.9,
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      textAreaInput(
+                        controller: requirementsController,
+                        validationMessage: "",
+                        isStateValid: provider
+                            .validateRequirements(requirementsController.text),
+                        initialValue: provider.post.event.requirements,
+                        maxLength: Constraint.requirementsMaxLength,
+                        onSaved: (value) => provider.post.event.requirements =
+                            requirementsController.text,
+                        onChange: (value) => provider.onFieldChange(
+                            requirementsController, value),
+                        hintText:
+                            'Event Requirements (Optional)', //TODO: translation
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(bottom: 50),
+                        child: persistButton(
+                            label: "Save", //TODO: translation
+                            context: context,
+                            isStateValid: true,
+                            onPressed: () async {
+                              if (formKey.currentState.validate()) {
+                                formKey.currentState.save();
+                                bool res = await provider.updateEvent();
+                                if (res) {
+                                  Application.router.pop(context, true);
+                                } else {
+                                  //TODO translate
+                                  showNewErrorSnackbar(
+                                      "Failed to update requirements");
+                                }
                               }
-                            }
-                          }),
-                    ),
-                  ],
+                            }),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
       );
     });
   }
