@@ -53,7 +53,9 @@ class _TagsState extends State<Tags> {
           child: Container(
             height: 48,
             decoration: BoxDecoration(
-              color: tags.length >= 5 ? Colors.grey[200] : HATheme.BASIC_INPUT_COLOR,
+              color: tags.length >= 5
+                  ? Colors.grey[200]
+                  : HATheme.BASIC_INPUT_COLOR,
               borderRadius: BorderRadius.circular(8),
             ),
             child: TypeAheadFormField(

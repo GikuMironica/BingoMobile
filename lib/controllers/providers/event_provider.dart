@@ -24,6 +24,7 @@ class EventProvider extends ChangeNotifier {
   HashMap<String, EventList> _eventsMap;
   Post _post;
 
+  bool isLocationValid = true;
   bool isDateValid = true;
 
   BaseFormStatus eventLoadingStatus;
@@ -148,6 +149,10 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> refreshAvailableSlots() async {
+    _post.availableSlots = (await _eventRepository.get(post.id)).availableSlots;
+  }
+
   bool validateTitle(String value) {
     return value != null &&
         value.characters.length > 0 &&
@@ -158,6 +163,11 @@ class EventProvider extends ChangeNotifier {
       TextEditingController endDateController) {
     isDateValid = startDateController.text.isNotEmpty &&
         endDateController.text.isNotEmpty;
+    notifyListeners();
+  }
+
+  void validateLocation() {
+    isLocationValid = post.location != null;
     notifyListeners();
   }
 
@@ -184,14 +194,14 @@ class EventProvider extends ChangeNotifier {
       GlobalKey<FormState> formKey,
       TextEditingController startDateController,
       TextEditingController endDateController) {
+    validateLocation();
     validateDates(startDateController, endDateController);
-    return formKey.currentState.validate() &&
-        post.location != null &&
-        isDateValid;
+    return formKey.currentState.validate() && isLocationValid && isDateValid;
   }
 
   void reset() {
     _initEventMap();
+    isLocationValid = true;
     isDateValid = true;
     eventLoadingStatus = Idle();
     notifyListeners();

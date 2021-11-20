@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/currencies.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
@@ -23,10 +24,16 @@ class _EditPricePageState extends State<EditPricePage> {
   double price;
 
   @override
+  void initState() {
+    super.initState();
+    price = getIt<EventProvider>().post.entryPrice;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(
-        key: _scaffoldkey,
+          key: _scaffoldkey,
           appBar: AppBar(
             flexibleSpace: Container(
               decoration: decorationGradient(),
@@ -45,48 +52,48 @@ class _EditPricePageState extends State<EditPricePage> {
                       "Updating event"),
                 )
               : Container(
-                padding: EdgeInsets.all(24.0),
-                height: MediaQuery.of(context).size.height * 0.9,
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      PriceSelector(
-                          initialValue:
-                              provider.post.event.entrancePrice.toString(),
-                          onChanged: (v) => price = double.parse(v),
-                          onSaved: (v) {
-                            provider.post.event.entrancePrice = price;
-                            provider.post.event.currency = Currency
-                                .eur; //TODO: remove this line when we can select currencies
-                          }),
-                      Container(
-                        padding: EdgeInsets.only(bottom: 50),
-                        child: persistButton(
-                            label: "Save", //TODO: translation
-                            context: context,
-                            isStateValid: true,
-                            onPressed: () async {
-                              if (formKey.currentState.validate()) {
-                                formKey.currentState.save();
-                                bool res = await provider.updateEvent();
-                                if (res) {
-                                  Application.router.pop(context, true);
-                                } else {
-                                  //TODO translate
-                                  showSnackBarWithError(
-                                      message: "Please input a valid price",
-                                      scaffoldKey: _scaffoldkey);
-                                }
-                              }
+                  padding: EdgeInsets.all(24.0),
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        PriceSelector(
+                            initialValue:
+                                provider.post.event.entrancePrice.toString(),
+                            onChanged: (v) => price = double.parse(v),
+                            onSaved: (v) {
+                              provider.post.event.entrancePrice = price;
+                              provider.post.event.currency = Currency
+                                  .eur; //TODO: remove this line when we can select currencies
                             }),
-                      ),
-                    ],
+                        Container(
+                          padding: EdgeInsets.only(bottom: 50),
+                          child: persistButton(
+                              label: "Save", //TODO: translation
+                              context: context,
+                              isStateValid: true,
+                              onPressed: () async {
+                                if (formKey.currentState.validate()) {
+                                  formKey.currentState.save();
+                                  bool res = await provider.updateEvent();
+                                  if (res) {
+                                    Application.router.pop(context, true);
+                                  } else {
+                                    //TODO translate
+                                    showSnackBarWithError(
+                                        message: "Please input a valid price",
+                                        scaffoldKey: _scaffoldkey);
+                                  }
+                                }
+                              }),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ));
+                ));
     });
   }
 }

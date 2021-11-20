@@ -21,7 +21,7 @@ class _EventParticipantsState extends State<EventParticipants> {
   void initState() {
     super.initState();
     widgetList = [];
-    int count = participants['AttendeesNumber'];
+    int count = participants['AttendeesNumber'] ?? 0;
     List members = participants['Attendees'];
     double pos = 0;
     switch (count) {
@@ -43,13 +43,18 @@ class _EventParticipantsState extends State<EventParticipants> {
         });
         break;
       case 0:
-        widgetList.add(SizedBox(height: 36, width: 36,));
+        widgetList.add(Positioned(
+            left: 0,
+            child: CircleAvatar(
+              radius: 18,
+              backgroundColor: Colors.grey[300],
+              backgroundImage: AssetImage('assets/icons/user-avatar.png'),
+            )));
         break;
       default:
-        if(participants['AttendeesNumber'] != null) {
-          widgetList
-              .add(
-              participant(element: participants['AttendeesNumber'] - 3, position: 0));
+        if (participants['AttendeesNumber'] != null) {
+          widgetList.add(participant(
+              element: participants['AttendeesNumber'] - 3, position: 0));
           pos = -30;
           members.forEach((element) {
             widgetList.add(participant(element: element, position: pos));
@@ -90,11 +95,10 @@ Widget participant({dynamic element, double position}) {
       radius: 18,
       child: imageUrl == null
           ? Text(initials,
-          style: TextStyle(color: Colors.black87, fontFamily: 'Roboto'))
+              style: TextStyle(color: Colors.black87, fontFamily: 'Roboto'))
           : null,
       backgroundColor: Colors.grey[300],
       backgroundImage: imageUrl != null ? NetworkImage(imageUrl) : null,
     ),
   );
 }
-
