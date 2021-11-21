@@ -7,8 +7,6 @@ import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
-import 'package:hopaut/data/models/event_list.dart';
-import 'package:hopaut/data/models/picture.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/models/profile.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
@@ -355,6 +353,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                             post.eventTime, post.endTime),
                                     time: post.timeRange,
                                     price: post.event.entrancePrice,
+                                    // TODO change to event currency
                                     priceCurrency: 'EUR',
                                     slots:
                                         '${post.availableSlots} / ${post.event.slots}',

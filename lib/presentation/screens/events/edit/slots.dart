@@ -40,7 +40,7 @@ class _EditSlotsPageState extends State<EditSlotsPage> {
             icon: HATheme.backButton,
             onPressed: () => Application.router.pop(context),
           ),
-          title: Text('Edit Slots'), //TODO: translation
+          title: Text('Edit Available Places'), //TODO: translation
         ),
         body: provider.eventLoadingStatus is Submitted
             ? Container(
