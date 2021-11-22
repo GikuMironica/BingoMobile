@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/data/domain/request_result.dart';
 import 'package:hopaut/data/models/bug.dart';
+import 'package:hopaut/data/models/report.dart';
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
@@ -15,8 +17,17 @@ class ReportRepository extends Repository {
   /// Creates a post report
   ///
   /// This endpoint is used for reporting a post.
-  void postReport(int postId, int reason, String message) {
-    // TODO: Create a hashmap for reason (int) -> reason (String)
+  Future<void> postReport(PostReport postReport) async {
+    try {
+      var payload = postReport.toJson();
+      var response = await dio.post(API.REPORT, data: payload);
+      RequestResult result = RequestResult(isSuccessful: true);
+      return result;
+    } on DioError catch (e) {
+      logger.e(e.message);
+      return RequestResult(
+          isSuccessful: false, errorMessage: "Error, report could not be sent");
+    }
   }
 
   /// Creates a user report
