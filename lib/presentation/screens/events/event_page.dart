@@ -466,7 +466,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                             context: context,
                                             builder: (BuildContext context) =>
                                                 CustomDialog(
-                                                  pageWidget: ReportEvent(),
+                                                  pageWidget: ReportEvent(postId: widget.postId),
                                                 )),
                                         contentPadding:
                                             EdgeInsets.symmetric(vertical: 4),

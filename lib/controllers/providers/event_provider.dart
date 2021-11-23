@@ -199,8 +199,13 @@ class EventProvider extends ChangeNotifier {
     return formKey.currentState.validate() && isLocationValid && isDateValid;
   }
 
+  Future<void> reportPost(int postId) async{
+
+  }
+
   void reset() {
     _initEventMap();
+    _post = null;
     isLocationValid = true;
     isDateValid = true;
     eventLoadingStatus = Idle();
