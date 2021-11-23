@@ -8,6 +8,7 @@ import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/repositories/participant_repository.dart';
 import 'package:hopaut/presentation/widgets/dialogs/profile_dialog.dart';
+import 'package:hopaut/presentation/widgets/event_page/event_participants.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -96,10 +97,19 @@ class _ParticipationListState extends State<ParticipationList> {
                                   builder: (context) => ProfileDialog(
                                         userId: _participators[index]['Id'],
                                       )),
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    '${WEB.PROFILE_PICTURES}/${_participators[index]['Picture']}.webp'),
-                              ),
+                              leading: _participators[index]['Picture'] != null
+                                  ? CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                          '${WEB.PROFILE_PICTURES}/${_participators[index]['Picture']}.webp'))
+                                  : CircleAvatar(
+                                      child: Text(
+                                          '${_participators[index]['FirstName'].substring(0, 1)}' +
+                                              '${_participators[index]['LastName'].substring(0, 1)}',
+                                          style: TextStyle(
+                                              color: HATheme.HOPAUT_PINK,
+                                              fontFamily: 'Roboto')),
+                                      backgroundColor: HATheme.HOPAUT_GREY,
+                                      backgroundImage: null),
                               title: Text(
                                   '${_participators[index]['FirstName']} ${_participators[index]['LastName']}'),
                               trailing: Wrap(

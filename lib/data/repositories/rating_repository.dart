@@ -1,4 +1,5 @@
 import 'package:hopaut/config/constants.dart' show API;
+import 'package:hopaut/data/domain/request_result.dart';
 import 'package:hopaut/data/models/rating.dart';
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:dio/dio.dart';
@@ -35,13 +36,22 @@ class RatingRepository extends Repository {
     }
   }
 
-  Future<bool> create(Map<String, dynamic> payload) async {
+  Future<RequestResult> create(Map<String, dynamic> payload) async {
     try {
       var response = await dio.post(API.RATINGS, data: payload);
-      return response.statusCode == 201;
+      RequestResult result = RequestResult(isSuccessful: true);
+      return result;
     } on DioError catch (e) {
       logger.e(e.message);
-      return false;
+      if (e.response?.statusCode == 403) {
+        // TODO - translation
+        return RequestResult(
+            isSuccessful: false,
+            errorMessage: "You've rated this event already");
+      }
+      return RequestResult(
+          isSuccessful: false,
+          errorMessage: "Error, rating could not be submitted");
     }
   }
 }

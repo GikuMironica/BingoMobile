@@ -31,14 +31,19 @@ class EventDetails extends StatelessWidget {
       crossAxisCount: 2,
       children: <Widget>[
         GridCell(
-            title: 'Date', data: date, icon: MdiIcons.calendarBlankOutline),
+            // TODO translation
+            title: 'Date',
+            data: date,
+            icon: MdiIcons.calendarBlankOutline),
         GridCell(title: 'Time', data: time, icon: ClockIcon(time)),
-        if (price != 0.0) GridCell(
+        if (price != 0.0)
+          GridCell(
               title: 'Entrance Price',
               data: '${price.toString()} $priceCurrency',
               icon: MdiIcons.cash),
-        if (slots != '0 / 0') GridCell(
-              title: 'Slots',
+        if (slots != '0 / 0')
+          GridCell(
+              title: 'Available Places',
               data: slots,
               icon: MdiIcons.clipboardListOutline),
       ],

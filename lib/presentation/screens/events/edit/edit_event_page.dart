@@ -29,114 +29,113 @@ class _EditEventPageState extends State<EditEventPage> {
     // TODO: Check if the user is the owner of the event.
     // TODO: If not, then throw an error page.
     // TODO: Create an Error page that allows the user to return to the home page.
-      return Scaffold(
-        key: _editEventScaffoldKey,
-        appBar: AppBar(
-          leading: IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            icon: HATheme.backButton,
-            onPressed: () => Application.router.pop(context),
-          ),
-          // TODO translation
-          title: Text('Edit Event'),
-          flexibleSpace: Container(
-            decoration: decorationGradient(),
+    return Scaffold(
+      key: _editEventScaffoldKey,
+      appBar: AppBar(
+        leading: IconButton(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          icon: HATheme.backButton,
+          onPressed: () => Application.router.pop(context),
+        ),
+        // TODO translation
+        title: Text('Edit Event'),
+        flexibleSpace: Container(
+          decoration: decorationGradient(),
+        ),
+      ),
+      body: SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
+        padding: EdgeInsets.all(8.0),
+        child: Builder(
+          builder: (context) => Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Subtitle(label: provider.post.event.title),
+              ),
+              Divider(),
+              ListTile(
+                onTap: () async => await _navigateAndDisplayResult(
+                    context, Routes.editEventPictures),
+                leading: Icon(Icons.photo),
+                title: Text('Pictures'),
+              ),
+              Divider(),
+              ListTile(
+                onTap: () async => await _navigateAndDisplayResult(
+                    context, Routes.editEventTitle),
+                leading: Icon(MdiIcons.alphabeticalVariant),
+                title: Text('Title'),
+              ),
+              Divider(),
+              ListTile(
+                onTap: () async => await _navigateAndDisplayResult(
+                    context, Routes.searchByMap),
+                leading: Icon(MdiIcons.mapMarker),
+                title: Text('Location'),
+              ),
+              Divider(),
+              ListTile(
+                onTap: () async => await _navigateAndDisplayResult(
+                    context, Routes.editEventTime),
+                leading: Icon(ClockIcon(provider.post.timeRange)),
+                title: Text('Time'),
+              ),
+              Divider(),
+              Visibility(
+                visible: provider.post.event.eventType == EventType.houseParty,
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      onTap: () async => await _navigateAndDisplayResult(
+                          context, Routes.editEventSlots),
+                      leading: Icon(MdiIcons.clipboardListOutline),
+                      title: Text('Available Places'),
+                    ),
+                    Divider(),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: provider.post.event.isPaidEvent(),
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      onTap: () async => await _navigateAndDisplayResult(
+                          context, Routes.editEventPrice),
+                      leading: Icon(MdiIcons.cash),
+                      title: Text('Entrance Price'),
+                    ),
+                    Divider(),
+                  ],
+                ),
+              ),
+              ListTile(
+                onTap: () async => await _navigateAndDisplayResult(
+                    context, Routes.editEventDescription),
+                leading: Icon(MdiIcons.text),
+                title: Text('Description'),
+              ),
+              Divider(),
+              ListTile(
+                onTap: () async => await _navigateAndDisplayResult(
+                    context, Routes.editEventRequirements),
+                leading: Icon(MdiIcons.clipboardAlertOutline),
+                title: Text('Requirements'),
+              ),
+              Divider(),
+              ListTile(
+                onTap: () async => await _navigateAndDisplayResult(
+                    context, Routes.editEventTags),
+                leading: Icon(MdiIcons.tag),
+                title: Text('Tags'),
+              ),
+            ],
           ),
         ),
-        body: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
-          padding: EdgeInsets.all(8.0),
-          child: Builder(
-            builder: (context) => Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Subtitle(label: provider.post.event.title),
-                ),
-                Divider(),
-                ListTile(
-                  onTap: () async => await _navigateAndDisplayResult(
-                      context, Routes.editEventPictures),
-                  leading: Icon(Icons.photo),
-                  title: Text('Pictures'),
-                ),
-                Divider(),
-                ListTile(
-                  onTap: () async => await _navigateAndDisplayResult(
-                      context, Routes.editEventTitle),
-                  leading: Icon(MdiIcons.alphabeticalVariant),
-                  title: Text('Title'),
-                ),
-                Divider(),
-                ListTile(
-                  onTap: () async => await _navigateAndDisplayResult(
-                      context, Routes.searchByMap),
-                  leading: Icon(MdiIcons.mapMarker),
-                  title: Text('Location'),
-                ),
-                Divider(),
-                ListTile(
-                  onTap: () async => await _navigateAndDisplayResult(
-                      context, Routes.editEventTime),
-                  leading: Icon(ClockIcon(provider.post.timeRange)),
-                  title: Text('Time'),
-                ),
-                Divider(),
-                Visibility(
-                  visible:
-                      provider.post.event.eventType == EventType.houseParty,
-                  child: Column(
-                    children: <Widget>[
-                      ListTile(
-                        onTap: () async => await _navigateAndDisplayResult(
-                            context, Routes.editEventSlots),
-                        leading: Icon(MdiIcons.clipboardListOutline),
-                        title: Text('Slots'),
-                      ),
-                      Divider(),
-                    ],
-                  ),
-                ),
-                Visibility(
-                  visible: provider.post.event.isPaidEvent(),
-                  child: Column(
-                    children: <Widget>[
-                      ListTile(
-                        onTap: () async => await _navigateAndDisplayResult(
-                            context, Routes.editEventPrice),
-                        leading: Icon(MdiIcons.cash),
-                        title: Text('Entrance Price'),
-                      ),
-                      Divider(),
-                    ],
-                  ),
-                ),
-                ListTile(
-                  onTap: () async => await _navigateAndDisplayResult(
-                      context, Routes.editEventDescription),
-                  leading: Icon(MdiIcons.text),
-                  title: Text('Description'),
-                ),
-                Divider(),
-                ListTile(
-                  onTap: () async => await _navigateAndDisplayResult(
-                      context, Routes.editEventRequirements),
-                  leading: Icon(MdiIcons.clipboardAlertOutline),
-                  title: Text('Requirements'),
-                ),
-                Divider(),
-                ListTile(
-                  onTap: () async => await _navigateAndDisplayResult(
-                      context, Routes.editEventTags),
-                  leading: Icon(MdiIcons.tag),
-                  title: Text('Tags'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
+      ),
+    );
   }
 
   Future<void> _navigateAndDisplayResult(
@@ -145,8 +144,7 @@ class _EditEventPageState extends State<EditEventPage> {
         .navigateTo(context, routes, transition: TransitionType.cupertino);
     if (result != null && result) {
       // TODO translation
-      showSuccessSnackBar(
-          context: context, message: "Event updated");
+      showSuccessSnackBar(context: context, message: "Event updated");
     }
   }
 }

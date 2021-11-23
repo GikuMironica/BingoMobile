@@ -65,9 +65,8 @@ class EditPostPictures extends StatelessWidget {
                                   Application.router.pop(context, true);
                                 } else {
                                   //TODO translate
-                                  showSnackBarWithError(
-                                      message: "Unable to update pictures",
-                                      scaffoldKey: _scaffoldkey);
+                                  showNewErrorSnackbar(
+                                      "Unable to update pictures");
                                 }
                               }
                             },

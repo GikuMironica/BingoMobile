@@ -271,7 +271,7 @@ List<Widget> _carouselFilterItems(
         onTap: (v) => provider.filterToggleEventType(EventType.carMeet)),
     _filterEventType(
         context: context,
-        type: 'Marathon',
+        type: 'Sport',
         value: provider.searchQuery.eventTypes[EventType.sport],
         onTap: (v) => provider.filterToggleEventType(EventType.sport)),
     _filterEventType(

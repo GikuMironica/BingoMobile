@@ -1,4 +1,3 @@
-
 // TODO: Map reason (int) -> reason (String)
 // TODO: So basically change int to string.
 
@@ -28,8 +27,7 @@ class PostReport {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Id'] = this.id;
-    data['Timestamp'] = this.timestamp;
+    data['PostId'] = this.id;
     data['Reason'] = this.reason;
     data['Message'] = this.message;
     return data;

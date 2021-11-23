@@ -102,9 +102,8 @@ class _EditPostTimeState extends State<EditPostTime> {
                                 Application.router.pop(context, true);
                               } else {
                                 //TODO translate
-                                showSnackBarWithError(
-                                    message: "Please select a valid time frame",
-                                    scaffoldKey: _scaffoldkey);
+                                showNewErrorSnackbar(
+                                    "Please select a valid time frame");
                               }
                             }
                           }),

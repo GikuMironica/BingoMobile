@@ -79,7 +79,7 @@ Widget participant({dynamic element, double position}) {
   String imageUrl;
 
   if (element is Map) {
-    if (element.containsKey('Picture')) {
+    if (element.containsKey('Picture') && element['Picture'] != null) {
       imageUrl = '${WEB.PROFILE_PICTURES}/${element['Picture']}.webp';
     } else {
       initials = '${element['FirstName'].substring(0, 1)}';
@@ -92,12 +92,12 @@ Widget participant({dynamic element, double position}) {
   return Positioned(
     left: position,
     child: CircleAvatar(
-      radius: 18,
       child: imageUrl == null
           ? Text(initials,
-              style: TextStyle(color: Colors.black87, fontFamily: 'Roboto'))
+              style:
+                  TextStyle(color: HATheme.HOPAUT_PINK, fontFamily: 'Roboto'))
           : null,
-      backgroundColor: Colors.grey[300],
+      backgroundColor: HATheme.HOPAUT_GREY,
       backgroundImage: imageUrl != null ? NetworkImage(imageUrl) : null,
     ),
   );
