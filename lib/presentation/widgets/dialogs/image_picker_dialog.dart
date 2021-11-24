@@ -12,7 +12,7 @@ class ImagePickerDialog extends StatefulWidget {
   final bool isProfileUpdated;
   final Function uploadAsync;
 
-  const ImagePickerDialog(
+  ImagePickerDialog(
       {this.isCropperEnabled, this.isProfileUpdated, this.uploadAsync});
 
   @override

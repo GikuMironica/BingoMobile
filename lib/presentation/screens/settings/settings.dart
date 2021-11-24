@@ -273,6 +273,7 @@ class _SettingsState extends State<Settings> {
   @override
   void dispose() {
     super.dispose();
+    widget.logoutStatus = false;
   }
 
   void changePage(String path) {

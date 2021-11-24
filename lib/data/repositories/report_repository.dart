@@ -17,7 +17,7 @@ class ReportRepository extends Repository {
   /// Creates a post report
   ///
   /// This endpoint is used for reporting a post.
-  Future<void> postReport(PostReport postReport) async {
+  Future<RequestResult> postReport(PostReport postReport) async {
     try {
       var payload = postReport.toJson();
       var response = await dio.post(API.REPORT, data: payload);
@@ -25,6 +25,12 @@ class ReportRepository extends Repository {
       return result;
     } on DioError catch (e) {
       logger.e(e.message);
+      if (e.response?.statusCode == 403) {
+        // TODO - translation
+        return RequestResult(
+            isSuccessful: false,
+            errorMessage: "You've reported this post already");
+      }
       return RequestResult(
           isSuccessful: false, errorMessage: "Error, report could not be sent");
     }
