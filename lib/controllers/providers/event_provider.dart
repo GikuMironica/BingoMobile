@@ -4,14 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/api.dart';
 import 'package:hopaut/config/constants/constraint.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/controllers/providers/search_page_provider.dart';
 import 'package:hopaut/data/models/event_list.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/picture.dart';
 import 'package:hopaut/data/models/post.dart';
+import 'package:hopaut/data/models/report.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
+import 'package:hopaut/data/repositories/report_repository.dart';
 import 'package:hopaut/data/repositories/tag_repository.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/utils/image_utilities.dart';
 import 'package:injectable/injectable.dart';
 
@@ -20,6 +24,7 @@ enum EventProviderStatus { Idle, Loading, Error }
 @lazySingleton
 class EventProvider extends ChangeNotifier {
   EventRepository _eventRepository;
+  ReportRepository _reportRepository;
   TagRepository _tagRepository;
   HashMap<String, EventList> _eventsMap;
   Post _post;
@@ -28,11 +33,13 @@ class EventProvider extends ChangeNotifier {
   bool isDateValid = true;
 
   BaseFormStatus eventLoadingStatus;
+  BaseFormStatus reportPostLoadingStatus;
 
   EventProvider(
       {EventRepository eventRepository, TagRepository tagRepository}) {
     _eventRepository = eventRepository;
     _tagRepository = tagRepository;
+    _reportRepository = getIt<ReportRepository>();
     _initEventMap();
     eventLoadingStatus = Idle();
   }
@@ -199,11 +206,31 @@ class EventProvider extends ChangeNotifier {
     return formKey.currentState.validate() && isLocationValid && isDateValid;
   }
 
+  Future<void> reportPost(
+      {int postId, int reason, BuildContext context}) async {
+    PostReport report = PostReport(reason: reason, postId: postId);
+
+    reportPostLoadingStatus = Submitted();
+    notifyListeners();
+
+    var result = await _reportRepository.postReport(report);
+
+    if (!result.isSuccessful) {
+      showNewErrorSnackbar(result.errorMessage);
+    }
+
+    Application.router.pop(context, true);
+    reportPostLoadingStatus = Idle();
+    notifyListeners();
+  }
+
   void reset() {
     _initEventMap();
+    _post = null;
     isLocationValid = true;
     isDateValid = true;
     eventLoadingStatus = Idle();
+    reportPostLoadingStatus = Idle();
     notifyListeners();
   }
 

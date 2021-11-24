@@ -2,7 +2,7 @@
 // TODO: So basically change int to string.
 
 class UserReport {
-  String reason;
+  int reason;
   String message;
   String reportedUserId;
 
@@ -18,16 +18,16 @@ class UserReport {
 }
 
 class PostReport {
-  int id;
+  int postId;
   int timestamp;
-  String reason;
+  int reason;
   String message;
 
-  PostReport({this.id, this.timestamp, this.reason, this.message});
+  PostReport({this.postId, this.timestamp, this.reason, this.message});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['PostId'] = this.id;
+    data['PostId'] = this.postId;
     data['Reason'] = this.reason;
     data['Message'] = this.message;
     return data;
