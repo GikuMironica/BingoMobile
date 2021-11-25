@@ -45,6 +45,7 @@ class _ParticipationListState extends State<ParticipationList> {
           icon: HATheme.backButton,
           onPressed: () => Application.router.pop(context),
         ),
+        // TODO translation
         title: Text('Member List'),
         actions: <Widget>[
           Visibility(
@@ -119,7 +120,19 @@ class _ParticipationListState extends State<ParticipationList> {
                                         widget.postType == EventType.houseParty,
                                     child: IconButton(
                                       icon: Icon(MdiIcons.windowClose),
-                                      onPressed: () {},
+                                      onPressed: () async {
+                                        bool res =
+                                            await getIt<ParticipantRepository>()
+                                                .rejectAttendee(
+                                                    postId: widget.postId,
+                                                    userId:
+                                                        _participators[index]
+                                                            ['Id']);
+                                        if (res) {
+                                          setState(() =>
+                                              _participators.removeAt(index));
+                                        }
+                                      },
                                     ),
                                   )
                                 ],
@@ -127,6 +140,7 @@ class _ParticipationListState extends State<ParticipationList> {
                             );
                           }),
                       replacement: Center(
+                        // TODo translation
                         child: Text("No Members Yet"),
                       ),
                     ),

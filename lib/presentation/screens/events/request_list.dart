@@ -102,9 +102,6 @@ class _RequestListState extends State<RequestList> {
                                                   userId: _requests[index]
                                                       ['Id']);
                                       if (res) {
-                                        Fluttertoast.showToast(
-                                            msg:
-                                                '${_requests[index]['FirstName']} ${_requests[index]['LastName']} has been accepted');
                                         setState(
                                             () => _requests.removeAt(index));
                                       }
@@ -112,7 +109,18 @@ class _RequestListState extends State<RequestList> {
                                   ),
                                   IconButton(
                                     icon: Icon(MdiIcons.windowClose),
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      bool res =
+                                          await getIt<ParticipantRepository>()
+                                              .rejectAttendee(
+                                                  postId: widget.postId,
+                                                  userId: _requests[index]
+                                                      ['Id']);
+                                      if (res) {
+                                        setState(
+                                            () => _requests.removeAt(index));
+                                      }
+                                    },
                                   )
                                 ],
                               ),
