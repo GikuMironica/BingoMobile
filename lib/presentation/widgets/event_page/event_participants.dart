@@ -80,7 +80,11 @@ Widget participant({dynamic element, double position}) {
 
   if (element is Map) {
     if (element.containsKey('Picture') && element['Picture'] != null) {
-      imageUrl = '${WEB.PROFILE_PICTURES}/${element['Picture']}.webp';
+      if (element['Picture'].toString().contains('http')) {
+        imageUrl = element['Picture'];
+      } else {
+        imageUrl = '${WEB.PROFILE_PICTURES}/${element['Picture']}.webp';
+      }
     } else {
       initials = '${element['FirstName'].substring(0, 1)}';
       initials = initials + '${element['LastName'].substring(0, 1)}';

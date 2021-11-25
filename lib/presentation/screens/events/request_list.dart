@@ -74,22 +74,25 @@ class _RequestListState extends State<RequestList> {
                                       )),
                               title: Text(
                                   '${_requests[index]['FirstName']} ${_requests[index]['LastName']}'),
-                              leading: CircleAvatar(
-                                  backgroundImage: (_requests[index]
-                                              ['Picture'] !=
-                                          null)
-                                      ? NetworkImage(
-                                          '${WEB.PROFILE_PICTURES}/${_requests[index]['Picture']}.webp')
-                                      : null,
-                                  child: _requests[index]['Picture'] == null
-                                      ? Text(
-                                          makeInitials(
-                                              firstName: _requests[index]
-                                                  ['FirstName'],
-                                              lastName: _requests[index]
-                                                  ['LastName']),
-                                        )
-                                      : null),
+                              leading: _requests[index]['Picture'] == null
+                                  ? CircleAvatar(
+                                      child: Text(
+                                          '${_requests[index]['FirstName'].substring(0, 1)}' +
+                                              '${_requests[index]['LastName'].substring(0, 1)}',
+                                          style: TextStyle(
+                                              color: HATheme.HOPAUT_PINK,
+                                              fontFamily: 'Roboto')),
+                                      backgroundColor: HATheme.HOPAUT_GREY,
+                                      backgroundImage: null)
+                                  : (_requests[index]['Picture'])
+                                          .toString()
+                                          .contains('http')
+                                      ? CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              _requests[index]['Picture']))
+                                      : CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              '${WEB.PROFILE_PICTURES}/${_requests[index]['Picture']}.webp')),
                               trailing: Wrap(
                                 children: <Widget>[
                                   IconButton(
@@ -102,9 +105,6 @@ class _RequestListState extends State<RequestList> {
                                                   userId: _requests[index]
                                                       ['Id']);
                                       if (res) {
-                                        Fluttertoast.showToast(
-                                            msg:
-                                                '${_requests[index]['FirstName']} ${_requests[index]['LastName']} has been accepted');
                                         setState(
                                             () => _requests.removeAt(index));
                                       }
@@ -112,13 +112,25 @@ class _RequestListState extends State<RequestList> {
                                   ),
                                   IconButton(
                                     icon: Icon(MdiIcons.windowClose),
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      bool res =
+                                          await getIt<ParticipantRepository>()
+                                              .rejectAttendee(
+                                                  postId: widget.postId,
+                                                  userId: _requests[index]
+                                                      ['Id']);
+                                      if (res) {
+                                        setState(
+                                            () => _requests.removeAt(index));
+                                      }
+                                    },
                                   )
                                 ],
                               ),
                             );
                           }),
                       replacement: Center(
+                        // TODO translation
                         child: Text("No Requests Yet"),
                       ),
                     ),
