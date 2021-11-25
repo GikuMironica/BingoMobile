@@ -98,11 +98,8 @@ class _ParticipationListState extends State<ParticipationList> {
                                   builder: (context) => ProfileDialog(
                                         userId: _participators[index]['Id'],
                                       )),
-                              leading: _participators[index]['Picture'] != null
+                              leading: _participators[index]['Picture'] == null
                                   ? CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                          '${WEB.PROFILE_PICTURES}/${_participators[index]['Picture']}.webp'))
-                                  : CircleAvatar(
                                       child: Text(
                                           '${_participators[index]['FirstName'].substring(0, 1)}' +
                                               '${_participators[index]['LastName'].substring(0, 1)}',
@@ -110,7 +107,16 @@ class _ParticipationListState extends State<ParticipationList> {
                                               color: HATheme.HOPAUT_PINK,
                                               fontFamily: 'Roboto')),
                                       backgroundColor: HATheme.HOPAUT_GREY,
-                                      backgroundImage: null),
+                                      backgroundImage: null)
+                                  : (_participators[index]['Picture'])
+                                          .toString()
+                                          .contains('http')
+                                      ? CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              _participators[index]['Picture']))
+                                      : CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              '${WEB.PROFILE_PICTURES}/${_participators[index]['Picture']}.webp')),
                               title: Text(
                                   '${_participators[index]['FirstName']} ${_participators[index]['LastName']}'),
                               trailing: Wrap(
