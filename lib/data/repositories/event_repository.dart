@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:hopaut/config/constants/api.dart';
+import 'package:hopaut/data/domain/request_result.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/models/search_query.dart';
-import 'package:hopaut/data/models/updated_post.dart';
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -27,7 +27,7 @@ class EventRepository extends Repository {
     return null;
   }
 
-  Future<MiniPost> create(Post post) async {
+  Future<RequestResult> create(Post post) async {
     try {
       FormData _data = FormData.fromMap(await post.toMultipartJson(false));
       Response response = await dio.post(API.POSTS,
@@ -37,10 +37,15 @@ class EventRepository extends Repository {
           }));
       if (response.statusCode == 201) {
         MiniPost post = MiniPost.fromJson(response.data['Data']);
-        return post;
+        return RequestResult(data: post, isSuccessful: true);
       }
     } on DioError catch (e) {
       logger.e(e.response.statusMessage);
+      return RequestResult(
+          isSuccessful: false,
+          errorMessage: e.response.statusCode == 400
+              ? "Invalid input!"
+              : "You need to set your name to create an event.");
     } finally {
       dio.options.headers
           .addAll({Headers.contentTypeHeader: 'application/json'});
@@ -49,7 +54,7 @@ class EventRepository extends Repository {
   }
 
   /// Update Post
-  Future<bool> update(Post post) async {
+  Future<RequestResult> update(Post post) async {
     try {
       FormData data = FormData.fromMap(await post.toMultipartJson(true));
       dio.options.headers.addAll({
@@ -59,27 +64,39 @@ class EventRepository extends Repository {
         '${API.POSTS}/${post.id}',
         data: data,
       );
-      return response.statusCode == 200;
+      if (response.statusCode == 200) {
+        return RequestResult(isSuccessful: true);
+      }
     } on DioError catch (e) {
       logger.e(e.response.statusMessage);
-      return false;
+      return RequestResult(
+          isSuccessful: false,
+          errorMessage: e.response.statusCode == 400
+              ? "Invalid input!"
+              : "You are not authorized for this action.");
     } finally {
       dio.options.headers
           .addAll({Headers.contentTypeHeader: 'application/json'});
     }
+    return null;
   }
 
   /// Delete Post
-  Future<bool> delete(int postId) async {
+  Future<RequestResult> delete(int postId) async {
     try {
       Response response = await dio.delete('${API.POSTS}/$postId');
       if (response.statusCode == 204) {
-        return true;
+        return RequestResult(isSuccessful: true);
       }
     } on DioError catch (e) {
       logger.e(e.message);
+      String message = "Bad request!";
+      if (e.response.statusCode == 403) {
+        message = "You can't delete an even you are not the host of!";
+        return RequestResult(isSuccessful: false, errorMessage: message);
+      }
     }
-    return false;
+    return null;
   }
 
   /// Search for posts.

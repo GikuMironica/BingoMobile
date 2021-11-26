@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -100,10 +99,6 @@ class _EditPostTimeState extends State<EditPostTime> {
                               if (res) {
                                 provider.updateMiniPost();
                                 Application.router.pop(context, true);
-                              } else {
-                                //TODO translate
-                                showNewErrorSnackbar(
-                                    "Please select a valid time frame");
                               }
                             }
                           }),

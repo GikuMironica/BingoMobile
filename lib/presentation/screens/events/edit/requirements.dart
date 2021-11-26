@@ -90,10 +90,6 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
                                 bool res = await provider.updateEvent();
                                 if (res) {
                                   Application.router.pop(context, true);
-                                } else {
-                                  //TODO translate
-                                  showNewErrorSnackbar(
-                                      "Failed to update requirements");
                                 }
                               }
                             }),

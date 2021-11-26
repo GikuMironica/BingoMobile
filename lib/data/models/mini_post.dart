@@ -21,6 +21,7 @@ class MiniPost {
   int endTime;
   double entracePrice;
   int slots;
+  String errorMessage;
 
   MiniPost(
       {this.postId,
@@ -38,7 +39,8 @@ class MiniPost {
       this.startTime,
       this.endTime,
       this.entracePrice,
-      this.slots});
+      this.slots,
+      this.errorMessage});
 
   MiniPost.fromJson(Map<String, dynamic> json) {
     postId = json['PostId'];

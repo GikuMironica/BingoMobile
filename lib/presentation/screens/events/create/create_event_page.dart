@@ -180,9 +180,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                           context, '/event/${postRes.postId}',
                                           transition: TransitionType.cupertino,
                                           replace: true);
-                                    } else {
-                                      showNewErrorSnackbar(
-                                          "Unable to create event"); //TODO: translation
                                     }
                                   }
                                 })

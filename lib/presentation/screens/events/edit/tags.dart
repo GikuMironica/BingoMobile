@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
@@ -68,9 +67,6 @@ class _EditPostTagsState extends State<EditPostTags> {
                                 bool res = await provider.updateEvent();
                                 if (res) {
                                   Application.router.pop(context, true);
-                                } else {
-                                  //TODO translate
-                                  showNewErrorSnackbar("Failed to update tags");
                                 }
                               }
                             },

@@ -56,8 +56,8 @@ class _DeleteEventDialogState extends State<DeleteEventDialog> {
                           style: TextStyle(color: Colors.white)),
                       color: Colors.red,
                       onPressed: () async {
-                        bool deleteRes = await getIt<EventRepository>()
-                            .delete(widget.postId);
+                        bool deleteRes = await getIt<EventProvider>()
+                            .deleteEvent(widget.postId);
                         if (deleteRes) {
                           Fluttertoast.showToast(
                               msg: 'Event deletion successful');

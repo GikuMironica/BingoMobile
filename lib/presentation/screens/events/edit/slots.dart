@@ -4,7 +4,6 @@ import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
-import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/inputs/event_text_field.dart';
@@ -79,10 +78,6 @@ class _EditSlotsPageState extends State<EditSlotsPage> {
                                   if (res) {
                                     await provider.refreshAvailableSlots();
                                     Application.router.pop(context, true);
-                                  } else {
-                                    //TODO translate
-                                    showNewErrorSnackbar(
-                                        "Please select a valid amount of available places");
                                   }
                                 }
                               }),
