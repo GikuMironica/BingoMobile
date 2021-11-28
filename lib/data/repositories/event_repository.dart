@@ -40,12 +40,18 @@ class EventRepository extends Repository {
         return RequestResult(data: post, isSuccessful: true);
       }
     } on DioError catch (e) {
-      logger.e(e.response.statusMessage);
-      return RequestResult(
-          isSuccessful: false,
-          errorMessage: e.response.statusCode == 400
-              ? "Invalid input!"
-              : "You need to set your name to create an event.");
+      logger.e(e.response?.statusMessage);
+      String errorMessage =
+          "A connection to the server couldn't be established."; //TODO: translation
+      switch (e.response?.statusCode) {
+        case 400:
+          errorMessage = "Invalid input."; //TODO: translation
+          break;
+        case 403:
+          errorMessage =
+              "You need to set your name to create an event."; //TODO: translation
+      }
+      return RequestResult(isSuccessful: false, errorMessage: errorMessage);
     } finally {
       dio.options.headers
           .addAll({Headers.contentTypeHeader: 'application/json'});
@@ -68,12 +74,18 @@ class EventRepository extends Repository {
         return RequestResult(isSuccessful: true);
       }
     } on DioError catch (e) {
-      logger.e(e.response.statusMessage);
-      return RequestResult(
-          isSuccessful: false,
-          errorMessage: e.response.statusCode == 400
-              ? "Invalid input!"
-              : "You are not authorized for this action.");
+      logger.e(e.response?.statusMessage);
+      String errorMessage =
+          "A connection to the server couldn't be established."; //TODO: translation
+      switch (e.response?.statusCode) {
+        case 400:
+          errorMessage = "Invalid input."; //TODO: translation
+          break;
+        case 403:
+          errorMessage =
+              "You are not authorized for this action."; //TODO: translation
+      }
+      return RequestResult(isSuccessful: false, errorMessage: errorMessage);
     } finally {
       dio.options.headers
           .addAll({Headers.contentTypeHeader: 'application/json'});
@@ -90,11 +102,21 @@ class EventRepository extends Repository {
       }
     } on DioError catch (e) {
       logger.e(e.message);
-      String message = "Bad request!";
-      if (e.response.statusCode == 403) {
-        message = "You can't delete an even you are not the host of!";
-        return RequestResult(isSuccessful: false, errorMessage: message);
+      String errorMessage =
+          "A connection to the server couldn't be established."; //TODO: translation
+      switch (e.response?.statusCode) {
+        case 400:
+          errorMessage = "Bad request."; //TODO: translation
+          break;
+        case 403:
+          errorMessage =
+              "You need to be the host in order to delete this event."; //TODO: translation
+          break;
+        case 404:
+          errorMessage =
+              "The event you are trying to delete wasn't found."; //TODO: translation
       }
+      return RequestResult(isSuccessful: false, errorMessage: errorMessage);
     }
     return null;
   }
