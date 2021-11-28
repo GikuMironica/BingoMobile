@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
@@ -16,7 +17,6 @@ import 'package:hopaut/services/secure_storage_service.dart';
 import 'package:provider/provider.dart';
 import 'init.dart';
 import 'package:flutter/material.dart' hide Router;
-import 'dart:io' show Platform;
 
 class HopAut extends StatefulWidget {
   @override
@@ -69,6 +69,9 @@ class _HopAutState extends State<HopAut> {
       child: MultiProvider(
         providers: providerList,
         child: MaterialApp(
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
           builder: (context, child) {
             return ScrollConfiguration(
               behavior: DisableGlowBehavior(),

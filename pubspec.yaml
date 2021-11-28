@@ -87,6 +87,7 @@ dependencies:
   uuid: ^2.2.2
   flutter_native_splash: ^0.3.2
   currency_text_input_formatter: ^1.0.4
+  easy_localization: ^2.3.3
 
   flutter_cupertino_date_picker:
     git: https://github.com/yasseralsamman/flutter-cupertino-date-picker.git
@@ -127,11 +128,12 @@ flutter:
     - assets/images/
     - assets/logo/
     - assets/facebook/
-    - assets/i18n/
     - assets/icons/
     - assets/icons/map/
     - assets/icons/svg/
     - assets/fonts/
+    - assets/translations/
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
