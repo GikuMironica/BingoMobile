@@ -1,0 +1,20 @@
+{
+  "Map": {
+    "Event": {}
+  },
+  "Hosted": {
+    "Create": {},
+    "Edit": {}
+  },
+  "Joined": {},
+  "Account": {
+    "AccountPage": {},
+    "EditProfile": {},
+    "Settings": {}
+  },
+  "Authentication": {
+    "Register": {},
+    "Login": {},
+    "ForgotPassword": {}
+  }
+}

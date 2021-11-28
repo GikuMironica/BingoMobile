@@ -44,10 +44,10 @@ class _HomePageState extends State<HomePage> {
                 // TODO - Translate
                 FullscreenDialog(
                   svgAsset: 'assets/icons/svg/complete_register.svg',
-                  header: 'Hey there!',
+                  header: 'Hey there!', //TODO: translation
                   message:
-                      'Complete the registration by entering your name to create or join events',
-                  buttonText: 'Settings',
+                      'Complete the registration by entering your name to create or join events', //TODO: translation
+                  buttonText: 'Settings', //TODO: translation
                   route: Routes.editAccount,
                 )));
       });
@@ -112,19 +112,19 @@ class _HomePageState extends State<HomePage> {
     return [
       HopautNavBarItem(
         svg: MdiIcons.mapLegend,
-        title: ("Map"),
+        title: ("Map"), //TODO: translation
       ),
       HopautNavBarItem(
         svg: MdiIcons.bullhorn,
-        title: ("Hosted"),
+        title: ("Hosted"), //TODO: translation
       ),
       HopautNavBarItem(
         svg: MdiIcons.calendar,
-        title: ("Joined"),
+        title: ("Joined"), //TODO: translation
       ),
       HopautNavBarItem(
         svg: MdiIcons.accountOutline,
-        title: ("Account"),
+        title: ("Account"), //TODO: translation
       ),
     ];
   }
