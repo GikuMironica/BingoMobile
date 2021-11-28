@@ -88,6 +88,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
     bool attendResponse = await getIt<EventRepository>()
         .changeAttendanceStatus(postId, API.ATTEND);
     if (attendResponse) {
+      participants = await getIt<EventRepository>().getAttendees(postId);
       setState(() {
         isAttending = true;
       });
@@ -98,6 +99,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
     bool unattendResponse = await getIt<EventRepository>()
         .changeAttendanceStatus(postId, API.UNATTEND);
     if (unattendResponse) {
+      participants = await getIt<EventRepository>().getAttendees(postId);
       setState(() {
         isAttending = false;
       });
@@ -167,7 +169,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                   body: Builder(
                       builder: (context) => CustomScrollView(
                             controller: _scrollController,
-                            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                            physics: const BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics()),
                             slivers: <Widget>[
                               SliverAppBar(
                                 pinned: true,
@@ -199,8 +202,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                         if (post.pictures.isNotEmpty) {
                                           pushNewScreen(context,
                                               screen: ImageScreen(
-                                                imageUrls:
-                                                    post.pictureUrls(),
+                                                imageUrls: post.pictureUrls(),
                                                 startingIndex: value,
                                               ),
                                               withNavBar: false);
@@ -223,8 +225,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                         isActiveEvent &&
                                         DateTime.now()
                                             .add(Duration(minutes: 15))
-                                            .isBefore(
-                                                post.startTimeAsDateTime),
+                                            .isBefore(post.startTimeAsDateTime),
                                     child: IconButton(
                                       splashColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
@@ -251,7 +252,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                 refreshIndicatorExtent: 60.0,
                                 onRefresh: () async {
                                   await getDetails().then((value) => setState(
-                                          () => provider.eventLoadingStatus = Success()));
+                                      () => provider.eventLoadingStatus =
+                                          Success()));
                                 },
                               ),
                               SliverPadding(
@@ -304,10 +306,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                         ),
                                         CircleAvatar(
                                           backgroundColor: Colors.pink[100],
-                                          child: Icon(
-                                              MdiIcons.mapMarkerOutline,
-                                              size: 18,
-                                              color: Colors.pink),
+                                          child: Icon(MdiIcons.mapMarkerOutline,
+                                              size: 18, color: Colors.pink),
                                           radius: 14,
                                         ),
                                       ],
@@ -322,17 +322,15 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                         InkWell(
                                           onTap: () => showDialog(
                                             context: context,
-                                            builder:
-                                                (BuildContext context) =>
-                                                    ProfileDialog(
+                                            builder: (BuildContext context) =>
+                                                ProfileDialog(
                                               profile: host,
                                             ),
                                           ),
                                           child: hostDetails(
                                             hostName: host.getFullName,
                                             hostInitials: host.getInitials,
-                                            hostImage:
-                                                host.getProfilePicture,
+                                            hostImage: host.getProfilePicture,
                                             rating: post.hostRating,
                                           ),
                                         ),
@@ -347,17 +345,16 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                                         screen:
                                                             ParticipationList(
                                                           postId: post.id,
-                                                          postTitle: post
-                                                              .event.title,
+                                                          postTitle:
+                                                              post.event.title,
                                                           postType: post
-                                                              .event
-                                                              .eventType,
+                                                              .event.eventType,
                                                         ),
                                                         withNavBar: false),
                                                 child: EventParticipants(
                                                     participants)),
-                                            replacement: EventParticipants(
-                                                participants),
+                                            replacement:
+                                                EventParticipants(participants),
                                           ),
                                         ),
                                       ],
@@ -384,8 +381,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                     Visibility(
                                       visible: ((post.event.requirements !=
                                               null) &&
-                                          (post.event.requirements
-                                                  ?.length !=
+                                          (post.event.requirements?.length !=
                                               0)),
                                       child: Column(
                                         crossAxisAlignment:
@@ -433,7 +429,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                         onTap: () async =>
                                             await _navigateAndDisplayResult(
                                                 context,
-                                                '/rate-event/$postId'),
+                                                '/rate-event/$postId',
+                                                "Event host rated."), //TODO: translation
                                         child: ListTile(
                                             contentPadding:
                                                 EdgeInsets.symmetric(
@@ -441,22 +438,21 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                             leading: Icon(Icons.star),
                                             title: Align(
                                               child: Text('Rate event'),
-                                              alignment:
-                                                  Alignment(-1.17, 0),
+                                              alignment: Alignment(-1.17, 0),
                                             )),
                                       ),
                                     ),
                                     Visibility(
                                       visible: !isHost &&
-                                          DateTime.now().isBefore(
-                                              post.endTimeAsDateTime),
+                                          DateTime.now()
+                                              .isBefore(post.endTimeAsDateTime),
                                       child: VisibilityDetector(
                                         key: attendCellKey,
                                         onVisibilityChanged: (visibility) {
                                           if (visibility.visibleFraction >
                                               0.3) {
-                                            setState(() =>
-                                                attendCellVisible = true);
+                                            setState(
+                                                () => attendCellVisible = true);
                                           } else {
                                             setState(() =>
                                                 attendCellVisible = false);
@@ -471,10 +467,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                                 EdgeInsets.symmetric(
                                                     vertical: 4),
                                             leading: isAttending
-                                                ? Icon(
-                                                    MdiIcons.accountMinus)
-                                                : Icon(
-                                                    MdiIcons.accountPlus),
+                                                ? Icon(MdiIcons.accountMinus)
+                                                : Icon(MdiIcons.accountPlus),
                                             title: Align(
                                               child: Text(isAttending
                                                   ? 'Not Interested?'
@@ -490,19 +484,15 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                       child: ListTile(
                                           onTap: () => showDialog(
                                               context: context,
-                                              builder:
-                                                  (BuildContext context) =>
-                                                      CustomDialog(
-                                                        pageWidget:
-                                                            ReportEvent(
-                                                                postId: widget
-                                                                    .postId),
-                                                      )),
+                                              builder: (BuildContext context) =>
+                                                  CustomDialog(
+                                                    pageWidget: ReportEvent(
+                                                        postId: widget.postId),
+                                                  )),
                                           contentPadding:
-                                              EdgeInsets.symmetric(
-                                                  vertical: 4),
-                                          leading: Icon(
-                                              MdiIcons.alertCircleOutline),
+                                              EdgeInsets.symmetric(vertical: 4),
+                                          leading:
+                                              Icon(MdiIcons.alertCircleOutline),
                                           title: Align(
                                             child:
                                                 // TODO translate
@@ -531,8 +521,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                                     vertical: 4),
                                             leading: Icon(Icons.edit),
                                             title: Align(
-                                              child:
-                                                  Text('Edit this event'),
+                                              child: Text('Edit this event'),
                                               alignment: Alignment(-1.2, 0),
                                             )),
                                       ),
@@ -549,10 +538,9 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                                       pageWidget:
                                                           DeleteEventDialog(
                                                         postId: post.id,
-                                                        postTitle: post
-                                                            .event.title,
-                                                        isActive:
-                                                            isActiveEvent,
+                                                        postTitle:
+                                                            post.event.title,
+                                                        isActive: isActiveEvent,
                                                       ),
                                                     )).then((value) =>
                                                 value == true
@@ -561,8 +549,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                                     : null);
                                           },
                                           contentPadding:
-                                              EdgeInsets.symmetric(
-                                                  vertical: 4),
+                                              EdgeInsets.symmetric(vertical: 4),
                                           leading: Icon(MdiIcons.delete),
                                           title: Align(
                                             child:
@@ -583,12 +570,12 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   }
 
   Future<void> _navigateAndDisplayResult(
-      BuildContext context, String routes) async {
+      BuildContext context, String routes, String message) async {
     bool result = await Application.router
         .navigateTo(context, routes, transition: TransitionType.cupertino);
     if (result != null && result) {
       // TODO translation
-      showSuccessSnackBar(context: context, message: "Event host rated");
+      showSuccessSnackBar(context: context, message: message);
     }
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/currencies.dart';
 import 'package:hopaut/config/injection.dart';
@@ -81,10 +80,6 @@ class _EditPricePageState extends State<EditPricePage> {
                                   bool res = await provider.updateEvent();
                                   if (res) {
                                     Application.router.pop(context, true);
-                                  } else {
-                                    //TODO translate
-                                    showNewErrorSnackbar(
-                                        "Please input a valid price");
                                   }
                                 }
                               }),

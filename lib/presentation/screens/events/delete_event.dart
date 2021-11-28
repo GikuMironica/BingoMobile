@@ -4,6 +4,7 @@ import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class DeleteEventDialog extends StatefulWidget {
@@ -38,7 +39,8 @@ class _DeleteEventDialogState extends State<DeleteEventDialog> {
           RichText(
             text: TextSpan(
               style: TextStyle(fontSize: 14, color: Colors.black),
-              text: 'Once you confirm, this event will be deleted.',
+              text:
+                  'Once you confirm, this event will be deleted.', // TODO: translation
             ),
           ),
           SizedBox(
@@ -52,26 +54,24 @@ class _DeleteEventDialogState extends State<DeleteEventDialog> {
                 ButtonTheme(
                   minWidth: 122,
                   child: RaisedButton(
-                      child: Text('Confirm Delete',
+                      child: Text('Confirm Delete', // TODO: translation
                           style: TextStyle(color: Colors.white)),
                       color: Colors.red,
                       onPressed: () async {
-                        bool deleteRes = await getIt<EventRepository>()
-                            .delete(widget.postId);
+                        bool deleteRes = await getIt<EventProvider>()
+                            .deleteEvent(widget.postId);
                         if (deleteRes) {
-                          Fluttertoast.showToast(
-                              msg: 'Event deletion successful');
+                          showNewErrorSnackbar(
+                              'Event was successfuly deleted.');
                           provider.removeEvent(widget.postId);
                           Navigator.pop(context, deleteRes);
-                        } else {
-                          Fluttertoast.showToast(msg: 'Unable to delete event');
                         }
                       }),
                 ),
                 ButtonTheme(
                     minWidth: 122,
                     child: RaisedButton(
-                        child: Text('Cancel',
+                        child: Text('Cancel', // TODO: translation
                             style: TextStyle(color: Colors.black54)),
                         color: Colors.grey[350],
                         onPressed: () => Application.router.pop(context))),

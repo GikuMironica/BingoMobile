@@ -7,6 +7,7 @@ import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/controllers/providers/search_page_provider.dart';
+import 'package:hopaut/data/domain/request_result.dart';
 import 'package:hopaut/data/models/event_list.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/picture.dart';
@@ -80,26 +81,43 @@ class EventProvider extends ChangeNotifier {
   Future<MiniPost> createEvent() async {
     eventLoadingStatus = Submitted();
     notifyListeners();
+    MiniPost miniPost;
     if (_eventsMap[API.MY_ACTIVE] != null) {
-      MiniPost miniPost = await _eventRepository.create(post);
-      _eventsMap[API.MY_ACTIVE].events.insert(0, miniPost);
+      var result = await _eventRepository.create(post);
+      if (result.isSuccessful) {
+        miniPost = result.data;
+        _eventsMap[API.MY_ACTIVE].events.insert(0, miniPost);
+      } else {
+        showNewErrorSnackbar(result.errorMessage);
+      }
       eventLoadingStatus = Idle();
       notifyListeners();
-      return miniPost;
     }
-    return null;
+    return miniPost;
   }
 
   Future<bool> updateEvent() async {
     eventLoadingStatus = Submitted();
     notifyListeners();
-    bool result = false;
+    RequestResult result;
     if (post != null) {
       result = await _eventRepository.update(post);
+      if (!result.isSuccessful) {
+        showNewErrorSnackbar(result.errorMessage);
+      }
       eventLoadingStatus = Idle();
       notifyListeners();
     }
-    return result;
+    return result.isSuccessful;
+  }
+
+  Future<bool> deleteEvent(int postId) async {
+    var result = await _eventRepository.delete(postId);
+    if (result.isSuccessful) {
+      return true;
+    }
+    showNewErrorSnackbar(result.errorMessage);
+    return false;
   }
 
   void removeEvent(int id) {

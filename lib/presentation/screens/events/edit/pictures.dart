@@ -63,10 +63,6 @@ class EditPostPictures extends StatelessWidget {
                                 if (res) {
                                   provider.updateMiniPost();
                                   Application.router.pop(context, true);
-                                } else {
-                                  //TODO translate
-                                  showNewErrorSnackbar(
-                                      "Unable to update pictures");
                                 }
                               }
                             },

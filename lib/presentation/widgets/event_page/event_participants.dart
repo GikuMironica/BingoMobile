@@ -7,22 +7,18 @@ class EventParticipants extends StatefulWidget {
   EventParticipants(this.participants);
 
   @override
-  _EventParticipantsState createState() =>
-      _EventParticipantsState(participants);
+  _EventParticipantsState createState() => _EventParticipantsState();
 }
 
 class _EventParticipantsState extends State<EventParticipants> {
-  final Map<String, dynamic> participants;
   List<Widget> widgetList;
 
-  _EventParticipantsState(this.participants);
+  _EventParticipantsState();
 
-  @override
-  void initState() {
-    super.initState();
+  getImageWidgets() {
     widgetList = [];
-    int count = participants['AttendeesNumber'] ?? 0;
-    List members = participants['Attendees'];
+    int count = widget.participants['AttendeesNumber'] ?? 0;
+    List members = widget.participants['Attendees'];
     double pos = 0;
     switch (count) {
       case 3:
@@ -52,9 +48,10 @@ class _EventParticipantsState extends State<EventParticipants> {
             )));
         break;
       default:
-        if (participants['AttendeesNumber'] != null) {
+        if (widget.participants['AttendeesNumber'] != null) {
           widgetList.add(participant(
-              element: participants['AttendeesNumber'] - 3, position: 0));
+              element: widget.participants['AttendeesNumber'] - 3,
+              position: 0));
           pos = -30;
           members.forEach((element) {
             widgetList.add(participant(element: element, position: pos));
@@ -67,6 +64,7 @@ class _EventParticipantsState extends State<EventParticipants> {
 
   @override
   Widget build(BuildContext context) {
+    getImageWidgets();
     return Stack(
       overflow: Overflow.visible,
       children: widgetList,

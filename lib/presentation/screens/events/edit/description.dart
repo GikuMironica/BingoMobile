@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -90,10 +89,6 @@ class _EditPostDescriptionState extends State<EditPostDescription> {
                                 bool res = await provider.updateEvent();
                                 if (res) {
                                   Application.router.pop(context, true);
-                                } else {
-                                  //TODO translate
-                                  showNewErrorSnackbar(
-                                      "Please input a valid description");
                                 }
                               }
                             }),

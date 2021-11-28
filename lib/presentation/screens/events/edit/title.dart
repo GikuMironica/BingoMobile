@@ -91,10 +91,6 @@ class _EditPostTitleState extends State<EditPostTitle> {
                                   if (res) {
                                     provider.updateMiniPost();
                                     Application.router.pop(context, true);
-                                  } else {
-                                    //TODO translate
-                                    showNewErrorSnackbar(
-                                        "Unable to update title");
                                   }
                                 }
                               }),
