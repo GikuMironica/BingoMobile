@@ -2,6 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/init.dart';
 import 'package:hopaut/presentation/screens/account/account_page.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/confirm_mobile.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_mobile.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_profile.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_description.dart';
@@ -70,6 +71,11 @@ var editAccountDescriptionHandler = new Handler(
 var editMobileHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return EditMobile();
+});
+
+var confirmMobileHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return ConfirmMobile();
 });
 
 var editAccountPictureHandler = new Handler(

@@ -22,12 +22,14 @@ class _EditMobileState extends State<EditMobile> {
   LocationServiceProvider _locationProvider;
   final TextEditingController controller = TextEditingController();
   PhoneNumber number;
+  bool state;
   String initialCountry;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
+    state = false;
     _locationProvider =
         Provider.of<LocationServiceProvider>(context, listen: false);
     initialCountry = _locationProvider.countryCode;
@@ -81,9 +83,21 @@ class _EditMobileState extends State<EditMobile> {
                     .tr(),
               )),
           SizedBox(
-            height: 8,
+            height: 10,
           ),
           _phoneNumberPicker(),
+          SizedBox(
+            height: 10,
+          ),
+          persistButton(
+              label: LocaleKeys.Account_EditProfile_EditMobile_button_Next.tr(),
+              context: context,
+              isStateValid: _formKey.currentState?.validate() ?? false,
+              onPressed: () => {
+                    print(number),
+                    _accountProvider.navigateToConfirmPhone(
+                        context, number.toString(), state)
+                  })
         ],
       ),
     );
@@ -104,13 +118,6 @@ class _EditMobileState extends State<EditMobile> {
         SizedBox(
           height: 8,
         ),
-        _phoneNumberPicker(),
-        persistButton(
-          label: LocaleKeys.Account_EditProfile_EditMobile_button_Next.tr(),
-          context: context,
-          isStateValid: _formKey.currentState.validate(),
-          onPressed:
-        ),
       ],
     );
   }
@@ -122,10 +129,10 @@ class _EditMobileState extends State<EditMobile> {
       errorMessage: LocaleKeys
           .Account_EditProfile_EditMobile_validationLabel_InvalidNumber.tr(),
       onInputChanged: (PhoneNumber number) {
-        print(number.phoneNumber);
+        _accountProvider.number = number.phoneNumber;
       },
       onInputValidated: (bool value) {
-        print(value);
+        state = value;
       },
       selectorConfig: SelectorConfig(
         selectorType: PhoneInputSelectorType.DIALOG,
