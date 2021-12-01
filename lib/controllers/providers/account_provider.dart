@@ -1,3 +1,4 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -77,6 +78,11 @@ class AccountProvider extends ChangeNotifier {
         Application.router.pop(context, Success());
       }
     }
+  }
+
+  void navigateToConfirmPhone(BuildContext context, String number) {
+    Application.router
+        .navigateTo(context, "", transition: TransitionType.cupertino);
   }
 
   Future<bool> deleteProfilePictureAsync(String userId) async {

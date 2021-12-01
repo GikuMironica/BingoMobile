@@ -91,7 +91,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
       Consumer<AuthenticationService>(
         builder: (context, auth, child) => ListTile(
           onTap: () async =>
-              await _navigateAndDisplayResult(context, Routes.editAccountName),
+              await _navigateAndDisplayResult(context, Routes.editMobile),
           title: Text(
               LocaleKeys.Account_EditProfile_navigationLabel_PhoneNumber.tr()),
           subtitle: Text(auth.user.phoneNumber ?? "-"),
@@ -105,8 +105,10 @@ class _EditAccountPageState extends State<EditAccountPage> {
     var result = await Application.router
         .navigateTo(context, routes, transition: TransitionType.cupertino);
     if (result is Success) {
-      // TODO translation
-      showSuccessSnackBar(context: context, message: "Profile updated");
+      showSuccessSnackBar(
+          context: context,
+          message:
+              LocaleKeys.Account_EditProfile_successToast_ProfileUpdated.tr());
     }
   }
 }

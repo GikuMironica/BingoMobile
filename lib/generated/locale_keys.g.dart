@@ -21,6 +21,13 @@ abstract class  LocaleKeys {
   static const Account_EditProfile_pageTitle = 'Account.EditProfile.pageTitle';
   static const Account_EditProfile_placeholder_EmptyDescription = 'Account.EditProfile.placeholder_EmptyDescription';
   static const Account_EditProfile_successToast_ProfileUpdated = 'Account.EditProfile.successToast_ProfileUpdated';
+  static const Account_EditProfile_EditMobile_pageTitle = 'Account.EditProfile.EditMobile.pageTitle';
+  static const Account_EditProfile_EditMobile_label_verifyNumberInfo = 'Account.EditProfile.EditMobile.label_verifyNumberInfo';
+  static const Account_EditProfile_EditMobile_errorToast_Error = 'Account.EditProfile.EditMobile.errorToast_Error';
+  static const Account_EditProfile_EditMobile_hintLabel_PhoneNumber = 'Account.EditProfile.EditMobile.hintLabel_PhoneNumber';
+  static const Account_EditProfile_EditMobile_validationLabel_InvalidNumber = 'Account.EditProfile.EditMobile.validationLabel_InvalidNumber';
+  static const Account_EditProfile_EditMobile_button_Next = 'Account.EditProfile.EditMobile.button_Next';
+  static const Account_EditProfile_EditMobile = 'Account.EditProfile.EditMobile';
   static const Account_EditProfile = 'Account.EditProfile';
   static const Account_Settings = 'Account.Settings';
   static const Account = 'Account';

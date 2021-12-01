@@ -39,7 +39,15 @@ class CodegenLoader extends AssetLoader{
       "navigationLabel_EditProfilePicture": "Profilbild ändern",
       "pageTitle": "Profil bearbeiten",
       "placeholder_EmptyDescription": "Leer",
-      "successToast_ProfileUpdated": "Profil wurde aktualisiert"
+      "successToast_ProfileUpdated": "Profil wurde aktualisiert",
+      "EditMobile": {
+        "pageTitle": "Bestätigen Sie Ihre Rufnummer",
+        "label_verifyNumberInfo": "Sie erhalten eine SMS-Nachricht (es können Gebühren anfallen) zur Bestätigung Ihrer Telefonnummer. Geben Sie Ihre Telefonnummer ein.",
+        "errorToast_Error": "Fehler, etwas ist schief gelaufen",
+        "hintLabel_PhoneNumber": "Rufnummer",
+        "validationLabel_InvalidNumber": "Ungültige Rufnummer",
+        "button_Next": "Weiter"
+      }
     },
     "Settings": {}
   },
@@ -74,7 +82,15 @@ static const Map<String,dynamic> en = {
       "navigationLabel_EditProfilePicture": "Change profile picture",
       "pageTitle": "Edit Profile",
       "placeholder_EmptyDescription": "Empty",
-      "successToast_ProfileUpdated": "Profile updated"
+      "successToast_ProfileUpdated": "Profile updated",
+      "EditMobile": {
+        "pageTitle": "Confirm your phone number",
+        "label_verifyNumberInfo": "You will get an SMS message (carrier charges may apply) to confirm your phone number. Enter your phone number.",
+        "errorToast_Error": "Error, something went wrong",
+        "hintLabel_PhoneNumber": "Phone number",
+        "validationLabel_InvalidNumber": "Invalid phone number",
+        "button_Next": "Next"
+      }
     },
     "Settings": {}
   },
