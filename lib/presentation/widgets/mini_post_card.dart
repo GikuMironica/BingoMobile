@@ -3,7 +3,7 @@ import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class MiniPostCard extends StatelessWidget {
   final MiniPost miniPost;
@@ -72,7 +72,7 @@ class MiniPostCard extends StatelessWidget {
                         eventTypeStrings[miniPost.postType],
                         style:
                             TextStyle(color: Color(0xFF9A9DB2), fontSize: 11),
-                      ),
+                      ).tr(),
                       FittedBox(
                         child: Text(
                           miniPost.title,
