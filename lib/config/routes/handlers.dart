@@ -2,6 +2,8 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/init.dart';
 import 'package:hopaut/presentation/screens/account/account_page.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/confirm_mobile.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/edit_mobile.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_profile.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_description.dart';
 import 'package:hopaut/presentation/screens/account/edit_account/edit_name.dart';
@@ -60,10 +62,22 @@ var editAccountNameHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return EditAccountName();
 });
+
 var editAccountDescriptionHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return EditAccountDescription();
 });
+
+var editMobileHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return EditMobile();
+});
+
+var confirmMobileHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return ConfirmMobile();
+});
+
 var editAccountPictureHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return EditAccountPicture();
@@ -89,8 +103,8 @@ var changePasswordHandler = new Handler(
 
 var reportBugHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-      return ReportBug();
-    });
+  return ReportBug();
+});
 
 var forgotPasswordHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {

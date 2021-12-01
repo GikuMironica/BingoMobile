@@ -9,11 +9,15 @@ class Routes {
   static String login = '/login';
   static String registration = '/registration';
   static String fullscreenDialog = '/fullscreen_dialog';
+
+  // -- ACCOUNT ----------------------------------------------------------------
   static String account = '/account';
   static String editAccount = account + '/edit';
   static String editAccountPicture = editAccount + '/picture';
   static String editAccountName = editAccount + '/name';
   static String editAccountDescription = editAccount + '/description';
+  static String editMobile = editAccount + '/mobile';
+  static String confirmMobile = editAccount + editMobile + '/confirm_mobile';
   static String forgotPassword = '/forgot_password';
 
   // -- SETTINGS --------------------------------------------------------------
@@ -29,6 +33,7 @@ class Routes {
   static String createEvent = '/create-event';
   static String searchByMap = createEvent + '/map';
   static String rateEvent = '/rate-event/:id';
+
   // -- EDIT EVENT ------------------------------------------------------------
   static String editEvent = '/edit-event';
   static String editEventDescription = '/edit-event/description';
@@ -62,6 +67,8 @@ class Routes {
     router.define(account, handler: accountHandler);
     router.define(editAccount, handler: editAccountHandler);
     router.define(editAccountName, handler: editAccountNameHandler);
+    router.define(editMobile, handler: editMobileHandler);
+    router.define(confirmMobile, handler: confirmMobileHandler);
     router.define(editAccountDescription,
         handler: editAccountDescriptionHandler);
     router.define(editAccountPicture, handler: editAccountPictureHandler);

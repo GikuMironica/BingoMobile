@@ -88,6 +88,8 @@ dependencies:
   flutter_native_splash: ^0.3.2
   currency_text_input_formatter: ^1.0.4
   easy_localization: ^2.3.3
+  intl_phone_number_input: ^0.6.0
+  geocoder: ^0.2.1
 
   flutter_cupertino_date_picker:
     git: https://github.com/yasseralsamman/flutter-cupertino-date-picker.git

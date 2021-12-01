@@ -1,12 +1,17 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/data/domain/request_result.dart';
 import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
+import 'package:hopaut/presentation/screens/account/edit_account/confirm_mobile.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:injectable/injectable.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 @lazySingleton
 class AccountProvider extends ChangeNotifier {
@@ -18,6 +23,7 @@ class AccountProvider extends ChangeNotifier {
   // State data
   BaseFormStatus formStatus;
   BaseFormStatus picturesPageStatus;
+  String number;
 
   // Services, repositories and models
   AuthenticationService _authenticationService;
@@ -77,6 +83,13 @@ class AccountProvider extends ChangeNotifier {
         Application.router.pop(context, Success());
       }
     }
+  }
+
+  navigateToConfirmPhone(BuildContext context, String number, bool isValid) {
+    if (!isValid) {
+      return;
+    }
+    Application.router.navigateTo(context, Routes.confirmMobile);
   }
 
   Future<bool> deleteProfilePictureAsync(String userId) async {
@@ -145,5 +158,6 @@ class AccountProvider extends ChangeNotifier {
   void resetProvider() {
     formStatus = Idle();
     picturesPageStatus = Idle();
+    number = null;
   }
 }

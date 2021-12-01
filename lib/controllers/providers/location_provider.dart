@@ -7,11 +7,13 @@ import 'package:hopaut/utils/rounding_decimals.dart';
 import 'package:injectable/injectable.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:location/location.dart' as l;
+import 'package:geocoder/geocoder.dart' as geocoder;
 
 @singleton
 class LocationServiceProvider extends ChangeNotifier {
   l.Location _location;
   UserLocation userLocation;
+  String countryCode;
 
   LocationServiceProvider() {
     getActualLocation();
@@ -22,11 +24,19 @@ class LocationServiceProvider extends ChangeNotifier {
     _location = l.Location();
     bool isLocationEnabled = await _isLocationServiceEnabledAndAllowed();
     if (!isLocationEnabled) {
-      // TODO handle
       return null;
     }
     l.LocationData locationData = await _getLocation();
     userLocation = UserLocation(locationData.latitude, locationData.longitude);
+
+    if (countryCode == null) {
+      var coordinates = new geocoder.Coordinates(
+          userLocation.latitude, userLocation.longitude);
+      var address = await geocoder.Geocoder.local
+          .findAddressesFromCoordinates(coordinates);
+      countryCode = address.first.countryCode;
+    }
+
     notifyListeners();
     return userLocation;
   }
@@ -66,8 +76,8 @@ class LocationServiceProvider extends ChangeNotifier {
         accuracy: l.LocationAccuracy.high, distanceFilter: 10);
     _location.onLocationChanged.listen((e) async {
       if (e != null) {
-        final newLatitude = roundOff(5, e.latitude);
-        final newLongtiude = roundOff(5, e.longitude);
+        final newLatitude = roundOff(6, e.latitude);
+        final newLongtiude = roundOff(6, e.longitude);
         if (_lastLocation != null) {
           if (_lastLocation.latitude != newLatitude &&
               _lastLocation.longitude != newLongtiude) {

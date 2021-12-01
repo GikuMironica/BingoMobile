@@ -9,6 +9,8 @@ import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class EditAccountPage extends StatefulWidget {
   @override
@@ -22,8 +24,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: SimpleAppBar(
-        // TODO translation
-        text: 'Edit Profile',
+        text: LocaleKeys.Account_EditProfile_pageTitle.tr(),
         context: context,
       ),
       body: SingleChildScrollView(padding: EdgeInsets.all(16), child: items()),
@@ -46,8 +47,9 @@ class _EditAccountPageState extends State<EditAccountPage> {
                 height: 16,
               ),
               Text(
-                // TODO translation
-                'Change profile picture',
+                LocaleKeys
+                        .Account_EditProfile_navigationLabel_EditProfilePicture
+                    .tr(),
                 style: TextStyle(color: HATheme.HOPAUT_PINK),
               ),
             ],
@@ -61,8 +63,8 @@ class _EditAccountPageState extends State<EditAccountPage> {
         builder: (context, auth, child) => ListTile(
           onTap: () async =>
               await _navigateAndDisplayResult(context, Routes.editAccountName),
-          // TODO translation
-          title: Text('Name'),
+          title: Text(
+              LocaleKeys.Account_EditProfile_navigationLabel_EditName.tr()),
           subtitle: Text(auth.user.fullName),
           trailing: Icon(Icons.arrow_forward_ios),
         ),
@@ -71,15 +73,28 @@ class _EditAccountPageState extends State<EditAccountPage> {
         builder: (context, auth, child) => ListTile(
           onTap: () async => await _navigateAndDisplayResult(
               context, Routes.editAccountDescription),
-          // TODO translation
-          title: Text('Description'),
+          title: Text(LocaleKeys
+              .Account_EditProfile_navigationLabel_EditDescription.tr()),
           subtitle: auth.user.description?.length == null
-              ? Text("Empty", style: TextStyle(color: Colors.grey[500]))
+              ? Text(
+                  LocaleKeys.Account_EditProfile_placeholder_EmptyDescription
+                      .tr(),
+                  style: TextStyle(color: Colors.grey[500]))
               : Text(
                   auth.user.description.trim(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
+          trailing: Icon(Icons.arrow_forward_ios),
+        ),
+      ),
+      Consumer<AuthenticationService>(
+        builder: (context, auth, child) => ListTile(
+          onTap: () async =>
+              await _navigateAndDisplayResult(context, Routes.editMobile),
+          title: Text(
+              LocaleKeys.Account_EditProfile_navigationLabel_PhoneNumber.tr()),
+          subtitle: Text(auth.user.phoneNumber ?? "-"),
           trailing: Icon(Icons.arrow_forward_ios),
         ),
       ),
@@ -90,8 +105,10 @@ class _EditAccountPageState extends State<EditAccountPage> {
     var result = await Application.router
         .navigateTo(context, routes, transition: TransitionType.cupertino);
     if (result is Success) {
-      // TODO translation
-      showSuccessSnackBar(context: context, message: "Profile updated");
+      showSuccessSnackBar(
+          context: context,
+          message:
+              LocaleKeys.Account_EditProfile_successToast_ProfileUpdated.tr());
     }
   }
 }
