@@ -1,12 +1,12 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants/constraint.dart';
 import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/data/models/mini_post.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:hopaut/presentation/screens/events/create/picture_list.dart';
 import 'package:hopaut/presentation/screens/events/create/tags.dart';
 import 'package:hopaut/presentation/screens/events/create/time_picker.dart';
@@ -18,7 +18,7 @@ import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/inputs/text_area_input.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'event_type_list.dart';
 import 'location_button.dart';
 
@@ -48,14 +48,12 @@ class _CreateEventPageState extends State<CreateEventPage> {
             leading: IconButton(
                 icon: HATheme.backButton,
                 onPressed: () => Application.router.pop(context)),
-            title: Text('Create Event'), //TODO: translation
+            title: Text(LocaleKeys.Hosted_Create_header_title).tr(),
           ),
           body: provider.eventLoadingStatus is Submitted
               ? Container(
                   child: overlayBlurBackgroundCircularProgressIndicator(
-                      // TODO translations
-                      context,
-                      "Creating event"),
+                      context, LocaleKeys.Hosted_Create_labels_creating.tr()),
                 )
               : SingleChildScrollView(
                   controller: scrollController,
@@ -67,7 +65,9 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            FieldTitle(title: "Pictures"), //TODO: translation
+                            FieldTitle(
+                                title: LocaleKeys.Hosted_Create_labels_pictures
+                                    .tr()),
                             PictureList(
                               selectPicture: provider.selectPicture,
                               onSaved: (value) =>
@@ -77,14 +77,16 @@ class _CreateEventPageState extends State<CreateEventPage> {
                               height: 8,
                             ),
                             Divider(),
-                            FieldTitle(title: "Тitle"), //TODO: translation
+                            FieldTitle(
+                                title:
+                                    LocaleKeys.Hosted_Create_labels_title.tr()),
                             valueInput(
                               controller: titleController,
                               isStateValid:
                                   provider.validateTitle(titleController.text),
                               initialValue: provider.post.event.title,
-                              validationMessage:
-                                  "Please provide a valid title.", // TODO: translation
+                              validationMessage: LocaleKeys
+                                  .Hosted_Create_validation_title.tr(),
                               maxLength: Constraint.titleMaxLength,
                               onSaved: (value) => provider.post.event.title =
                                   titleController.text,
@@ -92,16 +94,22 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                   titleController, value),
                             ),
                             Divider(),
-                            FieldTitle(title: "Type"), //TODO: translation
+                            FieldTitle(
+                                title: LocaleKeys.Hosted_Create_labels_pictures
+                                    .tr()),
                             EventTypeList(post: provider.post),
                             Divider(),
-                            FieldTitle(title: "Location"), //TODO: translation
+                            FieldTitle(
+                                title: LocaleKeys.Hosted_Create_labels_location
+                                    .tr()),
                             LocationButton(
                                 isValid: provider.isLocationValid,
                                 validate: provider.validateLocation,
                                 post: provider.post),
                             Divider(),
-                            FieldTitle(title: "Time"), //TODO: translation
+                            FieldTitle(
+                                title:
+                                    LocaleKeys.Hosted_Create_labels_time.tr()),
                             TimePicker(
                                 isValid: provider.isDateValid,
                                 onConfirmStart: (startTime) =>
@@ -121,7 +129,9 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                       startDateController, endDateController);
                                 }),
                             Divider(),
-                            FieldTitle(title: "Tags"), //TODO: translation
+                            FieldTitle(
+                                title:
+                                    LocaleKeys.Hosted_Create_labels_tags.tr()),
                             Tags(
                                 post: provider.post,
                                 getTagSuggestions: (pattern, currentTags) =>
@@ -129,11 +139,12 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                         pattern, currentTags)),
                             Divider(),
                             FieldTitle(
-                                title: "Description"), //TODO: translation
+                                title: LocaleKeys
+                                    .Hosted_Create_labels_description.tr()),
                             textAreaInput(
                               controller: descriptionController,
-                              validationMessage:
-                                  "Please provide a valid description.", // TODO: translation
+                              validationMessage: LocaleKeys
+                                  .Hosted_Create_validation_description.tr(),
                               isStateValid: provider.validateDescription(
                                   descriptionController.text),
                               initialValue: provider.post.event.description,
@@ -146,7 +157,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                             ),
                             Divider(),
                             FieldTitle(
-                                title: "Requirements"), //TODO: translation
+                                title: LocaleKeys
+                                    .Hosted_Create_labels_requirements.tr()),
                             textAreaInput(
                               controller: requirementsController,
                               validationMessage: "",
@@ -162,7 +174,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                               //'Event Requirements (Optional)', //TODO: write example requirements + translation
                             ),
                             persistButton(
-                                label: "Save", //TODO: translation
+                                label:
+                                    LocaleKeys.Hosted_Create_btns_create.tr(),
                                 context: context,
                                 isStateValid: true,
                                 onPressed: () async {

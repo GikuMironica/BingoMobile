@@ -5,6 +5,8 @@ import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/data/models/post.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class LocationButton extends StatelessWidget {
   final Post post;
@@ -43,8 +45,9 @@ class LocationButton extends StatelessWidget {
         child: InputDecorator(
           decoration: InputDecoration(
             labelStyle: TextStyle(color: Colors.red),
-            labelText:
-                isValid ? "" : "Please choose a location!", //TODO:translation
+            labelText: isValid
+                ? ""
+                : LocaleKeys.Hosted_Create_validation_location.tr(),
             isDense: true,
             contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
             border: InputBorder.none,

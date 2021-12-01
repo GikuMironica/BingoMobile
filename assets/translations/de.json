@@ -3,10 +3,68 @@
     "Event": {}
   },
   "Hosted": {
-    "Create": {},
-    "Edit": {}
+    "Create": {
+      "header": {
+        "title": "Create Event"
+      },
+      "labels": {
+        "pictures": "Pictures",
+        "title": "Title",
+        "type": "Type",
+        "location": "Location",
+        "time": "Time",
+        "tags": "Tag",
+        "description": "Description",
+        "requirements": "Requirements",
+        "creating": "Creating event",
+        "guests": "Number of guests",
+        "price": "Entrance price"
+      },
+      "hints": {
+        "eventType": "Event Type",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "tagsLimit": "You can add up to 5 tags.",
+        "addTags": "Add Tags"
+      },
+      "btns": {
+        "create": "Create"
+      },
+      "validation": {
+        "title": "Please provide a valid title.",
+        "eventType": "Event type is required.",
+        "location": "Please choose a location.",
+        "time": "Start and end time is required.",
+        "description": "Please provide a valid description."
+      },
+      "eventTypes": {
+        "houseParty": "House Party",
+        "club": "Club",
+        "bar": "Bar",
+        "bikerMeet": "Biker Meet",
+        "bicycleMeet": "Bicycle Meet",
+        "carMeet": "Car Meet",
+        "streetParty": "Street Party",
+        "sport": "Sport",
+        "others": "Other"
+      }
+    },
+    "Edit": {},
+    "header": {
+      "title": "Hosted Events"
+    }
   },
-  "Joined": {},
+  "Joined": {
+    "header": {
+      "title": "Joined Events",
+      "currentTab": "Current",
+      "pastTab": "Past"
+    },
+    "labels": {
+      "noEventsFound": "No events found",
+      "loading": "Loading events."
+    }
+  },
   "Account": {
     "AccountPage": {
       "label_MemberSince": "Mitglied seit",

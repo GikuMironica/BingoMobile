@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class DropDownWidget<T> extends StatefulWidget {
   final T value;
@@ -68,7 +69,8 @@ class _DropDownWidgetState<T> extends State<DropDownWidget<T>> {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         onSaved: widget.onSaved,
         items: widget.list
-            ?.map((T e) => DropdownMenuItem<T>(value: e, child: Text('$e')))
+            ?.map((T e) => DropdownMenuItem<T>(
+                value: e, child: Text('${e.toString().tr()}')))
             ?.toList(),
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(12.0),

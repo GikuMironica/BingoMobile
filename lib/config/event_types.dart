@@ -1,3 +1,5 @@
+import 'package:hopaut/generated/locale_keys.g.dart';
+
 enum EventType {
   defaultType,
   houseParty,
@@ -12,15 +14,15 @@ enum EventType {
 }
 
 const Map<EventType, String> eventTypeStrings = {
-  EventType.houseParty: "House Party",
-  EventType.club: "Club",
-  EventType.bar: "Bar",
-  EventType.bikerMeet: "Biker Meet",
-  EventType.bicycleMeet: "Bicycle Meet",
-  EventType.carMeet: "Car Meet",
-  EventType.streetParty: "Street Party",
-  EventType.sport: "Sport",
-  EventType.other: "Other"
+  EventType.houseParty: LocaleKeys.Hosted_Create_eventTypes_houseParty,
+  EventType.club: LocaleKeys.Hosted_Create_eventTypes_club,
+  EventType.bar: LocaleKeys.Hosted_Create_eventTypes_bar,
+  EventType.bikerMeet: LocaleKeys.Hosted_Create_eventTypes_bikerMeet,
+  EventType.bicycleMeet: LocaleKeys.Hosted_Create_eventTypes_bicycleMeet,
+  EventType.carMeet: LocaleKeys.Hosted_Create_eventTypes_carMeet,
+  EventType.streetParty: LocaleKeys.Hosted_Create_eventTypes_streetParty,
+  EventType.sport: LocaleKeys.Hosted_Create_eventTypes_sport,
+  EventType.other: LocaleKeys.Hosted_Create_eventTypes_others
 };
 
 const List<EventType> paidEvents = [

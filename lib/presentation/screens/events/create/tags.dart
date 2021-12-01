@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/data/models/post.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:hopaut/presentation/screens/events/create/tag_chip.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Tags extends StatefulWidget {
   final Post post;
@@ -30,8 +32,9 @@ class _TagsState extends State<Tags> {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('You can to add up to 5 tags.', //TODO: translation
-              style: TextStyle(color: Colors.black87)),
+          child: Text(LocaleKeys.Hosted_Create_hints_tagsLimit,
+                  style: TextStyle(color: Colors.black87))
+              .tr(),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 2.0),
@@ -67,7 +70,7 @@ class _TagsState extends State<Tags> {
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(12.0),
-                      hintText: 'Add tags', //TODO: translation
+                      hintText: LocaleKeys.Hosted_Create_hints_addTags.tr(),
                       border: InputBorder.none)),
               suggestionsCallback: (pattern) async {
                 return await widget.getTagSuggestions(pattern, tags);
