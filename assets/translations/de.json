@@ -8,8 +8,23 @@
   },
   "Joined": {},
   "Account": {
-    "AccountPage": {},
-    "EditProfile": {},
+    "AccountPage": {
+      "label_MemberSince": "Mitglied seit",
+      "navigationLabel_EditProfile": "Profil bearbeiten",
+      "navigationLabel_Settings": "Einstellungen",
+      "placeholder_NameSurname": "Name Nachname",
+      "label_Email": "Email",
+      "label_PhoneNumber": "Mobil"
+    },
+    "EditProfile": {
+      "navigationLabel_PhoneNumber": "Mobil",
+      "navigationLabel_EditName": "Name",
+      "navigationLabel_EditDescription": "Profilbeschreibung",
+      "navigationLabel_EditProfilePicture": "Profilbild ändern",
+      "pageTitle": "Profil bearbeiten",
+      "placeholder_EmptyDescription": "Leer",
+      "successToast_ProfileUpdated": "Profil wurde aktualisiert"
+    },
     "Settings": {}
   },
   "Authentication": {
