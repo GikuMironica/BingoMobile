@@ -5,9 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/models/event_list.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:provider/provider.dart';
 import 'package:hopaut/presentation/widgets/mini_post_card.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class EventsListView extends StatelessWidget {
   final String listType;
@@ -22,19 +24,20 @@ class EventsListView extends StatelessWidget {
           ? Center(
               // TODO translation
               child: overlayBlurBackgroundCircularProgressIndicator(
-                  context, 'Loading events'),
+                  context, LocaleKeys.Joined_labels_loading.tr()),
             )
           : CustomScrollView(
-            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-            slivers: [
-                CupertinoSliverRefreshControl(
-                  refreshTriggerPullDistance: 30.0,
-                  refreshIndicatorExtent: 30.0,
-                  onRefresh: () async {
-                    provider.eventsMap[listType] = EventList();
-                    await provider.fetchEventList(listType);
-                  },
-                ),
+              physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              slivers: [
+                  CupertinoSliverRefreshControl(
+                    refreshTriggerPullDistance: 30.0,
+                    refreshIndicatorExtent: 30.0,
+                    onRefresh: () async {
+                      provider.eventsMap[listType] = EventList();
+                      await provider.fetchEventList(listType);
+                    },
+                  ),
                   SliverOverlapInjector(
                     // This is the flip side of the SliverOverlapAbsorber
                     // above.
@@ -62,8 +65,8 @@ class EventsListView extends StatelessWidget {
                                         .eventsMap[listType].events[index],
                                   ),
                                 ),
-                                childCount: provider
-                                    .eventsMap[listType].events.length,
+                                childCount:
+                                    provider.eventsMap[listType].events.length,
                               ))
                           : SliverFillRemaining(
                               hasScrollBody: false,
@@ -82,8 +85,8 @@ class EventsListView extends StatelessWidget {
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    Text(
-                                        'No events found') //TODO: translation
+                                    Text(LocaleKeys.Joined_labels_noEventsFound)
+                                        .tr()
                                   ])))),
                 ]);
     });

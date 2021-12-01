@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:hopaut/presentation/screens/events/event_list_page.dart';
 import 'package:hopaut/presentation/screens/account/account_page.dart';
 import 'package:hopaut/presentation/screens/search/search.dart';
@@ -11,6 +12,7 @@ import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/presentation/widgets/hopaut_btm_nav_bar/hopaut_nav_bar_item.dart';
 import 'package:hopaut/presentation/widgets/hopaut_btm_nav_bar/hopaut_bottom_nav_bar.dart';
 import 'package:hopaut/config/routes/routes.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomePage extends StatefulWidget {
   final String route;
@@ -100,9 +102,9 @@ class _HomePageState extends State<HomePage> {
     return [
       SearchPage(),
       EventListPage(
-          title: "Hosted Events", isMyEvents: true), //TODO: translation
+          title: LocaleKeys.Hosted_header_title.tr(), isMyEvents: true),
       EventListPage(
-          title: "Joined Events", isMyEvents: false), //TODO: translation
+          title: LocaleKeys.Joined_header_title.tr(), isMyEvents: false),
       AccountPage(),
     ];
   }

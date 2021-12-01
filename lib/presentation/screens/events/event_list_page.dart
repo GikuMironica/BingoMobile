@@ -1,14 +1,15 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/data/models/post.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:hopaut/presentation/screens/events/event_list_view.dart';
 import 'package:hopaut/presentation/widgets/hopaut_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class EventListPage extends StatelessWidget {
   final String title;
@@ -21,7 +22,10 @@ class EventListPage extends StatelessWidget {
     final List<String> listTypes = isMyEvents
         ? [API.MY_ACTIVE, API.MY_INACTIVE]
         : [API.ATTENDING_ACTIVE, API.ATTENDED_INACTIVE];
-    final List<String> tabs = ['Current', 'Past']; // TODO: translate(maybe)
+    final List<String> tabs = [
+      LocaleKeys.Joined_header_currentTab.tr(),
+      LocaleKeys.Joined_header_pastTab.tr()
+    ];
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(
         floatingActionButton: isMyEvents

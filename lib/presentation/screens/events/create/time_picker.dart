@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class TimePicker extends StatefulWidget {
   final Function(DateTime) onConfirmStart;
@@ -79,11 +81,13 @@ class _TimePickerState extends State<TimePicker> {
                   child: Text(
                     startDate != null
                         ? dateFormat.format(startDate)
-                        : 'Start Time', // TODO: translation
+                        : LocaleKeys.Hosted_Create_hints_startTime.tr(),
                   )),
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           InkWell(
             onTap: () async {
               if (startDate != null) {
@@ -110,11 +114,9 @@ class _TimePickerState extends State<TimePicker> {
                     color: HATheme.BASIC_INPUT_COLOR,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Text(
-                    endDate != null
-                        ? dateFormat.format(endDate)
-                        : 'End Time', // TODO: translation
-                  )),
+                  child: Text(endDate != null
+                      ? dateFormat.format(endDate)
+                      : LocaleKeys.Hosted_Create_hints_endTime.tr())),
             ),
           ),
           Container(
@@ -124,7 +126,7 @@ class _TimePickerState extends State<TimePicker> {
                 labelStyle: TextStyle(color: Colors.red),
                 labelText: widget.isValid
                     ? ""
-                    : "Please input valid dates!", //TODO:translation
+                    : LocaleKeys.Hosted_Create_validation_time.tr(),
                 isDense: true,
                 contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
                 border: InputBorder.none,
