@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 
-@singleton
+@lazySingleton
 class FirebaseOtpService {
   FirebaseAuth _auth;
 
@@ -12,15 +12,17 @@ class FirebaseOtpService {
 
   Future<void> verifyOtp(String smsCode, BuildContext context) async {}
 
-  Future<void> sendOtp(BuildContext context, String phoneNum,
-      Function verificationFailed, Function codeSent) async {
+  Future<void> sendOtpAsync(BuildContext context, String phoneNum,
+      Function verificationFailed) async {
     await _auth.verifyPhoneNumber(
       phoneNumber: phoneNum,
       timeout: Duration(seconds: 30),
-      verificationCompleted: null,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await _auth.signInWithCredential(credential);
+      },
       verificationFailed: verificationFailed,
-      codeSent: codeSent,
-      codeAutoRetrievalTimeout: null,
+      codeSent: (String verificationId, [int resendToken]) {},
+      codeAutoRetrievalTimeout: (String verificationId) {},
     );
   }
 }

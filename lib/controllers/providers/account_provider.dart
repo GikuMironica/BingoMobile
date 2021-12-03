@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart' as fba;
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/constants/configurations.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -10,7 +12,9 @@ import 'package:hopaut/controllers/providers/page_states/otp_timer_state.dart';
 import 'package:hopaut/data/domain/request_result.dart';
 import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/services/authentication_service.dart';
+import 'package:hopaut/services/firebase_otp.dart';
 import 'package:injectable/injectable.dart';
 import 'package:quiver/async.dart';
 
@@ -34,6 +38,7 @@ class AccountProvider extends ChangeNotifier {
   AuthenticationService _authenticationService;
   UserRepository _userRepository;
   User get currentIdentity => _authenticationService.user;
+  FirebaseOtpService _firebaseOtpService;
 
   AccountProvider() {
     timerState = TimerStopped();
@@ -92,18 +97,35 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-  continueToPhoneConfirmation(
-      BuildContext context, String number, bool isValid) {
+  Future<void> continueToPhoneConfirmation(
+      BuildContext context, bool isValid) async {
     if (!isValid) {
       return;
     }
+    _firebaseOtpService = getIt<FirebaseOtpService>();
 
-    startTimer();
+    formStatus = Submitted();
+    notifyListeners();
 
     // TODO USE FIREBASE OTP IN A SERIVCE TO SEND SMS
+    await _firebaseOtpService.sendOtpAsync(
+        context, number, sendingOtpFailCallback);
+    startTimer();
 
+    formStatus = Idle();
     Application.router.navigateTo(context, Routes.confirmMobile,
         transition: TransitionType.cupertino);
+    notifyListeners();
+  }
+
+  sendingOtpFailCallback(fba.FirebaseAuthException e) {
+    if (e.code == 'invalid-phone-number') {
+      showNewErrorSnackbar('The provided phone number is not valid.');
+    } else {
+      showNewErrorSnackbar(
+          'This service is currently unavailable, please try again tomorrow.',
+          toastGravity: ToastGravity.TOP);
+    }
   }
 
   Future<bool> confirmOtp(bool bool) {

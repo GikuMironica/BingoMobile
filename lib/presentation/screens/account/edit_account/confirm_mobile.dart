@@ -82,7 +82,7 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
                 _accountProvider.number.substring(0, 3) +
                 " " +
                 _accountProvider.number
-                    .substring(3, _accountProvider.number.length - 1),
+                    .substring(3, _accountProvider.number.length),
             style: HATheme.LABEL_HEADER_STYLE,
           ),
           SizedBox(height: 20),
@@ -110,15 +110,15 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
             height: 10,
           ),
           persistButton(
-            label: LocaleKeys
-                    .Account_EditProfile_EditMobile_ConfirmMobile_buttons_confirmPhone
-                .tr(),
-            context: context,
-            isStateValid: textEditingController.text.length == 6,
-            onPressed: () => {
-                  _accountProvider
-                      .confirmOtp(textEditingController.text.length == 6)
-                }),
+              label: LocaleKeys
+                      .Account_EditProfile_EditMobile_ConfirmMobile_buttons_confirmPhone
+                  .tr(),
+              context: context,
+              isStateValid: textEditingController.text.length == 6,
+              onPressed: () => {
+                    _accountProvider
+                        .confirmOtp(textEditingController.text.length == 6)
+                  }),
           SizedBox(
             height: 20,
           ),
@@ -160,6 +160,7 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
     _accountProvider.otp = null;
     _accountProvider.currentTimerSeconds = Configurations.resendOtpTime;
     _accountProvider.timerState = TimerStopped();
+    _accountProvider.formStatus = Idle();
     textEditingController.dispose();
   }
 }

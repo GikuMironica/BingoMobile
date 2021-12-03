@@ -46,7 +46,7 @@ class _EditMobileState extends State<EditMobile> {
         ),
         body: Container(
           height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
+          child: Padding(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: Builder(builder: (context) => _editProfileForm(context)),
           ),
@@ -65,37 +65,48 @@ class _EditMobileState extends State<EditMobile> {
       });
       _accountProvider.formStatus = new Idle();
     }
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 20,
+    return Stack(
+      children: [
+        Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                  padding: EdgeInsets.only(left: 12),
+                  child: Text(
+                    LocaleKeys
+                            .Account_EditProfile_EditMobile_label_verifyNumberInfo
+                        .tr(),
+                  )),
+              SizedBox(
+                height: 10,
+              ),
+              _phoneNumberPicker(),
+              SizedBox(
+                height: 10,
+              ),
+              persistButton(
+                  label: LocaleKeys.Account_EditProfile_EditMobile_button_Next
+                      .tr(),
+                  context: context,
+                  isStateValid: _formKey.currentState?.validate() ?? false,
+                  onPressed: () => {
+                        _accountProvider.continueToPhoneConfirmation(
+                            context, state)
+                      })
+            ],
           ),
-          Padding(
-              padding: EdgeInsets.only(left: 12),
-              child: Text(
-                LocaleKeys.Account_EditProfile_EditMobile_label_verifyNumberInfo
-                    .tr(),
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          _phoneNumberPicker(),
-          SizedBox(
-            height: 10,
-          ),
-          persistButton(
-              label: LocaleKeys.Account_EditProfile_EditMobile_button_Next.tr(),
-              context: context,
-              isStateValid: _formKey.currentState?.validate() ?? false,
-              onPressed: () => {
-                    _accountProvider.continueToPhoneConfirmation(
-                        context, number.toString(), state)
-                  })
-        ],
-      ),
+        ),
+        Visibility(
+            visible: _accountProvider.formStatus is Submitted,
+            // TODO translate
+            child: overlayBlurBackgroundCircularProgressIndicator(
+                context, 'Sending OTP')),
+      ],
     );
   }
 
@@ -157,6 +168,7 @@ class _EditMobileState extends State<EditMobile> {
   @override
   void dispose() {
     controller?.dispose();
+    _accountProvider.formStatus = Idle();
     super.dispose();
   }
 }
