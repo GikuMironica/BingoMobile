@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "396871983289",
+    "project_id": "hopaut-ug",
+    "storage_bucket": "hopaut-ug.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:396871983289:android:48811d9671ab14c2e2bb68",
+        "android_client_info": {
+          "package_name": "com.hopaut.hopaut"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "396871983289-5d0ba05c3re1uq88hrof43nmrtgftl00.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hopaut.hopaut",
+            "certificate_hash": "34248aeae30b0cce881df9cb9c6d3ac67c662820"
+          }
+        },
+        {
+          "client_id": "396871983289-1ff99hngmjrg1f827th0a0kok4ku07ju.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCvwWApqQBv5mxSrC0avZaS_jyNDHTCmI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "396871983289-1ff99hngmjrg1f827th0a0kok4ku07ju.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
