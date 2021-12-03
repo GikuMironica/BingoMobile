@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "396871983289",
-    "project_id": "hopaut-ug",
-    "storage_bucket": "hopaut-ug.appspot.com"
+    "project_number": "1028951635281",
+    "project_id": "hopaut-334017",
+    "storage_bucket": "hopaut-334017.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:396871983289:android:48811d9671ab14c2e2bb68",
+        "mobilesdk_app_id": "1:1028951635281:android:4c8f8b0d45edc332ca0f70",
         "android_client_info": {
           "package_name": "com.hopaut.hopaut"
         }
       },
       "oauth_client": [
         {
-          "client_id": "396871983289-5d0ba05c3re1uq88hrof43nmrtgftl00.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hopaut.hopaut",
-            "certificate_hash": "34248aeae30b0cce881df9cb9c6d3ac67c662820"
-          }
-        },
-        {
-          "client_id": "396871983289-1ff99hngmjrg1f827th0a0kok4ku07ju.apps.googleusercontent.com",
+          "client_id": "1028951635281-qini3f0amnl8pmv3du2uupo6524kk374.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBCvwWApqQBv5mxSrC0avZaS_jyNDHTCmI"
+          "current_key": "AIzaSyB_T8Bfv8XG-VFHlr336ttrpQkBVK5FJ6U"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "396871983289-1ff99hngmjrg1f827th0a0kok4ku07ju.apps.googleusercontent.com",
+              "client_id": "1028951635281-qini3f0amnl8pmv3du2uupo6524kk374.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
