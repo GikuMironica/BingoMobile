@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
-import 'package:hopaut/presentation/widgets/inputs/basic_input.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:hopaut/controllers/providers/account_provider.dart';
-import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hopaut/generated/locale_keys.g.dart';
@@ -34,7 +32,6 @@ class _EditMobileState extends State<EditMobile> {
         Provider.of<LocationServiceProvider>(context, listen: false);
     initialCountry = _locationProvider.countryCode;
     number = PhoneNumber(isoCode: initialCountry);
-    print(initialCountry);
   }
 
   @override
@@ -94,8 +91,7 @@ class _EditMobileState extends State<EditMobile> {
               context: context,
               isStateValid: _formKey.currentState?.validate() ?? false,
               onPressed: () => {
-                    print(number),
-                    _accountProvider.navigateToConfirmPhone(
+                    _accountProvider.continueToPhoneConfirmation(
                         context, number.toString(), state)
                   })
         ],

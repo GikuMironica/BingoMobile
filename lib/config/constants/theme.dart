@@ -46,4 +46,7 @@ class HATheme {
     fontSize: 14.0,
     fontWeight: FontWeight.w400,
   );
+
+  static TextStyle LABEL_HEADER_STYLE =
+      TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 }

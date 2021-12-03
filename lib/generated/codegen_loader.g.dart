@@ -129,12 +129,23 @@ class CodegenLoader extends AssetLoader{
       "placeholder_EmptyDescription": "Leer",
       "successToast_ProfileUpdated": "Profil wurde aktualisiert",
       "EditMobile": {
-        "pageTitle": "Bestätigen Sie Ihre Rufnummer",
+        "pageTitle": "Rufnummer ändern",
         "label_verifyNumberInfo": "Sie erhalten eine SMS-Nachricht (es können Gebühren anfallen) zur Bestätigung Ihrer Telefonnummer. Geben Sie Ihre Telefonnummer ein.",
         "errorToast_Error": "Fehler, etwas ist schief gelaufen",
         "hintLabel_PhoneNumber": "Rufnummer",
         "validationLabel_InvalidNumber": "Ungültige Rufnummer",
-        "button_Next": "Weiter"
+        "button_Next": "Weiter",
+        "ConfirmMobile": {
+          "pageTitle": "Bestätigen Sie Ihre Rufnummer",
+          "toasts": {},
+          "labels": {
+            "confirmNumberInfo": "Bitte geben Sie den 6-stelligen Code ein, der Ihnen zugesandt wurde",
+            "confirmThisNumber": "Bestätigen"
+          },
+          "buttons": {
+            "confirmPhone": "Bestätigen"
+          }
+        }
       }
     },
     "Settings": {}
@@ -260,12 +271,23 @@ static const Map<String,dynamic> en = {
       "placeholder_EmptyDescription": "Empty",
       "successToast_ProfileUpdated": "Profile updated",
       "EditMobile": {
-        "pageTitle": "Confirm your phone number",
+        "pageTitle": "Change phone number",
         "label_verifyNumberInfo": "You will get an SMS message (carrier charges may apply) to confirm your phone number. Enter your phone number.",
         "errorToast_Error": "Error, something went wrong",
         "hintLabel_PhoneNumber": "Phone number",
         "validationLabel_InvalidNumber": "Invalid phone number",
-        "button_Next": "Next"
+        "button_Next": "Next",
+        "ConfirmMobile": {
+          "pageTitle": "Confirm your phone number",
+          "toasts": {},
+          "labels": {
+            "confirmNumberInfo": "Please enter the 6-digit code that was sent to you",
+            "confirmThisNumber": "Confirm"
+          },
+          "buttons": {
+            "confirmPhone": "Confirm"
+          }
+        }
       }
     },
     "Settings": {}

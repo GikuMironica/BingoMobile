@@ -113,12 +113,23 @@
       "placeholder_EmptyDescription": "Leer",
       "successToast_ProfileUpdated": "Profil wurde aktualisiert",
       "EditMobile": {
-        "pageTitle": "Bestätigen Sie Ihre Rufnummer",
+        "pageTitle": "Rufnummer ändern",
         "label_verifyNumberInfo": "Sie erhalten eine SMS-Nachricht (es können Gebühren anfallen) zur Bestätigung Ihrer Telefonnummer. Geben Sie Ihre Telefonnummer ein.",
         "errorToast_Error": "Fehler, etwas ist schief gelaufen",
         "hintLabel_PhoneNumber": "Rufnummer",
         "validationLabel_InvalidNumber": "Ungültige Rufnummer",
-        "button_Next": "Weiter"
+        "button_Next": "Weiter",
+        "ConfirmMobile": {
+          "pageTitle": "Bestätigen Sie Ihre Rufnummer",
+          "toasts": {},
+          "labels": {
+            "confirmNumberInfo": "Bitte geben Sie den 6-stelligen Code ein, der Ihnen zugesandt wurde",
+            "confirmThisNumber": "Bestätigen"
+          },
+          "buttons": {
+            "confirmPhone": "Bestätigen"
+          }
+        }
       }
     },
     "Settings": {}

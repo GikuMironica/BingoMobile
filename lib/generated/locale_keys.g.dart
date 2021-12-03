@@ -99,6 +99,14 @@ abstract class  LocaleKeys {
   static const Account_EditProfile_EditMobile_hintLabel_PhoneNumber = 'Account.EditProfile.EditMobile.hintLabel_PhoneNumber';
   static const Account_EditProfile_EditMobile_validationLabel_InvalidNumber = 'Account.EditProfile.EditMobile.validationLabel_InvalidNumber';
   static const Account_EditProfile_EditMobile_button_Next = 'Account.EditProfile.EditMobile.button_Next';
+  static const Account_EditProfile_EditMobile_ConfirmMobile_pageTitle = 'Account.EditProfile.EditMobile.ConfirmMobile.pageTitle';
+  static const Account_EditProfile_EditMobile_ConfirmMobile_toasts = 'Account.EditProfile.EditMobile.ConfirmMobile.toasts';
+  static const Account_EditProfile_EditMobile_ConfirmMobile_labels_confirmNumberInfo = 'Account.EditProfile.EditMobile.ConfirmMobile.labels.confirmNumberInfo';
+  static const Account_EditProfile_EditMobile_ConfirmMobile_labels_confirmThisNumber = 'Account.EditProfile.EditMobile.ConfirmMobile.labels.confirmThisNumber';
+  static const Account_EditProfile_EditMobile_ConfirmMobile_labels = 'Account.EditProfile.EditMobile.ConfirmMobile.labels';
+  static const Account_EditProfile_EditMobile_ConfirmMobile_buttons_confirmPhone = 'Account.EditProfile.EditMobile.ConfirmMobile.buttons.confirmPhone';
+  static const Account_EditProfile_EditMobile_ConfirmMobile_buttons = 'Account.EditProfile.EditMobile.ConfirmMobile.buttons';
+  static const Account_EditProfile_EditMobile_ConfirmMobile = 'Account.EditProfile.EditMobile.ConfirmMobile';
   static const Account_EditProfile_EditMobile = 'Account.EditProfile.EditMobile';
   static const Account_EditProfile = 'Account.EditProfile';
   static const Account_Settings = 'Account.Settings';
