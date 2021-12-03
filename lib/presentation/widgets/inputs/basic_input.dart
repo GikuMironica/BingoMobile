@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hopaut/config/constants/theme.dart';
@@ -10,7 +11,9 @@ Widget valueInput(
     void Function(String) onChange,
     TextEditingController controller,
     FormFieldSetter<String> onSaved,
-    String hintText}) {
+    String hintText,
+    TextInputType inputType,
+    TextAlign alignment}) {
   return Stack(
     children: [
       Card(
@@ -29,6 +32,7 @@ Widget valueInput(
         inputFormatters: [
           LengthLimitingTextInputFormatter(maxLength),
         ],
+        keyboardType: inputType != null ? inputType : TextInputType.text,
         initialValue: initialValue ?? "",
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (value) => isStateValid ? null : validationMessage,
@@ -37,6 +41,7 @@ Widget valueInput(
         maxLines: 1,
         maxLengthEnforced: true,
         maxLength: maxLength,
+        textAlign: alignment != null ? alignment : TextAlign.start,
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: HATheme.FIELD_HINT_STYLE,

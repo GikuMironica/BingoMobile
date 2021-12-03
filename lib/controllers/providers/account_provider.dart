@@ -1,17 +1,18 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hopaut/config/constants/configurations.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/controllers/providers/page_states/otp_timer_state.dart';
 import 'package:hopaut/data/domain/request_result.dart';
 import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
-import 'package:hopaut/presentation/screens/account/edit_account/confirm_mobile.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:injectable/injectable.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:quiver/async.dart';
 
 @lazySingleton
 class AccountProvider extends ChangeNotifier {
@@ -23,7 +24,11 @@ class AccountProvider extends ChangeNotifier {
   // State data
   BaseFormStatus formStatus;
   BaseFormStatus picturesPageStatus;
+  TimerState timerState;
+
   String number;
+  String otp;
+  int currentTimerSeconds;
 
   // Services, repositories and models
   AuthenticationService _authenticationService;
@@ -31,6 +36,8 @@ class AccountProvider extends ChangeNotifier {
   User get currentIdentity => _authenticationService.user;
 
   AccountProvider() {
+    timerState = TimerStopped();
+    currentTimerSeconds = Configurations.resendOtpTime;
     _authenticationService = getIt<AuthenticationService>();
     _userRepository = getIt<UserRepository>();
     formStatus = Idle();
@@ -85,11 +92,22 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-  navigateToConfirmPhone(BuildContext context, String number, bool isValid) {
+  continueToPhoneConfirmation(
+      BuildContext context, String number, bool isValid) {
     if (!isValid) {
       return;
     }
-    Application.router.navigateTo(context, Routes.confirmMobile);
+
+    startTimer();
+
+    // TODO USE FIREBASE OTP IN A SERIVCE TO SEND SMS
+
+    Application.router.navigateTo(context, Routes.confirmMobile,
+        transition: TransitionType.cupertino);
+  }
+
+  Future<bool> confirmOtp(bool bool) {
+    notifyListeners();
   }
 
   Future<bool> deleteProfilePictureAsync(String userId) async {
@@ -120,6 +138,32 @@ class AccountProvider extends ChangeNotifier {
     } else {
       return result;
     }
+  }
+
+  /// OTP countdown
+  void startTimer() {
+    timerState = TimerRunning();
+    notifyListeners();
+
+    CountdownTimer countDownTimer = new CountdownTimer(
+      new Duration(seconds: currentTimerSeconds),
+      new Duration(seconds: 1),
+    );
+
+    var sub = countDownTimer.listen(null);
+    sub.onData((duration) {
+      currentTimerSeconds =
+          Configurations.resendOtpTime - duration.elapsed.inSeconds;
+      notifyListeners();
+    });
+
+    sub.onDone(() {
+      print("Done");
+      sub.cancel();
+      timerState = TimerStopped();
+      currentTimerSeconds = Configurations.resendOtpTime;
+      notifyListeners();
+    });
   }
 
   /// Validation Methods
@@ -155,9 +199,17 @@ class AccountProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void onOtpChange(String value, TextEditingController controller) async {
+    controller.text = value;
+    notifyListeners();
+  }
+
   void resetProvider() {
+    timerState = TimerStopped();
+    currentTimerSeconds = Configurations.resendOtpTime;
     formStatus = Idle();
     picturesPageStatus = Idle();
     number = null;
+    otp = null;
   }
 }
