@@ -127,7 +127,7 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
             child: ListTile(
                 onTap: resendOtpSwitch
                     ? () {
-                        _accountProvider.startTimer();
+                        _accountProvider.sendOtp(context);
                         setState(() {
                           resendOtpSwitch = false;
                         });

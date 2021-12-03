@@ -30,11 +30,15 @@ class LocationServiceProvider extends ChangeNotifier {
     userLocation = UserLocation(locationData.latitude, locationData.longitude);
 
     if (countryCode == null) {
-      var coordinates = new geocoder.Coordinates(
-          userLocation.latitude, userLocation.longitude);
-      var address = await geocoder.Geocoder.local
-          .findAddressesFromCoordinates(coordinates);
-      countryCode = address.first.countryCode;
+      try {
+        var coordinates = new geocoder.Coordinates(
+            userLocation.latitude, userLocation.longitude);
+        var address = await geocoder.Geocoder.local
+            .findAddressesFromCoordinates(coordinates);
+        countryCode = address.first.countryCode;
+      } catch (e) {
+        countryCode = "DE";
+      }
     }
 
     notifyListeners();

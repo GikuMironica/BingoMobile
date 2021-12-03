@@ -102,20 +102,24 @@ class AccountProvider extends ChangeNotifier {
     if (!isValid) {
       return;
     }
-    _firebaseOtpService = getIt<FirebaseOtpService>();
 
     formStatus = Submitted();
     notifyListeners();
 
-    // TODO USE FIREBASE OTP IN A SERIVCE TO SEND SMS
-    await _firebaseOtpService.sendOtpAsync(
-        context, number, sendingOtpFailCallback);
-    startTimer();
+    sendOtp(context);
 
     formStatus = Idle();
     Application.router.navigateTo(context, Routes.confirmMobile,
         transition: TransitionType.cupertino);
     notifyListeners();
+  }
+
+  Future<void> sendOtp(BuildContext context) async {
+    _firebaseOtpService = getIt<FirebaseOtpService>();
+
+    await _firebaseOtpService.sendOtpAsync(
+        context, number, sendingOtpFailCallback);
+    startTimer();
   }
 
   sendingOtpFailCallback(fba.FirebaseAuthException e) {
@@ -128,9 +132,7 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> confirmOtp(bool bool) {
-    notifyListeners();
-  }
+  Future<bool> confirmOtp(bool bool) {}
 
   Future<bool> deleteProfilePictureAsync(String userId) async {
     if (currentIdentity.profilePicture != null) {
