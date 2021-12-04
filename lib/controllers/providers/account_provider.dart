@@ -138,8 +138,17 @@ class AccountProvider extends ChangeNotifier {
       return;
     }
 
-    Application.router.navigateTo(context, Routes.editAccount,
-        transition: TransitionType.cupertino, replace: true);
+    // TODO Save number in user model. and update state
+    User tempUser = User(phoneNumber: number);
+    User updatedUser = await _userRepository.update(currentIdentity.id, tempUser);
+
+    if (updatedUser == null) {
+      showNewErrorSnackbar('Error, failed to update phone number');
+    } else {
+      _authenticationService.setUser(updatedUser);
+      Application.router.navigateTo(context, Routes.editAccount,
+          transition: TransitionType.cupertino, clearStack: true);
+    }
   }
 
   sendingOtpFailCallback(fba.FirebaseAuthException e) {
@@ -200,7 +209,6 @@ class AccountProvider extends ChangeNotifier {
     });
 
     sub.onDone(() {
-      print("Done");
       sub.cancel();
       timerState = TimerStopped();
       currentTimerSeconds = Configurations.resendOtpTime;
