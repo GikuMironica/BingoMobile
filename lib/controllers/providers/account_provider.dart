@@ -33,6 +33,7 @@ class AccountProvider extends ChangeNotifier {
   String number;
   String otp;
   int currentTimerSeconds;
+  int otpTries;
 
   // Services, repositories and models
   AuthenticationService _authenticationService;
@@ -41,6 +42,7 @@ class AccountProvider extends ChangeNotifier {
   FirebaseOtpService _firebaseOtpService;
 
   AccountProvider() {
+    otpTries = 0;
     timerState = TimerStopped();
     currentTimerSeconds = Configurations.resendOtpTime;
     _authenticationService = getIt<AuthenticationService>();
@@ -132,7 +134,23 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> confirmOtp(bool bool) {}
+  Future<void> confirmOtp(
+      String sms, bool isStateValid, BuildContext context) async {
+    _firebaseOtpService = getIt<FirebaseOtpService>();
+
+    if (!isStateValid) {
+      return;
+    }
+
+    var result = await _firebaseOtpService.verifyOtp(sms);
+    if (!result) {
+      otpTries++;
+      return;
+    }
+
+    Application.router.navigateTo(context, Routes.editAccount,
+        transition: TransitionType.cupertino, replace: true);
+  }
 
   Future<bool> deleteProfilePictureAsync(String userId) async {
     if (currentIdentity.profilePicture != null) {
@@ -235,5 +253,6 @@ class AccountProvider extends ChangeNotifier {
     picturesPageStatus = Idle();
     number = null;
     otp = null;
+    otpTries = 0;
   }
 }
