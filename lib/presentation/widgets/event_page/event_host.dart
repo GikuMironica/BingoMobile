@@ -19,7 +19,7 @@ Widget hostRating({double rating}) {
   return Row(children: widgetList);
 }
 
-Widget hostDetails(String phone, {String hostName, String hostInitials, String hostImage, double rating}) {
+Widget hostDetails({String phone, String hostName, String hostInitials, String hostImage, double rating}) {
   return Row(
     children: <Widget>[
       Card(
@@ -42,7 +42,7 @@ Widget hostDetails(String phone, {String hostName, String hostInitials, String h
           ),
           Visibility(
             visible: phone != null,
-            child: Text(phone, style: TextStyle(color: Colors.black54)),
+            child: Text(phone??"", style: TextStyle(color: Colors.black54)),
           ),
           hostRating(rating: rating)
         ],

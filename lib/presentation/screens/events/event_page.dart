@@ -328,7 +328,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                             ),
                                           ),
                                           child: hostDetails(
-                                            host.phoneNumber,
+                                            phone: host.phoneNumber,
                                             hostName: host.getFullName,
                                             hostInitials: host.getInitials,
                                             hostImage: host.getProfilePicture,
