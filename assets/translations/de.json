@@ -5,64 +5,94 @@
   "Hosted": {
     "Create": {
       "header": {
-        "title": "Create Event"
+        "title": "Veranstaltung erstellen"
       },
       "labels": {
-        "pictures": "Pictures",
-        "title": "Title",
-        "type": "Type",
-        "location": "Location",
-        "time": "Time",
+        "pictures": "Bilder",
+        "title": "Titel",
+        "type": "Typ",
+        "location": "Standort",
+        "time": "Zeit",
         "tags": "Tag",
-        "description": "Description",
-        "requirements": "Requirements",
-        "creating": "Creating event",
-        "guests": "Number of guests",
-        "price": "Entrance price"
+        "description": "Beschreibung",
+        "requirements": "Anforderungen",
+        "creating": "Veranstaltung erstellen",
+        "guests": "Anzahl der Gäste",
+        "price": "Eintrittspreis"
       },
       "hints": {
-        "eventType": "Event Type",
-        "startTime": "Start Time",
-        "endTime": "End Time",
-        "tagsLimit": "You can add up to 5 tags.",
-        "addTags": "Add Tags"
+        "eventType": "Veranstaltungstyp",
+        "startTime": "Startzeit",
+        "endTime": "Endzeit",
+        "tagsLimit": "Sie können bis zu 5 Tags hinzufügen.",
+        "addTags": "Tags hinzufügen"
       },
       "btns": {
-        "create": "Create"
+        "create": "Erstellen"
       },
       "validation": {
-        "title": "Please provide a valid title.",
-        "eventType": "Event type is required.",
-        "location": "Please choose a location.",
-        "time": "Start and end time is required.",
-        "description": "Please provide a valid description."
+        "title": "Bitte geben Sie einen gültigen Titel an.",
+        "eventType": "Veranstaltungstyp ist erforderlich.",
+        "location": "Bitte wählen Sie einen Standort.",
+        "time": "Start- und Endzeit sind erforderlich.",
+        "description": "Bitte geben Sie eine gültige Beschreibung an."
       },
       "eventTypes": {
-        "houseParty": "House Party",
+        "houseParty": "Hausparty",
         "club": "Club",
         "bar": "Bar",
-        "bikerMeet": "Biker Meet",
-        "bicycleMeet": "Bicycle Meet",
-        "carMeet": "Car Meet",
-        "streetParty": "Street Party",
+        "bikerMeet": "Bikertreffen",
+        "bicycleMeet": "Fahrradtreffen",
+        "carMeet": "Autotreffen",
+        "streetParty": "Straßenparty",
         "sport": "Sport",
-        "others": "Other"
+        "others": "Sonstiges"
       }
     },
-    "Edit": {},
+    "Edit": {
+      "labels": {
+        "updatingEvent": "Aktualisierung der Veranstaltung"
+      },
+      "btns": {
+        "pictures": "Bilder",
+        "title": "Titel",
+        "location": "Standort",
+        "time": "Zeit",
+        "description": "Beschreibung",
+        "requirements": "Anforderungen",
+        "tags": "Tags",
+        "update": "Aktualisieren",
+        "places": "Freie Plätze",
+        "price": "Eintrittspreis"
+      },
+      "header": {
+        "editEvent": "Veranstaltung bearbeiten",
+        "editPictures": "Bilder bearbeiten",
+        "editTitle": "Titel bearbeiten",
+        "editTime": "Zeit bearbeiten",
+        "editDescription": "Beschreibung bearbeiten",
+        "editRequirements": "Anforderungen bearbeiten",
+        "editTags": "Tags bearbeiten",
+        "editPrice": "Preis bearbeiten",
+        "editPlaces": "Verfügbare Plätze bearbeiten"
+      },
+      "toasts": {
+        "eventUpdated": "Veranstaltung aktualisiert."
+      }
+    },
     "header": {
-      "title": "Hosted Events"
+      "title": "Gehaltene Veranstaltungen"
     }
   },
   "Joined": {
     "header": {
-      "title": "Joined Events",
-      "currentTab": "Current",
-      "pastTab": "Past"
+      "title": "Verbundene Veranstaltungen",
+      "currentTab": "Aktuelle",
+      "pastTab": "Vergangene"
     },
     "labels": {
-      "noEventsFound": "No events found",
-      "loading": "Loading events."
+      "noEventsFound": "Keine Veranstaltungen gefunden",
+      "loading": "Veranstaltungen laden."
     }
   },
   "Account": {

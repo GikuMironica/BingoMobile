@@ -49,7 +49,37 @@
         "others": "Other"
       }
     },
-    "Edit": {},
+    "Edit": {
+      "labels": {
+        "updatingEvent": "Updating event."
+      },
+      "btns": {
+        "pictures": "Pictures",
+        "title": "Title",
+        "location": "Location",
+        "time": "Time",
+        "description": "Description",
+        "requirements": "Requirements",
+        "tags": "Tags",
+        "update": "Update",
+        "places": "Available Places",
+        "price": "Entrance Price"
+      },
+      "header": {
+        "editEvent": "Edit Event",
+        "editPictures": "Edit Pictures",
+        "editTitle": "Edit Title",
+        "editTime": "Edit Time",
+        "editDescription": "Edit Description",
+        "editRequirements": "Edit Requirements",
+        "editTags": "Edit Tags",
+        "editPrice": "Edit Price",
+        "editPlaces": "Edit Available Places"
+      },
+      "toasts": {
+        "eventUpdated": "Event updated."
+      }
+    },
     "header": {
       "title": "Hosted Events"
     }
@@ -62,7 +92,7 @@
     },
     "labels": {
       "noEventsFound": "No events found",
-      "loading": "Loading events"
+      "loading": "Loading events."
     }
   },
   "Account": {
