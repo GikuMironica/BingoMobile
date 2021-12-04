@@ -17,8 +17,7 @@ Widget persistButton({
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
-          // TODO chck if nothing broke
-          onPressed: isStateValid ? onPressed : null,
+          onPressed: onPressed,
           child: Text(label,
               style: TextStyle(
                 fontSize: 20,

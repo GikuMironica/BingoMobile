@@ -95,8 +95,10 @@ class _EditMobileState extends State<EditMobile> {
                   context: context,
                   isStateValid: _formKey.currentState?.validate() ?? false,
                   onPressed: () => {
-                        _accountProvider.continueToPhoneConfirmation(
+                    _formKey.currentState?.validate() ?? false
+                        ? _accountProvider.continueToPhoneConfirmation(
                             context, state)
+                        : null
                       })
             ],
           ),

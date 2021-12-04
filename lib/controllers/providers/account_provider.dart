@@ -124,16 +124,6 @@ class AccountProvider extends ChangeNotifier {
     startTimer();
   }
 
-  sendingOtpFailCallback(fba.FirebaseAuthException e) {
-    if (e.code == 'invalid-phone-number') {
-      showNewErrorSnackbar('The provided phone number is not valid.');
-    } else {
-      showNewErrorSnackbar(
-          'This service is currently unavailable, please try again tomorrow.',
-          toastGravity: ToastGravity.TOP);
-    }
-  }
-
   Future<void> confirmOtp(
       String sms, bool isStateValid, BuildContext context) async {
     _firebaseOtpService = getIt<FirebaseOtpService>();
@@ -150,6 +140,16 @@ class AccountProvider extends ChangeNotifier {
 
     Application.router.navigateTo(context, Routes.editAccount,
         transition: TransitionType.cupertino, replace: true);
+  }
+
+  sendingOtpFailCallback(fba.FirebaseAuthException e) {
+    if (e.code == 'invalid-phone-number') {
+      showNewErrorSnackbar('The provided phone number is not valid.');
+    } else {
+      showNewErrorSnackbar(
+          'This service is currently unavailable, please try again tomorrow.',
+          toastGravity: ToastGravity.TOP);
+    }
   }
 
   Future<bool> deleteProfilePictureAsync(String userId) async {

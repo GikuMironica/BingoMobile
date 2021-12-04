@@ -116,8 +116,10 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
               context: context,
               isStateValid: textEditingController.text.length == 6,
               onPressed: () => {
-                    _accountProvider.confirmOtp(textEditingController.text,
+                textEditingController.text.length == 6
+                    ? _accountProvider.confirmOtp(textEditingController.text,
                         textEditingController.text.length == 6, context)
+                    : null
                   }),
           SizedBox(
             height: 20,
