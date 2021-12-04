@@ -25,7 +25,12 @@ class FirebaseOtpService {
     try {
       UserCredential result = await _auth.signInWithCredential(credential);
       return true;
-    } catch (e) {
+    } on FirebaseAuthException catch (fbe) {
+      if(fbe.code=="invalid-verification-code"){
+        showNewErrorSnackbar('The provided OTP is not valid.');
+      }else if(fbe.code=="session-expired"){
+        showNewErrorSnackbar('The provided code has expired');
+      }
       return false;
     }
   }
@@ -34,7 +39,7 @@ class FirebaseOtpService {
       Function verificationFailed) async {
     await _auth.verifyPhoneNumber(
       phoneNumber: phoneNum,
-      timeout: Duration(seconds: 30),
+      timeout: Duration(seconds: 60),
       verificationCompleted: (PhoneAuthCredential credential) async {
         // await _auth.signInWithCredential(credential);
       },
