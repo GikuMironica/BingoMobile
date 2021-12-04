@@ -65,7 +65,10 @@ class _TimePickerState extends State<TimePicker> {
                     endDate = null;
                   }
                 });
-              }, currentTime: startDate, locale: LocaleType.en);
+              },
+                  currentTime: startDate,
+                  locale: LocaleType.values.firstWhere((element) =>
+                      element.toString() == 'LocaleType.${context.locale}'));
             },
             child: Card(
               elevation: HATheme.WIDGET_ELEVATION,
@@ -100,7 +103,10 @@ class _TimePickerState extends State<TimePicker> {
                     endDate = date;
                     widget.onConfirmEnd(date);
                   });
-                }, currentTime: endDate, locale: LocaleType.en);
+                },
+                    currentTime: endDate,
+                    locale: LocaleType.values.firstWhere((element) =>
+                        element.toString() == 'LocaleType.${context.locale}'));
               }
             },
             child: Card(

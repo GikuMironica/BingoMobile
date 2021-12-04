@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:hopaut/presentation/screens/events/create/tags.dart';
 import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class EditPostTags extends StatefulWidget {
   @override
@@ -32,14 +34,12 @@ class _EditPostTagsState extends State<EditPostTags> {
               icon: HATheme.backButton,
               onPressed: () => Application.router.pop(context),
             ),
-            title: Text('Edit Tags'),
+            title: Text(LocaleKeys.Hosted_Edit_header_editTags).tr(),
           ),
           body: provider.eventLoadingStatus is Submitted
               ? Container(
-                  child: overlayBlurBackgroundCircularProgressIndicator(
-                      // TODO translations
-                      context,
-                      "Updating event"),
+                  child: overlayBlurBackgroundCircularProgressIndicator(context,
+                      LocaleKeys.Hosted_Edit_labels_updatingEvent.tr()),
                 )
               : Container(
                   padding: EdgeInsets.all(24.0),
@@ -58,7 +58,7 @@ class _EditPostTagsState extends State<EditPostTags> {
                         Container(
                           padding: EdgeInsets.only(bottom: 50),
                           child: persistButton(
-                            label: "Save", //TODO: translation
+                            label: LocaleKeys.Hosted_Edit_btns_update.tr(),
                             context: context,
                             isStateValid: true,
                             onPressed: () async {

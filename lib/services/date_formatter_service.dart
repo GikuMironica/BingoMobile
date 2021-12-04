@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 
 @singleton
 class DateFormatterService {
@@ -17,12 +18,12 @@ class DateFormatterService {
   DateFormat get dateTimeFormat => _dateTimeFormat;
 
   String formatTimeRange(int startTime, int endTime) {
-    return '${_timeFormat.format(DateTime.fromMillisecondsSinceEpoch(startTime * 1000))} - ${_timeFormat.format(DateTime.fromMillisecondsSinceEpoch(endTime * 1000))}';
+    return '${Jiffy.unix(startTime).Hm} - ${Jiffy.unix(endTime).Hm}';
   }
 
   String formatDateRange(int startTime, int endTime) {
-    String startDate = formatDate(startTime);
-    String endDate = formatDate(endTime);
+    String startDate = Jiffy.unix(startTime).format("dd.MM.yyyy");
+    String endDate = Jiffy.unix(endTime).format("dd.MM.yyyy");
 
     return startDate == endDate ? '$startDate' : '$startDate - $endDate';
   }

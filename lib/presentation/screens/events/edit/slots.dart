@@ -4,11 +4,13 @@ import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/inputs/event_text_field.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class EditSlotsPage extends StatefulWidget {
   @override
@@ -39,14 +41,12 @@ class _EditSlotsPageState extends State<EditSlotsPage> {
             icon: HATheme.backButton,
             onPressed: () => Application.router.pop(context),
           ),
-          title: Text('Edit Available Places'), //TODO: translation
+          title: Text(LocaleKeys.Hosted_Edit_header_editPlaces).tr(),
         ),
         body: provider.eventLoadingStatus is Submitted
             ? Container(
                 child: overlayBlurBackgroundCircularProgressIndicator(
-                    // TODO translations
-                    context,
-                    "Updating event"),
+                    context, LocaleKeys.Hosted_Edit_labels_updatingEvent.tr()),
               )
             : Builder(
                 builder: (context) => Container(
@@ -63,12 +63,12 @@ class _EditSlotsPageState extends State<EditSlotsPage> {
                           onChanged: (v) => slots = int.parse(v),
                           onSaved: (v) => provider.post.event.slots = slots,
                           textInputType: TextInputType.number,
-                          textHint: "Available Places", //TODO: translation
+                          //textHint: "Available Places",
                         ),
                         Container(
                           padding: EdgeInsets.only(bottom: 50),
                           child: persistButton(
-                              label: "Save", //TODO: translation
+                              label: LocaleKeys.Hosted_Edit_btns_update.tr(),
                               context: context,
                               isStateValid: true,
                               onPressed: () async {

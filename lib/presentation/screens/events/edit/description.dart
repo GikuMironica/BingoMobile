@@ -3,12 +3,14 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/inputs/text_area_input.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class EditPostDescription extends StatefulWidget {
   @override
@@ -45,14 +47,12 @@ class _EditPostDescriptionState extends State<EditPostDescription> {
             icon: HATheme.backButton,
             onPressed: () => Application.router.pop(context),
           ),
-          title: Text('Edit Description'),
+          title: Text(LocaleKeys.Hosted_Edit_header_editDescription).tr(),
         ),
         body: provider.eventLoadingStatus is Submitted
             ? Container(
                 child: overlayBlurBackgroundCircularProgressIndicator(
-                    // TODO translations
-                    context,
-                    "Updating event"),
+                    context, LocaleKeys.Hosted_Edit_labels_updatingEvent.tr()),
               )
             : Container(
                 padding: EdgeInsets.all(24.0),
@@ -65,8 +65,8 @@ class _EditPostDescriptionState extends State<EditPostDescription> {
                     children: <Widget>[
                       textAreaInput(
                         controller: descriptionController,
-                        validationMessage:
-                            "Please provide a valid description.", // TODO: translation
+                        validationMessage: LocaleKeys
+                            .Hosted_Create_validation_description.tr(),
                         isStateValid: provider
                             .validateDescription(descriptionController.text),
                         initialValue: provider.post.event.description,
@@ -75,12 +75,12 @@ class _EditPostDescriptionState extends State<EditPostDescription> {
                             descriptionController.text,
                         onChange: (value) => provider.onFieldChange(
                             descriptionController, value),
-                        hintText: 'Event Description', //TODO: translation
+                        //hintText: 'Event Description',
                       ),
                       Container(
                         padding: EdgeInsets.only(bottom: 50),
                         child: persistButton(
-                            label: "Save", //TODO: translation
+                            label: LocaleKeys.Hosted_Edit_btns_update.tr(),
                             context: context,
                             isStateValid: true,
                             onPressed: () async {
