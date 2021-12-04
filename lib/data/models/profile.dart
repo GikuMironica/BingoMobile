@@ -5,15 +5,17 @@ class Profile {
   String lastName;
   String profilePicture;
   String description;
+  String phoneNumber;
 
   Profile(
-      {this.firstName, this.lastName, this.profilePicture, this.description});
+      {this.firstName, this.lastName, this.profilePicture, this.description, this.phoneNumber});
 
   Profile.fromJson(Map<String, dynamic> json) {
     firstName = json['FirstName'];
     lastName = json['LastName'];
     profilePicture = json['ProfilePicture'];
     description = json['Description'];
+    phoneNumber = json['PhoneNumber'];
   }
 
   String get getFullName => "$firstName $lastName";
