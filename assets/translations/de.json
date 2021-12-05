@@ -144,7 +144,8 @@
           "buttons": {
             "confirmPhone": "Bestätigen"
           }
-        }
+        },
+        "label_sendingOtpDialog": "Code wird gesendet"
       }
     },
     "Settings": {}

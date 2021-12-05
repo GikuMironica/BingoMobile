@@ -30,6 +30,7 @@ class AccountProvider extends ChangeNotifier {
   BaseFormStatus picturesPageStatus;
   TimerState timerState;
 
+  CountdownTimer countDownTimer;
   String number;
   String otp;
   int currentTimerSeconds;
@@ -112,7 +113,7 @@ class AccountProvider extends ChangeNotifier {
 
     formStatus = Idle();
     Application.router.navigateTo(context, Routes.confirmMobile,
-        transition: TransitionType.cupertino);
+        transition: TransitionType.cupertino, replace: true);
     notifyListeners();
   }
 
@@ -121,7 +122,9 @@ class AccountProvider extends ChangeNotifier {
 
     await _firebaseOtpService.sendOtpAsync(
         context, number, sendingOtpFailCallback);
-    startTimer();
+    if(timerState is TimerStopped){
+      startTimer();
+    }
   }
 
   Future<void> confirmOtp(
@@ -135,6 +138,11 @@ class AccountProvider extends ChangeNotifier {
     var result = await _firebaseOtpService.verifyOtp(sms);
     if (!result) {
       otpTries++;
+      if(otpTries==5){
+        showNewErrorSnackbar('Wrong code entered 5 times');
+        Application.router.navigateTo(context, Routes.editAccount,
+            transition: TransitionType.cupertino, clearStack: true);
+      }
       return;
     }
 
@@ -196,7 +204,7 @@ class AccountProvider extends ChangeNotifier {
     timerState = TimerRunning();
     notifyListeners();
 
-    CountdownTimer countDownTimer = new CountdownTimer(
+    countDownTimer = new CountdownTimer(
       new Duration(seconds: currentTimerSeconds),
       new Duration(seconds: 1),
     );

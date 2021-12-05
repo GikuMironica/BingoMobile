@@ -160,7 +160,8 @@ class CodegenLoader extends AssetLoader{
           "buttons": {
             "confirmPhone": "Bestätigen"
           }
-        }
+        },
+        "label_sendingOtpDialog": "Code wird gesendet"
       }
     },
     "Settings": {}
@@ -340,7 +341,8 @@ static const Map<String,dynamic> en = {
           "buttons": {
             "confirmPhone": "Confirm"
           }
-        }
+        },
+        "label_sendingOtpDialog": "Seding code"
       }
     },
     "Settings": {}
