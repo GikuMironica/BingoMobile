@@ -7,6 +7,8 @@ import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class EditAccountDescription extends StatefulWidget {
   @override
@@ -36,8 +38,8 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
     return Scaffold(
         appBar: SimpleAppBar(
             context: context,
-            // TODO translation
-            text: 'Description',
+            text: LocaleKeys
+                .Account_EditProfile_EditDescription_pageTitle.tr(),
             actionButtons: _accountProvider.validateDescription(
                     _descriptionController.text, maxFieldLength)
                 ? [
@@ -61,14 +63,15 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
     if (_accountProvider.formStatus is Failed) {
       // Translation
       Future.delayed(Duration.zero, () async {
-        // TODO - translation
         showSnackBarWithError(
-            context: context, message: "Error, Something went wrong");
+            context: context, message: LocaleKeys
+            .Account_EditProfile_EditDescription_toasts_error.tr());
       });
       _accountProvider.formStatus = new Idle();
     }
     return _accountProvider.formStatus is Submitted
-        ? overlayBlurBackgroundCircularProgressIndicator(context, 'Updating')
+        ? overlayBlurBackgroundCircularProgressIndicator(context, LocaleKeys
+        .Account_EditProfile_EditDescription_labels_updatingDialog.tr())
         : Form(
             key: _formKey,
             child: Column(
@@ -80,8 +83,8 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
                 Padding(
                   padding: EdgeInsets.only(left: 12),
                   child: Text(
-                    // TODO translation
-                    'Description',
+                    LocaleKeys
+                        .Account_EditProfile_EditDescription_labels_descriptionLabel.tr(),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -94,8 +97,8 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
                   isStateValid: _accountProvider.validateDescription(
                       _descriptionController.text, maxFieldLength),
                   initialValue: _accountProvider.currentIdentity.description,
-                  // TODO translation
-                  validationMessage: "Profile description too long",
+                  validationMessage: LocaleKeys
+                      .Account_EditProfile_EditDescription_validation_descriptionTooLong.tr(),
                   onChange: (v) => _accountProvider.onDescriptionChange(
                       v, _descriptionController),
                 )

@@ -7,6 +7,8 @@ import 'package:hopaut/controllers/providers/account_provider.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
 import 'package:hopaut/config/injection.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class EditAccountName extends StatefulWidget {
   @override
@@ -37,8 +39,9 @@ class _EditAccountNameState extends State<EditAccountName> {
     return Scaffold(
         appBar: SimpleAppBar(
           context: context,
-          // TODO - Translation
-          text: 'Name',
+          text: LocaleKeys
+              .Account_EditProfile_EditName_pageTitle
+              .tr(),
           actionButtons: !_accountProvider
                       .validateFirstName(_firstNameController.text) ||
                   !_accountProvider.validateLastName(_lastNameController.text)
@@ -66,43 +69,43 @@ class _EditAccountNameState extends State<EditAccountName> {
     if (_accountProvider.formStatus is Failed) {
       // Translation
       Future.delayed(Duration.zero, () async {
-        // TODO - translation
         showSnackBarWithError(
-            context: context, message: "Error, Something went wrong");
+            context: context, message: LocaleKeys
+            .Account_EditProfile_EditName_toasts_error.tr());
       });
       _accountProvider.formStatus = new Idle();
     }
     return _accountProvider.formStatus is Submitted
-        // TODO translation
-        ? overlayBlurBackgroundCircularProgressIndicator(context, 'Updating')
+        ? overlayBlurBackgroundCircularProgressIndicator(context, LocaleKeys
+        .Account_EditProfile_EditName_labels_updatingDialog.tr())
         : Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // translation
-                _fieldSpacing(label: 'Name'),
+                _fieldSpacing(label: LocaleKeys.Account_EditProfile_EditName_labels_nameLabel.tr()),
                 valueInput(
                     maxLength: AccountProvider.namesMaxLength,
                     controller: _firstNameController,
                     isStateValid: _accountProvider
                         .validateFirstName(_firstNameController.text),
-                    // TODO translations
-                    validationMessage: "Please provide a valid name.",
+                    validationMessage: LocaleKeys
+                        .Account_EditProfile_EditName_validation_inputValidName.tr(),
                     initialValue: _accountProvider.currentIdentity.firstName,
                     onChange: (v) => _accountProvider.onFirstNameChange(
                         v, _firstNameController)),
                 // translation
                 Divider(),
-                _fieldSpacing(label: 'Last name'),
+                _fieldSpacing(label: LocaleKeys.Account_EditProfile_EditName_labels_lastName.tr()),
                 valueInput(
                     maxLength: AccountProvider.namesMaxLength,
                     controller: _lastNameController,
                     isStateValid: _accountProvider
                         .validateLastName(_lastNameController.text),
                     initialValue: _accountProvider.currentIdentity.lastName,
-                    // TODO translations
-                    validationMessage: "Please provide a valid name.",
+                    validationMessage: LocaleKeys
+                        .Account_EditProfile_EditName_validation_inputValidName.tr(),
                     onChange: (v) => _accountProvider.onLastNameChange(
                         v, _lastNameController)),
               ],

@@ -157,6 +157,52 @@
           }
         },
         "label_sendingOtpDialog": "Code wird gesendet"
+      },
+      "EditName": {
+        "pageTitle": "Name bearbeiten",
+        "labels": {
+          "nameLabel": "Name",
+          "lastName": "Nachname",
+          "updatingDialog": "Aktualisierung"
+        },
+        "validation": {
+          "inputValidName": "Bitte geben Sie einen gültigen Namen an"
+        },
+        "toasts": {
+          "error": "Etwas ist schief gelaufen"
+        }
+      },
+      "EditDescription": {
+        "pageTitle": "Profilbeschreibung bearbeiten",
+        "labels": {
+          "updatingDialog": "Aktualisierung",
+          "descriptionLabel": "Profilbeschreibung"
+        },
+        "validation": {
+          "descriptionTooLong": "Profilbeschreibung ist zu lang"
+        },
+        "toasts": {
+          "error": "Etwas ist schief gelaufen"
+        }
+      },
+      "EditProfilePicture": {
+        "pageTitle": "Profilbild ändern",
+        "navigationLabels": {
+          "changePicture": "Bild ändern",
+          "deletePicture": "Bild löschen"
+        },
+        "labels": {
+          "camera": "der Kamera",
+          "gallery": "der Galerie",
+          "uploadPicture": "Bild hochladen von"
+        },
+        "toasts": {
+          "profilePicUpdated": "Profilbild aktualisiert"
+        },
+        "buttons": {
+          "cancel": "Abbrechen",
+          "setPicture": "Als Profilbild festlegen"
+        }
       }
     },
     "Settings": {}
