@@ -208,9 +208,9 @@ class CodegenLoader extends AssetLoader{
           "deletePicture": "Bild löschen"
         },
         "labels": {
-          "camera": "der Kamera",
-          "gallery": "der Galerie",
-          "uploadPicture": "Bild hochladen von"
+          "camera": "Kamera",
+          "gallery": "Galerie",
+          "uploadPicture": "Bild hochladen"
         },
         "toasts": {
           "profilePicUpdated": "Profilbild aktualisiert"
@@ -221,7 +221,53 @@ class CodegenLoader extends AssetLoader{
         }
       }
     },
-    "Settings": {}
+    "Settings": {
+      "DeleteAccount": {},
+      "ReportBug": {},
+      "ChangePassword": {
+        "pageTitle": "Passwort ändern",
+        "labels": {
+          "forgotPasswordInstructions": "Wenn Sie Ihr Passwort vergessen haben, können Sie sich abmelden und ein neues Passwort anfordern",
+          "updatingDialog": "Aktualisierung läuft"
+        },
+        "toasts": {
+          "wrongPassword": "Altes Passwort ist falsch",
+          "passwordUpdated": "Passwort aktualisiert"
+        },
+        "hints": {
+          "enterOldPassword": "Geben Sie Ihr altes Passwort ein",
+          "enterNewPassword": "Geben Sie Ihr neues Passwort ein"
+        },
+        "validation": {
+          "inputOldPassword": "Bitte geben Sie Ihr altes Passwort ein",
+          "inputNewPassword": "Passwort muss mindestens 8 Zeichen lang sein und Groß- und Kleinbuchstaben sowie Ziffern enthalten"
+        },
+        "buttons": {
+          "changePassword": "Passwort ändern"
+        }
+      },
+      "pageTitle": "Einstellungen",
+      "subHeader": {
+        "notifications": "Benachrichtigungen",
+        "account": "Konto",
+        "info": "Infos",
+        "feedback": "Rückmeldung"
+      },
+      "navigationLabels": {
+        "pushNotifications": "Push-Benachrichtigungen",
+        "changePassword": "Passwort ändern",
+        "logout": "Abmelden",
+        "deleteAccount": "Konto löschen",
+        "termsAndServices": "Nutzungsbedingungen",
+        "privacyPolicy": "Datenschutzerklärung",
+        "imprint": "Impressum",
+        "leaveRating": "Bewertung abgeben",
+        "reportBug": "Fehler melden"
+      },
+      "labels": {
+        "loggingOutDialog": "Abmeldung läuft"
+      }
+    }
   },
   "Authentication": {
     "Register": {},
@@ -448,7 +494,7 @@ static const Map<String,dynamic> en = {
         "labels": {
           "camera": "Camera",
           "gallery": "Gallery",
-          "uploadPicture": "Upload picture from"
+          "uploadPicture": "Upload picture"
         },
         "toasts": {
           "profilePicUpdated": "Profile picture updated"
@@ -459,7 +505,53 @@ static const Map<String,dynamic> en = {
         }
       }
     },
-    "Settings": {}
+    "Settings": {
+      "DeleteAccount": {},
+      "ReportBug": {},
+      "ChangePassword": {
+        "pageTitle": "Change password",
+        "labels": {
+          "forgotPasswordInstructions": "If you have forgotten your password, you can log out and request a password reset",
+          "updatingDialog": "Updating"
+        },
+        "toasts": {
+          "wrongPassword": "Old password is incorrect",
+          "passwordUpdated": "Password updated"
+        },
+        "hints": {
+          "enterOldPassword": "Enter your old password",
+          "enterNewPassword": "Enter your new password"
+        },
+        "validation": {
+          "inputOldPassword": "Please input your old password",
+          "inputNewPassword": "Password must be at least 8 characters length, must contain upper, lower case letters and digits"
+        },
+        "buttons": {
+          "changePassword": "Change password"
+        }
+      },
+      "pageTitle": "Settings",
+      "subHeader": {
+        "notifications": "Notifications",
+        "account": "Account",
+        "info": "Info",
+        "feedback": "Feedback"
+      },
+      "navigationLabels": {
+        "pushNotifications": "Push notifications",
+        "changePassword": "Change password",
+        "logout": "Logout",
+        "deleteAccount": "Delete account",
+        "termsAndServices": "Terms of services",
+        "privacyPolicy": "Privacy policy",
+        "imprint": "Imprint",
+        "leaveRating": "Leave a rating",
+        "reportBug": "Report a bug"
+      },
+      "labels": {
+        "loggingOutDialog": "Logging out"
+      }
+    }
   },
   "Authentication": {
     "Register": {},
