@@ -129,7 +129,8 @@
           "buttons": {
             "confirmPhone": "Confirm"
           }
-        }
+        },
+        "label_sendingOtpDialog": "Seding code"
       }
     },
     "Settings": {}

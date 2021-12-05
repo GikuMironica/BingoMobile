@@ -107,6 +107,7 @@ abstract class  LocaleKeys {
   static const Account_EditProfile_EditMobile_ConfirmMobile_buttons_confirmPhone = 'Account.EditProfile.EditMobile.ConfirmMobile.buttons.confirmPhone';
   static const Account_EditProfile_EditMobile_ConfirmMobile_buttons = 'Account.EditProfile.EditMobile.ConfirmMobile.buttons';
   static const Account_EditProfile_EditMobile_ConfirmMobile = 'Account.EditProfile.EditMobile.ConfirmMobile';
+  static const Account_EditProfile_EditMobile_label_sendingOtpDialog = 'Account.EditProfile.EditMobile.label_sendingOtpDialog';
   static const Account_EditProfile_EditMobile = 'Account.EditProfile.EditMobile';
   static const Account_EditProfile = 'Account.EditProfile';
   static const Account_Settings = 'Account.Settings';

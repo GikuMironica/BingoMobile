@@ -41,7 +41,6 @@ class _EditMobileState extends State<EditMobile> {
     return Scaffold(
         appBar: SimpleAppBar(
           context: context,
-          // TODO - Translation
           text: LocaleKeys.Account_EditProfile_EditMobile_pageTitle.tr(),
         ),
         body: Container(
@@ -57,7 +56,6 @@ class _EditMobileState extends State<EditMobile> {
     if (_accountProvider.formStatus is Failed) {
       // Translation
       Future.delayed(Duration.zero, () async {
-        // TODO - translation
         showSnackBarWithError(
             context: context,
             message: LocaleKeys.Account_EditProfile_EditMobile_errorToast_Error
@@ -105,9 +103,9 @@ class _EditMobileState extends State<EditMobile> {
         ),
         Visibility(
             visible: _accountProvider.formStatus is Submitted,
-            // TODO translate
             child: overlayBlurBackgroundCircularProgressIndicator(
-                context, 'Sending OTP')),
+                context, LocaleKeys.Account_EditProfile_EditMobile_label_sendingOtpDialog
+                .tr())),
       ],
     );
   }

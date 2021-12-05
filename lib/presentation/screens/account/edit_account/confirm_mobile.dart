@@ -160,8 +160,8 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
     super.dispose();
     resendOtpSwitch = false;
     _accountProvider.otp = null;
+    _accountProvider.otpTries = 5;
     _accountProvider.currentTimerSeconds = Configurations.resendOtpTime;
-    _accountProvider.timerState = TimerStopped();
     _accountProvider.formStatus = Idle();
     textEditingController.dispose();
   }
