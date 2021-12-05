@@ -120,12 +120,23 @@ class _ProfileDialogState extends State<ProfileDialog> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
+              Visibility(
+                visible: _profileContext.phoneNumber != null,
+                child: Text(
+                  _profileContext.phoneNumber??" ",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 16.0,
+                  ),
+                ),
+              ),
               SizedBox(height: 16.0),
               Text(
                 _profileContext.description,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 16.0,
+                  fontSize: 12.0,
                 ),
               ),
               SizedBox(height: 24.0),

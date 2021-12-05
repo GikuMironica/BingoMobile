@@ -4,7 +4,7 @@ Hopaut - Mobile
 
 ## Getting Started
 
-## To regenerate the injection.config.dart file:
+## To regenerate the injection.config.dart, don;t forget to delete it first if u want to update it:
 - flutter packages pub run build_runner watch
 
 ## To regenerate the LocalKeys.dart for the translations:

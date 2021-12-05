@@ -144,15 +144,176 @@ class CodegenLoader extends AssetLoader{
       "placeholder_EmptyDescription": "Leer",
       "successToast_ProfileUpdated": "Profil wurde aktualisiert",
       "EditMobile": {
-        "pageTitle": "Bestätigen Sie Ihre Rufnummer",
+        "pageTitle": "Rufnummer ändern",
         "label_verifyNumberInfo": "Sie erhalten eine SMS-Nachricht (es können Gebühren anfallen) zur Bestätigung Ihrer Telefonnummer. Geben Sie Ihre Telefonnummer ein.",
         "errorToast_Error": "Fehler, etwas ist schief gelaufen",
         "hintLabel_PhoneNumber": "Rufnummer",
         "validationLabel_InvalidNumber": "Ungültige Rufnummer",
-        "button_Next": "Weiter"
+        "button_Next": "Weiter",
+        "ConfirmMobile": {
+          "pageTitle": "Bestätigen Sie Ihre Rufnummer",
+          "toasts": {
+            "wrongCode5Times": "Falscher Code 5 Mal eingegeben",
+            "failedToUpdateNumber": "Aktualisierung der Telefonnummer fehlgeschlagen",
+            "invalidPhone": "Die angegebene Rufnummer ist ungültig",
+            "serviceUnavaialble": "Dieser Dienst ist derzeit nicht verfügbar. Bitte versuchen Sie es morgen erneut. ",
+            "invalidOtp": "Das angegebene OTP ist ungültig",
+            "expiredOtp": "Der angegebene Code ist abgelaufen"
+          },
+          "labels": {
+            "confirmNumberInfo": "Bitte geben Sie den 6-stelligen Code ein, der Ihnen zugesandt wurde",
+            "confirmThisNumber": "Bestätigen",
+            "resendOTP": "Code erneut senden"
+          },
+          "buttons": {
+            "confirmPhone": "Bestätigen"
+          },
+          "validation": {
+            "inputValidOtp": "Bitte geben Sie einen gültigen Code ein"
+          }
+        },
+        "label_sendingOtpDialog": "Code wird gesendet"
+      },
+      "EditName": {
+        "pageTitle": "Name bearbeiten",
+        "labels": {
+          "nameLabel": "Name",
+          "lastName": "Nachname",
+          "updatingDialog": "Aktualisierung"
+        },
+        "validation": {
+          "inputValidName": "Bitte geben Sie einen gültigen Namen an"
+        },
+        "toasts": {
+          "error": "Etwas ist schief gelaufen"
+        }
+      },
+      "EditDescription": {
+        "pageTitle": "Profilbeschreibung bearbeiten",
+        "labels": {
+          "updatingDialog": "Aktualisierung",
+          "descriptionLabel": "Profilbeschreibung"
+        },
+        "validation": {
+          "descriptionTooLong": "Profilbeschreibung ist zu lang"
+        },
+        "toasts": {
+          "error": "Etwas ist schief gelaufen"
+        }
+      },
+      "EditProfilePicture": {
+        "pageTitle": "Profilbild ändern",
+        "navigationLabels": {
+          "changePicture": "Bild ändern",
+          "deletePicture": "Bild löschen"
+        },
+        "labels": {
+          "camera": "Kamera",
+          "gallery": "Galerie",
+          "uploadPicture": "Bild hochladen"
+        },
+        "toasts": {
+          "profilePicUpdated": "Profilbild aktualisiert",
+          "error": "Etwas ist schief gelaufen"
+        },
+        "buttons": {
+          "cancel": "Abbrechen",
+          "setPicture": "Als Profilbild festlegen"
+        }
       }
     },
-    "Settings": {}
+    "Settings": {
+      "DeleteAccount": {
+        "dialogTitle": "Konto löschen",
+        "labels": {
+          "deleteInfo1": "Sobald Sie bestätigen, werden alle Ihre Kontodaten gelöscht.",
+          "deleteInfo2": "Die Löschung des Kontos ist ",
+          "deleteInfo3": "endgültig",
+          "deleteInfo4": ". Es gibt keine Möglichkeit, Ihr Konto wiederherzustellen.",
+          "deleteInfo5": "Bitte geben Sie zur Bestätigung Ihre E-Mail-Adresse ein:"
+        },
+        "hints": {
+          "enterEmail": "E-Mail eingeben",
+          "email": "E-Mail"
+        },
+        "validation": {
+          "inputValidEmail": "Bitte geben Sie eine gültige E-Mail ein"
+        },
+        "buttons": {
+          "delete": "Löschen",
+          "cancel": "Abbrechen"
+        }
+      },
+      "ReportBug": {
+        "pageTitle": "Einen Fehler melden",
+        "labels": {
+          "somethingIsntWorking": "Funktioniert etwas nicht wie erwartet?",
+          "uploadScreenshots": "Screenshots hochladen"
+        },
+        "hints": {
+          "issueReportHint": "Bitte erklären Sie kurz, was passiert ist und wie wir das Problem reproduzieren können."
+        },
+        "validation": {
+          "invalidIssueDescription": "Beschreibung ist nicht gültig"
+        },
+        "dialogs": {
+          "thankYouDialog": {
+            "headerLabel": "Vielen Dank!",
+            "messageLabel": "Ihr Beitrag wird unserem Team helfen, die Dienstleistungen für Sie zu verbessern.",
+            "buttonLabel": "Zurück zu den Einstellungen"
+          },
+          "uploadingDialog": {
+            "uploadingReport": "Bericht wird versendet"
+          }
+        },
+        "toasts": {
+          "error": "Etwas ist schief gelaufen"
+        }
+      },
+      "ChangePassword": {
+        "pageTitle": "Passwort ändern",
+        "labels": {
+          "forgotPasswordInstructions": "Wenn Sie Ihr Passwort vergessen haben, können Sie sich abmelden und ein neues Passwort anfordern",
+          "updatingDialog": "Aktualisierung läuft"
+        },
+        "toasts": {
+          "wrongPassword": "Altes Passwort ist falsch",
+          "passwordUpdated": "Passwort aktualisiert"
+        },
+        "hints": {
+          "enterOldPassword": "Geben Sie Ihr altes Passwort ein",
+          "enterNewPassword": "Geben Sie Ihr neues Passwort ein"
+        },
+        "validation": {
+          "inputOldPassword": "Bitte geben Sie Ihr altes Passwort ein",
+          "inputNewPassword": "Passwort muss mindestens 8 Zeichen lang sein und Groß- und Kleinbuchstaben sowie Ziffern enthalten"
+        },
+        "buttons": {
+          "changePassword": "Passwort ändern"
+        }
+      },
+      "pageTitle": "Einstellungen",
+      "subHeader": {
+        "notifications": "Benachrichtigungen",
+        "account": "Konto",
+        "info": "Infos",
+        "feedback": "Rückmeldung"
+      },
+      "navigationLabels": {
+        "pushNotifications": "Push-Benachrichtigungen",
+        "changePassword": "Passwort ändern",
+        "logout": "Abmelden",
+        "deleteAccount": "Konto löschen",
+        "termsAndServices": "Nutzungsbedingungen",
+        "privacyPolicy": "Datenschutzerklärung",
+        "imprint": "Impressum",
+        "leaveRating": "Bewertung abgeben",
+        "reportBug": "Fehler melden"
+      },
+      "labels": {
+        "loggingOutDialog": "Abmeldung läuft"
+      }
+    }
   },
   "Authentication": {
     "Register": {},
@@ -313,15 +474,176 @@ static const Map<String,dynamic> en = {
       "placeholder_EmptyDescription": "Empty",
       "successToast_ProfileUpdated": "Profile updated",
       "EditMobile": {
-        "pageTitle": "Confirm your phone number",
+        "pageTitle": "Change phone number",
         "label_verifyNumberInfo": "You will get an SMS message (carrier charges may apply) to confirm your phone number. Enter your phone number.",
         "errorToast_Error": "Error, something went wrong",
         "hintLabel_PhoneNumber": "Phone number",
         "validationLabel_InvalidNumber": "Invalid phone number",
-        "button_Next": "Next"
+        "button_Next": "Next",
+        "ConfirmMobile": {
+          "pageTitle": "Confirm your phone number",
+          "toasts": {
+            "wrongCode5Times": "Wrong code entered 5 times",
+            "failedToUpdateNumber": "Failed to update phone number",
+            "invalidPhone": "The provided phone number is not valid",
+            "serviceUnavaialble": "This service is currently unavailable, please try again tomorrow.",
+            "invalidOtp": "The provided OTP is not valid",
+            "expiredOtp": "The provided code has expired"
+          },
+          "labels": {
+            "confirmNumberInfo": "Please enter the 6-digit code that was sent to you",
+            "confirmThisNumber": "Confirm",
+            "resendOTP": "Resend OTP"
+          },
+          "buttons": {
+            "confirmPhone": "Confirm"
+          },
+          "validation": {
+            "inputValidOtp": "Please input a valid OTP"
+          }
+        },
+        "label_sendingOtpDialog": "Seding code"
+      },
+      "EditName": {
+        "pageTitle": "Edit name",
+        "labels": {
+          "nameLabel": "Name",
+          "lastName": "Last name",
+          "updatingDialog": "Updating"
+        },
+        "validation": {
+          "inputValidName": "Please provide a valid name."
+        },
+        "toasts": {
+          "error": "Something went wrong"
+        }
+      },
+      "EditDescription": {
+        "pageTitle": "Edit profile description",
+        "labels": {
+          "updatingDialog": "Updating",
+          "descriptionLabel": "Profile description"
+        },
+        "validation": {
+          "descriptionTooLong": "Profile description too long"
+        },
+        "toasts": {
+          "error": "Something went wrong"
+        }
+      },
+      "EditProfilePicture": {
+        "pageTitle": "Change profile picture",
+        "navigationLabels": {
+          "changePicture": "Change picture",
+          "deletePicture": "Delete picture"
+        },
+        "labels": {
+          "camera": "Camera",
+          "gallery": "Gallery",
+          "uploadPicture": "Upload picture"
+        },
+        "toasts": {
+          "profilePicUpdated": "Profile picture updated",
+          "error": "Something went wrong"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "setPicture": "Set as profile picture"
+        }
       }
     },
-    "Settings": {}
+    "Settings": {
+      "DeleteAccount": {
+        "dialogTitle": "Delete account",
+        "labels": {
+          "deleteInfo1": "Once you confirm, all of your account data will be deleted.",
+          "deleteInfo2": "Account deletion is ",
+          "deleteInfo3": "final",
+          "deleteInfo4": ". There will be no way to restore your account.",
+          "deleteInfo5": "Please enter your email address to confirm:"
+        },
+        "hints": {
+          "enterEmail": "Enter your email",
+          "email": "Email"
+        },
+        "validation": {
+          "inputValidEmail": "Please input a valid email"
+        },
+        "buttons": {
+          "delete": "Delete",
+          "cancel": "Cancel"
+        }
+      },
+      "ReportBug": {
+        "pageTitle": "Report an issue",
+        "labels": {
+          "somethingIsntWorking": "Something isn\\'t working as expected?",
+          "uploadScreenshots": "Upload screenshots"
+        },
+        "hints": {
+          "issueReportHint": "Please explain briefly what happened and how can we reproduce the issue?"
+        },
+        "validation": {
+          "invalidIssueDescription": "Description is not valid"
+        },
+        "dialogs": {
+          "thankYouDialog": {
+            "headerLabel": "Thank you!",
+            "messageLabel": "Your input will significantly help our team improve the services we provide you.",
+            "buttonLabel": "Back to settings"
+          },
+          "uploadingDialog": {
+            "uploadingReport": "Sending report"
+          }
+        },
+        "toasts": {
+          "error": "Something went wrong"
+        }
+      },
+      "ChangePassword": {
+        "pageTitle": "Change password",
+        "labels": {
+          "forgotPasswordInstructions": "If you have forgotten your password, you can log out and request a password reset",
+          "updatingDialog": "Updating"
+        },
+        "toasts": {
+          "wrongPassword": "Old password is incorrect",
+          "passwordUpdated": "Password updated"
+        },
+        "hints": {
+          "enterOldPassword": "Enter your old password",
+          "enterNewPassword": "Enter your new password"
+        },
+        "validation": {
+          "inputOldPassword": "Please input your old password",
+          "inputNewPassword": "Password must be at least 8 characters length, must contain upper, lower case letters and digits"
+        },
+        "buttons": {
+          "changePassword": "Change password"
+        }
+      },
+      "pageTitle": "Settings",
+      "subHeader": {
+        "notifications": "Notifications",
+        "account": "Account",
+        "info": "Info",
+        "feedback": "Feedback"
+      },
+      "navigationLabels": {
+        "pushNotifications": "Push notifications",
+        "changePassword": "Change password",
+        "logout": "Logout",
+        "deleteAccount": "Delete account",
+        "termsAndServices": "Terms of services",
+        "privacyPolicy": "Privacy policy",
+        "imprint": "Imprint",
+        "leaveRating": "Leave a rating",
+        "reportBug": "Report a bug"
+      },
+      "labels": {
+        "loggingOutDialog": "Logging out"
+      }
+    }
   },
   "Authentication": {
     "Register": {},

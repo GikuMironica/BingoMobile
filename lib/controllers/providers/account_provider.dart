@@ -1,17 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart' as fba;
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hopaut/config/constants/configurations.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/controllers/providers/page_states/otp_timer_state.dart';
 import 'package:hopaut/data/domain/request_result.dart';
 import 'package:hopaut/data/models/user.dart';
 import 'package:hopaut/data/repositories/user_repository.dart';
-import 'package:hopaut/presentation/screens/account/edit_account/confirm_mobile.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/services/authentication_service.dart';
+import 'package:hopaut/services/firebase_otp.dart';
 import 'package:injectable/injectable.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:quiver/async.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 @lazySingleton
 class AccountProvider extends ChangeNotifier {
@@ -23,14 +30,24 @@ class AccountProvider extends ChangeNotifier {
   // State data
   BaseFormStatus formStatus;
   BaseFormStatus picturesPageStatus;
+  TimerState timerState;
+
+  CountdownTimer countDownTimer;
   String number;
+  String otp;
+  int currentTimerSeconds;
+  int otpTries;
 
   // Services, repositories and models
   AuthenticationService _authenticationService;
   UserRepository _userRepository;
   User get currentIdentity => _authenticationService.user;
+  FirebaseOtpService _firebaseOtpService;
 
   AccountProvider() {
+    otpTries = 0;
+    timerState = TimerStopped();
+    currentTimerSeconds = Configurations.resendOtpTime;
     _authenticationService = getIt<AuthenticationService>();
     _userRepository = getIt<UserRepository>();
     formStatus = Idle();
@@ -85,11 +102,80 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-  navigateToConfirmPhone(BuildContext context, String number, bool isValid) {
+  Future<void> continueToPhoneConfirmation(
+      BuildContext context, bool isValid) async {
     if (!isValid) {
       return;
     }
-    Application.router.navigateTo(context, Routes.confirmMobile);
+
+    formStatus = Submitted();
+    notifyListeners();
+
+    sendOtp(context);
+
+    formStatus = Idle();
+    Application.router.navigateTo(context, Routes.confirmMobile,
+        transition: TransitionType.cupertino, replace: true);
+    notifyListeners();
+  }
+
+  Future<void> sendOtp(BuildContext context) async {
+    _firebaseOtpService = getIt<FirebaseOtpService>();
+
+    await _firebaseOtpService.sendOtpAsync(
+        context, number, sendingOtpFailCallback);
+    if(timerState is TimerStopped){
+      startTimer();
+    }
+  }
+
+  Future<void> confirmOtp(
+      String sms, bool isStateValid, BuildContext context) async {
+    _firebaseOtpService = getIt<FirebaseOtpService>();
+
+    if (!isStateValid) {
+      return;
+    }
+
+    var result = await _firebaseOtpService.verifyOtp(sms);
+    if (!result) {
+      otpTries++;
+      if(otpTries==5){
+        showNewErrorSnackbar(LocaleKeys
+            .Account_EditProfile_EditMobile_ConfirmMobile_toasts_wrongCode5Times
+            .tr());
+        Application.router.navigateTo(context, Routes.editAccount,
+            transition: TransitionType.cupertino, clearStack: true);
+      }
+      return;
+    }
+
+    User tempUser = User(phoneNumber: number);
+    User updatedUser = await _userRepository.update(currentIdentity.id, tempUser);
+
+    if (updatedUser == null) {
+      showNewErrorSnackbar(LocaleKeys
+          .Account_EditProfile_EditMobile_ConfirmMobile_toasts_failedToUpdateNumber
+          .tr());
+    } else {
+      _authenticationService.setUser(updatedUser);
+      Application.router.navigateTo(context, Routes.editAccount,
+          transition: TransitionType.cupertino, clearStack: true);
+    }
+  }
+
+  sendingOtpFailCallback(fba.FirebaseAuthException e) {
+    if (e.code == 'invalid-phone-number') {
+      showNewErrorSnackbar(LocaleKeys
+          .Account_EditProfile_EditMobile_ConfirmMobile_toasts_invalidPhone
+          .tr());
+    } else {
+      showNewErrorSnackbar(
+          LocaleKeys
+              .Account_EditProfile_EditMobile_ConfirmMobile_toasts_serviceUnavaialble
+              .tr(),
+          toastGravity: ToastGravity.TOP);
+    }
   }
 
   Future<bool> deleteProfilePictureAsync(String userId) async {
@@ -113,13 +199,38 @@ class AccountProvider extends ChangeNotifier {
         _authenticationService.setUser(user);
         return result;
       } else {
-        // TODO Translation, to log
         return RequestResult(
-            data: null, isSuccessful: false, errorMessage: "An error occurred");
+            data: null, isSuccessful: false, errorMessage: LocaleKeys
+            .Account_EditProfile_EditProfilePicture_toasts_error.tr());
       }
     } else {
       return result;
     }
+  }
+
+  /// OTP countdown
+  void startTimer() {
+    timerState = TimerRunning();
+    notifyListeners();
+
+    countDownTimer = new CountdownTimer(
+      new Duration(seconds: currentTimerSeconds),
+      new Duration(seconds: 1),
+    );
+
+    var sub = countDownTimer.listen(null);
+    sub.onData((duration) {
+      currentTimerSeconds =
+          Configurations.resendOtpTime - duration.elapsed.inSeconds;
+      notifyListeners();
+    });
+
+    sub.onDone(() {
+      sub.cancel();
+      timerState = TimerStopped();
+      currentTimerSeconds = Configurations.resendOtpTime;
+      notifyListeners();
+    });
   }
 
   /// Validation Methods
@@ -155,9 +266,18 @@ class AccountProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void onOtpChange(String value, TextEditingController controller) async {
+    controller.text = value;
+    notifyListeners();
+  }
+
   void resetProvider() {
+    timerState = TimerStopped();
+    currentTimerSeconds = Configurations.resendOtpTime;
     formStatus = Idle();
     picturesPageStatus = Idle();
     number = null;
+    otp = null;
+    otpTries = 0;
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/theme.dart';
-import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/change_password_provider.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
@@ -8,6 +7,8 @@ import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   @override
@@ -72,8 +73,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              // TODO translation
-              'Change Password',
+              LocaleKeys
+                  .Account_Settings_ChangePassword_pageTitle.tr(),
               style: TextStyle(
                   shadows: [
                     Shadow(
@@ -122,56 +123,51 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     return RichText(
       text: TextSpan(
           text:
-              // TODO translations
-              'If you have forgotten your password, you can log out and request a ',
-          style: TextStyle(color: Colors.grey),
-          children: [
-            // TODO translation
-            TextSpan(text: 'Password Reset'),
-            TextSpan(text: '.')
-          ]),
+          LocaleKeys
+              .Account_Settings_ChangePassword_labels_forgotPasswordInstructions.tr(),
+          style: TextStyle(color: Colors.grey)),
     );
   }
 
   Widget inputForm(BuildContext context) {
     if (_passwordProvider.formStatus is Failed) {
       Future.delayed(Duration.zero, () async {
-        // TODO - translation
-        showSnackBarWithError(context: context, message: "Wrong old password");
+        showSnackBarWithError(context: context, message: LocaleKeys
+            .Account_Settings_ChangePassword_toasts_wrongPassword.tr());
       });
     } else if (_passwordProvider.formStatus is Success) {
       Future.delayed(Duration.zero, () async {
-        // TODO - translation
-        showSuccessSnackBar(context: context, message: "Password updated");
+        showSuccessSnackBar(context: context, message: LocaleKeys
+            .Account_Settings_ChangePassword_toasts_passwordUpdated.tr());
       });
     }
     Future.delayed(Duration(seconds: 1), () async {
       _passwordProvider.formStatus = Idle();
     });
     return _passwordProvider.formStatus is Submitted
-        ? overlayBlurBackgroundCircularProgressIndicator(context, 'Updating')
+        ? overlayBlurBackgroundCircularProgressIndicator(context, LocaleKeys
+        .Account_Settings_ChangePassword_labels_updatingDialog.tr())
         : Form(
             key: _formKey,
             child: Column(
               children: [
-                // TODO translation
                 passwordInputField(
                     context: context,
-                    hint: 'Enter your old password',
-                    validationMessage: 'Please input your old password',
+                    hint: LocaleKeys
+                        .Account_Settings_ChangePassword_hints_enterOldPassword.tr(),
+                    validationMessage: LocaleKeys
+                        .Account_Settings_ChangePassword_validation_inputOldPassword.tr(),
                     isStateValid: _passwordProvider.validateOldPassword(),
                     isTextObscured: _passwordProvider.passwordObscureText,
                     onObscureTap: _passwordProvider.toggleObscurePassword,
                     onChange: (v) => _passwordProvider.oldPasswordChange(v)),
                 SizedBox(height: 20),
-                // TODO translation
                 passwordInputField(
                     context: context,
-                    hint: 'Enter your new password',
-                    validationMessage:
-                        "Password must be at least 8 characters length," +
-                            " must contain upper, lower case letters" +
-                            " and digits",
+                    hint: LocaleKeys
+                        .Account_Settings_ChangePassword_hints_enterNewPassword.tr(),
+                    validationMessage: LocaleKeys
+                        .Account_Settings_ChangePassword_validation_inputNewPassword.tr(),
                     isStateValid: _passwordProvider.validateNewPassword(),
                     isTextObscured: _passwordProvider.newPasswordObscureText,
                     onObscureTap: _passwordProvider.toggleObscureNewPassword,
@@ -179,8 +175,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 SizedBox(height: 30),
                 persistButton(
                     context: context,
-                    // TODO translation
-                    label: 'Change password',
+                    label: LocaleKeys
+                        .Account_Settings_ChangePassword_buttons_changePassword.tr(),
                     isStateValid: _passwordProvider.validateNewPassword() &&
                         _passwordProvider.validateOldPassword(),
                     onPressed: () async => {

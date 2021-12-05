@@ -48,12 +48,8 @@ class DioService {
           } else if (error.response.statusCode == 429) {
             // TODO translation
             Fluttertoast.cancel();
-            Fluttertoast.showToast(
-                backgroundColor: HATheme.HOPAUT_PINK.withOpacity(0.7),
-                textColor: Colors.white,
-                gravity: ToastGravity.TOP,
-                toastLength: Toast.LENGTH_LONG,
-                msg: 'Exceeded requests quota');
+            showNewErrorSnackbar('Exceeded requests quota',
+                toastGravity: ToastGravity.TOP);
             return error;
           } else {
             return error;

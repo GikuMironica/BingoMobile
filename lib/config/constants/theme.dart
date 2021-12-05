@@ -13,6 +13,8 @@ class HATheme {
   static Icon backButton =
       Platform.isIOS ? Icon(Icons.arrow_back_ios) : Icon(Icons.arrow_back);
 
+  static const double PAGE_TITLE_SIZE = 18;
+
   static ThemeData themeData = ThemeData(
     primaryColor: HOPAUT_PINK,
     fontFamily: 'Poppins',
@@ -46,4 +48,7 @@ class HATheme {
     fontSize: 14.0,
     fontWeight: FontWeight.w400,
   );
+
+  static TextStyle LABEL_HEADER_STYLE =
+      TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 }

@@ -7,6 +7,8 @@ import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/presentation/widgets/dialogs/image_picker_dialog.dart';
 import 'package:hopaut/data/domain/request_result.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class EditAccountPicture extends StatefulWidget {
   @override
@@ -22,8 +24,7 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
     return Scaffold(
       key: scaffoldKey,
       appBar: SimpleAppBar(
-        // TODO translate
-        text: 'Profile Picture',
+        text: LocaleKeys.Account_EditProfile_EditProfilePicture_pageTitle.tr(),
         context: context,
       ),
       body: SingleChildScrollView(
@@ -41,8 +42,7 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
                 Icons.edit,
                 color: Colors.grey[400],
               ),
-              // TODO translate
-              title: Text('Change Picture'),
+              title: Text(LocaleKeys.Account_EditProfile_EditProfilePicture_navigationLabels_changePicture.tr()),
             ),
             Divider(),
             ListTile(
@@ -53,8 +53,7 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
                 Icons.delete,
                 color: Colors.redAccent,
               ),
-              // TODO translate
-              title: Text('Delete Picture',
+              title: Text(LocaleKeys.Account_EditProfile_EditProfilePicture_navigationLabels_deletePicture.tr(),
                   style: TextStyle(color: Colors.redAccent)),
             )
           ],
@@ -73,11 +72,11 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
               uploadAsync: _accountProvider.uploadProfilePictureAsync,
             )));
 
-    // TODO translation
     if (result != null) {
       result.isSuccessful
           ? showSuccessSnackBar(
-              scaffoldKey: scaffoldKey, message: "Profile picture updated")
+              scaffoldKey: scaffoldKey,
+              message: LocaleKeys.Account_EditProfile_EditProfilePicture_toasts_profilePicUpdated.tr())
           : showSnackBarWithError(
               scaffoldKey: scaffoldKey, message: result.errorMessage);
     }

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:provider/provider.dart';
-
 import 'data/models/user.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class Initialization extends StatefulWidget {
   Initialization();

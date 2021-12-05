@@ -170,11 +170,12 @@ SnackBar _errorSnackBar(String message) {
       backgroundColor: HATheme.HOPAUT_PINK.withOpacity(0.7));
 }
 
-void showNewErrorSnackbar(String message) {
+void showNewErrorSnackbar(String message, {ToastGravity toastGravity}) {
   Fluttertoast.showToast(
       backgroundColor: HATheme.HOPAUT_PINK.withOpacity(0.7),
       textColor: Colors.white,
       toastLength: Toast.LENGTH_LONG,
+      gravity: toastGravity ?? ToastGravity.BOTTOM,
       msg: message);
 }
 
