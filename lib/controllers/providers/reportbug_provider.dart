@@ -9,7 +9,8 @@ import 'package:hopaut/data/repositories/report_repository.dart';
 import 'package:hopaut/presentation/widgets/dialogs/fullscreen_dialog.dart';
 import 'package:hopaut/utils/image_utilities.dart';
 import 'package:injectable/injectable.dart';
-
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'page_states/base_form_status.dart';
 
 @lazySingleton
@@ -49,13 +50,14 @@ class ReportBugProvider with ChangeNotifier {
       Navigator.of(context).pushReplacement(PageRouteBuilder(
           opaque: false,
           pageBuilder: (BuildContext context, _, __) =>
-              // TODO - Translate
               FullscreenDialog(
-                svgAsset: 'assets/icons/svg/thank_you.svg',
-                header: 'Thank you!',
+                header: LocaleKeys
+                    .Account_Settings_ReportBug_dialogs_thankYouDialog_headerLabel.tr(),
                 message:
-                    'Your input will significantly help our team improve the services we provide you.',
-                buttonText: 'Back to settings',
+                LocaleKeys
+                    .Account_Settings_ReportBug_dialogs_thankYouDialog_messageLabel.tr(),
+                buttonText: LocaleKeys
+                    .Account_Settings_ReportBug_dialogs_thankYouDialog_buttonLabel.tr(),
                 route: Routes.settings,
               )));
     });

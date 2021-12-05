@@ -197,7 +197,8 @@
           "uploadPicture": "Bild hochladen"
         },
         "toasts": {
-          "profilePicUpdated": "Profilbild aktualisiert"
+          "profilePicUpdated": "Profilbild aktualisiert",
+          "error": "Etwas ist schief gelaufen"
         },
         "buttons": {
           "cancel": "Abbrechen",
@@ -206,8 +207,53 @@
       }
     },
     "Settings": {
-      "DeleteAccount": {},
-      "ReportBug": {},
+      "DeleteAccount": {
+        "dialogTitle": "Konto löschen",
+        "labels": {
+          "deleteInfo1": "Sobald Sie bestätigen, werden alle Ihre Kontodaten gelöscht.",
+          "deleteInfo2": "Die Löschung des Kontos ist ",
+          "deleteInfo3": "endgültig",
+          "deleteInfo4": ". Es gibt keine Möglichkeit, Ihr Konto wiederherzustellen.",
+          "deleteInfo5": "Bitte geben Sie zur Bestätigung Ihre E-Mail-Adresse ein:"
+        },
+        "hints": {
+          "enterEmail": "E-Mail eingeben",
+          "email": "E-Mail"
+        },
+        "validation": {
+          "inputValidEmail": "Bitte geben Sie eine gültige E-Mail ein"
+        },
+        "buttons": {
+          "delete": "Löschen",
+          "cancel": "Abbrechen"
+        }
+      },
+      "ReportBug": {
+        "pageTitle": "Einen Fehler melden",
+        "labels": {
+          "somethingIsntWorking": "Funktioniert etwas nicht wie erwartet?",
+          "uploadScreenshots": "Screenshots hochladen"
+        },
+        "hints": {
+          "issueReportHint": "Bitte erklären Sie kurz, was passiert ist und wie wir das Problem reproduzieren können."
+        },
+        "validation": {
+          "invalidIssueDescription": "Beschreibung ist nicht gültig"
+        },
+        "dialogs": {
+          "thankYouDialog": {
+            "headerLabel": "Vielen Dank!",
+            "messageLabel": "Ihr Beitrag wird unserem Team helfen, die Dienstleistungen für Sie zu verbessern.",
+            "buttonLabel": "Zurück zu den Einstellungen"
+          },
+          "uploadingDialog": {
+            "uploadingReport": "Bericht wird versendet"
+          }
+        },
+        "toasts": {
+          "error": "Etwas ist schief gelaufen"
+        }
+      },
       "ChangePassword": {
         "pageTitle": "Passwort ändern",
         "labels": {
