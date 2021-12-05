@@ -152,13 +152,24 @@ class CodegenLoader extends AssetLoader{
         "button_Next": "Weiter",
         "ConfirmMobile": {
           "pageTitle": "Bestätigen Sie Ihre Rufnummer",
-          "toasts": {},
+          "toasts": {
+            "wrongCode5Times": "Falscher Code 5 Mal eingegeben",
+            "failedToUpdateNumber": "Aktualisierung der Telefonnummer fehlgeschlagen",
+            "invalidPhone": "Die angegebene Rufnummer ist ungültig",
+            "serviceUnavaialble": "Dieser Dienst ist derzeit nicht verfügbar. Bitte versuchen Sie es morgen erneut. ",
+            "invalidOtp": "Das angegebene OTP ist ungültig",
+            "expiredOtp": "Der angegebene Code ist abgelaufen"
+          },
           "labels": {
             "confirmNumberInfo": "Bitte geben Sie den 6-stelligen Code ein, der Ihnen zugesandt wurde",
-            "confirmThisNumber": "Bestätigen"
+            "confirmThisNumber": "Bestätigen",
+            "resendOTP": "Code erneut senden"
           },
           "buttons": {
             "confirmPhone": "Bestätigen"
+          },
+          "validation": {
+            "inputValidOtp": "Bitte geben Sie einen gültigen Code ein"
           }
         },
         "label_sendingOtpDialog": "Code wird gesendet"
@@ -333,13 +344,24 @@ static const Map<String,dynamic> en = {
         "button_Next": "Next",
         "ConfirmMobile": {
           "pageTitle": "Confirm your phone number",
-          "toasts": {},
+          "toasts": {
+            "wrongCode5Times": "Wrong code entered 5 times",
+            "failedToUpdateNumber": "Failed to update phone number",
+            "invalidPhone": "The provided phone number is not valid",
+            "serviceUnavaialble": "This service is currently unavailable, please try again tomorrow.",
+            "invalidOtp": "The provided OTP is not valid",
+            "expiredOtp": "The provided code has expired"
+          },
           "labels": {
             "confirmNumberInfo": "Please enter the 6-digit code that was sent to you",
-            "confirmThisNumber": "Confirm"
+            "confirmThisNumber": "Confirm",
+            "resendOTP": "Resend OTP"
           },
           "buttons": {
             "confirmPhone": "Confirm"
+          },
+          "validation": {
+            "inputValidOtp": "Please input a valid OTP"
           }
         },
         "label_sendingOtpDialog": "Seding code"

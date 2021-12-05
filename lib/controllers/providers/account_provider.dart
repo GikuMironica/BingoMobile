@@ -17,6 +17,8 @@ import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/services/firebase_otp.dart';
 import 'package:injectable/injectable.dart';
 import 'package:quiver/async.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 @lazySingleton
 class AccountProvider extends ChangeNotifier {
@@ -139,19 +141,22 @@ class AccountProvider extends ChangeNotifier {
     if (!result) {
       otpTries++;
       if(otpTries==5){
-        showNewErrorSnackbar('Wrong code entered 5 times');
+        showNewErrorSnackbar(LocaleKeys
+            .Account_EditProfile_EditMobile_ConfirmMobile_toasts_wrongCode5Times
+            .tr());
         Application.router.navigateTo(context, Routes.editAccount,
             transition: TransitionType.cupertino, clearStack: true);
       }
       return;
     }
 
-    // TODO Save number in user model. and update state
     User tempUser = User(phoneNumber: number);
     User updatedUser = await _userRepository.update(currentIdentity.id, tempUser);
 
     if (updatedUser == null) {
-      showNewErrorSnackbar('Error, failed to update phone number');
+      showNewErrorSnackbar(LocaleKeys
+          .Account_EditProfile_EditMobile_ConfirmMobile_toasts_failedToUpdateNumber
+          .tr());
     } else {
       _authenticationService.setUser(updatedUser);
       Application.router.navigateTo(context, Routes.editAccount,
@@ -161,10 +166,14 @@ class AccountProvider extends ChangeNotifier {
 
   sendingOtpFailCallback(fba.FirebaseAuthException e) {
     if (e.code == 'invalid-phone-number') {
-      showNewErrorSnackbar('The provided phone number is not valid.');
+      showNewErrorSnackbar(LocaleKeys
+          .Account_EditProfile_EditMobile_ConfirmMobile_toasts_invalidPhone
+          .tr());
     } else {
       showNewErrorSnackbar(
-          'This service is currently unavailable, please try again tomorrow.',
+          LocaleKeys
+              .Account_EditProfile_EditMobile_ConfirmMobile_toasts_serviceUnavaialble
+              .tr(),
           toastGravity: ToastGravity.TOP);
     }
   }

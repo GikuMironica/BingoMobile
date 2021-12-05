@@ -42,7 +42,6 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
     return Scaffold(
         appBar: SimpleAppBar(
           context: context,
-          // TODO - Translation
           text: LocaleKeys
               .Account_EditProfile_EditMobile_ConfirmMobile_pageTitle.tr(),
         ),
@@ -61,7 +60,6 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
       Future.delayed(Duration.zero, () async {
         showSnackBarWithError(
             context: context,
-            // TODO - translation
             message: LocaleKeys.Account_EditProfile_EditMobile_errorToast_Error
                 .tr());
       });
@@ -101,7 +99,9 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
             maxLength: 6,
             isStateValid: textEditingController.text.length == 6,
             controller: textEditingController,
-            validationMessage: "Please input a valid OTP",
+            validationMessage: LocaleKeys
+                .Account_EditProfile_EditMobile_ConfirmMobile_validation_inputValidOtp
+                .tr(),
             hintText: "123456",
             onChange: (v) =>
                 _accountProvider.onOtpChange(v, textEditingController),
@@ -138,7 +138,9 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
                 leading: Icon(Icons.message,
                     color: resendOtpSwitch ? Colors.black : Colors.grey),
                 title: Text(
-                  'Resend OTP',
+                  LocaleKeys
+                      .Account_EditProfile_EditMobile_ConfirmMobile_labels_resendOTP
+                      .tr(),
                   style: TextStyle(
                     color: resendOtpSwitch ? Colors.black : Colors.grey,
                   ),

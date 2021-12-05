@@ -136,13 +136,24 @@
         "button_Next": "Next",
         "ConfirmMobile": {
           "pageTitle": "Confirm your phone number",
-          "toasts": {},
+          "toasts": {
+            "wrongCode5Times": "Wrong code entered 5 times",
+            "failedToUpdateNumber": "Failed to update phone number",
+            "invalidPhone": "The provided phone number is not valid",
+            "serviceUnavaialble": "This service is currently unavailable, please try again tomorrow.",
+            "invalidOtp": "The provided OTP is not valid",
+            "expiredOtp": "The provided code has expired"
+          },
           "labels": {
             "confirmNumberInfo": "Please enter the 6-digit code that was sent to you",
-            "confirmThisNumber": "Confirm"
+            "confirmThisNumber": "Confirm",
+            "resendOTP": "Resend OTP"
           },
           "buttons": {
             "confirmPhone": "Confirm"
+          },
+          "validation": {
+            "inputValidOtp": "Please input a valid OTP"
           }
         },
         "label_sendingOtpDialog": "Seding code"

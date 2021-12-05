@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:injectable/injectable.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 @lazySingleton
 class FirebaseOtpService {
@@ -14,7 +16,9 @@ class FirebaseOtpService {
 
   Future<bool> verifyOtp(String smsCode) async {
     if (verificationId == null) {
-      showNewErrorSnackbar('Invalid OTP');
+      showNewErrorSnackbar(LocaleKeys
+          .Account_EditProfile_EditMobile_ConfirmMobile_toasts_invalidOtp
+          .tr());
       return false;
     }
 
@@ -27,9 +31,13 @@ class FirebaseOtpService {
       return true;
     } on FirebaseAuthException catch (fbe) {
       if(fbe.code=="invalid-verification-code"){
-        showNewErrorSnackbar('The provided OTP is not valid.');
+        showNewErrorSnackbar(LocaleKeys
+            .Account_EditProfile_EditMobile_ConfirmMobile_toasts_invalidOtp
+            .tr());
       }else if(fbe.code=="session-expired"){
-        showNewErrorSnackbar('The provided code has expired');
+        showNewErrorSnackbar(LocaleKeys
+            .Account_EditProfile_EditMobile_ConfirmMobile_toasts_expiredOtp
+            .tr());
       }
       return false;
     }
@@ -41,7 +49,6 @@ class FirebaseOtpService {
       phoneNumber: phoneNum,
       timeout: Duration(seconds: 60),
       verificationCompleted: (PhoneAuthCredential credential) async {
-        // await _auth.signInWithCredential(credential);
       },
       verificationFailed: verificationFailed,
       codeSent: (String verificationId, [int resendToken]) {

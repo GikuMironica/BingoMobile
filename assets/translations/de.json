@@ -136,13 +136,24 @@
         "button_Next": "Weiter",
         "ConfirmMobile": {
           "pageTitle": "Bestätigen Sie Ihre Rufnummer",
-          "toasts": {},
+          "toasts": {
+            "wrongCode5Times": "Falscher Code 5 Mal eingegeben",
+            "failedToUpdateNumber": "Aktualisierung der Telefonnummer fehlgeschlagen",
+            "invalidPhone": "Die angegebene Rufnummer ist ungültig",
+            "serviceUnavaialble": "Dieser Dienst ist derzeit nicht verfügbar. Bitte versuchen Sie es morgen erneut. ",
+            "invalidOtp": "Das angegebene OTP ist ungültig",
+            "expiredOtp": "Der angegebene Code ist abgelaufen"
+          },
           "labels": {
             "confirmNumberInfo": "Bitte geben Sie den 6-stelligen Code ein, der Ihnen zugesandt wurde",
-            "confirmThisNumber": "Bestätigen"
+            "confirmThisNumber": "Bestätigen",
+            "resendOTP": "Code erneut senden"
           },
           "buttons": {
             "confirmPhone": "Bestätigen"
+          },
+          "validation": {
+            "inputValidOtp": "Bitte geben Sie einen gültigen Code ein"
           }
         },
         "label_sendingOtpDialog": "Code wird gesendet"
