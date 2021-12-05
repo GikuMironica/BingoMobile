@@ -57,7 +57,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                 )
               : SingleChildScrollView(
                   controller: scrollController,
-                  reverse: true,
+                  reverse: false,
                   physics: ClampingScrollPhysics(),
                   padding: EdgeInsets.all(24.0),
                   child: Form(

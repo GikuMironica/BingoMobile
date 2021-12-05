@@ -34,6 +34,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class EventPage extends StatefulWidget {
   EventPage({this.postId});
@@ -279,7 +280,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                         Text(
                                           eventTypeStrings[
                                               post.event.eventType],
-                                        ),
+                                        ).tr(),
                                         SizedBox(
                                           width: 4,
                                         ),

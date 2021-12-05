@@ -7,7 +7,9 @@ import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/models/search_query.dart';
 import 'package:hopaut/data/repositories/repository.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:injectable/injectable.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 @lazySingleton
 class EventRepository extends Repository {
@@ -41,15 +43,13 @@ class EventRepository extends Repository {
       }
     } on DioError catch (e) {
       logger.e(e.response?.statusMessage);
-      String errorMessage =
-          "A connection to the server couldn't be established."; //TODO: translation
+      String errorMessage = LocaleKeys.Error_Event_noConnection.tr();
       switch (e.response?.statusCode) {
         case 400:
-          errorMessage = "Invalid input."; //TODO: translation
+          errorMessage = LocaleKeys.Error_Event_create_400.tr();
           break;
         case 403:
-          errorMessage =
-              "You need to set your name to create an event."; //TODO: translation
+          errorMessage = LocaleKeys.Error_Event_create_403.tr();
       }
       return RequestResult(isSuccessful: false, errorMessage: errorMessage);
     } finally {
@@ -75,15 +75,13 @@ class EventRepository extends Repository {
       }
     } on DioError catch (e) {
       logger.e(e.response?.statusMessage);
-      String errorMessage =
-          "A connection to the server couldn't be established."; //TODO: translation
+      String errorMessage = LocaleKeys.Error_Event_noConnection.tr();
       switch (e.response?.statusCode) {
         case 400:
-          errorMessage = "Invalid input."; //TODO: translation
+          errorMessage = LocaleKeys.Error_Event_create_400.tr();
           break;
         case 403:
-          errorMessage =
-              "You are not authorized for this action."; //TODO: translation
+          errorMessage = LocaleKeys.Error_Event_update_403.tr();
       }
       return RequestResult(isSuccessful: false, errorMessage: errorMessage);
     } finally {
@@ -102,19 +100,16 @@ class EventRepository extends Repository {
       }
     } on DioError catch (e) {
       logger.e(e.message);
-      String errorMessage =
-          "A connection to the server couldn't be established."; //TODO: translation
+      String errorMessage = LocaleKeys.Error_Event_noConnection.tr();
       switch (e.response?.statusCode) {
         case 400:
-          errorMessage = "Bad request."; //TODO: translation
+          errorMessage = LocaleKeys.Error_Event_delete_400.tr();
           break;
         case 403:
-          errorMessage =
-              "You need to be the host in order to delete this event."; //TODO: translation
+          errorMessage = LocaleKeys.Error_Event_delete_403.tr();
           break;
         case 404:
-          errorMessage =
-              "The event you are trying to delete wasn't found."; //TODO: translation
+          errorMessage = LocaleKeys.Error_Event_delete_404.tr();
       }
       return RequestResult(isSuccessful: false, errorMessage: errorMessage);
     }

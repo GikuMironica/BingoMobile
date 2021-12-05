@@ -109,24 +109,23 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
-  // TODO translation
   List<HopautNavBarItem> _navBarsItems() {
     return [
       HopautNavBarItem(
         svg: MdiIcons.mapLegend,
-        title: ("Map"), //TODO: translation
+        title: (LocaleKeys.Navigation_map.tr()),
       ),
       HopautNavBarItem(
         svg: MdiIcons.bullhorn,
-        title: ("Hosted"), //TODO: translation
+        title: (LocaleKeys.Navigation_hosted.tr()),
       ),
       HopautNavBarItem(
         svg: MdiIcons.calendar,
-        title: ("Joined"), //TODO: translation
+        title: (LocaleKeys.Navigation_joined.tr()),
       ),
       HopautNavBarItem(
         svg: MdiIcons.accountOutline,
-        title: ("Account"), //TODO: translation
+        title: (LocaleKeys.Navigation_account.tr()),
       ),
     ];
   }
