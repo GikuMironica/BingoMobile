@@ -11,23 +11,25 @@ class HopAutAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      backgroundColor: Colors.transparent,
-      expandedHeight: 120.0,
+        backgroundColor: Colors.transparent,
+        expandedHeight: 120.0,
         floating: true,
-      pinned: true,
-      bottom: bottom,
-      snap: true,
-      elevation: 0.0,
-      actions: actions,
-      flexibleSpace: Stack(
-        children: <Widget>[
-          Positioned.fill(child: HopAutBackgroundContainer()),
-          FlexibleSpaceBar(
-            title: Text(title),
-            centerTitle: true,
-          )
-        ],
-      )
-    );
+        pinned: true,
+        bottom: bottom,
+        snap: true,
+        elevation: 0.0,
+        actions: actions,
+        flexibleSpace: Stack(
+          children: <Widget>[
+            Positioned.fill(child: HopAutBackgroundContainer()),
+            FlexibleSpaceBar(
+              title: Text(
+                title,
+                style: TextStyle(fontSize: 16),
+              ),
+              centerTitle: true,
+            )
+          ],
+        ));
   }
 }

@@ -26,16 +26,16 @@ class _ReportEventState extends State<ReportEvent> {
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: <Widget>[
-        Visibility(
-            visible: _eventProvider.reportPostLoadingStatus is Submitted,
-            child:
-                Container(child: Expanded(child: LinearProgressIndicator()))),
         // TODO translate
         Center(child: Subtitle(label: 'Report Event')),
         SizedBox(
           height: 8,
         ),
-        Divider(),
+        Visibility(
+          visible: _eventProvider.reportPostLoadingStatus is Submitted,
+          child: Container(child: Expanded(child: LinearProgressIndicator())),
+          replacement: Divider(),
+        ),
         SizedBox(
           height: 8,
         ),
