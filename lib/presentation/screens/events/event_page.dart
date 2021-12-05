@@ -280,17 +280,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                           eventTypeStrings[
                                               post.event.eventType],
                                         ),
-                                        SizedBox(
-                                          width: 4,
-                                        ),
-                                        Icon(
-                                          MdiIcons.circleSmall,
-                                          color: Colors.black54,
-                                          size: 11,
-                                        ),
-                                        SizedBox(
-                                          width: 4,
-                                        ),
+                                        Icon(MdiIcons.mapMarkerOutline,
+                                            size: 18, color: Colors.pink),
                                         Text(
                                           post.location.address != null &&
                                                   post.location.city != null
@@ -300,15 +291,6 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                           style: TextStyle(
                                               fontSize: 14,
                                               color: Colors.black54),
-                                        ),
-                                        SizedBox(
-                                          width: 16,
-                                        ),
-                                        CircleAvatar(
-                                          backgroundColor: Colors.pink[100],
-                                          child: Icon(MdiIcons.mapMarkerOutline,
-                                              size: 18, color: Colors.pink),
-                                          radius: 14,
                                         ),
                                       ],
                                     ),
