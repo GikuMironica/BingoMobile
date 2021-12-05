@@ -179,7 +179,7 @@
         "labels": {
           "camera": "Camera",
           "gallery": "Gallery",
-          "uploadPicture": "Upload picture from"
+          "uploadPicture": "Upload picture"
         },
         "toasts": {
           "profilePicUpdated": "Profile picture updated"
@@ -190,7 +190,53 @@
         }
       }
     },
-    "Settings": {}
+    "Settings": {
+      "DeleteAccount": {},
+      "ReportBug": {},
+      "ChangePassword": {
+        "pageTitle": "Change password",
+        "labels": {
+          "forgotPasswordInstructions": "If you have forgotten your password, you can log out and request a password reset",
+          "updatingDialog": "Updating"
+        },
+        "toasts": {
+          "wrongPassword": "Old password is incorrect",
+          "passwordUpdated": "Password updated"
+        },
+        "hints": {
+          "enterOldPassword": "Enter your old password",
+          "enterNewPassword": "Enter your new password"
+        },
+        "validation": {
+          "inputOldPassword": "Please input your old password",
+          "inputNewPassword": "Password must be at least 8 characters length, must contain upper, lower case letters and digits"
+        },
+        "buttons": {
+          "changePassword": "Change password"
+        }
+      },
+      "pageTitle": "Settings",
+      "subHeader": {
+        "notifications": "Notifications",
+        "account": "Account",
+        "info": "Info",
+        "feedback": "Feedback"
+      },
+      "navigationLabels": {
+        "pushNotifications": "Push notifications",
+        "changePassword": "Change password",
+        "logout": "Logout",
+        "deleteAccount": "Delete account",
+        "termsAndServices": "Terms of services",
+        "privacyPolicy": "Privacy policy",
+        "imprint": "Imprint",
+        "leaveRating": "Leave a rating",
+        "reportBug": "Report a bug"
+      },
+      "labels": {
+        "loggingOutDialog": "Logging out"
+      }
+    }
   },
   "Authentication": {
     "Register": {},

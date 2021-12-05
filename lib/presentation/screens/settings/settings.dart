@@ -14,6 +14,8 @@ import 'package:hopaut/controllers/providers/settings_provider.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'delete_account.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class Settings extends StatefulWidget {
   bool logoutStatus;
@@ -59,8 +61,8 @@ class _SettingsState extends State<Settings> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              // TODO translation
-                              'Settings',
+                              LocaleKeys
+                                  .Account_Settings_pageTitle.tr(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 30,
@@ -97,16 +99,16 @@ class _SettingsState extends State<Settings> {
                               SizedBox(
                                 height: 30,
                               ),
-                              // TODO translation
-                              Text('Notifications',
+                              Text(LocaleKeys
+                                  .Account_Settings_subHeader_notifications.tr(),
                                   style: TextStyle(color: Colors.black38)),
                               Consumer<SettingsProvider>(
                                 builder: (context, settingsMgr, child) =>
                                     ListTile(
                                   contentPadding: EdgeInsets.zero,
                                   title: Text(
-                                    // TODO translation
-                                    'Push Notifications',
+                                    LocaleKeys
+                                        .Account_Settings_navigationLabels_pushNotifications.tr(),
                                     style: TextStyle(fontSize: 18),
                                   ),
                                   trailing: Visibility(
@@ -131,22 +133,22 @@ class _SettingsState extends State<Settings> {
                               SizedBox(
                                 height: 15,
                               ),
-                              // TODO translation
-                              Text('Account',
+                              Text(LocaleKeys
+                                  .Account_Settings_subHeader_account.tr(),
                                   style: TextStyle(color: Colors.black38)),
                               MergeSemantics(
                                   child: ListTile(
-                                // TODO translation
                                 contentPadding: EdgeInsets.zero,
-                                title: Text('Change Password',
+                                title: Text(LocaleKeys
+                                    .Account_Settings_navigationLabels_changePassword.tr(),
                                     style: TextStyle(fontSize: 18)),
                                 trailing: Icon(Icons.lock),
                                 onTap: () => changePage('/change_password'),
                               )),
                               ListTile(
                                   contentPadding: EdgeInsets.zero,
-                                  // TODO translation
-                                  title: Text('Logout',
+                                  title: Text(LocaleKeys
+                                      .Account_Settings_navigationLabels_logout.tr(),
                                       style: TextStyle(fontSize: 18)),
                                   trailing: Icon(Icons.exit_to_app),
                                   onTap: () async {
@@ -165,25 +167,25 @@ class _SettingsState extends State<Settings> {
                                     });
                                   }),
                               InkWellButton(
-                                  // TODO translation
-                                  'Delete Account',
+                                  LocaleKeys
+                                      .Account_Settings_navigationLabels_deleteAccount.tr(),
                                   () => showDialog(
                                       context: context,
                                       builder: (context) => CustomDialog(
                                             pageWidget: DeleteAccountPopup(),
                                           )),
                                   Colors.redAccent),
-                              // TODO translation
                               SizedBox(
                                 height: 15,
                               ),
-                              Text('Info',
+                              Text(LocaleKeys
+                                  .Account_Settings_subHeader_info.tr(),
                                   style: TextStyle(color: Colors.black38)),
                               MergeSemantics(
                                 child: ListTile(
-                                    // TODO translation
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text('Terms of Services',
+                                    title: Text(LocaleKeys
+                                        .Account_Settings_navigationLabels_termsAndServices.tr(),
                                         style: TextStyle(fontSize: 18)),
                                     trailing: Icon(Icons.arrow_forward_ios),
                                     onTap: () => changePage('/tos')),
@@ -191,16 +193,17 @@ class _SettingsState extends State<Settings> {
                               MergeSemantics(
                                 child: ListTile(
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text('Privacy Policy',
+                                    title: Text(LocaleKeys
+                                        .Account_Settings_navigationLabels_privacyPolicy.tr(),
                                         style: TextStyle(fontSize: 18)),
                                     trailing: Icon(Icons.arrow_forward_ios),
                                     onTap: () => changePage('/privacy_policy')),
                               ),
-                              // TODO Translation
                               MergeSemantics(
                                 child: ListTile(
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text('Imprint',
+                                    title: Text(LocaleKeys
+                                        .Account_Settings_navigationLabels_imprint.tr(),
                                         style: TextStyle(fontSize: 18)),
                                     trailing: Icon(Icons.arrow_forward_ios),
                                     onTap: () => changePage('/imprint')),
@@ -208,14 +211,14 @@ class _SettingsState extends State<Settings> {
                               SizedBox(
                                 height: 15,
                               ),
-                              // TODO translation
-                              Text('Feedback',
+                              Text(LocaleKeys
+                                  .Account_Settings_subHeader_feedback.tr(),
                                   style: TextStyle(color: Colors.black38)),
-                              // TODO bug/rating
                               MergeSemantics(
                                 child: ListTile(
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text('Leave a rating',
+                                    title: Text(LocaleKeys
+                                        .Account_Settings_navigationLabels_leaveRating.tr(),
                                         style: TextStyle(fontSize: 18)),
                                     trailing: Icon(Icons.arrow_forward_ios),
                                     onTap: () => {}),
@@ -223,7 +226,8 @@ class _SettingsState extends State<Settings> {
                               MergeSemantics(
                                 child: ListTile(
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text('Report a bug',
+                                    title: Text(LocaleKeys
+                                        .Account_Settings_navigationLabels_reportBug.tr(),
                                         style: TextStyle(fontSize: 18)),
                                     trailing: Icon(Icons.arrow_forward_ios),
                                     onTap: () => changePage(Routes.bug)),
@@ -243,7 +247,6 @@ class _SettingsState extends State<Settings> {
                               ),
                               Consumer<SettingsProvider>(
                                 builder: (_, settingsMgr, child) => Text(
-                                    // TODO - await SettingService Initialization -> leads to null app version
                                     'version ${settingsMgr.appVersion}',
                                     style: TextStyle(
                                         color: Colors.white.withOpacity(0.8))),
@@ -258,9 +261,9 @@ class _SettingsState extends State<Settings> {
           ),
           Visibility(
               visible: widget.logoutStatus,
-              // TODO translate
               child: overlayBlurBackgroundCircularProgressIndicator(
-                  context, 'Logging out')),
+                  context, LocaleKeys
+                  .Account_Settings_labels_loggingOutDialog.tr())),
         ],
       ),
     );

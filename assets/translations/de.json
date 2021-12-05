@@ -177,9 +177,9 @@
           "deletePicture": "Bild löschen"
         },
         "labels": {
-          "camera": "der Kamera",
-          "gallery": "der Galerie",
-          "uploadPicture": "Bild hochladen von"
+          "camera": "Kamera",
+          "gallery": "Galerie",
+          "uploadPicture": "Bild hochladen"
         },
         "toasts": {
           "profilePicUpdated": "Profilbild aktualisiert"
@@ -190,7 +190,53 @@
         }
       }
     },
-    "Settings": {}
+    "Settings": {
+      "DeleteAccount": {},
+      "ReportBug": {},
+      "ChangePassword": {
+        "pageTitle": "Passwort ändern",
+        "labels": {
+          "forgotPasswordInstructions": "Wenn Sie Ihr Passwort vergessen haben, können Sie sich abmelden und ein neues Passwort anfordern",
+          "updatingDialog": "Aktualisierung läuft"
+        },
+        "toasts": {
+          "wrongPassword": "Altes Passwort ist falsch",
+          "passwordUpdated": "Passwort aktualisiert"
+        },
+        "hints": {
+          "enterOldPassword": "Geben Sie Ihr altes Passwort ein",
+          "enterNewPassword": "Geben Sie Ihr neues Passwort ein"
+        },
+        "validation": {
+          "inputOldPassword": "Bitte geben Sie Ihr altes Passwort ein",
+          "inputNewPassword": "Passwort muss mindestens 8 Zeichen lang sein und Groß- und Kleinbuchstaben sowie Ziffern enthalten"
+        },
+        "buttons": {
+          "changePassword": "Passwort ändern"
+        }
+      },
+      "pageTitle": "Einstellungen",
+      "subHeader": {
+        "notifications": "Benachrichtigungen",
+        "account": "Konto",
+        "info": "Infos",
+        "feedback": "Rückmeldung"
+      },
+      "navigationLabels": {
+        "pushNotifications": "Push-Benachrichtigungen",
+        "changePassword": "Passwort ändern",
+        "logout": "Abmelden",
+        "deleteAccount": "Konto löschen",
+        "termsAndServices": "Nutzungsbedingungen",
+        "privacyPolicy": "Datenschutzerklärung",
+        "imprint": "Impressum",
+        "leaveRating": "Bewertung abgeben",
+        "reportBug": "Fehler melden"
+      },
+      "labels": {
+        "loggingOutDialog": "Abmeldung läuft"
+      }
+    }
   },
   "Authentication": {
     "Register": {},
