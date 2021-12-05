@@ -51,7 +51,7 @@
     },
     "Edit": {
       "labels": {
-        "updatingEvent": "Updating event."
+        "updatingEvent": "Updating event"
       },
       "btns": {
         "pictures": "Pictures",
@@ -82,6 +82,21 @@
     },
     "header": {
       "title": "Hosted Events"
+    },
+    "Location": {
+      "header": {
+        "title": "Choose Location"
+      },
+      "labels": {
+        "loading": "Loading map"
+      },
+      "hints": {
+        "search": "Search in the radius of 50km",
+        "dismiss": "Touch the map to dismiss selection"
+      },
+      "btns": {
+        "getLocation": "Tap to get location"
+      }
     }
   },
   "Joined": {
@@ -92,7 +107,7 @@
     },
     "labels": {
       "noEventsFound": "No events found",
-      "loading": "Loading events."
+      "loading": "Loading events"
     }
   },
   "Account": {
@@ -127,5 +142,28 @@
     "Register": {},
     "Login": {},
     "ForgotPassword": {}
+  },
+  "Navigation": {
+    "map": "Map",
+    "hosted": "Hosted",
+    "joined": "Joined",
+    "account": "Account"
+  },
+  "Error": {
+    "Event": {
+      "noConnection": "A connection to the server couldn't be established.",
+      "create": {
+        "400": "Invalid input.",
+        "403": "You need to set your name to create an event."
+      },
+      "delete": {
+        "400": "Bad request.",
+        "403": "You need to be the host in order to delete this event.",
+        "404": "The event you are trying to delete wasn't found."
+      },
+      "update": {
+        "403": "You are not authorized for this action."
+      }
+    }
   }
 }

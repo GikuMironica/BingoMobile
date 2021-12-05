@@ -6,11 +6,13 @@ import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/map_location_provider.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SearchByMap extends StatefulWidget {
   @override
@@ -56,10 +58,7 @@ class _SearchByMapState extends State<SearchByMap> {
                     locationSelectionProvider
                         .setMapLoadingState(MapLoadingState.LOADING)
                   }),
-          title: Text(
-            // TODO translation
-            'Choose Location',
-          ),
+          title: Text(LocaleKeys.Hosted_Location_header_title).tr(),
           elevation: 0,
         ),
         body: _body(locationSelectionProvider));
@@ -105,8 +104,7 @@ class _SearchByMapState extends State<SearchByMap> {
                 SizedBox(
                   height: 5,
                 ),
-                // TODO translation
-                Text(' Tap to get location ',
+                Text(' ${LocaleKeys.Hosted_Location_btns_getLocation.tr()} ',
                     style: TextStyle(
                       shadows: [
                         Shadow(
@@ -160,8 +158,7 @@ class _SearchByMapState extends State<SearchByMap> {
                       controller: locationSelectionProvider.searchBarController,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(12.0),
-                        // TODO translation
-                        hintText: 'Search in the radius of 50km',
+                        hintText: LocaleKeys.Hosted_Location_hints_search.tr(),
                         hintStyle: TextStyle(
                           color: Color(0xFF818181).withOpacity(0.69),
                           fontSize: 14.0,
@@ -213,12 +210,11 @@ class _SearchByMapState extends State<SearchByMap> {
                       itemBuilder: (context, index) {
                         return ListTile(
                           contentPadding: EdgeInsets.zero,
-                          title: Text(
-                              locationSelectionProvider.searchResults[index].title),
-                          // TODO translation
+                          title: Text(locationSelectionProvider
+                              .searchResults[index].title),
                           trailing: GestureDetector(
-                            onTap: () =>
-                                locationSelectionProvider.handleSaveClick(context),
+                            onTap: () => locationSelectionProvider
+                                .handleSaveClick(context),
                             child: Container(
                                 width: 35,
                                 height: 150,
@@ -234,12 +230,12 @@ class _SearchByMapState extends State<SearchByMap> {
                 elevation: 15,
                 // TODO translation
                 color: Colors.transparent,
-                child: Text('Touch the map to dismiss selection',
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w700,
-                  )),
+                child: Text(LocaleKeys.Hosted_Location_hints_dismiss,
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w700,
+                    )).tr(),
               )
             ],
           ),
@@ -255,6 +251,6 @@ class _SearchByMapState extends State<SearchByMap> {
         child: overlayBlurBackgroundCircularProgressIndicator(
             // TODO translations
             context,
-            'Loading map'));
+            LocaleKeys.Hosted_Location_labels_loading.tr()));
   }
 }

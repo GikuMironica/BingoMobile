@@ -70,6 +70,16 @@ abstract class  LocaleKeys {
   static const Hosted_Edit = 'Hosted.Edit';
   static const Hosted_header_title = 'Hosted.header.title';
   static const Hosted_header = 'Hosted.header';
+  static const Hosted_Location_header_title = 'Hosted.Location.header.title';
+  static const Hosted_Location_header = 'Hosted.Location.header';
+  static const Hosted_Location_labels_loading = 'Hosted.Location.labels.loading';
+  static const Hosted_Location_labels = 'Hosted.Location.labels';
+  static const Hosted_Location_hints_search = 'Hosted.Location.hints.search';
+  static const Hosted_Location_hints_dismiss = 'Hosted.Location.hints.dismiss';
+  static const Hosted_Location_hints = 'Hosted.Location.hints';
+  static const Hosted_Location_btns_getLocation = 'Hosted.Location.btns.getLocation';
+  static const Hosted_Location_btns = 'Hosted.Location.btns';
+  static const Hosted_Location = 'Hosted.Location';
   static const Hosted = 'Hosted';
   static const Joined_header_title = 'Joined.header.title';
   static const Joined_header_currentTab = 'Joined.header.currentTab';
@@ -107,5 +117,22 @@ abstract class  LocaleKeys {
   static const Authentication_Login = 'Authentication.Login';
   static const Authentication_ForgotPassword = 'Authentication.ForgotPassword';
   static const Authentication = 'Authentication';
+  static const Navigation_map = 'Navigation.map';
+  static const Navigation_hosted = 'Navigation.hosted';
+  static const Navigation_joined = 'Navigation.joined';
+  static const Navigation_account = 'Navigation.account';
+  static const Navigation = 'Navigation';
+  static const Error_Event_noConnection = 'Error.Event.noConnection';
+  static const Error_Event_create_400 = 'Error.Event.create.400';
+  static const Error_Event_create_403 = 'Error.Event.create.403';
+  static const Error_Event_create = 'Error.Event.create';
+  static const Error_Event_delete_400 = 'Error.Event.delete.400';
+  static const Error_Event_delete_403 = 'Error.Event.delete.403';
+  static const Error_Event_delete_404 = 'Error.Event.delete.404';
+  static const Error_Event_delete = 'Error.Event.delete';
+  static const Error_Event_update_403 = 'Error.Event.update.403';
+  static const Error_Event_update = 'Error.Event.update';
+  static const Error_Event = 'Error.Event';
+  static const Error = 'Error';
 
 }

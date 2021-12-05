@@ -98,6 +98,21 @@ class CodegenLoader extends AssetLoader{
     },
     "header": {
       "title": "Gehaltene Veranstaltungen"
+    },
+    "Location": {
+      "header": {
+        "title": "Standort auswählen"
+      },
+      "labels": {
+        "loading": "Karte laden"
+      },
+      "hints": {
+        "search": "Suche im Umkreis von 50km",
+        "dismiss": "Berühren Sie die Karte, um die Auswahl aufzuheben."
+      },
+      "btns": {
+        "getLocation": "Tippen Sie auf , um den Standort abzurufen"
+      }
     }
   },
   "Joined": {
@@ -108,7 +123,7 @@ class CodegenLoader extends AssetLoader{
     },
     "labels": {
       "noEventsFound": "Keine Veranstaltungen gefunden",
-      "loading": "Veranstaltungen laden."
+      "loading": "Veranstaltungen laden"
     }
   },
   "Account": {
@@ -143,6 +158,29 @@ class CodegenLoader extends AssetLoader{
     "Register": {},
     "Login": {},
     "ForgotPassword": {}
+  },
+  "Navigation": {
+    "map": "Karte",
+    "hosted": "Gehaltene",
+    "joined": "Verbundene",
+    "account": "Konto"
+  },
+  "Error": {
+    "Event": {
+      "noConnection": "Eine Verbindung zum Server konnte nicht hergestellt werden.",
+      "create": {
+        "400": "Ungültige Eingabe.",
+        "403": "Sie müssen Ihren Namen eingeben, um ein Ereignis zu erstellen."
+      },
+      "delete": {
+        "400": "Schlechte Anfrage.",
+        "403": "Sie müssen der Gastgeber sein, um dieses Ereignis löschen zu können.",
+        "404": "Die Veranstaltung, das Sie zu löschen versuchen, wurde nicht gefunden."
+      },
+      "update": {
+        "403": "Sie sind zu dieser Aktion nicht berechtigt."
+      }
+    }
   }
 };
 static const Map<String,dynamic> en = {
@@ -198,7 +236,7 @@ static const Map<String,dynamic> en = {
     },
     "Edit": {
       "labels": {
-        "updatingEvent": "Updating event."
+        "updatingEvent": "Updating event"
       },
       "btns": {
         "pictures": "Pictures",
@@ -229,6 +267,21 @@ static const Map<String,dynamic> en = {
     },
     "header": {
       "title": "Hosted Events"
+    },
+    "Location": {
+      "header": {
+        "title": "Choose Location"
+      },
+      "labels": {
+        "loading": "Loading map"
+      },
+      "hints": {
+        "search": "Search in the radius of 50km",
+        "dismiss": "Touch the map to dismiss selection"
+      },
+      "btns": {
+        "getLocation": "Tap to get location"
+      }
     }
   },
   "Joined": {
@@ -239,7 +292,7 @@ static const Map<String,dynamic> en = {
     },
     "labels": {
       "noEventsFound": "No events found",
-      "loading": "Loading events."
+      "loading": "Loading events"
     }
   },
   "Account": {
@@ -274,6 +327,29 @@ static const Map<String,dynamic> en = {
     "Register": {},
     "Login": {},
     "ForgotPassword": {}
+  },
+  "Navigation": {
+    "map": "Map",
+    "hosted": "Hosted",
+    "joined": "Joined",
+    "account": "Account"
+  },
+  "Error": {
+    "Event": {
+      "noConnection": "A connection to the server couldn't be established.",
+      "create": {
+        "400": "Invalid input.",
+        "403": "You need to set your name to create an event."
+      },
+      "delete": {
+        "400": "Bad request.",
+        "403": "You need to be the host in order to delete this event.",
+        "404": "The event you are trying to delete wasn't found."
+      },
+      "update": {
+        "403": "You are not authorized for this action."
+      }
+    }
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"de": de, "en": en};

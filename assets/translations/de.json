@@ -82,6 +82,21 @@
     },
     "header": {
       "title": "Gehaltene Veranstaltungen"
+    },
+    "Location": {
+      "header": {
+        "title": "Standort auswählen"
+      },
+      "labels": {
+        "loading": "Karte laden"
+      },
+      "hints": {
+        "search": "Suche im Umkreis von 50km",
+        "dismiss": "Berühren Sie die Karte, um die Auswahl aufzuheben."
+      },
+      "btns": {
+        "getLocation": "Tippen Sie auf , um den Standort abzurufen"
+      }
     }
   },
   "Joined": {
@@ -92,7 +107,7 @@
     },
     "labels": {
       "noEventsFound": "Keine Veranstaltungen gefunden",
-      "loading": "Veranstaltungen laden."
+      "loading": "Veranstaltungen laden"
     }
   },
   "Account": {
@@ -127,5 +142,28 @@
     "Register": {},
     "Login": {},
     "ForgotPassword": {}
+  },
+  "Navigation": {
+    "map": "Karte",
+    "hosted": "Gehaltene",
+    "joined": "Verbundene",
+    "account": "Konto"
+  },
+  "Error": {
+    "Event": {
+      "noConnection": "Eine Verbindung zum Server konnte nicht hergestellt werden.",
+      "create": {
+        "400": "Ungültige Eingabe.",
+        "403": "Sie müssen Ihren Namen eingeben, um ein Ereignis zu erstellen."
+      },
+      "delete": {
+        "400": "Schlechte Anfrage.",
+        "403": "Sie müssen der Gastgeber sein, um dieses Ereignis löschen zu können.",
+        "404": "Die Veranstaltung, das Sie zu löschen versuchen, wurde nicht gefunden."
+      },
+      "update": {
+        "403": "Sie sind zu dieser Aktion nicht berechtigt."
+      }
+    }
   }
 }
