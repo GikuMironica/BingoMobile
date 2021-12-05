@@ -199,9 +199,9 @@ class AccountProvider extends ChangeNotifier {
         _authenticationService.setUser(user);
         return result;
       } else {
-        // TODO Translation, to log
         return RequestResult(
-            data: null, isSuccessful: false, errorMessage: "An error occurred");
+            data: null, isSuccessful: false, errorMessage: LocaleKeys
+            .Account_EditProfile_EditProfilePicture_toasts_error.tr());
       }
     } else {
       return result;

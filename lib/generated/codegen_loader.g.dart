@@ -198,7 +198,8 @@ class CodegenLoader extends AssetLoader{
           "uploadPicture": "Bild hochladen"
         },
         "toasts": {
-          "profilePicUpdated": "Profilbild aktualisiert"
+          "profilePicUpdated": "Profilbild aktualisiert",
+          "error": "Etwas ist schief gelaufen"
         },
         "buttons": {
           "cancel": "Abbrechen",
@@ -207,8 +208,53 @@ class CodegenLoader extends AssetLoader{
       }
     },
     "Settings": {
-      "DeleteAccount": {},
-      "ReportBug": {},
+      "DeleteAccount": {
+        "dialogTitle": "Konto löschen",
+        "labels": {
+          "deleteInfo1": "Sobald Sie bestätigen, werden alle Ihre Kontodaten gelöscht.",
+          "deleteInfo2": "Die Löschung des Kontos ist ",
+          "deleteInfo3": "endgültig",
+          "deleteInfo4": ". Es gibt keine Möglichkeit, Ihr Konto wiederherzustellen.",
+          "deleteInfo5": "Bitte geben Sie zur Bestätigung Ihre E-Mail-Adresse ein:"
+        },
+        "hints": {
+          "enterEmail": "E-Mail eingeben",
+          "email": "E-Mail"
+        },
+        "validation": {
+          "inputValidEmail": "Bitte geben Sie eine gültige E-Mail ein"
+        },
+        "buttons": {
+          "delete": "Löschen",
+          "cancel": "Abbrechen"
+        }
+      },
+      "ReportBug": {
+        "pageTitle": "Einen Fehler melden",
+        "labels": {
+          "somethingIsntWorking": "Funktioniert etwas nicht wie erwartet?",
+          "uploadScreenshots": "Screenshots hochladen"
+        },
+        "hints": {
+          "issueReportHint": "Bitte erklären Sie kurz, was passiert ist und wie wir das Problem reproduzieren können."
+        },
+        "validation": {
+          "invalidIssueDescription": "Beschreibung ist nicht gültig"
+        },
+        "dialogs": {
+          "thankYouDialog": {
+            "headerLabel": "Vielen Dank!",
+            "messageLabel": "Ihr Beitrag wird unserem Team helfen, die Dienstleistungen für Sie zu verbessern.",
+            "buttonLabel": "Zurück zu den Einstellungen"
+          },
+          "uploadingDialog": {
+            "uploadingReport": "Bericht wird versendet"
+          }
+        },
+        "toasts": {
+          "error": "Etwas ist schief gelaufen"
+        }
+      },
       "ChangePassword": {
         "pageTitle": "Passwort ändern",
         "labels": {
@@ -444,7 +490,8 @@ static const Map<String,dynamic> en = {
           "uploadPicture": "Upload picture"
         },
         "toasts": {
-          "profilePicUpdated": "Profile picture updated"
+          "profilePicUpdated": "Profile picture updated",
+          "error": "Something went wrong"
         },
         "buttons": {
           "cancel": "Cancel",
@@ -453,8 +500,53 @@ static const Map<String,dynamic> en = {
       }
     },
     "Settings": {
-      "DeleteAccount": {},
-      "ReportBug": {},
+      "DeleteAccount": {
+        "dialogTitle": "Delete account",
+        "labels": {
+          "deleteInfo1": "Once you confirm, all of your account data will be deleted.",
+          "deleteInfo2": "Account deletion is ",
+          "deleteInfo3": "final",
+          "deleteInfo4": ". There will be no way to restore your account.",
+          "deleteInfo5": "Please enter your email address to confirm:"
+        },
+        "hints": {
+          "enterEmail": "Enter your email",
+          "email": "Email"
+        },
+        "validation": {
+          "inputValidEmail": "Please input a valid email"
+        },
+        "buttons": {
+          "delete": "Delete",
+          "cancel": "Cancel"
+        }
+      },
+      "ReportBug": {
+        "pageTitle": "Report an issue",
+        "labels": {
+          "somethingIsntWorking": "Something isn\\'t working as expected?",
+          "uploadScreenshots": "Upload screenshots"
+        },
+        "hints": {
+          "issueReportHint": "Please explain briefly what happened and how can we reproduce the issue?"
+        },
+        "validation": {
+          "invalidIssueDescription": "Description is not valid"
+        },
+        "dialogs": {
+          "thankYouDialog": {
+            "headerLabel": "Thank you!",
+            "messageLabel": "Your input will significantly help our team improve the services we provide you.",
+            "buttonLabel": "Back to settings"
+          },
+          "uploadingDialog": {
+            "uploadingReport": "Sending report"
+          }
+        },
+        "toasts": {
+          "error": "Something went wrong"
+        }
+      },
       "ChangePassword": {
         "pageTitle": "Change password",
         "labels": {

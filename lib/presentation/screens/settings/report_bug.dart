@@ -7,6 +7,8 @@ import 'package:hopaut/presentation/widgets/inputs/text_area_input.dart';
 import 'package:hopaut/presentation/widgets/ui/simple_app_bar.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class ReportBug extends StatefulWidget {
   @override
@@ -31,8 +33,8 @@ class _ReportBugState extends State<ReportBug> {
     return Scaffold(
         appBar: SimpleAppBar(
             context: context,
-            // TODO translation
-            text: 'Report an issue',
+            text: LocaleKeys
+                .Account_Settings_ReportBug_pageTitle.tr(),
             actionButtons:
                 _reportBugProvider.validateBugField(bugController.text)
                     ? [
@@ -57,16 +59,16 @@ class _ReportBugState extends State<ReportBug> {
     if (_reportBugProvider.reportBugFormStatus is Failed) {
       // Translation
       Future.delayed(Duration.zero, () async {
-        // TODO - translation
         showSnackBarWithError(
-            context: context, message: "Error, Something went wrong");
+            context: context, message: LocaleKeys
+            .Account_Settings_ReportBug_toasts.tr());
       });
       _reportBugProvider.reportBugFormStatus = new Idle();
     }
     return _reportBugProvider.reportBugFormStatus is Submitted
-        // TODO translation
         ? overlayBlurBackgroundCircularProgressIndicator(
-            context, 'Sending report')
+            context, LocaleKeys
+        .Account_Settings_ReportBug_dialogs_uploadingDialog_uploadingReport.tr())
         : Form(
             key: _formKey,
             child: Column(
@@ -78,8 +80,8 @@ class _ReportBugState extends State<ReportBug> {
                 Padding(
                   padding: EdgeInsets.only(left: 12),
                   child: Text(
-                    // TODO translation
-                    'Something isn\'t working as expected?',
+                    LocaleKeys
+                        .Account_Settings_ReportBug_labels_somethingIsntWorking.tr(),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -94,9 +96,10 @@ class _ReportBugState extends State<ReportBug> {
                   isStateValid:
                       _reportBugProvider.validateBugField(bugController.text),
                   hintText:
-                      'Please explain briefly what happened and how can we reproduce the issue?',
-                  // TODO translation
-                  validationMessage: "Description is not valid",
+                  LocaleKeys
+                      .Account_Settings_ReportBug_hints_issueReportHint.tr(),
+                  validationMessage: LocaleKeys
+                      .Account_Settings_ReportBug_validation_invalidIssueDescription.tr(),
                   onChange: (v) =>
                       _reportBugProvider.onReportChange(v, bugController),
                 ),
@@ -118,8 +121,8 @@ class _ReportBugState extends State<ReportBug> {
                         headerBuilder: (context, isExpanded) {
                           return ListTile(
                             title: Text(
-                              // TODO translations
-                              'Upload screenshots',
+                              LocaleKeys
+                                  .Account_Settings_ReportBug_labels_uploadScreenshots.tr(),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 14),
                             ),

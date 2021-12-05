@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/theme.dart';
-import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/change_password_provider.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
@@ -139,7 +138,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     } else if (_passwordProvider.formStatus is Success) {
       Future.delayed(Duration.zero, () async {
         showSuccessSnackBar(context: context, message: LocaleKeys
-            .Account_Settings_ChangePassword_toasts_passwordUpdated);
+            .Account_Settings_ChangePassword_toasts_passwordUpdated.tr());
       });
     }
     Future.delayed(Duration(seconds: 1), () async {
