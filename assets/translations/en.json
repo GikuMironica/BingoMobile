@@ -142,6 +142,52 @@
           }
         },
         "label_sendingOtpDialog": "Seding code"
+      },
+      "EditName": {
+        "pageTitle": "Edit name",
+        "labels": {
+          "nameLabel": "Name",
+          "lastName": "Last name",
+          "updatingDialog": "Updating"
+        },
+        "validation": {
+          "inputValidName": "Please provide a valid name."
+        },
+        "toasts": {
+          "error": "Something went wrong"
+        }
+      },
+      "EditDescription": {
+        "pageTitle": "Edit profile description",
+        "labels": {
+          "updatingDialog": "Updating",
+          "descriptionLabel": "Profile description"
+        },
+        "validation": {
+          "descriptionTooLong": "Profile description too long"
+        },
+        "toasts": {
+          "error": "Something went wrong"
+        }
+      },
+      "EditProfilePicture": {
+        "pageTitle": "Change profile picture",
+        "navigationLabels": {
+          "changePicture": "Change picture",
+          "deletePicture": "Delete picture"
+        },
+        "labels": {
+          "camera": "Camera",
+          "gallery": "Gallery",
+          "uploadPicture": "Upload picture from"
+        },
+        "toasts": {
+          "profilePicUpdated": "Profile picture updated"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "setPicture": "Set as profile picture"
+        }
       }
     },
     "Settings": {}

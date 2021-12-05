@@ -6,6 +6,8 @@ import 'package:hopaut/data/domain/request_result.dart';
 import 'package:hopaut/utils/image_utilities.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class ImagePickerDialog extends StatefulWidget {
   final bool isCropperEnabled;
@@ -63,8 +65,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                     Align(
                       alignment: Alignment.center,
                       child: Text(
-                        // TODO Translation
-                        'Upload Picture',
+                        LocaleKeys.Account_EditProfile_EditProfilePicture_labels_uploadPicture.tr(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
                       ),
@@ -77,13 +78,11 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                         _imageTarget(
                             assetPath: _cameraSvg,
                             imgSource: ImageSource.camera,
-                            // TODO translation
-                            hint: "Camera"),
+                            hint: LocaleKeys.Account_EditProfile_EditProfilePicture_labels_camera.tr()),
                         _imageTarget(
                             assetPath: _gallerySvg,
                             imgSource: ImageSource.gallery,
-                            // TODO translation
-                            hint: "Gallery")
+                            hint: LocaleKeys.Account_EditProfile_EditProfilePicture_labels_gallery.tr())
                       ],
                     )
                   ]
@@ -111,8 +110,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                                   children: [
                                     Icon(Icons.cancel),
                                     SizedBox(width: 4),
-                                    // TODO translation
-                                    Text('Cancel'),
+                                    Text(LocaleKeys.Account_EditProfile_EditProfilePicture_buttons_cancel.tr()),
                                   ],
                                 ),
                               ),
@@ -124,8 +122,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                                     SizedBox(
                                       height: 4,
                                     ),
-                                    // TODO translation
-                                    Text('Set as Profile Picture'),
+                                    Text(LocaleKeys.Account_EditProfile_EditProfilePicture_buttons_setPicture.tr()),
                                   ],
                                 ),
                               )

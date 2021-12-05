@@ -19,7 +19,8 @@ class SimpleAppBar extends AppBar {
       );
 
   @override
-  Widget get title => Text(text);
+  Widget get title => Text(text, style: TextStyle(fontSize: HATheme.PAGE_TITLE_SIZE));
+
 
   @override
   bool get centerTitle => centerText;

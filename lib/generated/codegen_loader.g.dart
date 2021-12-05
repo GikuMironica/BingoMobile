@@ -158,6 +158,52 @@ class CodegenLoader extends AssetLoader{
           }
         },
         "label_sendingOtpDialog": "Code wird gesendet"
+      },
+      "EditName": {
+        "pageTitle": "Name bearbeiten",
+        "labels": {
+          "nameLabel": "Name",
+          "lastName": "Nachname",
+          "updatingDialog": "Aktualisierung"
+        },
+        "validation": {
+          "inputValidName": "Bitte geben Sie einen gültigen Namen an"
+        },
+        "toasts": {
+          "error": "Etwas ist schief gelaufen"
+        }
+      },
+      "EditDescription": {
+        "pageTitle": "Profilbeschreibung bearbeiten",
+        "labels": {
+          "updatingDialog": "Aktualisierung",
+          "descriptionLabel": "Profilbeschreibung"
+        },
+        "validation": {
+          "descriptionTooLong": "Profilbeschreibung ist zu lang"
+        },
+        "toasts": {
+          "error": "Etwas ist schief gelaufen"
+        }
+      },
+      "EditProfilePicture": {
+        "pageTitle": "Profilbild ändern",
+        "navigationLabels": {
+          "changePicture": "Bild ändern",
+          "deletePicture": "Bild löschen"
+        },
+        "labels": {
+          "camera": "der Kamera",
+          "gallery": "der Galerie",
+          "uploadPicture": "Bild hochladen von"
+        },
+        "toasts": {
+          "profilePicUpdated": "Profilbild aktualisiert"
+        },
+        "buttons": {
+          "cancel": "Abbrechen",
+          "setPicture": "Als Profilbild festlegen"
+        }
       }
     },
     "Settings": {}
@@ -312,6 +358,52 @@ static const Map<String,dynamic> en = {
           }
         },
         "label_sendingOtpDialog": "Seding code"
+      },
+      "EditName": {
+        "pageTitle": "Edit name",
+        "labels": {
+          "nameLabel": "Name",
+          "lastName": "Last name",
+          "updatingDialog": "Updating"
+        },
+        "validation": {
+          "inputValidName": "Please provide a valid name."
+        },
+        "toasts": {
+          "error": "Something went wrong"
+        }
+      },
+      "EditDescription": {
+        "pageTitle": "Edit profile description",
+        "labels": {
+          "updatingDialog": "Updating",
+          "descriptionLabel": "Profile description"
+        },
+        "validation": {
+          "descriptionTooLong": "Profile description too long"
+        },
+        "toasts": {
+          "error": "Something went wrong"
+        }
+      },
+      "EditProfilePicture": {
+        "pageTitle": "Change profile picture",
+        "navigationLabels": {
+          "changePicture": "Change picture",
+          "deletePicture": "Delete picture"
+        },
+        "labels": {
+          "camera": "Camera",
+          "gallery": "Gallery",
+          "uploadPicture": "Upload picture from"
+        },
+        "toasts": {
+          "profilePicUpdated": "Profile picture updated"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "setPicture": "Set as profile picture"
+        }
       }
     },
     "Settings": {}
