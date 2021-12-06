@@ -33,7 +33,7 @@ class _ReportEventState extends State<ReportEvent> {
         ),
         Visibility(
           visible: _eventProvider.reportPostLoadingStatus is Submitted,
-          child: Container(child: Expanded(child: LinearProgressIndicator())),
+          child: Container(child: LinearProgressIndicator()),
           replacement: Divider(),
         ),
         SizedBox(

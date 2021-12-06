@@ -300,9 +300,53 @@
     }
   },
   "Authentication": {
-    "Register": {},
+    "Register": {
+      "pageTitle": "Register",
+      "labels": {
+        "info": "Create new account",
+        "signInInfo": "By signing up",
+        "youAgree": "you agree to our"
+      },
+      "hints": {
+        "confirmPasswordHint": "Confirm password",
+        "passwordFieldHint": "Enter a password"
+      },
+      "validation": {
+        "passwordField": "Password must be at least 8 characters length, must contain upper, lower case letters and digits",
+        "confirmPassword": "Passwords don't match"
+      },
+      "navigationLabels": {
+        "privacyPolicy": "Privacy Policy",
+        "and": " and ",
+        "tos": "Terms & Conditions"
+      },
+      "toasts": {
+        "couldnNotConnect": "Couldn't connect to"
+      },
+      "buttons": {
+        "register": "Sign Up"
+      },
+      "successDialog": {
+        "header": "Success!",
+        "message": "Please check your email. You will get soon an email confirmation link.",
+        "button": "Back to login"
+      }
+    },
     "Login": {},
-    "ForgotPassword": {}
+    "ForgotPassword": {
+      "pageTItle": "Forgot Password?",
+      "labels": {
+        "instructionsLabel": "Enter the email associated with your account and we'll send an email with instructions to reset your password."
+      },
+      "buttons": {
+        "requestButton": "Send request"
+      },
+      "successDialog": {
+        "header": "Check your inbox",
+        "message": "We have sent a password recover instructions to your email.",
+        "buttonText": "Back to login"
+      }
+    }
   },
   "Navigation": {
     "map": "Map",
@@ -326,5 +370,30 @@
         "403": "You are not authorized for this action."
       }
     }
+  },
+  "Widgets": {
+    "TextInput": {
+      "EmailInput": {
+        "hint": "Enter your email",
+        "label": "Email",
+        "validation": "Please input a valid email"
+      },
+      "PasswordInput": {
+        "label": "Password"
+      }
+    },
+    "NoAccountYet": {
+      "buttons": {
+        "noAccountYet1": "Don't have an account yet? ",
+        "signUp": "Sign up"
+      }
+    },
+    "HaveAnAccount": {
+      "haveAnAccount": "Already have an account? ",
+      "login": "Login"
+    }
+  },
+  "Others": {
+    "Repositories": {}
   }
 }

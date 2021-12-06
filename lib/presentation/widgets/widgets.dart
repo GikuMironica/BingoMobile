@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../../config/routes/application.dart';
 import 'package:hopaut/config/constants/theme.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 Widget makeTitle({String title}) {
   return Text(
@@ -40,10 +42,9 @@ Widget accountAlreadyPrompt(BuildContext context) {
       },
       child:
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-        // TODO - Translate
-        Text('Already have an account? '),
+        Text(LocaleKeys.Widgets_HaveAnAccount_haveAnAccount.tr()),
         Text(
-          'Login',
+          LocaleKeys.Widgets_HaveAnAccount_login.tr(),
           style: TextStyle(fontWeight: FontWeight.w500, color: Colors.pink),
         )
       ]));
@@ -62,8 +63,7 @@ Widget forgotPassword(BuildContext context) {
               transitionDuration: Duration());
         },
         child: Text(
-          // TODO - Translations
-          'Forgot password?',
+          LocaleKeys.Authentication_Register_validation_passwordField,
           style: TextStyle(
               fontWeight: FontWeight.w500, color: Colors.pink, fontSize: 12),
           textAlign: TextAlign.end,
@@ -84,9 +84,8 @@ Widget noAccountYetPrompt(BuildContext context) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // TODO - Translation
-          Text('Don\'t have an account yet? '),
-          Text('Sign up',
+          Text(LocaleKeys.Widgets_NoAccountYet_buttons_noAccountYet1.tr()),
+          Text(LocaleKeys.Widgets_NoAccountYet_buttons_signUp.tr(),
               style: TextStyle(fontWeight: FontWeight.w500, color: Colors.pink))
         ],
       ));
@@ -137,6 +136,7 @@ Widget overlayBlurBackgroundCircularProgressIndicator(
             ),
             Text(
               text,
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.grey),
             ),
           ],
@@ -228,18 +228,22 @@ Widget privacyPolicyAndTerms({BuildContext context, String actionText}) {
     text: TextSpan(
       style: defaultStyle,
       children: <TextSpan>[
-        // TODO - translation
-        TextSpan(text: '$actionText, you agree to our \n'),
         TextSpan(
-            text: 'Privacy Policy',
+            text: '$actionText' +
+                " " +
+                LocaleKeys.Authentication_Register_labels_youAgree.tr()),
+        TextSpan(
+            text: LocaleKeys
+                .Authentication_Register_navigationLabels_privacyPolicy.tr(),
             style: linkStyle,
             recognizer: TapGestureRecognizer()
               ..onTap = () async {
                 await _launchURL(url: WEB.PRIVACY_POLICY);
               }),
-        TextSpan(text: ' and '),
         TextSpan(
-            text: 'Terms & Conditions',
+            text: LocaleKeys.Authentication_Register_navigationLabels_and.tr()),
+        TextSpan(
+            text: LocaleKeys.Authentication_Register_navigationLabels_tos.tr(),
             style: linkStyle,
             recognizer: TapGestureRecognizer()
               ..onTap = () async {
@@ -254,8 +258,10 @@ _launchURL({String url, BuildContext context}) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    // TODO - translate
     showSnackBarWithError(
-        context: context, message: "Couldn't connect to $url");
+        context: context,
+        message: LocaleKeys.Authentication_Register_toasts_couldnNotConnect +
+            " " +
+            url);
   }
 }

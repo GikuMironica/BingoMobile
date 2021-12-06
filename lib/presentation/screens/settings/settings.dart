@@ -61,8 +61,7 @@ class _SettingsState extends State<Settings> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              LocaleKeys
-                                  .Account_Settings_pageTitle.tr(),
+                              LocaleKeys.Account_Settings_pageTitle.tr(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 30,
@@ -99,8 +98,10 @@ class _SettingsState extends State<Settings> {
                               SizedBox(
                                 height: 30,
                               ),
-                              Text(LocaleKeys
-                                  .Account_Settings_subHeader_notifications.tr(),
+                              Text(
+                                  LocaleKeys
+                                          .Account_Settings_subHeader_notifications
+                                      .tr(),
                                   style: TextStyle(color: Colors.black38)),
                               Consumer<SettingsProvider>(
                                 builder: (context, settingsMgr, child) =>
@@ -108,7 +109,8 @@ class _SettingsState extends State<Settings> {
                                   contentPadding: EdgeInsets.zero,
                                   title: Text(
                                     LocaleKeys
-                                        .Account_Settings_navigationLabels_pushNotifications.tr(),
+                                            .Account_Settings_navigationLabels_pushNotifications
+                                        .tr(),
                                     style: TextStyle(fontSize: 18),
                                   ),
                                   trailing: Visibility(
@@ -133,22 +135,27 @@ class _SettingsState extends State<Settings> {
                               SizedBox(
                                 height: 15,
                               ),
-                              Text(LocaleKeys
-                                  .Account_Settings_subHeader_account.tr(),
+                              Text(
+                                  LocaleKeys.Account_Settings_subHeader_account
+                                      .tr(),
                                   style: TextStyle(color: Colors.black38)),
                               MergeSemantics(
                                   child: ListTile(
                                 contentPadding: EdgeInsets.zero,
-                                title: Text(LocaleKeys
-                                    .Account_Settings_navigationLabels_changePassword.tr(),
+                                title: Text(
+                                    LocaleKeys
+                                            .Account_Settings_navigationLabels_changePassword
+                                        .tr(),
                                     style: TextStyle(fontSize: 18)),
                                 trailing: Icon(Icons.lock),
                                 onTap: () => changePage('/change_password'),
                               )),
                               ListTile(
                                   contentPadding: EdgeInsets.zero,
-                                  title: Text(LocaleKeys
-                                      .Account_Settings_navigationLabels_logout.tr(),
+                                  title: Text(
+                                      LocaleKeys
+                                              .Account_Settings_navigationLabels_logout
+                                          .tr(),
                                       style: TextStyle(fontSize: 18)),
                                   trailing: Icon(Icons.exit_to_app),
                                   onTap: () async {
@@ -168,7 +175,8 @@ class _SettingsState extends State<Settings> {
                                   }),
                               InkWellButton(
                                   LocaleKeys
-                                      .Account_Settings_navigationLabels_deleteAccount.tr(),
+                                          .Account_Settings_navigationLabels_deleteAccount
+                                      .tr(),
                                   () => showDialog(
                                       context: context,
                                       builder: (context) => CustomDialog(
@@ -178,14 +186,17 @@ class _SettingsState extends State<Settings> {
                               SizedBox(
                                 height: 15,
                               ),
-                              Text(LocaleKeys
-                                  .Account_Settings_subHeader_info.tr(),
+                              Text(
+                                  LocaleKeys.Account_Settings_subHeader_info
+                                      .tr(),
                                   style: TextStyle(color: Colors.black38)),
                               MergeSemantics(
                                 child: ListTile(
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text(LocaleKeys
-                                        .Account_Settings_navigationLabels_termsAndServices.tr(),
+                                    title: Text(
+                                        LocaleKeys
+                                                .Account_Settings_navigationLabels_termsAndServices
+                                            .tr(),
                                         style: TextStyle(fontSize: 18)),
                                     trailing: Icon(Icons.arrow_forward_ios),
                                     onTap: () => changePage('/tos')),
@@ -193,8 +204,10 @@ class _SettingsState extends State<Settings> {
                               MergeSemantics(
                                 child: ListTile(
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text(LocaleKeys
-                                        .Account_Settings_navigationLabels_privacyPolicy.tr(),
+                                    title: Text(
+                                        LocaleKeys
+                                                .Account_Settings_navigationLabels_privacyPolicy
+                                            .tr(),
                                         style: TextStyle(fontSize: 18)),
                                     trailing: Icon(Icons.arrow_forward_ios),
                                     onTap: () => changePage('/privacy_policy')),
@@ -202,8 +215,10 @@ class _SettingsState extends State<Settings> {
                               MergeSemantics(
                                 child: ListTile(
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text(LocaleKeys
-                                        .Account_Settings_navigationLabels_imprint.tr(),
+                                    title: Text(
+                                        LocaleKeys
+                                                .Account_Settings_navigationLabels_imprint
+                                            .tr(),
                                         style: TextStyle(fontSize: 18)),
                                     trailing: Icon(Icons.arrow_forward_ios),
                                     onTap: () => changePage('/imprint')),
@@ -211,14 +226,17 @@ class _SettingsState extends State<Settings> {
                               SizedBox(
                                 height: 15,
                               ),
-                              Text(LocaleKeys
-                                  .Account_Settings_subHeader_feedback.tr(),
+                              Text(
+                                  LocaleKeys.Account_Settings_subHeader_feedback
+                                      .tr(),
                                   style: TextStyle(color: Colors.black38)),
                               MergeSemantics(
                                 child: ListTile(
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text(LocaleKeys
-                                        .Account_Settings_navigationLabels_leaveRating.tr(),
+                                    title: Text(
+                                        LocaleKeys
+                                                .Account_Settings_navigationLabels_leaveRating
+                                            .tr(),
                                         style: TextStyle(fontSize: 18)),
                                     trailing: Icon(Icons.arrow_forward_ios),
                                     onTap: () => {}),
@@ -226,8 +244,10 @@ class _SettingsState extends State<Settings> {
                               MergeSemantics(
                                 child: ListTile(
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text(LocaleKeys
-                                        .Account_Settings_navigationLabels_reportBug.tr(),
+                                    title: Text(
+                                        LocaleKeys
+                                                .Account_Settings_navigationLabels_reportBug
+                                            .tr(),
                                         style: TextStyle(fontSize: 18)),
                                     trailing: Icon(Icons.arrow_forward_ios),
                                     onTap: () => changePage(Routes.bug)),
@@ -261,9 +281,8 @@ class _SettingsState extends State<Settings> {
           ),
           Visibility(
               visible: widget.logoutStatus,
-              child: overlayBlurBackgroundCircularProgressIndicator(
-                  context, LocaleKeys
-                  .Account_Settings_labels_loggingOutDialog.tr())),
+              child: overlayBlurBackgroundCircularProgressIndicator(context,
+                  LocaleKeys.Account_Settings_labels_loggingOutDialog.tr())),
         ],
       ),
     );

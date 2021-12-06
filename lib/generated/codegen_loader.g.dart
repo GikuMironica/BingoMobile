@@ -316,9 +316,53 @@ class CodegenLoader extends AssetLoader{
     }
   },
   "Authentication": {
-    "Register": {},
+    "Register": {
+      "pageTitle": "Registrieren",
+      "labels": {
+        "info": "Neues Konto erstellen",
+        "signInInfo": "Mit der Anmeldung",
+        "youAgree": "erklären Sie sich mit unserem"
+      },
+      "hints": {
+        "confirmPasswordHint": "Passwort bestätigen",
+        "passwordFieldHint": "Passwort eingeben"
+      },
+      "validation": {
+        "passwordField": "Das Passwort muss mindestens 8 Zeichen lang sein und Groß- und Kleinbuchstaben sowie Ziffern enthalten",
+        "confirmPassword": "Passwörter stimmen nicht überein"
+      },
+      "navigationLabels": {
+        "privacyPolicy": "Datenschutzerklärung",
+        "and": " und ",
+        "tos": "AGB"
+      },
+      "toasts": {
+        "couldnNotConnect": "Konnte keine Verbindung zu dieser Website herstellen"
+      },
+      "buttons": {
+        "register": "Registrieren"
+      },
+      "successDialog": {
+        "header": "Erfolgreich!",
+        "message": "Bitte schauen Sie in Ihrem Posteingang nach. Sie erhalten in Kürze einen Bestätigungslink per E-Mail.",
+        "button": "Zurück zur Anmeldung"
+      }
+    },
     "Login": {},
-    "ForgotPassword": {}
+    "ForgotPassword": {
+      "pageTItle": "Passwort vergessen?",
+      "labels": {
+        "instructionsLabel": "Geben Sie die mit Ihrem Konto verknüpfte E-Mail-Adresse ein, und wir senden Ihnen eine E-Mail mit Anweisungen zum Zurücksetzen Ihres Passworts."
+      },
+      "buttons": {
+        "requestButton": "Anfrage senden"
+      },
+      "successDialog": {
+        "header": "Prüfen Sie Ihren Posteingang",
+        "message": "Wir haben eine Anleitung zur Wiederherstellung des Passworts an Ihre E-Mail geschickt.",
+        "buttonText": "Zurück zur Anmeldung"
+      }
+    }
   },
   "Navigation": {
     "map": "Karte",
@@ -342,6 +386,31 @@ class CodegenLoader extends AssetLoader{
         "403": "Sie sind zu dieser Aktion nicht berechtigt."
       }
     }
+  },
+  "Widgets": {
+    "TextInput": {
+      "EmailInput": {
+        "hint": "E-Mail eingeben",
+        "label": "E-mail",
+        "validation": "Bitte geben Sie eine gültige E-Mail ein"
+      },
+      "PasswordInput": {
+        "label": "Passwort"
+      }
+    },
+    "NoAccountYet": {
+      "buttons": {
+        "noAccountYet1": "Haben Sie noch kein Konto?",
+        "signUp": "Registrieren"
+      }
+    },
+    "HaveAnAccount": {
+      "haveAnAccount": "Haben Sie schon ein Konto?",
+      "login": "Anmelden"
+    }
+  },
+  "Others": {
+    "Repositories": {}
   }
 };
 static const Map<String,dynamic> en = {
@@ -646,9 +715,53 @@ static const Map<String,dynamic> en = {
     }
   },
   "Authentication": {
-    "Register": {},
+    "Register": {
+      "pageTitle": "Register",
+      "labels": {
+        "info": "Create new account",
+        "signInInfo": "By signing up",
+        "youAgree": "you agree to our"
+      },
+      "hints": {
+        "confirmPasswordHint": "Confirm password",
+        "passwordFieldHint": "Enter a password"
+      },
+      "validation": {
+        "passwordField": "Password must be at least 8 characters length, must contain upper, lower case letters and digits",
+        "confirmPassword": "Passwords don't match"
+      },
+      "navigationLabels": {
+        "privacyPolicy": "Privacy Policy",
+        "and": " and ",
+        "tos": "Terms & Conditions"
+      },
+      "toasts": {
+        "couldnNotConnect": "Couldn't connect to"
+      },
+      "buttons": {
+        "register": "Sign Up"
+      },
+      "successDialog": {
+        "header": "Success!",
+        "message": "Please check your email. You will get soon an email confirmation link.",
+        "button": "Back to login"
+      }
+    },
     "Login": {},
-    "ForgotPassword": {}
+    "ForgotPassword": {
+      "pageTItle": "Forgot Password?",
+      "labels": {
+        "instructionsLabel": "Enter the email associated with your account and we'll send an email with instructions to reset your password."
+      },
+      "buttons": {
+        "requestButton": "Send request"
+      },
+      "successDialog": {
+        "header": "Check your inbox",
+        "message": "We have sent a password recover instructions to your email.",
+        "buttonText": "Back to login"
+      }
+    }
   },
   "Navigation": {
     "map": "Map",
@@ -672,6 +785,31 @@ static const Map<String,dynamic> en = {
         "403": "You are not authorized for this action."
       }
     }
+  },
+  "Widgets": {
+    "TextInput": {
+      "EmailInput": {
+        "hint": "Enter your email",
+        "label": "Email",
+        "validation": "Please input a valid email"
+      },
+      "PasswordInput": {
+        "label": "Password"
+      }
+    },
+    "NoAccountYet": {
+      "buttons": {
+        "noAccountYet1": "Don't have an account yet? ",
+        "signUp": "Sign up"
+      }
+    },
+    "HaveAnAccount": {
+      "haveAnAccount": "Already have an account? ",
+      "login": "Login"
+    }
+  },
+  "Others": {
+    "Repositories": {}
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"de": de, "en": en};

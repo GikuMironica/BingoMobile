@@ -37,9 +37,7 @@ Widget textAreaInput(
         ],
         initialValue: initialValue ?? "",
         autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: (value) =>
-            // TODO translation
-            isStateValid ? null : validationMessage,
+        validator: (value) => isStateValid ? null : validationMessage,
         onChanged: onChange,
         onSaved: onSaved,
         maxLines: 7,

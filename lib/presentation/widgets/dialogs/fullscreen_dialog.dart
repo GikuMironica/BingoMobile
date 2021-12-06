@@ -98,6 +98,7 @@ class FullscreenDialog extends StatelessWidget {
                     child: Center(
                       child: Text(
                         buttonText,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,

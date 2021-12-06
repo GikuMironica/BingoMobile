@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 
 class HopAutAppBar extends StatelessWidget {
@@ -25,7 +26,7 @@ class HopAutAppBar extends StatelessWidget {
             FlexibleSpaceBar(
               title: Text(
                 title,
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: HATheme.PAGE_TITLE_SIZE),
               ),
               centerTitle: true,
             )

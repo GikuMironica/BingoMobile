@@ -6,7 +6,6 @@ import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/blocs/login/login_bloc.dart';
 import 'package:hopaut/controllers/blocs/login/login_state.dart';
 import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
-import 'package:hopaut/controllers/blocs/register/register_bloc.dart';
 import 'package:hopaut/presentation/widgets/buttons/facebook_button.dart';
 import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
 import 'package:hopaut/presentation/widgets/inputs/password_input.dart';

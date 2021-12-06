@@ -10,6 +10,8 @@ import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';
 import 'package:hopaut/presentation/widgets/text/text.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   @override
@@ -43,8 +45,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           HopautLogo(),
           SizedBox(height: 32),
-          // TODO - Translate
-          H1(text: "Forgot Password?"),
+          H1(text: LocaleKeys.Authentication_ForgotPassword_pageTItle.tr()),
           SizedBox(height: 10),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 48),
@@ -84,9 +85,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           child: Column(
             children: [
               text(
-                  text:
-                      "Enter the email associated with your account and we'll send"
-                      " an email with instructions to reset your password."),
+                  text: LocaleKeys
+                          .Authentication_ForgotPassword_labels_instructionsLabel
+                      .tr()),
               SizedBox(height: 32),
               BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
                   builder: (context, state) {
@@ -118,8 +119,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
           builder: (context, state) {
         return persistButton(
-            // TODO - Translate
-            label: 'Send request',
+            label: LocaleKeys
+                .Authentication_ForgotPassword_buttons_requestButton.tr(),
             context: context,
             isStateValid: state.formStatus is SubmissionSuccess,
             onPressed: state.formStatus is RequestSubmitted
@@ -143,10 +144,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           opaque: false,
           pageBuilder: (BuildContext context, _, __) => FullscreenDialog(
                 asset: 'assets/icons/forgot_password.png',
-                header: 'Check your email',
-                message:
-                    'We have sent a password recover instructions to your email.',
-                buttonText: 'Back to login',
+                header: LocaleKeys
+                    .Authentication_ForgotPassword_successDialog_header.tr(),
+                message: LocaleKeys
+                    .Authentication_ForgotPassword_successDialog_message.tr(),
+                buttonText: LocaleKeys
+                        .Authentication_ForgotPassword_successDialog_buttonText
+                    .tr(),
                 route: '/login',
               )));
     });

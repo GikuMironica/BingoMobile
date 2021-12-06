@@ -49,15 +49,17 @@ class ReportBugProvider with ChangeNotifier {
       reportBugFormStatus = Idle();
       Navigator.of(context).pushReplacement(PageRouteBuilder(
           opaque: false,
-          pageBuilder: (BuildContext context, _, __) =>
-              FullscreenDialog(
+          pageBuilder: (BuildContext context, _, __) => FullscreenDialog(
+                svgAsset: 'assets/icons/svg/thank_you.svg',
                 header: LocaleKeys
-                    .Account_Settings_ReportBug_dialogs_thankYouDialog_headerLabel.tr(),
-                message:
-                LocaleKeys
-                    .Account_Settings_ReportBug_dialogs_thankYouDialog_messageLabel.tr(),
+                        .Account_Settings_ReportBug_dialogs_thankYouDialog_headerLabel
+                    .tr(),
+                message: LocaleKeys
+                        .Account_Settings_ReportBug_dialogs_thankYouDialog_messageLabel
+                    .tr(),
                 buttonText: LocaleKeys
-                    .Account_Settings_ReportBug_dialogs_thankYouDialog_buttonLabel.tr(),
+                        .Account_Settings_ReportBug_dialogs_thankYouDialog_buttonLabel
+                    .tr(),
                 route: Routes.settings,
               )));
     });
