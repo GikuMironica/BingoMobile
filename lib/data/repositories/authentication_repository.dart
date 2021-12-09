@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/data/domain/login_result.dart';
 import 'package:hopaut/data/repositories/repository.dart';
@@ -52,7 +54,12 @@ class AuthenticationRepository extends Repository {
   /// Registers a user with the system.
   Future<AuthResult> register(
       {@required String email, @required String password}) async {
-    final Map<String, dynamic> payload = {'email': email, 'password': password};
+    String lang = Platform.localeName.substring(0, 2);
+    final Map<String, dynamic> payload = {
+      'email': email,
+      'password': password,
+      'language': lang
+    };
     Response response;
     try {
       response = await dio.post(
@@ -71,6 +78,7 @@ class AuthenticationRepository extends Repository {
   }
 
   Future<Map<String, dynamic>> loginWithFacebook() async {
+    String lang = Platform.localeName.substring(0, 2);
     FacebookLogin facebookLogin = FacebookLogin();
     FacebookLoginResult _facebookLoginResult =
         await facebookLogin.logIn(['email']);
@@ -85,7 +93,8 @@ class AuthenticationRepository extends Repository {
       case FacebookLoginStatus.loggedIn:
         logger.d('Facebook login successful');
         final Map<String, dynamic> payload = {
-          'accessToken': _facebookLoginResult.accessToken.token
+          'accessToken': _facebookLoginResult.accessToken.token,
+          'language': lang
         };
         try {
           Response response = await dio.post(API.FB_AUTH, data: payload);

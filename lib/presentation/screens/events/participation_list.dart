@@ -34,7 +34,6 @@ class _ParticipationListState extends State<ParticipationList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getData().then((value) => setState(() => _isLoaded = true));
     super.initState();
   }

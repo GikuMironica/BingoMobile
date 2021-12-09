@@ -503,6 +503,19 @@ class CodegenLoader extends AssetLoader{
     "requestList": {
       "requests": "Anfragen",
       "noReqsYet": "Noch keine Anfragen"
+    },
+    "Rating": {
+      "pageTitle": "Veranstaltung bewerten",
+      "validation": "Geben Sie ein kurzes Feedback",
+      "button": "Bewertung abgeben",
+      "dialog": "Hochladen",
+      "outOf": " von 5"
+    },
+    "Report": {
+      "reportEvent": "Veranstaltung melden",
+      "doesntExist": "Das Ereignis existiert nicht",
+      "inappropriateContet": "Unangemessener Inhalt",
+      "spam": "Spam"
     }
   }
 };
@@ -995,6 +1008,19 @@ static const Map<String,dynamic> en = {
     "requestList": {
       "requests": "Requests",
       "noReqsYet": "No requests yet"
+    },
+    "Rating": {
+      "pageTitle": "Rate Event",
+      "validation": "Provide a brief feedback",
+      "button": "Submit Rating",
+      "dialog": "Uploading",
+      "outOf": " of 5"
+    },
+    "Report": {
+      "reportEvent": "Report Event",
+      "doesntExist": "Event does not exist",
+      "inappropriateContet": "Inappropriate Content",
+      "spam": "Spam"
     }
   }
 };

@@ -370,6 +370,17 @@ abstract class  LocaleKeys {
   static const Event_requestList_requests = 'Event.requestList.requests';
   static const Event_requestList_noReqsYet = 'Event.requestList.noReqsYet';
   static const Event_requestList = 'Event.requestList';
+  static const Event_Rating_pageTitle = 'Event.Rating.pageTitle';
+  static const Event_Rating_validation = 'Event.Rating.validation';
+  static const Event_Rating_button = 'Event.Rating.button';
+  static const Event_Rating_dialog = 'Event.Rating.dialog';
+  static const Event_Rating_outOf = 'Event.Rating.outOf';
+  static const Event_Rating = 'Event.Rating';
+  static const Event_Report_reportEvent = 'Event.Report.reportEvent';
+  static const Event_Report_doesntExist = 'Event.Report.doesntExist';
+  static const Event_Report_inappropriateContet = 'Event.Report.inappropriateContet';
+  static const Event_Report_spam = 'Event.Report.spam';
+  static const Event_Report = 'Event.Report';
   static const Event = 'Event';
 
 }

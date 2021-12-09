@@ -487,6 +487,19 @@
     "requestList": {
       "requests": "Requests",
       "noReqsYet": "No requests yet"
+    },
+    "Rating": {
+      "pageTitle": "Rate Event",
+      "validation": "Provide a brief feedback",
+      "button": "Submit Rating",
+      "dialog": "Uploading",
+      "outOf": " of 5"
+    },
+    "Report": {
+      "reportEvent": "Report Event",
+      "doesntExist": "Event does not exist",
+      "inappropriateContet": "Inappropriate Content",
+      "spam": "Spam"
     }
   }
 }

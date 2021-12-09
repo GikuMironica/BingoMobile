@@ -8,6 +8,8 @@ import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/inputs/text_area_input.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class RateEvent extends StatefulWidget {
   final int postId;
@@ -41,8 +43,7 @@ class _RateEventState extends State<RateEvent> {
             icon: Icon(Icons.arrow_back),
             onPressed: () => Application.router.pop(context),
           ),
-          // TODO translation
-          title: Text('Rate Event'),
+          title: Text(LocaleKeys.Event_Rating_pageTitle.tr()),
           flexibleSpace: Container(
             decoration: decorationGradient(),
           ),
@@ -55,7 +56,6 @@ class _RateEventState extends State<RateEvent> {
       // Translation
       Failed formStatus = provider.ratingFormStatus;
       Future.delayed(Duration.zero, () async {
-        // TODO - translation
         showSnackBarWithError(
             context: context, message: formStatus.errorMessage);
       });
@@ -82,12 +82,11 @@ class _RateEventState extends State<RateEvent> {
                       provider.validateFeedback(ratingController.text),
                   onChange: (v) =>
                       provider.onRatingMessageChange(v, ratingController),
-                  // TODO translation
-                  validationMessage: "Provide a brief feedback",
+                  validationMessage: LocaleKeys.Event_Rating_validation.tr(),
                 ),
                 SizedBox(height: 12),
                 persistButton(
-                    label: "Submit Rating",
+                    label: LocaleKeys.Event_Rating_button,
                     context: context,
                     isStateValid:
                         provider.validateFeedback(ratingController.text) &&
@@ -109,9 +108,8 @@ class _RateEventState extends State<RateEvent> {
         Visibility(
           visible: provider.ratingFormStatus is Submitted,
           child: Center(
-            // TODO translation
             child: overlayBlurBackgroundCircularProgressIndicator(
-                context, 'Uploading'),
+                context, LocaleKeys.Event_Rating_dialog.tr()),
           ),
         ),
       ],
@@ -155,7 +153,7 @@ class StarRating extends StatelessWidget {
                 : unfilledStar ?? Icons.star_border,
           ),
           padding: EdgeInsets.zero,
-          tooltip: "${index + 1} of 5",
+          tooltip: "${index + 1}" + LocaleKeys.Event_Rating_outOf.tr(),
         );
       }),
     );
