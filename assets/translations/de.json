@@ -500,6 +500,13 @@
       "doesntExist": "Das Ereignis existiert nicht",
       "inappropriateContet": "Unangemessener Inhalt",
       "spam": "Spam"
+    },
+    "Delete": {
+      "title": "Veranstaltung löschen",
+      "confirmDelete": "Sobald Sie bestätigen, wird dieses Ereignis gelöscht",
+      "confirm": "Bestätigen Löschen",
+      "deleteSuccess": "Ereignis wurde erfolgreich gelöscht.",
+      "cancel": "Abbrechen"
     }
   }
 }

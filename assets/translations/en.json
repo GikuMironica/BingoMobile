@@ -500,6 +500,13 @@
       "doesntExist": "Event does not exist",
       "inappropriateContet": "Inappropriate Content",
       "spam": "Spam"
+    },
+    "Delete": {
+      "title": "Delete Event",
+      "confirmDelete": "Once you confirm, this event will be deleted",
+      "confirm": "Confirm Delete",
+      "deleteSuccess": "Event was successfully deleted.",
+      "cancel": "Cancel"
     }
   }
 }

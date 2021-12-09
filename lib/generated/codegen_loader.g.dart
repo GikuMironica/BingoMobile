@@ -516,6 +516,13 @@ class CodegenLoader extends AssetLoader{
       "doesntExist": "Das Ereignis existiert nicht",
       "inappropriateContet": "Unangemessener Inhalt",
       "spam": "Spam"
+    },
+    "Delete": {
+      "title": "Veranstaltung löschen",
+      "confirmDelete": "Sobald Sie bestätigen, wird dieses Ereignis gelöscht",
+      "confirm": "Bestätigen Löschen",
+      "deleteSuccess": "Ereignis wurde erfolgreich gelöscht.",
+      "cancel": "Abbrechen"
     }
   }
 };
@@ -1021,6 +1028,13 @@ static const Map<String,dynamic> en = {
       "doesntExist": "Event does not exist",
       "inappropriateContet": "Inappropriate Content",
       "spam": "Spam"
+    },
+    "Delete": {
+      "title": "Delete Event",
+      "confirmDelete": "Once you confirm, this event will be deleted",
+      "confirm": "Confirm Delete",
+      "deleteSuccess": "Event was successfully deleted.",
+      "cancel": "Cancel"
     }
   }
 };

@@ -60,7 +60,7 @@ class _ReportEventState extends State<ReportEvent> {
             await _eventProvider.reportPost(
                 postId: widget.postId, reason: 2, context: context)
           },
-          title: Text(LocaleKeys.Event_Report_spam),
+          title: Text(LocaleKeys.Event_Report_spam.tr()),
         )
       ],
     );

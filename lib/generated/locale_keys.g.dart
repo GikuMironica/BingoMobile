@@ -381,6 +381,12 @@ abstract class  LocaleKeys {
   static const Event_Report_inappropriateContet = 'Event.Report.inappropriateContet';
   static const Event_Report_spam = 'Event.Report.spam';
   static const Event_Report = 'Event.Report';
+  static const Event_Delete_title = 'Event.Delete.title';
+  static const Event_Delete_confirmDelete = 'Event.Delete.confirmDelete';
+  static const Event_Delete_confirm = 'Event.Delete.confirm';
+  static const Event_Delete_deleteSuccess = 'Event.Delete.deleteSuccess';
+  static const Event_Delete_cancel = 'Event.Delete.cancel';
+  static const Event_Delete = 'Event.Delete';
   static const Event = 'Event';
 
 }
