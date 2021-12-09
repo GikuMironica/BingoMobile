@@ -4,7 +4,8 @@ import 'package:hopaut/controllers/blocs/register/register_page_status.dart';
 import 'package:hopaut/controllers/blocs/register/register_state.dart';
 import 'package:hopaut/data/domain/login_result.dart';
 import 'package:hopaut/services/authentication_service.dart';
-
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import '../base_event.dart';
 
 abstract class RegisterEvent extends BaseEvent {
@@ -68,7 +69,8 @@ class UnobscureConfirmPasswordClicked extends RegisterEvent {
   @override
   Stream<RegisterState> handleEvent(BaseState state) async* {
     RegisterState registerState = state;
-    yield registerState.copyWith(confirmPasswordObscureText: !confirmPasswordObscureText);
+    yield registerState.copyWith(
+        confirmPasswordObscureText: !confirmPasswordObscureText);
   }
 }
 
@@ -83,13 +85,12 @@ class RegisterClicked extends RegisterEvent {
           registerState.username.trim(), registerState.password.trim());
       yield result.isSuccessful
           ? registerState.copyWith(formStatus: SubmissionSuccess())
-      // TODO- Translation
           : registerState.copyWith(
-          formStatus: SubmissionFailed(result.data["Error"]));
+              formStatus: SubmissionFailed(result.data["Error"]));
     } catch (e) {
-      // TODO - translations
-      yield registerState.copyWith(formStatus: SubmissionFailed("Internal error"));
+      yield registerState.copyWith(
+          formStatus: SubmissionFailed(
+              LocaleKeys.Authentication_Register_toasts_internalError.tr()));
     }
   }
 }
-

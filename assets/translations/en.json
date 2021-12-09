@@ -316,12 +316,13 @@
         "confirmPassword": "Passwords don't match"
       },
       "navigationLabels": {
-        "privacyPolicy": "Privacy Policy",
+        "privacyPolicy": " Privacy Policy",
         "and": " and ",
         "tos": "Terms & Conditions"
       },
       "toasts": {
-        "couldnNotConnect": "Couldn't connect to"
+        "couldnNotConnect": "Couldn't connect to",
+        "internalError": "Internal Error"
       },
       "buttons": {
         "register": "Sign Up"
@@ -332,7 +333,26 @@
         "button": "Back to login"
       }
     },
-    "Login": {},
+    "Login": {
+      "pageTitle": "Welcome!",
+      "labels": {
+        "info": "Login to continue",
+        "dividerText": " Or continue with "
+      },
+      "hints": {
+        "enterPass": "Enter your password"
+      },
+      "validation": {
+        "inputPass": "Please input your password"
+      },
+      "buttons": {
+        "login": "Login"
+      },
+      "toasts": {
+        "internalError": "Internal Error",
+        "wentWrong": "Something went wrong"
+      }
+    },
     "ForgotPassword": {
       "pageTItle": "Forgot Password?",
       "labels": {
@@ -345,6 +365,9 @@
         "header": "Check your inbox",
         "message": "We have sent a password recover instructions to your email.",
         "buttonText": "Back to login"
+      },
+      "toasts": {
+        "internalError": "Internal Error"
       }
     }
   },
@@ -385,7 +408,7 @@
     "NoAccountYet": {
       "buttons": {
         "noAccountYet1": "Don't have an account yet? ",
-        "signUp": "Sign up"
+        "signUp": " Sign up"
       }
     },
     "HaveAnAccount": {
@@ -394,6 +417,76 @@
     }
   },
   "Others": {
-    "Repositories": {}
+    "Repositories": {
+      "Authentication": {
+        "confirmEmail": "Please confirm your email",
+        "tooManyAttempts": "Too many invalid login attempts, try again later",
+        "invalidCredentials": "Invalid username or password",
+        "accountExists": "An account with this email already exists"
+      },
+      "Report": {
+        "reportedAlready": "You've reported this event already",
+        "cantSendReport": "Report could not be sent"
+      },
+      "Rating": {
+        "ratedAlready": "You've rated this event already",
+        "cantRate": "Rating could not be submitted"
+      },
+      "User": {
+        "cantSaveImage": "Image could not be saved",
+        "error": "Internal error"
+      }
+    },
+    "Services": {
+      "DioService": {
+        "requestQuotaExceed": "Exceeded requests quota"
+      },
+      "Location": {
+        "serviceDisabled": "Location service is disabled",
+        "locationPermissionDenied": "Location permission denied"
+      }
+    },
+    "Providers": {
+      "SearchPage": {
+        "noEventsFound": "No events found in this area"
+      },
+      "Settings": {
+        "inputurEmail": "Input your account email",
+        "accountDeleted": "Account deleted",
+        "failedAccountDelete": "Unable to delete account"
+      }
+    }
+  },
+  "Event": {
+    "dialogs": {
+      "loadingEvent": "Loading event data"
+    },
+    "labels": {
+      "unknownAdress": "Unknown address",
+      "tags": "Tags",
+      "eventRated": "Event host rated",
+      "rateEvent": "Rate event",
+      "reportEvent": "Report this event",
+      "editEvent": "Edit this event",
+      "delete": "Delete this event"
+    },
+    "buttons": {
+      "attend": "Attend",
+      "notInterested": "Not Interested?"
+    },
+    "detailsLabels": {
+      "date": "Date",
+      "tim": "Time",
+      "price": "Entrance Price",
+      "availablePlaces": "Available Places"
+    },
+    "participators": {
+      "pageTitle": "Guests List",
+      "noMembersYet": "No guests yet"
+    },
+    "requestList": {
+      "requests": "Requests",
+      "noReqsYet": "No requests yet"
+    }
   }
 }

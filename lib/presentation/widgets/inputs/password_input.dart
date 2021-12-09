@@ -12,6 +12,7 @@ Widget passwordInputField({
   @required void Function() onObscureTap,
 }) {
   return TextFormField(
+    validator: (value) => isStateValid ? null : validationMessage,
     autovalidateMode: AutovalidateMode.onUserInteraction,
     onChanged: onChange,
     obscureText: isTextObscured,

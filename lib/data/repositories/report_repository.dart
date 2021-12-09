@@ -1,5 +1,6 @@
 import 'dart:io';
-
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:dio/dio.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/data/domain/request_result.dart';
@@ -26,22 +27,22 @@ class ReportRepository extends Repository {
     } on DioError catch (e) {
       logger.e(e.message);
       if (e.response?.statusCode == 403) {
-        // TODO - translation
         return RequestResult(
             isSuccessful: false,
-            errorMessage: "You've reported this post already");
+            errorMessage:
+                LocaleKeys.Others_Repositories_Report_reportedAlready.tr());
       }
       return RequestResult(
-          isSuccessful: false, errorMessage: "Error, report could not be sent");
+          isSuccessful: false,
+          errorMessage:
+              LocaleKeys.Others_Repositories_Report_cantSendReport.tr());
     }
   }
 
   /// Creates a user report
   ///
   /// This endpoint is used for reporting a user.
-  void userReport(String userId, int reason, String message) {
-    // TODO: Create a hashmap for reason (int) -> reason (String)
-  }
+  void userReport(String userId, int reason, String message) {}
 
   /// Report a bug
   Future<bool> bugReportPostAsync(Bug bug) async {

@@ -1,11 +1,10 @@
 import 'dart:io';
-
-import 'package:get_it/get_it.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:hopaut/data/domain/request_result.dart';
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:dio/dio.dart';
 import 'package:hopaut/config/constants.dart' show API;
-import 'package:hopaut/services/dio_service.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
 
@@ -87,14 +86,13 @@ class UserRepository extends Repository {
         return RequestResult(
             data: null,
             isSuccessful: false,
-            // TODO translations
-            errorMessage: "Image could not be persisted");
+            errorMessage:
+                LocaleKeys.Others_Repositories_User_cantSaveImage.tr());
       }
       return RequestResult(
           data: null,
           isSuccessful: false,
-          // TODO translations
-          errorMessage: "An error occurred.");
+          errorMessage: LocaleKeys.Others_Repositories_User_error.tr());
     } finally {
       dio.options.headers[HttpHeaders.contentTypeHeader] = 'application/json';
     }

@@ -47,7 +47,7 @@ class AccountProvider extends ChangeNotifier {
   AccountProvider() {
     otpTries = 0;
     timerState = TimerStopped();
-    currentTimerSeconds = Configurations.resendOtpTime;
+    currentTimerSeconds = Configurations.RESEND_OTP_TIME;
     _authenticationService = getIt<AuthenticationService>();
     _userRepository = getIt<UserRepository>();
     formStatus = Idle();
@@ -124,7 +124,7 @@ class AccountProvider extends ChangeNotifier {
 
     await _firebaseOtpService.sendOtpAsync(
         context, number, sendingOtpFailCallback);
-    if(timerState is TimerStopped){
+    if (timerState is TimerStopped) {
       startTimer();
     }
   }
@@ -140,9 +140,9 @@ class AccountProvider extends ChangeNotifier {
     var result = await _firebaseOtpService.verifyOtp(sms);
     if (!result) {
       otpTries++;
-      if(otpTries==5){
+      if (otpTries == 5) {
         showNewErrorSnackbar(LocaleKeys
-            .Account_EditProfile_EditMobile_ConfirmMobile_toasts_wrongCode5Times
+                .Account_EditProfile_EditMobile_ConfirmMobile_toasts_wrongCode5Times
             .tr());
         Application.router.navigateTo(context, Routes.editAccount,
             transition: TransitionType.cupertino, clearStack: true);
@@ -151,11 +151,12 @@ class AccountProvider extends ChangeNotifier {
     }
 
     User tempUser = User(phoneNumber: number);
-    User updatedUser = await _userRepository.update(currentIdentity.id, tempUser);
+    User updatedUser =
+        await _userRepository.update(currentIdentity.id, tempUser);
 
     if (updatedUser == null) {
       showNewErrorSnackbar(LocaleKeys
-          .Account_EditProfile_EditMobile_ConfirmMobile_toasts_failedToUpdateNumber
+              .Account_EditProfile_EditMobile_ConfirmMobile_toasts_failedToUpdateNumber
           .tr());
     } else {
       _authenticationService.setUser(updatedUser);
@@ -167,12 +168,12 @@ class AccountProvider extends ChangeNotifier {
   sendingOtpFailCallback(fba.FirebaseAuthException e) {
     if (e.code == 'invalid-phone-number') {
       showNewErrorSnackbar(LocaleKeys
-          .Account_EditProfile_EditMobile_ConfirmMobile_toasts_invalidPhone
+              .Account_EditProfile_EditMobile_ConfirmMobile_toasts_invalidPhone
           .tr());
     } else {
       showNewErrorSnackbar(
           LocaleKeys
-              .Account_EditProfile_EditMobile_ConfirmMobile_toasts_serviceUnavaialble
+                  .Account_EditProfile_EditMobile_ConfirmMobile_toasts_serviceUnavaialble
               .tr(),
           toastGravity: ToastGravity.TOP);
     }
@@ -200,8 +201,10 @@ class AccountProvider extends ChangeNotifier {
         return result;
       } else {
         return RequestResult(
-            data: null, isSuccessful: false, errorMessage: LocaleKeys
-            .Account_EditProfile_EditProfilePicture_toasts_error.tr());
+            data: null,
+            isSuccessful: false,
+            errorMessage: LocaleKeys
+                .Account_EditProfile_EditProfilePicture_toasts_error.tr());
       }
     } else {
       return result;
@@ -221,14 +224,14 @@ class AccountProvider extends ChangeNotifier {
     var sub = countDownTimer.listen(null);
     sub.onData((duration) {
       currentTimerSeconds =
-          Configurations.resendOtpTime - duration.elapsed.inSeconds;
+          Configurations.RESEND_OTP_TIME - duration.elapsed.inSeconds;
       notifyListeners();
     });
 
     sub.onDone(() {
       sub.cancel();
       timerState = TimerStopped();
-      currentTimerSeconds = Configurations.resendOtpTime;
+      currentTimerSeconds = Configurations.RESEND_OTP_TIME;
       notifyListeners();
     });
   }
@@ -273,7 +276,7 @@ class AccountProvider extends ChangeNotifier {
 
   void resetProvider() {
     timerState = TimerStopped();
-    currentTimerSeconds = Configurations.resendOtpTime;
+    currentTimerSeconds = Configurations.RESEND_OTP_TIME;
     formStatus = Idle();
     picturesPageStatus = Idle();
     number = null;

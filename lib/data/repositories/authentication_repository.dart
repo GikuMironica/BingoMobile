@@ -5,6 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 @lazySingleton
 class AuthenticationRepository extends Repository {
@@ -22,20 +24,25 @@ class AuthenticationRepository extends Repository {
         data: payload,
       );
     } on DioError catch (e) {
-      if (e.response?.statusCode == 400 && e.response.data["FailReason"]==2) {
-        // TODO - translation
-        Map<String, String> result = {"Error": "Invalid username or password"};
+      if (e.response?.statusCode == 400 && e.response.data["FailReason"] == 2) {
+        Map<String, String> result = {
+          "Error": LocaleKeys
+              .Others_Repositories_Authentication_invalidCredentials.tr()
+        };
         return result;
       }
-      // TODO - Handle use case where email not confirmed or account blocked due to the amount of tries
-      if (e.response?.statusCode == 403 && e.response.data["FailReason"]==0){
-        // TODO - translation
-        Map<String, String> result = {"Error": "Please confirm your email"};
+      if (e.response?.statusCode == 403 && e.response.data["FailReason"] == 0) {
+        Map<String, String> result = {
+          "Error":
+              LocaleKeys.Others_Repositories_Authentication_confirmEmail.tr()
+        };
         return result;
       }
-      if (e.response?.statusCode == 403 && e.response.data["FailReason"]==1){
-        // TODO - translation
-        Map<String, String> result = {"Error": "Too many invalid login attempts, try again later."};
+      if (e.response?.statusCode == 403 && e.response.data["FailReason"] == 1) {
+        Map<String, String> result = {
+          "Error":
+              LocaleKeys.Others_Repositories_Authentication_tooManyAttempts.tr()
+        };
         return result;
       }
     }
@@ -53,12 +60,12 @@ class AuthenticationRepository extends Repository {
         data: payload,
       );
     } on DioError catch (e) {
-      // TODO - Handle use case if email was already used
       if (e.response?.statusCode == 400) {
-        // TODO - translation
-        return AuthResult(isSuccessful: false, data: {"Error": "An account with this email already exists."});
+        return AuthResult(isSuccessful: false, data: {
+          "Error":
+              LocaleKeys.Others_Repositories_Authentication_accountExists.tr()
+        });
       }
-
     }
     return AuthResult(isSuccessful: true, data: response.data["data"]);
   }
@@ -127,8 +134,7 @@ class AuthenticationRepository extends Repository {
 
     try {
       Response response = await dio.post(API.CHANGE_PASSWORD, data: payload);
-      if (response.statusCode==200)
-        return true;
+      if (response.statusCode == 200) return true;
     } on DioError catch (e) {
       logger.e(e.message);
     }

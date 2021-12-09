@@ -332,12 +332,13 @@ class CodegenLoader extends AssetLoader{
         "confirmPassword": "Passwörter stimmen nicht überein"
       },
       "navigationLabels": {
-        "privacyPolicy": "Datenschutzerklärung",
+        "privacyPolicy": " Datenschutzerklärung ",
         "and": " und ",
         "tos": "AGB"
       },
       "toasts": {
-        "couldnNotConnect": "Konnte keine Verbindung zu dieser Website herstellen"
+        "couldnNotConnect": "Konnte keine Verbindung zu dieser Website herstellen",
+        "internalError": "Interner Fehler"
       },
       "buttons": {
         "register": "Registrieren"
@@ -348,7 +349,26 @@ class CodegenLoader extends AssetLoader{
         "button": "Zurück zur Anmeldung"
       }
     },
-    "Login": {},
+    "Login": {
+      "pageTitle": "Willkommen!",
+      "labels": {
+        "info": "Einloggen um fortzufahren",
+        "dividerText": " Oder weiter mit  "
+      },
+      "hints": {
+        "enterPass": "Ihr Passwort eingeben"
+      },
+      "validation": {
+        "inputPass": "Bitte geben Sie Ihr Passwort ein"
+      },
+      "buttons": {
+        "login": "Einloggen"
+      },
+      "toasts": {
+        "internalError": "Interner Fehler",
+        "wentWrong": "Etwas ist schief gelaufen"
+      }
+    },
     "ForgotPassword": {
       "pageTItle": "Passwort vergessen?",
       "labels": {
@@ -358,9 +378,12 @@ class CodegenLoader extends AssetLoader{
         "requestButton": "Anfrage senden"
       },
       "successDialog": {
-        "header": "Prüfen Sie Ihren Posteingang",
+        "header": "Bitte schauen Sie in Ihrem E-Mail-Posteingang",
         "message": "Wir haben eine Anleitung zur Wiederherstellung des Passworts an Ihre E-Mail geschickt.",
         "buttonText": "Zurück zur Anmeldung"
+      },
+      "toasts": {
+        "internalError": "Interner Fehler"
       }
     }
   },
@@ -401,7 +424,7 @@ class CodegenLoader extends AssetLoader{
     "NoAccountYet": {
       "buttons": {
         "noAccountYet1": "Haben Sie noch kein Konto?",
-        "signUp": "Registrieren"
+        "signUp": " Registrieren"
       }
     },
     "HaveAnAccount": {
@@ -410,7 +433,77 @@ class CodegenLoader extends AssetLoader{
     }
   },
   "Others": {
-    "Repositories": {}
+    "Repositories": {
+      "Authentication": {
+        "confirmEmail": "Bitte bestätigen Sie Ihre E-Mail",
+        "tooManyAttempts": "Zu viele ungültige Anmeldeversuche, versuchen Sie es später noch einmal",
+        "invalidCredentials": "Ungültiger Benutzername oder Passwort",
+        "accountExists": "Ein Konto mit dieser E-Mail existiert bereits"
+      },
+      "Report": {
+        "reportedAlready": "Sie haben dieses Veranstaltung bereits gemeldet",
+        "cantSendReport": "Bericht konnte nicht gesendet werden"
+      },
+      "Rating": {
+        "ratedAlready": "Sie haben dieses Ereignis bereits bewertet",
+        "cantRate": "Bewertung konnte nicht abgegeben werden"
+      },
+      "User": {
+        "cantSaveImage": "Bild konnte nicht gespeichert werden",
+        "error": "Interner Fehler"
+      }
+    },
+    "Services": {
+      "DioService": {
+        "requestQuotaExceed": "Überschrittene Anfragenquote"
+      },
+      "Location": {
+        "serviceDisabled": "Standortdienst ist deaktiviert",
+        "locationPermissionDenied": "Standortgenehmigung abgelehnt"
+      }
+    },
+    "Providers": {
+      "SearchPage": {
+        "noEventsFound": "Keine Veranstaltungen in diesem Bereich gefunden"
+      },
+      "Settings": {
+        "inputurEmail": "Geben Sie Ihre Konto-E-Mail ein",
+        "accountDeleted": "Konto gelöscht",
+        "failedAccountDelete": "Konto konnte nicht gelöscht werden"
+      }
+    }
+  },
+  "Event": {
+    "dialogs": {
+      "loadingEvent": "Laden von Ereignisdaten"
+    },
+    "labels": {
+      "unknownAdress": "Unbekannte Adresse",
+      "tags": "Tags",
+      "eventRated": "Gastgeber bewertet",
+      "rateEvent": "Veranstaltung bewerten",
+      "reportEvent": "Diese Veranstaltung melden",
+      "editEvent": "Dieses Veranstaltung bearbeiten",
+      "delete": "Diese Veranstaltung löschen"
+    },
+    "buttons": {
+      "attend": "Teilnahme an",
+      "notInterested": "Nicht interessiert?"
+    },
+    "detailsLabels": {
+      "date": "Datum",
+      "tim": "Uhrzeit",
+      "price": "Eintrittspreis",
+      "availablePlaces": "Verfügbare Plätze"
+    },
+    "participators": {
+      "pageTitle": "Liste der Gäste",
+      "noMembersYet": "Noch keine Gäste"
+    },
+    "requestList": {
+      "requests": "Anfragen",
+      "noReqsYet": "Noch keine Anfragen"
+    }
   }
 };
 static const Map<String,dynamic> en = {
@@ -731,12 +824,13 @@ static const Map<String,dynamic> en = {
         "confirmPassword": "Passwords don't match"
       },
       "navigationLabels": {
-        "privacyPolicy": "Privacy Policy",
+        "privacyPolicy": " Privacy Policy",
         "and": " and ",
         "tos": "Terms & Conditions"
       },
       "toasts": {
-        "couldnNotConnect": "Couldn't connect to"
+        "couldnNotConnect": "Couldn't connect to",
+        "internalError": "Internal Error"
       },
       "buttons": {
         "register": "Sign Up"
@@ -747,7 +841,26 @@ static const Map<String,dynamic> en = {
         "button": "Back to login"
       }
     },
-    "Login": {},
+    "Login": {
+      "pageTitle": "Welcome!",
+      "labels": {
+        "info": "Login to continue",
+        "dividerText": " Or continue with "
+      },
+      "hints": {
+        "enterPass": "Enter your password"
+      },
+      "validation": {
+        "inputPass": "Please input your password"
+      },
+      "buttons": {
+        "login": "Login"
+      },
+      "toasts": {
+        "internalError": "Internal Error",
+        "wentWrong": "Something went wrong"
+      }
+    },
     "ForgotPassword": {
       "pageTItle": "Forgot Password?",
       "labels": {
@@ -760,6 +873,9 @@ static const Map<String,dynamic> en = {
         "header": "Check your inbox",
         "message": "We have sent a password recover instructions to your email.",
         "buttonText": "Back to login"
+      },
+      "toasts": {
+        "internalError": "Internal Error"
       }
     }
   },
@@ -800,7 +916,7 @@ static const Map<String,dynamic> en = {
     "NoAccountYet": {
       "buttons": {
         "noAccountYet1": "Don't have an account yet? ",
-        "signUp": "Sign up"
+        "signUp": " Sign up"
       }
     },
     "HaveAnAccount": {
@@ -809,7 +925,77 @@ static const Map<String,dynamic> en = {
     }
   },
   "Others": {
-    "Repositories": {}
+    "Repositories": {
+      "Authentication": {
+        "confirmEmail": "Please confirm your email",
+        "tooManyAttempts": "Too many invalid login attempts, try again later",
+        "invalidCredentials": "Invalid username or password",
+        "accountExists": "An account with this email already exists"
+      },
+      "Report": {
+        "reportedAlready": "You've reported this event already",
+        "cantSendReport": "Report could not be sent"
+      },
+      "Rating": {
+        "ratedAlready": "You've rated this event already",
+        "cantRate": "Rating could not be submitted"
+      },
+      "User": {
+        "cantSaveImage": "Image could not be saved",
+        "error": "Internal error"
+      }
+    },
+    "Services": {
+      "DioService": {
+        "requestQuotaExceed": "Exceeded requests quota"
+      },
+      "Location": {
+        "serviceDisabled": "Location service is disabled",
+        "locationPermissionDenied": "Location permission denied"
+      }
+    },
+    "Providers": {
+      "SearchPage": {
+        "noEventsFound": "No events found in this area"
+      },
+      "Settings": {
+        "inputurEmail": "Input your account email",
+        "accountDeleted": "Account deleted",
+        "failedAccountDelete": "Unable to delete account"
+      }
+    }
+  },
+  "Event": {
+    "dialogs": {
+      "loadingEvent": "Loading event data"
+    },
+    "labels": {
+      "unknownAdress": "Unknown address",
+      "tags": "Tags",
+      "eventRated": "Event host rated",
+      "rateEvent": "Rate event",
+      "reportEvent": "Report this event",
+      "editEvent": "Edit this event",
+      "delete": "Delete this event"
+    },
+    "buttons": {
+      "attend": "Attend",
+      "notInterested": "Not Interested?"
+    },
+    "detailsLabels": {
+      "date": "Date",
+      "tim": "Time",
+      "price": "Entrance Price",
+      "availablePlaces": "Available Places"
+    },
+    "participators": {
+      "pageTitle": "Guests List",
+      "noMembersYet": "No guests yet"
+    },
+    "requestList": {
+      "requests": "Requests",
+      "noReqsYet": "No requests yet"
+    }
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"de": de, "en": en};

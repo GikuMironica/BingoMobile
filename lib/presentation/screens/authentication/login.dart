@@ -14,6 +14,8 @@ import 'package:hopaut/presentation/widgets/logo/logo.dart';
 import 'package:hopaut/presentation/widgets/text/text.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/controllers/blocs/login/login_event.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -47,9 +49,8 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           HopautLogo(),
           SizedBox(height: 32),
-          // TODO - Translate
-          H1(text: "Welcome!"),
-          subHeader(text: "Login to continue"),
+          H1(text: LocaleKeys.Authentication_Login_pageTitle.tr()),
+          subHeader(text: LocaleKeys.Authentication_Login_labels_info.tr()),
           SizedBox(height: 32),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 48),
@@ -105,13 +106,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
               BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
                 return passwordInputField(
-                    // TODO - Translate
-                    hint: "Enter a password",
+                    hint: LocaleKeys.Authentication_Login_hints_enterPass.tr(),
                     context: context,
                     isTextObscured: state.obscureText,
                     isStateValid: state.isValidPassword,
-                    // TODO - Translation
-                    validationMessage: "Please input your password",
+                    validationMessage: LocaleKeys
+                        .Authentication_Login_validation_inputPass.tr(),
                     onObscureTap: () => context.read<LoginBloc>().add(
                         ShowPasswordClicked(obscureText: state.obscureText)),
                     onChange: (value) => context
@@ -135,8 +135,7 @@ class _LoginPageState extends State<LoginPage> {
     return Column(children: [
       BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
         return persistButton(
-            // TODO - translate
-            label: 'Login',
+            label: LocaleKeys.Authentication_Login_buttons_login.tr(),
             context: context,
             isStateValid: state.formStatus is SubmissionSuccess,
             onPressed: state.formStatus is LoginSubmitted
@@ -152,8 +151,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       Row(children: <Widget>[
         Expanded(child: Divider()),
-        // TODO translate
-        Text(" Or continue with "),
+        Text(LocaleKeys.Authentication_Login_labels_dividerText.tr()),
         Expanded(child: Divider()),
       ]),
       SizedBox(

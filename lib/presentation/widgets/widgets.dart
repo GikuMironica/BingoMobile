@@ -63,7 +63,7 @@ Widget forgotPassword(BuildContext context) {
               transitionDuration: Duration());
         },
         child: Text(
-          LocaleKeys.Authentication_Register_validation_passwordField,
+          LocaleKeys.Authentication_ForgotPassword_pageTItle.tr(),
           style: TextStyle(
               fontWeight: FontWeight.w500, color: Colors.pink, fontSize: 12),
           textAlign: TextAlign.end,

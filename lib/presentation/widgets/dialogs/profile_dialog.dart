@@ -123,7 +123,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
               Visibility(
                 visible: _profileContext.phoneNumber != null,
                 child: Text(
-                  _profileContext.phoneNumber??" ",
+                  _profileContext.phoneNumber ?? " ",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black54,
@@ -133,7 +133,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
               ),
               SizedBox(height: 16.0),
               Text(
-                _profileContext.description,
+                _profileContext.description ?? " ",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12.0,

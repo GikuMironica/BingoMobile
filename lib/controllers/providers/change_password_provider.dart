@@ -76,7 +76,6 @@ class ChangePasswordProvider extends ChangeNotifier {
     } else {
       formStatus = Success();
       Future.delayed(Duration(seconds: 4), () async {
-        // TODO - translation
         Application.router.pop(context);
       });
     }

@@ -35,6 +35,7 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class EventPage extends StatefulWidget {
   EventPage({this.postId});
@@ -147,9 +148,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
           ? Scaffold(
               body: Container(
                 child: overlayBlurBackgroundCircularProgressIndicator(
-                    // TODO translations
-                    context,
-                    "Loading event data"),
+                    context, LocaleKeys.Event_dialogs_loadingEvent.tr()),
               ),
             )
           : Stack(
@@ -261,7 +260,6 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                 padding: EdgeInsets.all(16.0),
                                 sliver: SliverList(
                                   delegate: SliverChildListDelegate([
-                                    // TODO Break into another component
                                     Text(
                                       post.event.title,
                                       style: TextStyle(
@@ -280,7 +278,6 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                         Text(
                                           eventTypeStrings[
                                               post.event.eventType],
-
                                         ),
                                         Icon(MdiIcons.mapMarkerOutline,
                                             size: 18, color: Colors.pink),
@@ -288,7 +285,9 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                           post.location.address != null &&
                                                   post.location.city != null
                                               ? '${post.location.address}, ${post.location.city}'
-                                              : 'Unknown address', //TODO: translation
+                                              : LocaleKeys
+                                                      .Event_labels_unknownAdress
+                                                  .tr(),
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                               fontSize: 14,
@@ -359,10 +358,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                     ),
                                     Divider(),
                                     SizedBox(height: 16),
-                                    EventDescription(isHost
-                                        ? post.event.description
-                                        : post.event.description ??
-                                            'No description for this event yet'),
+                                    EventDescription(post.event.description),
                                     Visibility(
                                       visible: ((post.event.requirements !=
                                               null) &&
@@ -391,7 +387,9 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                           Padding(
                                             padding: const EdgeInsets.only(
                                                 top: 16, bottom: 8),
-                                            child: Subtitle(label: 'Tags'),
+                                            child: Subtitle(
+                                                label: LocaleKeys
+                                                    .Event_labels_tags.tr()),
                                           ),
                                           Wrap(
                                             spacing: 8.0,
@@ -415,14 +413,17 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                             await _navigateAndDisplayResult(
                                                 context,
                                                 '/rate-event/$postId',
-                                                "Event host rated."), //TODO: translation
+                                                LocaleKeys
+                                                        .Event_labels_eventRated
+                                                    .tr()),
                                         child: ListTile(
                                             contentPadding:
                                                 EdgeInsets.symmetric(
                                                     vertical: 4),
                                             leading: Icon(Icons.star),
                                             title: Align(
-                                              child: Text('Rate event'),
+                                              child: Text(LocaleKeys
+                                                  .Event_labels_rateEvent.tr()),
                                               alignment: Alignment(-1.17, 0),
                                             )),
                                       ),
@@ -456,8 +457,12 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                                 : Icon(MdiIcons.accountPlus),
                                             title: Align(
                                               child: Text(isAttending
-                                                  ? 'Not Interested?'
-                                                  : 'Attend'),
+                                                  ? LocaleKeys
+                                                          .Event_buttons_notInterested
+                                                      .tr()
+                                                  : LocaleKeys
+                                                          .Event_buttons_attend
+                                                      .tr()),
                                               alignment: Alignment(-1.2, 0),
                                             ),
                                           ),
@@ -479,9 +484,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                           leading:
                                               Icon(MdiIcons.alertCircleOutline),
                                           title: Align(
-                                            child:
-                                                // TODO translate
-                                                Text('Report this event'),
+                                            child: Text(LocaleKeys
+                                                .Event_labels_reportEvent.tr()),
                                             alignment: Alignment(-1.2, 0),
                                           )),
                                     ),
@@ -506,7 +510,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                                     vertical: 4),
                                             leading: Icon(Icons.edit),
                                             title: Align(
-                                              child: Text('Edit this event'),
+                                              child: Text(LocaleKeys
+                                                  .Event_labels_editEvent.tr()),
                                               alignment: Alignment(-1.2, 0),
                                             )),
                                       ),
@@ -537,9 +542,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                               EdgeInsets.symmetric(vertical: 4),
                                           leading: Icon(MdiIcons.delete),
                                           title: Align(
-                                            child:
-                                                // TODO translate
-                                                Text('Delete this event'),
+                                            child: Text(LocaleKeys
+                                                .Event_labels_delete.tr()),
                                             alignment: Alignment(-1.2, 0),
                                           )),
                                     ),
@@ -559,7 +563,6 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
     bool result = await Application.router
         .navigateTo(context, routes, transition: TransitionType.cupertino);
     if (result != null && result) {
-      // TODO translation
       showSuccessSnackBar(context: context, message: message);
     }
   }

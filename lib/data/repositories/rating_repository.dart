@@ -4,6 +4,8 @@ import 'package:hopaut/data/models/rating.dart';
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 @lazySingleton
 class RatingRepository extends Repository {
@@ -44,14 +46,14 @@ class RatingRepository extends Repository {
     } on DioError catch (e) {
       logger.e(e.message);
       if (e.response?.statusCode == 403) {
-        // TODO - translation
         return RequestResult(
             isSuccessful: false,
-            errorMessage: "You've rated this event already");
+            errorMessage:
+                LocaleKeys.Others_Repositories_Rating_ratedAlready.tr());
       }
       return RequestResult(
           isSuccessful: false,
-          errorMessage: "Error, rating could not be submitted");
+          errorMessage: LocaleKeys.Others_Repositories_Rating_cantRate.tr());
     }
   }
 }

@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:hopaut/config/constants/configurations.dart';
 import 'package:hopaut/data/domain/coordinate.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/utils/rounding_decimals.dart';
 import 'package:injectable/injectable.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:location/location.dart' as l;
 import 'package:geocoder/geocoder.dart' as geocoder;
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 @singleton
 class LocationServiceProvider extends ChangeNotifier {
@@ -37,7 +38,7 @@ class LocationServiceProvider extends ChangeNotifier {
             .findAddressesFromCoordinates(coordinates);
         countryCode = address.first.countryCode;
       } catch (e) {
-        countryCode = "DE";
+        countryCode = Configurations.COUNTRY_CODE;
       }
     }
 
@@ -50,8 +51,8 @@ class LocationServiceProvider extends ChangeNotifier {
     l.PermissionStatus isLocationTrackingAllowed;
     serviceEnabled = await _location.serviceEnabled();
     if (!serviceEnabled) {
-      // TODO translation
-      showNewErrorSnackbar('Location service is disabled');
+      showNewErrorSnackbar(
+          LocaleKeys.Others_Services_Location_serviceDisabled.tr());
       var accepted = await _location.requestService();
       if (!accepted) return false;
     }
@@ -61,8 +62,8 @@ class LocationServiceProvider extends ChangeNotifier {
       isLocationTrackingAllowed = await _location.requestPermission();
       if (isLocationTrackingAllowed != l.PermissionStatus.granted &&
           isLocationTrackingAllowed != l.PermissionStatus.grantedLimited) {
-        // TODO translate
-        showNewErrorSnackbar('Location permission denied');
+        showNewErrorSnackbar(
+            LocaleKeys.Others_Services_Location_locationPermissionDenied.tr());
         return false;
       }
     }
