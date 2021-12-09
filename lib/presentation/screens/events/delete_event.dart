@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/data/repositories/event_repository.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class DeleteEventDialog extends StatefulWidget {
   final int postId;
@@ -26,7 +26,7 @@ class _DeleteEventDialogState extends State<DeleteEventDialog> {
         shrinkWrap: true,
         children: <Widget>[
           Text(
-            'Delete Event',
+            LocaleKeys.Event_Delete_title.tr(),
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           SizedBox(
@@ -39,8 +39,7 @@ class _DeleteEventDialogState extends State<DeleteEventDialog> {
           RichText(
             text: TextSpan(
               style: TextStyle(fontSize: 14, color: Colors.black),
-              text:
-                  'Once you confirm, this event will be deleted.', // TODO: translation
+              text: LocaleKeys.Event_Delete_confirmDelete.tr(),
             ),
           ),
           SizedBox(
@@ -54,7 +53,7 @@ class _DeleteEventDialogState extends State<DeleteEventDialog> {
                 ButtonTheme(
                   minWidth: 122,
                   child: RaisedButton(
-                      child: Text('Confirm Delete', // TODO: translation
+                      child: Text(LocaleKeys.Event_Delete_confirm.tr(),
                           style: TextStyle(color: Colors.white)),
                       color: Colors.red,
                       onPressed: () async {
@@ -62,7 +61,7 @@ class _DeleteEventDialogState extends State<DeleteEventDialog> {
                             .deleteEvent(widget.postId);
                         if (deleteRes) {
                           showNewErrorSnackbar(
-                              'Event was successfuly deleted.');
+                              LocaleKeys.Event_Delete_deleteSuccess.tr());
                           provider.removeEvent(widget.postId);
                           Navigator.pop(context, deleteRes);
                         }
@@ -71,7 +70,7 @@ class _DeleteEventDialogState extends State<DeleteEventDialog> {
                 ButtonTheme(
                     minWidth: 122,
                     child: RaisedButton(
-                        child: Text('Cancel', // TODO: translation
+                        child: Text(LocaleKeys.Event_Delete_cancel.tr(),
                             style: TextStyle(color: Colors.black54)),
                         color: Colors.grey[350],
                         onPressed: () => Application.router.pop(context))),

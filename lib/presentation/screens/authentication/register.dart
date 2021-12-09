@@ -14,6 +14,8 @@ import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
 import 'package:hopaut/presentation/widgets/logo/logo.dart';
 import 'package:hopaut/presentation/widgets/text/text.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -47,9 +49,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           HopautLogo(),
           SizedBox(height: 32),
-          // TODO - Translation
-          H1(text: "Register"),
-          subHeader(text: "Create new account"),
+          H1(text: LocaleKeys.Authentication_Register_pageTitle.tr()),
+          subHeader(text: LocaleKeys.Authentication_Register_labels_info.tr()),
           SizedBox(height: 32),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 48),
@@ -102,16 +103,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
               BlocBuilder<RegisterBloc, RegisterState>(
                   builder: (context, state) {
                 return passwordInputField(
-                    // TODO - Translate
-                    hint: "Enter a password",
+                    hint: LocaleKeys
+                        .Authentication_Register_hints_passwordFieldHint.tr(),
                     context: context,
                     isTextObscured: state.passwordObscureText,
                     isStateValid: state.isPasswordValid,
-                    // TODO - Translate
-                    validationMessage:
-                        "Password must be at least 8 characters length," +
-                            " must contain upper, lower case letters" +
-                            " and digits",
+                    validationMessage: LocaleKeys
+                        .Authentication_Register_validation_passwordField.tr(),
                     onObscureTap: () => context.read<RegisterBloc>().add(
                         UnobscurePasswordClicked(
                             passwordObscureText: state.passwordObscureText)),
@@ -125,11 +123,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
               BlocBuilder<RegisterBloc, RegisterState>(
                   builder: (context, state) {
                 return passwordInputField(
-                    // TODO - Translate
-                    hint: "Confirm password",
+                    hint: LocaleKeys
+                        .Authentication_Register_hints_confirmPasswordHint.tr(),
                     context: context,
-                    // TODO - Translate
-                    validationMessage: "Passwords don't match",
+                    validationMessage: LocaleKeys
+                        .Authentication_Register_hints_confirmPasswordHint.tr(),
                     isTextObscured: state.confirmPasswordObscureText,
                     isStateValid: state.isConfirmPasswordValid,
                     onObscureTap: () => context.read<RegisterBloc>().add(
@@ -152,9 +150,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
               SizedBox(
                 height: 16,
               ),
-              // TODO - translation
               privacyPolicyAndTerms(
-                  context: context, actionText: 'By signing up'),
+                  context: context,
+                  actionText: LocaleKeys
+                      .Authentication_Register_labels_signInInfo.tr()),
             ],
           )),
     );
@@ -164,8 +163,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return Container(child:
         BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
       return persistButton(
-          // TODO - Translate
-          label: 'Sign Up',
+          label: LocaleKeys.Authentication_Register_buttons_register.tr(),
           context: context,
           isStateValid: state.formStatus is SubmissionSuccess,
           onPressed: state.formStatus is RegisterSubmitted
@@ -182,14 +180,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
     Future.delayed(Duration.zero, () {
       Navigator.of(context).push(PageRouteBuilder(
           opaque: false,
-          pageBuilder: (BuildContext context, _, __) =>
-              // TODO - Translate
-              FullscreenDialog(
+          pageBuilder: (BuildContext context, _, __) => FullscreenDialog(
                 asset: 'assets/icons/confirm_email.png',
-                header: 'Success!',
-                message:
-                    'Please check your email. You will get soon an email confirmation link.',
-                buttonText: 'Back to login',
+                header: LocaleKeys.Authentication_Register_successDialog_header
+                    .tr(),
+                message: LocaleKeys
+                    .Authentication_Register_successDialog_message.tr(),
+                buttonText: LocaleKeys
+                    .Authentication_Register_successDialog_button.tr(),
                 route: '/login',
               )));
     });

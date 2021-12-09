@@ -9,6 +9,8 @@ import 'package:hopaut/services/authentication_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 @singleton
 class DioService {
@@ -42,13 +44,14 @@ class DioService {
             }
             var authService = getIt<AuthenticationService>();
             await authService.refreshToken();
-            print(requestHeader);
-            _dio.options.headers[HttpHeaders.contentTypeHeader] = requestHeader;
-            return await _dio.request(requestOptions.path);
+
+            // TODO Repeat request, must be fixed
+            //  _dio.options.headers[HttpHeaders.contentTypeHeader] = requestHeader;
+            //  return await _dio.request(requestOptions.path);
           } else if (error.response.statusCode == 429) {
-            // TODO translation
             Fluttertoast.cancel();
-            showNewErrorSnackbar('Exceeded requests quota',
+            showNewErrorSnackbar(
+                LocaleKeys.Others_Services_DioService_requestQuotaExceed.tr(),
                 toastGravity: ToastGravity.TOP);
             return error;
           } else {
@@ -62,11 +65,9 @@ class DioService {
   void setBearerToken(String token) {
     _dio.options.headers
         .addAll({HttpHeaders.authorizationHeader: 'bearer $token'});
-    print('Dio - Bearer token set :)');
   }
 
   void removeBearerToken() {
     _dio.options.headers.remove(HttpHeaders.authorizationHeader);
-    print('Dio - Bearer token removed');
   }
 }

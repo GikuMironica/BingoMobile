@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/repositories/participant_repository.dart';
 import 'package:hopaut/presentation/widgets/dialogs/profile_dialog.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/presentation/widgets/text/initials.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class RequestList extends StatefulWidget {
   final int postId;
@@ -41,7 +40,7 @@ class _RequestListState extends State<RequestList> {
           icon: HATheme.backButton,
           onPressed: () => Application.router.pop(context),
         ),
-        title: Text('Requests'),
+        title: Text(LocaleKeys.Event_requestList_requests.tr()),
         flexibleSpace: Container(
           decoration: decorationGradient(),
         ),
@@ -130,8 +129,8 @@ class _RequestListState extends State<RequestList> {
                             );
                           }),
                       replacement: Center(
-                        // TODO translation
-                        child: Text("No Requests Yet"),
+                        child:
+                            Text(LocaleKeys.Event_requestList_noReqsYet.tr()),
                       ),
                     ),
                   ],

@@ -90,7 +90,6 @@ class AuthenticationService with ChangeNotifier {
         return AuthResult(isSuccessful: true);
       }
     }
-    // TODO - Refactor to return Result Object with Bool and Error if exists
     return AuthResult(isSuccessful: false, data: _loginResult);
   }
 
@@ -110,7 +109,6 @@ class AuthenticationService with ChangeNotifier {
     if (_identity != null) {
       if (DateTime.now()
           .isAfter(DateTime.fromMillisecondsSinceEpoch(_identity.expiry))) {
-        // TODO - jwttoken is read twice on startup
         dynamic token = await _secureStorageService.read(key: 'token');
         dynamic refreshToken =
             await _secureStorageService.read(key: 'refreshToken');

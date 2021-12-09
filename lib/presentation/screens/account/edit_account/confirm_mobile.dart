@@ -22,7 +22,7 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
   bool resendOtpSwitch;
   TextEditingController textEditingController;
   String minutesStr = '00';
-  String secondsStr = Configurations.resendOtpTime.toString();
+  String secondsStr = Configurations.RESEND_OTP_TIME.toString();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -100,7 +100,7 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
             isStateValid: textEditingController.text.length == 6,
             controller: textEditingController,
             validationMessage: LocaleKeys
-                .Account_EditProfile_EditMobile_ConfirmMobile_validation_inputValidOtp
+                    .Account_EditProfile_EditMobile_ConfirmMobile_validation_inputValidOtp
                 .tr(),
             hintText: "123456",
             onChange: (v) =>
@@ -116,10 +116,12 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
               context: context,
               isStateValid: textEditingController.text.length == 6,
               onPressed: () => {
-                textEditingController.text.length == 6
-                    ? _accountProvider.confirmOtp(textEditingController.text,
-                        textEditingController.text.length == 6, context)
-                    : null
+                    textEditingController.text.length == 6
+                        ? _accountProvider.confirmOtp(
+                            textEditingController.text,
+                            textEditingController.text.length == 6,
+                            context)
+                        : null
                   }),
           SizedBox(
             height: 20,
@@ -139,7 +141,7 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
                     color: resendOtpSwitch ? Colors.black : Colors.grey),
                 title: Text(
                   LocaleKeys
-                      .Account_EditProfile_EditMobile_ConfirmMobile_labels_resendOTP
+                          .Account_EditProfile_EditMobile_ConfirmMobile_labels_resendOTP
                       .tr(),
                   style: TextStyle(
                     color: resendOtpSwitch ? Colors.black : Colors.grey,
@@ -163,7 +165,7 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
     resendOtpSwitch = false;
     _accountProvider.otp = null;
     _accountProvider.otpTries = 5;
-    _accountProvider.currentTimerSeconds = Configurations.resendOtpTime;
+    _accountProvider.currentTimerSeconds = Configurations.RESEND_OTP_TIME;
     _accountProvider.formStatus = Idle();
     textEditingController.dispose();
   }

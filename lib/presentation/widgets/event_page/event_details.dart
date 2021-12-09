@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../fields/grid_cell.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../clock_icons.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 /// Event Details
 ///
@@ -31,19 +33,21 @@ class EventDetails extends StatelessWidget {
       crossAxisCount: 2,
       children: <Widget>[
         GridCell(
-            // TODO translation
-            title: 'Date',
+            title: LocaleKeys.Event_detailsLabels_date.tr(),
             data: date,
             icon: MdiIcons.calendarBlankOutline),
-        GridCell(title: 'Time', data: time, icon: ClockIcon(time)),
+        GridCell(
+            title: LocaleKeys.Event_detailsLabels_tim.tr(),
+            data: time,
+            icon: ClockIcon(time)),
         if (price != 0.0)
           GridCell(
-              title: 'Entrance Price',
+              title: LocaleKeys.Event_detailsLabels_price.tr(),
               data: '${price.toString()} $priceCurrency',
               icon: MdiIcons.cash),
         if (slots != '0 / 0')
           GridCell(
-              title: 'Available Places',
+              title: LocaleKeys.Event_detailsLabels_availablePlaces.tr(),
               data: slots,
               icon: MdiIcons.clipboardListOutline),
       ],

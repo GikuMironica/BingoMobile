@@ -5,6 +5,8 @@ import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class ReportEvent extends StatefulWidget {
   final int postId;
@@ -26,14 +28,14 @@ class _ReportEventState extends State<ReportEvent> {
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: <Widget>[
-        // TODO translate
-        Center(child: Subtitle(label: 'Report Event')),
+        Center(
+            child: Subtitle(label: LocaleKeys.Event_Report_reportEvent.tr())),
         SizedBox(
           height: 8,
         ),
         Visibility(
           visible: _eventProvider.reportPostLoadingStatus is Submitted,
-          child: Container(child: Expanded(child: LinearProgressIndicator())),
+          child: Container(child: LinearProgressIndicator()),
           replacement: Divider(),
         ),
         SizedBox(
@@ -44,21 +46,21 @@ class _ReportEventState extends State<ReportEvent> {
             await _eventProvider.reportPost(
                 postId: widget.postId, reason: 0, context: context)
           },
-          title: Text('Event does not exist'),
+          title: Text(LocaleKeys.Event_Report_doesntExist.tr()),
         ),
         ListTile(
           onTap: () async => {
             await _eventProvider.reportPost(
                 postId: widget.postId, reason: 1, context: context)
           },
-          title: Text('Inappropriate Content'),
+          title: Text(LocaleKeys.Event_Report_inappropriateContet.tr()),
         ),
         ListTile(
           onTap: () async => {
             await _eventProvider.reportPost(
                 postId: widget.postId, reason: 2, context: context)
           },
-          title: Text('Spam'),
+          title: Text(LocaleKeys.Event_Report_spam.tr()),
         )
       ],
     );

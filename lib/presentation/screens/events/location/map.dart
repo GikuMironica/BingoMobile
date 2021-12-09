@@ -228,7 +228,6 @@ class _SearchByMapState extends State<SearchByMap> {
               ),
               Card(
                 elevation: 15,
-                // TODO translation
                 color: Colors.transparent,
                 child: Text(LocaleKeys.Hosted_Location_hints_dismiss,
                     style: TextStyle(
@@ -249,8 +248,6 @@ class _SearchByMapState extends State<SearchByMap> {
         visible:
             locationSelectionProvider.loadingState == MapLoadingState.LOADING,
         child: overlayBlurBackgroundCircularProgressIndicator(
-            // TODO translations
-            context,
-            LocaleKeys.Hosted_Location_labels_loading.tr()));
+            context, LocaleKeys.Hosted_Location_labels_loading.tr()));
   }
 }

@@ -13,6 +13,8 @@ import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:hopaut/presentation/screens/events/request_list.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class ParticipationList extends StatefulWidget {
   final int postId;
@@ -32,7 +34,6 @@ class _ParticipationListState extends State<ParticipationList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getData().then((value) => setState(() => _isLoaded = true));
     super.initState();
   }
@@ -45,8 +46,7 @@ class _ParticipationListState extends State<ParticipationList> {
           icon: HATheme.backButton,
           onPressed: () => Application.router.pop(context),
         ),
-        // TODO translation
-        title: Text('Member List'),
+        title: Text(LocaleKeys.Event_participators_pageTitle.tr()),
         actions: <Widget>[
           Visibility(
             visible: widget.postType == EventType.houseParty,
@@ -146,8 +146,8 @@ class _ParticipationListState extends State<ParticipationList> {
                             );
                           }),
                       replacement: Center(
-                        // TODo translation
-                        child: Text("No Members Yet"),
+                        child: Text(
+                            LocaleKeys.Event_participators_noMembersYet.tr()),
                       ),
                     ),
                   ],

@@ -3,7 +3,8 @@ import 'package:hopaut/controllers/providers/settings_provider.dart';
 import 'package:hopaut/controllers/blocs/login/login_page_status.dart';
 import 'package:hopaut/data/domain/login_result.dart';
 import 'package:hopaut/config/injection.dart';
-
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import '../base_event.dart';
 import '../base_state.dart';
 import 'login_state.dart';
@@ -67,13 +68,13 @@ class LoginClicked extends LoginEvent {
       }
       yield result.isSuccessful
           ? loginState.copyWith(formStatus: SubmissionSuccess())
-          // TODO- Translation
           : loginState.copyWith(
               formStatus: SubmissionFailed(result.data["Error"]));
     } catch (e) {
-      // TODO - translations
       print(e.toString());
-      yield loginState.copyWith(formStatus: SubmissionFailed("Internal error"));
+      yield loginState.copyWith(
+          formStatus: SubmissionFailed(
+              LocaleKeys.Authentication_Login_toasts_internalError.tr()));
     }
   }
 }
@@ -91,11 +92,13 @@ class FacebookLoginClicked extends LoginEvent {
       }
       yield result
           ? loginState.copyWith(formStatus: SubmissionSuccess())
-          // TODO - Translations
           : loginState.copyWith(
-              formStatus: SubmissionFailed("Error, something went wrong"));
+              formStatus: SubmissionFailed(
+                  LocaleKeys.Authentication_Login_toasts_wentWrong.tr()));
     } catch (e) {
-      yield loginState.copyWith(formStatus: SubmissionFailed("Internal error"));
+      yield loginState.copyWith(
+          formStatus: SubmissionFailed(
+              LocaleKeys.Authentication_Login_toasts_internalError.tr()));
     }
   }
 }

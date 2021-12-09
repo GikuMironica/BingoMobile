@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 Widget passwordInputField({
   @required BuildContext context,
@@ -10,9 +12,7 @@ Widget passwordInputField({
   @required void Function() onObscureTap,
 }) {
   return TextFormField(
-    validator: (value) =>
-        // TODO - Translation
-        isStateValid ? null : validationMessage,
+    validator: (value) => isStateValid ? null : validationMessage,
     autovalidateMode: AutovalidateMode.onUserInteraction,
     onChanged: onChange,
     obscureText: isTextObscured,
@@ -30,8 +30,7 @@ Widget passwordInputField({
           ),
         ),
         isDense: true,
-        // TODO - Translate
-        labelText: 'Password',
+        labelText: LocaleKeys.Widgets_TextInput_PasswordInput_label.tr(),
         errorMaxLines: 3,
         hintText: hint,
         hintStyle: TextStyle(color: Colors.grey[400]),

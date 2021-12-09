@@ -19,6 +19,8 @@ import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 enum SearchPageState {
   IDLE,
@@ -146,7 +148,6 @@ class SearchPageProvider extends ChangeNotifier {
     }
   }
 
-  //TODO clean old results!
   Future<void> searchEvents() async {
     if (pageState != SearchPageState.SEARCHING) {
       setPageState(SearchPageState.SEARCHING);
@@ -161,8 +162,8 @@ class SearchPageProvider extends ChangeNotifier {
         _addSearchResultsToMap(_searchResults);
       } else {
         setPageState(SearchPageState.NO_SEARCH_RESULT);
-        // TODO translation
-        showNewErrorSnackbar('No events found in this area.');
+        showNewErrorSnackbar(
+            LocaleKeys.Others_Providers_SearchPage_noEventsFound.tr());
       }
     }
   }

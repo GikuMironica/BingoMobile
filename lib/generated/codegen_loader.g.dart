@@ -316,9 +316,76 @@ class CodegenLoader extends AssetLoader{
     }
   },
   "Authentication": {
-    "Register": {},
-    "Login": {},
-    "ForgotPassword": {}
+    "Register": {
+      "pageTitle": "Registrieren",
+      "labels": {
+        "info": "Neues Konto erstellen",
+        "signInInfo": "Mit der Anmeldung",
+        "youAgree": "erklären Sie sich mit unserem"
+      },
+      "hints": {
+        "confirmPasswordHint": "Passwort bestätigen",
+        "passwordFieldHint": "Passwort eingeben"
+      },
+      "validation": {
+        "passwordField": "Das Passwort muss mindestens 8 Zeichen lang sein und Groß- und Kleinbuchstaben sowie Ziffern enthalten",
+        "confirmPassword": "Passwörter stimmen nicht überein"
+      },
+      "navigationLabels": {
+        "privacyPolicy": " Datenschutzerklärung ",
+        "and": " und ",
+        "tos": "AGB"
+      },
+      "toasts": {
+        "couldnNotConnect": "Konnte keine Verbindung zu dieser Website herstellen",
+        "internalError": "Interner Fehler"
+      },
+      "buttons": {
+        "register": "Registrieren"
+      },
+      "successDialog": {
+        "header": "Erfolgreich!",
+        "message": "Bitte schauen Sie in Ihrem Posteingang nach. Sie erhalten in Kürze einen Bestätigungslink per E-Mail.",
+        "button": "Zurück zur Anmeldung"
+      }
+    },
+    "Login": {
+      "pageTitle": "Willkommen!",
+      "labels": {
+        "info": "Einloggen um fortzufahren",
+        "dividerText": " Oder weiter mit  "
+      },
+      "hints": {
+        "enterPass": "Ihr Passwort eingeben"
+      },
+      "validation": {
+        "inputPass": "Bitte geben Sie Ihr Passwort ein"
+      },
+      "buttons": {
+        "login": "Einloggen"
+      },
+      "toasts": {
+        "internalError": "Interner Fehler",
+        "wentWrong": "Etwas ist schief gelaufen"
+      }
+    },
+    "ForgotPassword": {
+      "pageTItle": "Passwort vergessen?",
+      "labels": {
+        "instructionsLabel": "Geben Sie die mit Ihrem Konto verknüpfte E-Mail-Adresse ein, und wir senden Ihnen eine E-Mail mit Anweisungen zum Zurücksetzen Ihres Passworts."
+      },
+      "buttons": {
+        "requestButton": "Anfrage senden"
+      },
+      "successDialog": {
+        "header": "Bitte schauen Sie in Ihrem E-Mail-Posteingang",
+        "message": "Wir haben eine Anleitung zur Wiederherstellung des Passworts an Ihre E-Mail geschickt.",
+        "buttonText": "Zurück zur Anmeldung"
+      },
+      "toasts": {
+        "internalError": "Interner Fehler"
+      }
+    }
   },
   "Navigation": {
     "map": "Karte",
@@ -341,6 +408,121 @@ class CodegenLoader extends AssetLoader{
       "update": {
         "403": "Sie sind zu dieser Aktion nicht berechtigt."
       }
+    }
+  },
+  "Widgets": {
+    "TextInput": {
+      "EmailInput": {
+        "hint": "E-Mail eingeben",
+        "label": "E-mail",
+        "validation": "Bitte geben Sie eine gültige E-Mail ein"
+      },
+      "PasswordInput": {
+        "label": "Passwort"
+      }
+    },
+    "NoAccountYet": {
+      "buttons": {
+        "noAccountYet1": "Haben Sie noch kein Konto?",
+        "signUp": " Registrieren"
+      }
+    },
+    "HaveAnAccount": {
+      "haveAnAccount": "Haben Sie schon ein Konto?",
+      "login": "Anmelden"
+    }
+  },
+  "Others": {
+    "Repositories": {
+      "Authentication": {
+        "confirmEmail": "Bitte bestätigen Sie Ihre E-Mail",
+        "tooManyAttempts": "Zu viele ungültige Anmeldeversuche, versuchen Sie es später noch einmal",
+        "invalidCredentials": "Ungültiger Benutzername oder Passwort",
+        "accountExists": "Ein Konto mit dieser E-Mail existiert bereits"
+      },
+      "Report": {
+        "reportedAlready": "Sie haben dieses Veranstaltung bereits gemeldet",
+        "cantSendReport": "Bericht konnte nicht gesendet werden"
+      },
+      "Rating": {
+        "ratedAlready": "Sie haben dieses Ereignis bereits bewertet",
+        "cantRate": "Bewertung konnte nicht abgegeben werden"
+      },
+      "User": {
+        "cantSaveImage": "Bild konnte nicht gespeichert werden",
+        "error": "Interner Fehler"
+      }
+    },
+    "Services": {
+      "DioService": {
+        "requestQuotaExceed": "Überschrittene Anfragenquote"
+      },
+      "Location": {
+        "serviceDisabled": "Standortdienst ist deaktiviert",
+        "locationPermissionDenied": "Standortgenehmigung abgelehnt"
+      }
+    },
+    "Providers": {
+      "SearchPage": {
+        "noEventsFound": "Keine Veranstaltungen in diesem Bereich gefunden"
+      },
+      "Settings": {
+        "inputurEmail": "Geben Sie Ihre Konto-E-Mail ein",
+        "accountDeleted": "Konto gelöscht",
+        "failedAccountDelete": "Konto konnte nicht gelöscht werden"
+      }
+    }
+  },
+  "Event": {
+    "dialogs": {
+      "loadingEvent": "Laden von Ereignisdaten"
+    },
+    "labels": {
+      "unknownAdress": "Unbekannte Adresse",
+      "tags": "Tags",
+      "eventRated": "Gastgeber bewertet",
+      "rateEvent": "Veranstaltung bewerten",
+      "reportEvent": "Diese Veranstaltung melden",
+      "editEvent": "Dieses Veranstaltung bearbeiten",
+      "delete": "Diese Veranstaltung löschen"
+    },
+    "buttons": {
+      "attend": "Teilnahme an",
+      "notInterested": "Nicht interessiert?"
+    },
+    "detailsLabels": {
+      "date": "Datum",
+      "tim": "Uhrzeit",
+      "price": "Eintrittspreis",
+      "availablePlaces": "Verfügbare Plätze"
+    },
+    "participators": {
+      "pageTitle": "Liste der Gäste",
+      "noMembersYet": "Noch keine Gäste"
+    },
+    "requestList": {
+      "requests": "Anfragen",
+      "noReqsYet": "Noch keine Anfragen"
+    },
+    "Rating": {
+      "pageTitle": "Veranstaltung bewerten",
+      "validation": "Geben Sie ein kurzes Feedback",
+      "button": "Bewertung abgeben",
+      "dialog": "Hochladen",
+      "outOf": " von 5"
+    },
+    "Report": {
+      "reportEvent": "Veranstaltung melden",
+      "doesntExist": "Das Ereignis existiert nicht",
+      "inappropriateContet": "Unangemessener Inhalt",
+      "spam": "Spam"
+    },
+    "Delete": {
+      "title": "Veranstaltung löschen",
+      "confirmDelete": "Sobald Sie bestätigen, wird dieses Ereignis gelöscht",
+      "confirm": "Bestätigen Löschen",
+      "deleteSuccess": "Ereignis wurde erfolgreich gelöscht.",
+      "cancel": "Abbrechen"
     }
   }
 };
@@ -646,9 +828,76 @@ static const Map<String,dynamic> en = {
     }
   },
   "Authentication": {
-    "Register": {},
-    "Login": {},
-    "ForgotPassword": {}
+    "Register": {
+      "pageTitle": "Register",
+      "labels": {
+        "info": "Create new account",
+        "signInInfo": "By signing up",
+        "youAgree": "you agree to our"
+      },
+      "hints": {
+        "confirmPasswordHint": "Confirm password",
+        "passwordFieldHint": "Enter a password"
+      },
+      "validation": {
+        "passwordField": "Password must be at least 8 characters length, must contain upper, lower case letters and digits",
+        "confirmPassword": "Passwords don't match"
+      },
+      "navigationLabels": {
+        "privacyPolicy": " Privacy Policy",
+        "and": " and ",
+        "tos": "Terms & Conditions"
+      },
+      "toasts": {
+        "couldnNotConnect": "Couldn't connect to",
+        "internalError": "Internal Error"
+      },
+      "buttons": {
+        "register": "Sign Up"
+      },
+      "successDialog": {
+        "header": "Success!",
+        "message": "Please check your email. You will get soon an email confirmation link.",
+        "button": "Back to login"
+      }
+    },
+    "Login": {
+      "pageTitle": "Welcome!",
+      "labels": {
+        "info": "Login to continue",
+        "dividerText": " Or continue with "
+      },
+      "hints": {
+        "enterPass": "Enter your password"
+      },
+      "validation": {
+        "inputPass": "Please input your password"
+      },
+      "buttons": {
+        "login": "Login"
+      },
+      "toasts": {
+        "internalError": "Internal Error",
+        "wentWrong": "Something went wrong"
+      }
+    },
+    "ForgotPassword": {
+      "pageTItle": "Forgot Password?",
+      "labels": {
+        "instructionsLabel": "Enter the email associated with your account and we'll send an email with instructions to reset your password."
+      },
+      "buttons": {
+        "requestButton": "Send request"
+      },
+      "successDialog": {
+        "header": "Check your inbox",
+        "message": "We have sent a password recover instructions to your email.",
+        "buttonText": "Back to login"
+      },
+      "toasts": {
+        "internalError": "Internal Error"
+      }
+    }
   },
   "Navigation": {
     "map": "Map",
@@ -671,6 +920,121 @@ static const Map<String,dynamic> en = {
       "update": {
         "403": "You are not authorized for this action."
       }
+    }
+  },
+  "Widgets": {
+    "TextInput": {
+      "EmailInput": {
+        "hint": "Enter your email",
+        "label": "Email",
+        "validation": "Please input a valid email"
+      },
+      "PasswordInput": {
+        "label": "Password"
+      }
+    },
+    "NoAccountYet": {
+      "buttons": {
+        "noAccountYet1": "Don't have an account yet? ",
+        "signUp": " Sign up"
+      }
+    },
+    "HaveAnAccount": {
+      "haveAnAccount": "Already have an account? ",
+      "login": "Login"
+    }
+  },
+  "Others": {
+    "Repositories": {
+      "Authentication": {
+        "confirmEmail": "Please confirm your email",
+        "tooManyAttempts": "Too many invalid login attempts, try again later",
+        "invalidCredentials": "Invalid username or password",
+        "accountExists": "An account with this email already exists"
+      },
+      "Report": {
+        "reportedAlready": "You've reported this event already",
+        "cantSendReport": "Report could not be sent"
+      },
+      "Rating": {
+        "ratedAlready": "You've rated this event already",
+        "cantRate": "Rating could not be submitted"
+      },
+      "User": {
+        "cantSaveImage": "Image could not be saved",
+        "error": "Internal error"
+      }
+    },
+    "Services": {
+      "DioService": {
+        "requestQuotaExceed": "Exceeded requests quota"
+      },
+      "Location": {
+        "serviceDisabled": "Location service is disabled",
+        "locationPermissionDenied": "Location permission denied"
+      }
+    },
+    "Providers": {
+      "SearchPage": {
+        "noEventsFound": "No events found in this area"
+      },
+      "Settings": {
+        "inputurEmail": "Input your account email",
+        "accountDeleted": "Account deleted",
+        "failedAccountDelete": "Unable to delete account"
+      }
+    }
+  },
+  "Event": {
+    "dialogs": {
+      "loadingEvent": "Loading event data"
+    },
+    "labels": {
+      "unknownAdress": "Unknown address",
+      "tags": "Tags",
+      "eventRated": "Event host rated",
+      "rateEvent": "Rate event",
+      "reportEvent": "Report this event",
+      "editEvent": "Edit this event",
+      "delete": "Delete this event"
+    },
+    "buttons": {
+      "attend": "Attend",
+      "notInterested": "Not Interested?"
+    },
+    "detailsLabels": {
+      "date": "Date",
+      "tim": "Time",
+      "price": "Entrance Price",
+      "availablePlaces": "Available Places"
+    },
+    "participators": {
+      "pageTitle": "Guests List",
+      "noMembersYet": "No guests yet"
+    },
+    "requestList": {
+      "requests": "Requests",
+      "noReqsYet": "No requests yet"
+    },
+    "Rating": {
+      "pageTitle": "Rate Event",
+      "validation": "Provide a brief feedback",
+      "button": "Submit Rating",
+      "dialog": "Uploading",
+      "outOf": " of 5"
+    },
+    "Report": {
+      "reportEvent": "Report Event",
+      "doesntExist": "Event does not exist",
+      "inappropriateContet": "Inappropriate Content",
+      "spam": "Spam"
+    },
+    "Delete": {
+      "title": "Delete Event",
+      "confirmDelete": "Once you confirm, this event will be deleted",
+      "confirm": "Confirm Delete",
+      "deleteSuccess": "Event was successfully deleted.",
+      "cancel": "Cancel"
     }
   }
 };

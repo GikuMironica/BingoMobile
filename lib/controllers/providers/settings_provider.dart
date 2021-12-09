@@ -12,6 +12,8 @@ import 'package:hopaut/services/notifications_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 @singleton
 class SettingsProvider with ChangeNotifier {
@@ -68,8 +70,8 @@ class SettingsProvider with ChangeNotifier {
   Future<void> deleteAccount(BuildContext context) async {
     var authService = getIt<AuthenticationService>();
     if (deleteAccountEmail != authService.user.email) {
-      // TODO translate
-      showNewErrorSnackbar('Input your account email');
+      showNewErrorSnackbar(
+          LocaleKeys.Others_Providers_Settings_inputurEmail.tr());
       return;
     }
 
@@ -84,12 +86,13 @@ class SettingsProvider with ChangeNotifier {
     if (deleteRes) {
       Application.router.navigateTo(context, Routes.login,
           replace: true, transition: TransitionType.fadeIn);
-      //  TODO translate
-      showNewErrorSnackbar('Account deleted');
+      showNewErrorSnackbar(
+          LocaleKeys.Others_Providers_Settings_accountDeleted.tr());
 
       await authService.logout();
     } else {
-      showNewErrorSnackbar('Unable to delete account');
+      showNewErrorSnackbar(
+          LocaleKeys.Others_Providers_Settings_failedAccountDelete.tr());
     }
   }
 

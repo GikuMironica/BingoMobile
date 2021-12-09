@@ -1,4 +1,5 @@
 import 'package:hopaut/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 enum EventType {
   defaultType,
@@ -13,16 +14,16 @@ enum EventType {
   other
 }
 
-const Map<EventType, String> eventTypeStrings = {
-  EventType.houseParty: LocaleKeys.Hosted_Create_eventTypes_houseParty,
-  EventType.club: LocaleKeys.Hosted_Create_eventTypes_club,
-  EventType.bar: LocaleKeys.Hosted_Create_eventTypes_bar,
-  EventType.bikerMeet: LocaleKeys.Hosted_Create_eventTypes_bikerMeet,
-  EventType.bicycleMeet: LocaleKeys.Hosted_Create_eventTypes_bicycleMeet,
-  EventType.carMeet: LocaleKeys.Hosted_Create_eventTypes_carMeet,
-  EventType.streetParty: LocaleKeys.Hosted_Create_eventTypes_streetParty,
-  EventType.sport: LocaleKeys.Hosted_Create_eventTypes_sport,
-  EventType.other: LocaleKeys.Hosted_Create_eventTypes_others
+Map<EventType, String> eventTypeStrings = {
+  EventType.houseParty: LocaleKeys.Hosted_Create_eventTypes_houseParty.tr(),
+  EventType.club: LocaleKeys.Hosted_Create_eventTypes_club.tr(),
+  EventType.bar: LocaleKeys.Hosted_Create_eventTypes_bar.tr(),
+  EventType.bikerMeet: LocaleKeys.Hosted_Create_eventTypes_bikerMeet.tr(),
+  EventType.bicycleMeet: LocaleKeys.Hosted_Create_eventTypes_bicycleMeet.tr(),
+  EventType.carMeet: LocaleKeys.Hosted_Create_eventTypes_carMeet.tr(),
+  EventType.streetParty: LocaleKeys.Hosted_Create_eventTypes_streetParty.tr(),
+  EventType.sport: LocaleKeys.Hosted_Create_eventTypes_sport.tr(),
+  EventType.other: LocaleKeys.Hosted_Create_eventTypes_others.tr()
 };
 
 const List<EventType> paidEvents = [
