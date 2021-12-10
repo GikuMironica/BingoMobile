@@ -42,14 +42,11 @@ class _HomePageState extends State<HomePage> {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await Navigator.of(context).push(PageRouteBuilder(
             opaque: false,
-            pageBuilder: (BuildContext context, _, __) =>
-                // TODO - Translate
-                FullscreenDialog(
+            pageBuilder: (BuildContext context, _, __) => FullscreenDialog(
                   svgAsset: 'assets/icons/svg/complete_register.svg',
-                  header: 'Hey there!', //TODO: translation
-                  message:
-                      'Complete the registration by entering your name to create or join events', //TODO: translation
-                  buttonText: 'Settings', //TODO: translation
+                  header: LocaleKeys.Home_FullScreenDialog_header.tr(),
+                  message: LocaleKeys.Home_FullScreenDialog_messege.tr(),
+                  buttonText: LocaleKeys.Home_FullScreenDialog_btnText.tr(),
                   route: Routes.editAccount,
                 )));
       });

@@ -1,6 +1,17 @@
 {
   "Map": {
-    "Event": {}
+    "hints": {
+      "search": "Suchen Sie nach Veranstaltungen nach Tags."
+    },
+    "labels": {
+      "eventType": "Veranstaltungstyp:",
+      "searchRadius": "Suchradius:",
+      "today": "Heute",
+      "loading": "Ereignisse werden geladen"
+    },
+    "btns": {
+      "search": "Suche"
+    }
   },
   "Hosted": {
     "Create": {
@@ -25,7 +36,8 @@
         "startTime": "Startzeit",
         "endTime": "Endzeit",
         "tagsLimit": "Sie können bis zu 5 Tags hinzufügen.",
-        "addTags": "Tags hinzufügen"
+        "addTags": "Tags hinzufügen",
+        "price": "Preis"
       },
       "btns": {
         "create": "Erstellen"
@@ -414,6 +426,9 @@
     "HaveAnAccount": {
       "haveAnAccount": "Haben Sie schon ein Konto?",
       "login": "Anmelden"
+    },
+    "MiniPost": {
+      "unknownAddress": "Unbekannte Adresse"
     }
   },
   "Others": {
@@ -507,6 +522,13 @@
       "confirm": "Bestätigen Löschen",
       "deleteSuccess": "Ereignis wurde erfolgreich gelöscht.",
       "cancel": "Abbrechen"
+    }
+  },
+  "Home": {
+    "FullScreenDialog": {
+      "header": "Hallo zusammen!",
+      "messege": "Vervollständigen Sie die Registrierung durch Eingabe Ihres Namens, um Veranstaltungen zu erstellen oder ihnen beizutreten.",
+      "btnText": "Einstellungen"
     }
   }
 }
