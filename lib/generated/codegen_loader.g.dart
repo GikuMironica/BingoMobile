@@ -16,7 +16,18 @@ class CodegenLoader extends AssetLoader{
 
   static const Map<String,dynamic> de = {
   "Map": {
-    "Event": {}
+    "hints": {
+      "search": "Suchen Sie nach Veranstaltungen nach Tags"
+    },
+    "labels": {
+      "eventType": "Veranstaltungstyp:",
+      "searchRadius": "Suchradius:",
+      "today": "Heute",
+      "loading": "Ereignisse werden geladen"
+    },
+    "btns": {
+      "search": "Suche"
+    }
   },
   "Hosted": {
     "Create": {
@@ -41,7 +52,8 @@ class CodegenLoader extends AssetLoader{
         "startTime": "Startzeit",
         "endTime": "Endzeit",
         "tagsLimit": "Sie können bis zu 5 Tags hinzufügen.",
-        "addTags": "Tags hinzufügen"
+        "addTags": "Tags hinzufügen",
+        "price": "Preis"
       },
       "btns": {
         "create": "Erstellen"
@@ -430,6 +442,9 @@ class CodegenLoader extends AssetLoader{
     "HaveAnAccount": {
       "haveAnAccount": "Haben Sie schon ein Konto?",
       "login": "Anmelden"
+    },
+    "MiniPost": {
+      "unknownAddress": "Unbekannte Adresse"
     }
   },
   "Others": {
@@ -524,11 +539,29 @@ class CodegenLoader extends AssetLoader{
       "deleteSuccess": "Ereignis wurde erfolgreich gelöscht.",
       "cancel": "Abbrechen"
     }
+  },
+  "Home": {
+    "FullScreenDialog": {
+      "header": "Hallo zusammen!",
+      "messege": "Vervollständigen Sie die Registrierung durch Eingabe Ihres Namens, um Veranstaltungen zu erstellen oder ihnen beizutreten.",
+      "btnText": "Einstellungen"
+    }
   }
 };
 static const Map<String,dynamic> en = {
   "Map": {
-    "Event": {}
+    "hints": {
+      "search": "Search for events by tag"
+    },
+    "labels": {
+      "eventType": "Event Type:",
+      "searchRadius": "Search Radius:",
+      "today": "Today",
+      "loading": "Loading events"
+    },
+    "btns": {
+      "search": "Search"
+    }
   },
   "Hosted": {
     "Create": {
@@ -553,7 +586,8 @@ static const Map<String,dynamic> en = {
         "startTime": "End Time",
         "endTime": "End Time",
         "tagsLimit": "You can add up to 5 tags.",
-        "addTags": "Add Tags"
+        "addTags": "Add Tags",
+        "price": "Price"
       },
       "btns": {
         "create": "Create"
@@ -942,6 +976,9 @@ static const Map<String,dynamic> en = {
     "HaveAnAccount": {
       "haveAnAccount": "Already have an account? ",
       "login": "Login"
+    },
+    "MiniPost": {
+      "unknownAddress": "Unknown address"
     }
   },
   "Others": {
@@ -1035,6 +1072,13 @@ static const Map<String,dynamic> en = {
       "confirm": "Confirm Delete",
       "deleteSuccess": "Event was successfully deleted.",
       "cancel": "Cancel"
+    }
+  },
+  "Home": {
+    "FullScreenDialog": {
+      "header": "Hey there!",
+      "messege": "Complete the registration by entering your name to create or join events.",
+      "btnText": "Settings"
     }
   }
 };

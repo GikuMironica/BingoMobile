@@ -1,7 +1,15 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
 abstract class  LocaleKeys {
-  static const Map_Event = 'Map.Event';
+  static const Map_hints_search = 'Map.hints.search';
+  static const Map_hints = 'Map.hints';
+  static const Map_labels_eventType = 'Map.labels.eventType';
+  static const Map_labels_searchRadius = 'Map.labels.searchRadius';
+  static const Map_labels_today = 'Map.labels.today';
+  static const Map_labels_loading = 'Map.labels.loading';
+  static const Map_labels = 'Map.labels';
+  static const Map_btns_search = 'Map.btns.search';
+  static const Map_btns = 'Map.btns';
   static const Map = 'Map';
   static const Hosted_Create_header_title = 'Hosted.Create.header.title';
   static const Hosted_Create_header = 'Hosted.Create.header';
@@ -22,6 +30,7 @@ abstract class  LocaleKeys {
   static const Hosted_Create_hints_endTime = 'Hosted.Create.hints.endTime';
   static const Hosted_Create_hints_tagsLimit = 'Hosted.Create.hints.tagsLimit';
   static const Hosted_Create_hints_addTags = 'Hosted.Create.hints.addTags';
+  static const Hosted_Create_hints_price = 'Hosted.Create.hints.price';
   static const Hosted_Create_hints = 'Hosted.Create.hints';
   static const Hosted_Create_btns_create = 'Hosted.Create.btns.create';
   static const Hosted_Create_btns = 'Hosted.Create.btns';
@@ -316,6 +325,8 @@ abstract class  LocaleKeys {
   static const Widgets_HaveAnAccount_haveAnAccount = 'Widgets.HaveAnAccount.haveAnAccount';
   static const Widgets_HaveAnAccount_login = 'Widgets.HaveAnAccount.login';
   static const Widgets_HaveAnAccount = 'Widgets.HaveAnAccount';
+  static const Widgets_MiniPost_unknownAddress = 'Widgets.MiniPost.unknownAddress';
+  static const Widgets_MiniPost = 'Widgets.MiniPost';
   static const Widgets = 'Widgets';
   static const Others_Repositories_Authentication_confirmEmail = 'Others.Repositories.Authentication.confirmEmail';
   static const Others_Repositories_Authentication_tooManyAttempts = 'Others.Repositories.Authentication.tooManyAttempts';
@@ -388,5 +399,10 @@ abstract class  LocaleKeys {
   static const Event_Delete_cancel = 'Event.Delete.cancel';
   static const Event_Delete = 'Event.Delete';
   static const Event = 'Event';
+  static const Home_FullScreenDialog_header = 'Home.FullScreenDialog.header';
+  static const Home_FullScreenDialog_messege = 'Home.FullScreenDialog.messege';
+  static const Home_FullScreenDialog_btnText = 'Home.FullScreenDialog.btnText';
+  static const Home_FullScreenDialog = 'Home.FullScreenDialog';
+  static const Home = 'Home';
 
 }

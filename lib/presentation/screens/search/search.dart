@@ -3,11 +3,13 @@ import 'package:here_sdk/mapview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:hopaut/controllers/providers/search_page_provider.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:hopaut/presentation/screens/search/search_carousel.dart';
 import 'package:hopaut/presentation/screens/search/search_filter.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -64,8 +66,6 @@ class _SearchPageState extends State<SearchPage> {
         visible: searchProvider.pageState == SearchPageState.SEARCHING ||
             searchProvider.mapState == MapState.LOADING,
         child: overlayBlurBackgroundCircularProgressIndicator(
-            // TODO translations
-            context,
-            'Loading events'));
+            context, LocaleKeys.Map_labels_loading.tr()));
   }
 }

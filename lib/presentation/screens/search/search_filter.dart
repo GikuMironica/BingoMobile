@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/controllers/providers/search_page_provider.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SearchPageFilter extends StatefulWidget {
   @override
@@ -53,8 +55,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.only(left: 8.0),
-                          // TODO translation
-                          hintText: 'Search for events by tag',
+                          hintText: LocaleKeys.Map_hints_search.tr(),
                           hintStyle: HATheme.FIELD_HINT_STYLE),
                     ),
                   ),
@@ -79,8 +80,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                       ),
                       SizedBox(height: 4.0),
                       Text(
-                        // TODO translation
-                        'Event Type:',
+                        LocaleKeys.Map_labels_eventType.tr(),
                         style: TextStyle(
                           color: Color(0xFF2A2A2A),
                           fontSize: 12.0,
@@ -146,7 +146,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                         height: 12,
                       ),
                       Text(
-                        'Search Radius :',
+                        LocaleKeys.Map_labels_searchRadius.tr(),
                         style: TextStyle(
                           color: Color(0xFF2A2A2A),
                           fontSize: 12.0,
@@ -197,8 +197,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                // TODO translation
-                                'Today',
+                                LocaleKeys.Map_labels_today.tr(),
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14.0),
@@ -236,47 +235,47 @@ List<Widget> _carouselFilterItems(
   return [
     _filterEventType(
         context: context,
-        type: 'House Party',
+        type: LocaleKeys.Hosted_Create_eventTypes_houseParty.tr(),
         value: provider.searchQuery.eventTypes[EventType.houseParty],
         onTap: (v) => provider.filterToggleEventType(EventType.houseParty)),
     _filterEventType(
         context: context,
-        type: 'Club',
+        type: LocaleKeys.Hosted_Create_eventTypes_club.tr(),
         value: provider.searchQuery.eventTypes[EventType.club],
         onTap: (v) => provider.filterToggleEventType(EventType.club)),
     _filterEventType(
         context: context,
-        type: 'Street Party',
+        type: LocaleKeys.Hosted_Create_eventTypes_streetParty.tr(),
         value: provider.searchQuery.eventTypes[EventType.streetParty],
         onTap: (v) => provider.filterToggleEventType(EventType.streetParty)),
     _filterEventType(
         context: context,
-        type: 'Bar',
+        type: LocaleKeys.Hosted_Create_eventTypes_bar.tr(),
         value: provider.searchQuery.eventTypes[EventType.bar],
         onTap: (v) => provider.filterToggleEventType(EventType.bar)),
     _filterEventType(
         context: context,
-        type: 'Bicycle Meet',
+        type: LocaleKeys.Hosted_Create_eventTypes_bicycleMeet.tr(),
         value: provider.searchQuery.eventTypes[EventType.bicycleMeet],
         onTap: (v) => provider.filterToggleEventType(EventType.bicycleMeet)),
     _filterEventType(
         context: context,
-        type: 'Biker Meet',
+        type: LocaleKeys.Hosted_Create_eventTypes_bikerMeet.tr(),
         value: provider.searchQuery.eventTypes[EventType.bikerMeet],
         onTap: (v) => provider.filterToggleEventType(EventType.bikerMeet)),
     _filterEventType(
         context: context,
-        type: 'Car Meet',
+        type: LocaleKeys.Hosted_Create_eventTypes_carMeet.tr(),
         value: provider.searchQuery.eventTypes[EventType.carMeet],
         onTap: (v) => provider.filterToggleEventType(EventType.carMeet)),
     _filterEventType(
         context: context,
-        type: 'Sport',
+        type: LocaleKeys.Hosted_Create_eventTypes_sport.tr(),
         value: provider.searchQuery.eventTypes[EventType.sport],
         onTap: (v) => provider.filterToggleEventType(EventType.sport)),
     _filterEventType(
         context: context,
-        type: 'Other',
+        type: LocaleKeys.Hosted_Create_eventTypes_others.tr(),
         value: provider.searchQuery.eventTypes[EventType.other],
         onTap: (v) => provider.filterToggleEventType(EventType.other)),
   ];
@@ -284,7 +283,6 @@ List<Widget> _carouselFilterItems(
 
 OutlinedButton _searchButton(SearchPageProvider provider) {
   return OutlinedButton(
-    // TODO translation
     style: OutlinedButton.styleFrom(
       enableFeedback: true,
       backgroundColor: Colors.white,
@@ -297,9 +295,10 @@ OutlinedButton _searchButton(SearchPageProvider provider) {
         ),
       ),
     ),
-    child: const Text('Search',
-        style:
-            TextStyle(color: HATheme.HOPAUT_PINK, fontWeight: FontWeight.w600)),
+    child: const Text(LocaleKeys.Map_btns_search,
+            style: TextStyle(
+                color: HATheme.HOPAUT_PINK, fontWeight: FontWeight.w600))
+        .tr(),
     onPressed: () async => await provider.searchEvents(),
   );
 }

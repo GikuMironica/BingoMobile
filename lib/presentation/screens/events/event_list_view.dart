@@ -22,7 +22,6 @@ class EventsListView extends StatelessWidget {
       provider.fetchEventList(listType);
       return provider.eventsMap[listType].state == EventListState.loading
           ? Center(
-              // TODO translation
               child: overlayBlurBackgroundCircularProgressIndicator(
                   context, LocaleKeys.Joined_labels_loading.tr()),
             )

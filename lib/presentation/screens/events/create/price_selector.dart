@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/currencies.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:hopaut/presentation/widgets/currency_icons.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class PriceSelector extends StatelessWidget {
   final String title;
@@ -53,7 +55,7 @@ class PriceSelector extends StatelessWidget {
                       ),
                       contentPadding: EdgeInsets.all(12.0),
                       border: InputBorder.none,
-                      hintText: 'Price', //TODO: translation
+                      hintText: LocaleKeys.Hosted_Create_hints_price.tr(),
                     ),
                     keyboardType: TextInputType.number,
                   ),

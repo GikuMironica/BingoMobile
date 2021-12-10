@@ -1,6 +1,17 @@
 {
   "Map": {
-    "Event": {}
+    "hints": {
+      "search": "Search for events by tag"
+    },
+    "labels": {
+      "eventType": "Event Type:",
+      "searchRadius": "Search Radius:",
+      "today": "Today",
+      "loading": "Loading events"
+    },
+    "btns": {
+      "search": "Search"
+    }
   },
   "Hosted": {
     "Create": {
@@ -25,7 +36,8 @@
         "startTime": "End Time",
         "endTime": "End Time",
         "tagsLimit": "You can add up to 5 tags.",
-        "addTags": "Add Tags"
+        "addTags": "Add Tags",
+        "price": "Price"
       },
       "btns": {
         "create": "Create"
@@ -414,6 +426,9 @@
     "HaveAnAccount": {
       "haveAnAccount": "Already have an account? ",
       "login": "Login"
+    },
+    "MiniPost": {
+      "unknownAddress": "Unknown address"
     }
   },
   "Others": {
@@ -507,6 +522,13 @@
       "confirm": "Confirm Delete",
       "deleteSuccess": "Event was successfully deleted.",
       "cancel": "Cancel"
+    }
+  },
+  "Home": {
+    "FullScreenDialog": {
+      "header": "Hey there!",
+      "messege": "Complete the registration by entering your name to create or join events.",
+      "btnText": "Settings"
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/data/models/mini_post.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -86,7 +87,7 @@ class MiniPostCard extends StatelessWidget {
                       FittedBox(
                           child: Text(
                         miniPost.address ??
-                            "Unknown address", //TODO: translation
+                            LocaleKeys.Widgets_MiniPost_unknownAddress.tr(),
                         style: TextStyle(
                             color: Color(0xFF747686),
                             fontSize: 11,
