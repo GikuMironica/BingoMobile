@@ -1,7 +1,7 @@
 {
   "Map": {
     "hints": {
-      "search": "Search for events by tag."
+      "search": "Search for events by tag"
     },
     "labels": {
       "eventType": "Event Type:",

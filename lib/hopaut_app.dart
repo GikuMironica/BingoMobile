@@ -61,7 +61,7 @@ class _HopAutState extends State<HopAut> {
   @override
   Widget build(BuildContext context) {
     Application.navigatorKey = GlobalKey<NavigatorState>();
-
+    context.locale = Locale('de');
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();

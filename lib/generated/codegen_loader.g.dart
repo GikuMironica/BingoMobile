@@ -17,7 +17,7 @@ class CodegenLoader extends AssetLoader{
   static const Map<String,dynamic> de = {
   "Map": {
     "hints": {
-      "search": "Suchen Sie nach Veranstaltungen nach Tags."
+      "search": "Suchen Sie nach Veranstaltungen nach Tags"
     },
     "labels": {
       "eventType": "Veranstaltungstyp:",
@@ -551,7 +551,7 @@ class CodegenLoader extends AssetLoader{
 static const Map<String,dynamic> en = {
   "Map": {
     "hints": {
-      "search": "Search for events by tag."
+      "search": "Search for events by tag"
     },
     "labels": {
       "eventType": "Event Type:",
