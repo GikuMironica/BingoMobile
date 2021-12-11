@@ -75,6 +75,13 @@ class CodegenLoader extends AssetLoader{
         "streetParty": "Straßenparty",
         "sport": "Sport",
         "others": "Sonstiges"
+      },
+      "dialogs": {
+        "noPhoneDialog": {
+          "header": "Veranstaltung erstellt",
+          "message": "Ihre Veranstaltung wurde erfolgreich erstellt. Bitte aktualisieren Sie Ihre Telefonnummer, damit Teilnehmer Sie erreichen können.",
+          "button": "Einstellungen"
+        }
       }
     },
     "Edit": {
@@ -403,7 +410,12 @@ class CodegenLoader extends AssetLoader{
     "map": "Karte",
     "hosted": "Gehaltene",
     "joined": "Verbundene",
-    "account": "Konto"
+    "account": "Konto",
+    "noFullNameDialog": {
+      "header": "Hallo!",
+      "message": "Vervollständigen Sie die Registrierung durch Eingabe Ihres Namens.",
+      "button": "Einstellungen"
+    }
   },
   "Error": {
     "Event": {
@@ -498,8 +510,10 @@ class CodegenLoader extends AssetLoader{
       "eventRated": "Gastgeber bewertet",
       "rateEvent": "Veranstaltung bewerten",
       "reportEvent": "Diese Veranstaltung melden",
-      "editEvent": "Dieses Veranstaltung bearbeiten",
-      "delete": "Diese Veranstaltung löschen"
+      "editEvent": "Diese Veranstaltung bearbeiten",
+      "delete": "Dieses Veranstaltung löschen",
+      "description": "Beschreibung",
+      "requirements": "Anforderungen"
     },
     "buttons": {
       "attend": "Teilnahme an",
@@ -535,7 +549,7 @@ class CodegenLoader extends AssetLoader{
     "Delete": {
       "title": "Veranstaltung löschen",
       "confirmDelete": "Sobald Sie bestätigen, wird dieses Ereignis gelöscht",
-      "confirm": "Bestätigen Löschen",
+      "confirm": "Löschen",
       "deleteSuccess": "Ereignis wurde erfolgreich gelöscht.",
       "cancel": "Abbrechen"
     }
@@ -609,6 +623,13 @@ static const Map<String,dynamic> en = {
         "streetParty": "Street Party",
         "sport": "Sport",
         "others": "Other"
+      },
+      "dialogs": {
+        "noPhoneDialog": {
+          "header": "Event created!",
+          "message": "Your event was successfully created. Please update your phone number so the guests can reach you out.",
+          "button": "Settings"
+        }
       }
     },
     "Edit": {
@@ -937,7 +958,12 @@ static const Map<String,dynamic> en = {
     "map": "Map",
     "hosted": "Hosted",
     "joined": "Joined",
-    "account": "Account"
+    "account": "Account",
+    "noFullNameDialog": {
+      "header": "Hey there!",
+      "message": "Complete the registration by entering your name.",
+      "button": "Settings"
+    }
   },
   "Error": {
     "Event": {
@@ -1033,7 +1059,9 @@ static const Map<String,dynamic> en = {
       "rateEvent": "Rate event",
       "reportEvent": "Report this event",
       "editEvent": "Edit this event",
-      "delete": "Delete this event"
+      "delete": "Delete this event",
+      "description": "Description",
+      "requirements": "Requirements"
     },
     "buttons": {
       "attend": "Attend",
@@ -1069,7 +1097,7 @@ static const Map<String,dynamic> en = {
     "Delete": {
       "title": "Delete Event",
       "confirmDelete": "Once you confirm, this event will be deleted",
-      "confirm": "Confirm Delete",
+      "confirm": "Delete",
       "deleteSuccess": "Event was successfully deleted.",
       "cancel": "Cancel"
     }

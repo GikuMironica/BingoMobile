@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/constraint.dart';
 import 'package:hopaut/config/constants/theme.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/data/models/mini_post.dart';
 import 'package:hopaut/generated/locale_keys.g.dart';
@@ -11,12 +13,14 @@ import 'package:hopaut/presentation/screens/events/create/picture_list.dart';
 import 'package:hopaut/presentation/screens/events/create/tags.dart';
 import 'package:hopaut/presentation/screens/events/create/time_picker.dart';
 import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
+import 'package:hopaut/presentation/widgets/dialogs/fullscreen_dialog.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/inputs/basic_input.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/presentation/widgets/inputs/text_area_input.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
+import 'package:hopaut/services/authentication_service.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'event_type_list.dart';
@@ -29,6 +33,13 @@ class CreateEventPage extends StatefulWidget {
 
 class _CreateEventPageState extends State<CreateEventPage> {
   final formKey = GlobalKey<FormState>();
+  AuthenticationService _authService;
+
+  @override
+  void initState() {
+    super.initState();
+    _authService = getIt<AuthenticationService>();
+  }
 
   ScrollController scrollController = ScrollController(keepScrollOffset: true);
   TextEditingController titleController = TextEditingController();
@@ -189,10 +200,42 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                     MiniPost postRes =
                                         await provider.createEvent();
                                     if (postRes != null) {
-                                      Application.router.navigateTo(
-                                          context, '/event/${postRes.postId}',
-                                          transition: TransitionType.cupertino,
-                                          replace: true);
+                                      if (_authService
+                                              .user.phoneNumber?.isEmpty ??
+                                          true) {
+                                        Application.router.navigateTo(
+                                            context, '/event/${postRes.postId}',
+                                            transition:
+                                                TransitionType.cupertino,
+                                            replace: true);
+                                        Navigator.of(context).push(
+                                            PageRouteBuilder(
+                                                opaque: false,
+                                                pageBuilder: (BuildContext
+                                                            context,
+                                                        _,
+                                                        __) =>
+                                                    FullscreenDialog(
+                                                      svgAsset:
+                                                          'assets/icons/svg/event_confirmed.svg',
+                                                      header: LocaleKeys
+                                                              .Hosted_Create_dialogs_noPhoneDialog_header
+                                                          .tr(),
+                                                      message: LocaleKeys
+                                                              .Hosted_Create_dialogs_noPhoneDialog_message
+                                                          .tr(),
+                                                      buttonText: LocaleKeys
+                                                              .Hosted_Create_dialogs_noPhoneDialog_button
+                                                          .tr(),
+                                                      route: Routes.editAccount,
+                                                    )));
+                                      } else {
+                                        Application.router.navigateTo(
+                                            context, '/event/${postRes.postId}',
+                                            transition:
+                                                TransitionType.cupertino,
+                                            replace: true);
+                                      }
                                     }
                                   }
                                 })
