@@ -59,6 +59,13 @@
         "streetParty": "Street Party",
         "sport": "Sport",
         "others": "Other"
+      },
+      "dialogs": {
+        "noPhoneDialog": {
+          "header": "Event created!",
+          "message": "Your event was successfully created. Please update your phone number so the guests can reach you out.",
+          "button": "Settings"
+        }
       }
     },
     "Edit": {
@@ -387,7 +394,12 @@
     "map": "Map",
     "hosted": "Hosted",
     "joined": "Joined",
-    "account": "Account"
+    "account": "Account",
+    "noFullNameDialog": {
+      "header": "Hey there!",
+      "message": "Complete the registration by entering your name.",
+      "button": "Settings"
+    }
   },
   "Error": {
     "Event": {
@@ -483,7 +495,9 @@
       "rateEvent": "Rate event",
       "reportEvent": "Report this event",
       "editEvent": "Edit this event",
-      "delete": "Delete this event"
+      "delete": "Delete this event",
+      "description": "Description",
+      "requirements": "Requirements"
     },
     "buttons": {
       "attend": "Attend",
@@ -519,7 +533,7 @@
     "Delete": {
       "title": "Delete Event",
       "confirmDelete": "Once you confirm, this event will be deleted",
-      "confirm": "Confirm Delete",
+      "confirm": "Delete",
       "deleteSuccess": "Event was successfully deleted.",
       "cancel": "Cancel"
     }

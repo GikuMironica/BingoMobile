@@ -203,7 +203,7 @@ SnackBar _successSnackBar(String message) {
               message,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: HATheme.HOPAUT_SECONDARY_GREEN,
+                  color: HATheme.HOPAUT_GREEN,
                   fontSize: 15,
                   fontWeight: FontWeight.bold),
             )),
@@ -260,8 +260,9 @@ _launchURL({String url, BuildContext context}) async {
   } else {
     showSnackBarWithError(
         context: context,
-        message: LocaleKeys.Authentication_Register_toasts_couldnNotConnect +
-            " " +
-            url);
+        message:
+            LocaleKeys.Authentication_Register_toasts_couldnNotConnect.tr() +
+                " " +
+                url);
   }
 }

@@ -220,7 +220,7 @@ class _SearchByMapState extends State<SearchByMap> {
                                 height: 150,
                                 //decoration: BoxDecoration(color: Colors.green),
                                 child: Icon(MdiIcons.check,
-                                    color: HATheme.HOPAUT_SECONDARY, size: 35)),
+                                    color: HATheme.HOPAUT_GREEN, size: 35)),
                           ),
                         );
                       }),
@@ -229,7 +229,7 @@ class _SearchByMapState extends State<SearchByMap> {
               Card(
                 elevation: 15,
                 color: Colors.transparent,
-                child: Text(LocaleKeys.Hosted_Location_hints_dismiss,
+                child: Text(LocaleKeys.Hosted_Location_hints_dismiss.tr(),
                     style: TextStyle(
                       color: Colors.black54,
                       fontSize: 12.0,

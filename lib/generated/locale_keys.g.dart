@@ -50,6 +50,11 @@ abstract class  LocaleKeys {
   static const Hosted_Create_eventTypes_sport = 'Hosted.Create.eventTypes.sport';
   static const Hosted_Create_eventTypes_others = 'Hosted.Create.eventTypes.others';
   static const Hosted_Create_eventTypes = 'Hosted.Create.eventTypes';
+  static const Hosted_Create_dialogs_noPhoneDialog_header = 'Hosted.Create.dialogs.noPhoneDialog.header';
+  static const Hosted_Create_dialogs_noPhoneDialog_message = 'Hosted.Create.dialogs.noPhoneDialog.message';
+  static const Hosted_Create_dialogs_noPhoneDialog_button = 'Hosted.Create.dialogs.noPhoneDialog.button';
+  static const Hosted_Create_dialogs_noPhoneDialog = 'Hosted.Create.dialogs.noPhoneDialog';
+  static const Hosted_Create_dialogs = 'Hosted.Create.dialogs';
   static const Hosted_Create = 'Hosted.Create';
   static const Hosted_Edit_labels_updatingEvent = 'Hosted.Edit.labels.updatingEvent';
   static const Hosted_Edit_labels = 'Hosted.Edit.labels';
@@ -298,6 +303,10 @@ abstract class  LocaleKeys {
   static const Navigation_hosted = 'Navigation.hosted';
   static const Navigation_joined = 'Navigation.joined';
   static const Navigation_account = 'Navigation.account';
+  static const Navigation_noFullNameDialog_header = 'Navigation.noFullNameDialog.header';
+  static const Navigation_noFullNameDialog_message = 'Navigation.noFullNameDialog.message';
+  static const Navigation_noFullNameDialog_button = 'Navigation.noFullNameDialog.button';
+  static const Navigation_noFullNameDialog = 'Navigation.noFullNameDialog';
   static const Navigation = 'Navigation';
   static const Error_Event_noConnection = 'Error.Event.noConnection';
   static const Error_Event_create_400 = 'Error.Event.create.400';
@@ -366,6 +375,8 @@ abstract class  LocaleKeys {
   static const Event_labels_reportEvent = 'Event.labels.reportEvent';
   static const Event_labels_editEvent = 'Event.labels.editEvent';
   static const Event_labels_delete = 'Event.labels.delete';
+  static const Event_labels_description = 'Event.labels.description';
+  static const Event_labels_requirements = 'Event.labels.requirements';
   static const Event_labels = 'Event.labels';
   static const Event_buttons_attend = 'Event.buttons.attend';
   static const Event_buttons_notInterested = 'Event.buttons.notInterested';
