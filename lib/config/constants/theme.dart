@@ -13,7 +13,7 @@ class HATheme {
   static Icon backButton =
       Platform.isIOS ? Icon(Icons.arrow_back_ios) : Icon(Icons.arrow_back);
 
-  static const double PAGE_TITLE_SIZE = 18;
+  static const double PAGE_TITLE_SIZE = 16;
 
   static ThemeData themeData = ThemeData(
     primaryColor: HOPAUT_PINK,
