@@ -7,13 +7,12 @@ buildscript {
     }
 
     repositories {
-        maven { url './libs' }
         google()
-        mavenCentral()
+        jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.android.tools.build:gradle:4.0.1'
         // Firebase
         classpath 'com.google.gms:google-services:4.3.8'
     }
@@ -21,9 +20,8 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url './libs' }
         google()
-        mavenCentral()
+        jcenter()
     }
 }
 
