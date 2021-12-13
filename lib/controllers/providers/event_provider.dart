@@ -77,7 +77,6 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  // TODO: Make to submethods for create and update
   Future<MiniPost> createEvent() async {
     eventLoadingStatus = Submitted();
     notifyListeners();
@@ -249,7 +248,6 @@ class EventProvider extends ChangeNotifier {
     isDateValid = true;
     eventLoadingStatus = Idle();
     reportPostLoadingStatus = Idle();
-    notifyListeners();
   }
 
   void _initEventMap() {
