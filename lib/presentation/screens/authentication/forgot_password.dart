@@ -85,9 +85,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           child: Column(
             children: [
               text(
-                  text: LocaleKeys
-                          .Authentication_ForgotPassword_labels_instructionsLabel
-                      .tr()),
+                text: LocaleKeys
+                        .Authentication_ForgotPassword_labels_instructionsLabel
+                    .tr(),
+              ),
               SizedBox(height: 32),
               BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
                   builder: (context, state) {
