@@ -17,13 +17,13 @@ class CodegenLoader extends AssetLoader{
   static const Map<String,dynamic> de = {
   "Map": {
     "hints": {
-      "search": "Suchen Sie nach Veranstaltungen nach Tags"
+      "search": "Suchen Sie Veranstaltungen nach Tags"
     },
     "labels": {
       "eventType": "Veranstaltungstyp:",
       "searchRadius": "Suchradius:",
       "today": "Heute",
-      "loading": "Ereignisse werden geladen"
+      "loading": "Veranstaltungen werden geladen"
     },
     "btns": {
       "search": "Suche"
@@ -39,8 +39,8 @@ class CodegenLoader extends AssetLoader{
         "title": "Titel",
         "type": "Typ",
         "location": "Standort",
-        "time": "Zeit",
-        "tags": "Tag",
+        "time": "Uhrzeit",
+        "tags": "Tags",
         "description": "Beschreibung",
         "requirements": "Anforderungen",
         "creating": "Veranstaltung erstellen",
@@ -49,8 +49,8 @@ class CodegenLoader extends AssetLoader{
       },
       "hints": {
         "eventType": "Veranstaltungstyp",
-        "startTime": "Startzeit",
-        "endTime": "Endzeit",
+        "startTime": "Beginn",
+        "endTime": "Ende",
         "tagsLimit": "Sie können bis zu 5 Tags hinzufügen.",
         "addTags": "Tags hinzufügen",
         "price": "Preis"
@@ -62,7 +62,7 @@ class CodegenLoader extends AssetLoader{
         "title": "Bitte geben Sie einen gültigen Titel an.",
         "eventType": "Veranstaltungstyp ist erforderlich.",
         "location": "Bitte wählen Sie einen Standort.",
-        "time": "Start- und Endzeit sind erforderlich.",
+        "time": "Beginn und Endzeit sind erforderlich.",
         "description": "Bitte geben Sie eine gültige Beschreibung an."
       },
       "eventTypes": {
@@ -72,14 +72,14 @@ class CodegenLoader extends AssetLoader{
         "bikerMeet": "Bikertreffen",
         "bicycleMeet": "Fahrradtreffen",
         "carMeet": "Autotreffen",
-        "streetParty": "Straßenparty",
+        "streetParty": "Street Party",
         "sport": "Sport",
         "others": "Sonstiges"
       },
       "dialogs": {
         "noPhoneDialog": {
           "header": "Veranstaltung erstellt",
-          "message": "Ihre Veranstaltung wurde erfolgreich erstellt. Bitte aktualisieren Sie Ihre Telefonnummer, damit Teilnehmer Sie erreichen können.",
+          "message": "Ihre Veranstaltung wurde erfolgreich erstellt. Bitte aktualisieren Sie Ihre Telefonnummer, damit die Gäste Sie erreichen können.",
           "button": "Einstellungen"
         }
       }
@@ -109,7 +109,7 @@ class CodegenLoader extends AssetLoader{
         "editRequirements": "Anforderungen bearbeiten",
         "editTags": "Tags bearbeiten",
         "editPrice": "Preis bearbeiten",
-        "editPlaces": "Verfügbare Plätze bearbeiten"
+        "editPlaces": "Anzahl der verfügbaren Plätze bearbeiten"
       },
       "toasts": {
         "eventUpdated": "Veranstaltung aktualisiert."
@@ -123,20 +123,20 @@ class CodegenLoader extends AssetLoader{
         "title": "Standort auswählen"
       },
       "labels": {
-        "loading": "Karte laden"
+        "loading": "Karte lädt"
       },
       "hints": {
         "search": "Suche im Umkreis von 50km",
         "dismiss": "Berühren Sie die Karte, um die Auswahl aufzuheben."
       },
       "btns": {
-        "getLocation": "Tippen Sie auf , um den Standort abzurufen"
+        "getLocation": "Tippen, um den Standort abzurufen"
       }
     }
   },
   "Joined": {
     "header": {
-      "title": "Verbundene Veranstaltungen",
+      "title": "Teilgenommene Veranstaltungen",
       "currentTab": "Aktuelle",
       "pastTab": "Vergangene"
     },
@@ -166,7 +166,7 @@ class CodegenLoader extends AssetLoader{
         "pageTitle": "Rufnummer ändern",
         "label_verifyNumberInfo": "Sie erhalten eine SMS-Nachricht (es können Gebühren anfallen) zur Bestätigung Ihrer Telefonnummer. Geben Sie Ihre Telefonnummer ein.",
         "errorToast_Error": "Fehler, etwas ist schief gelaufen",
-        "hintLabel_PhoneNumber": "Rufnummer",
+        "hintLabel_PhoneNumber": "Telefonnummer",
         "validationLabel_InvalidNumber": "Ungültige Rufnummer",
         "button_Next": "Weiter",
         "ConfirmMobile": {
@@ -248,7 +248,7 @@ class CodegenLoader extends AssetLoader{
           "deleteInfo1": "Sobald Sie bestätigen, werden alle Ihre Kontodaten gelöscht.",
           "deleteInfo2": "Die Löschung des Kontos ist ",
           "deleteInfo3": "endgültig",
-          "deleteInfo4": ". Es gibt keine Möglichkeit, Ihr Konto wiederherzustellen.",
+          "deleteInfo4": ". Ihr Konto wird unwiderruflich gelöscht.",
           "deleteInfo5": "Bitte geben Sie zur Bestätigung Ihre E-Mail-Adresse ein:"
         },
         "hints": {
@@ -256,7 +256,7 @@ class CodegenLoader extends AssetLoader{
           "email": "E-Mail"
         },
         "validation": {
-          "inputValidEmail": "Bitte geben Sie eine gültige E-Mail ein"
+          "inputValidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein"
         },
         "buttons": {
           "delete": "Löschen",
@@ -391,7 +391,7 @@ class CodegenLoader extends AssetLoader{
     "ForgotPassword": {
       "pageTItle": "Passwort vergessen?",
       "labels": {
-        "instructionsLabel": "Geben Sie die mit Ihrem Konto verknüpfte E-Mail-Adresse ein, und wir senden Ihnen eine E-Mail mit Anweisungen zum Zurücksetzen Ihres Passworts."
+        "instructionsLabel": "Geben Sie die mit Ihrem Konto verknüpfte E-Mail-Adresse ein. Sie erhalten dann eine E-Mail mit Anweisungen für die Wiederherstellung des Passworts."
       },
       "buttons": {
         "requestButton": "Anfrage senden"
@@ -409,7 +409,7 @@ class CodegenLoader extends AssetLoader{
   "Navigation": {
     "map": "Karte",
     "hosted": "Gehaltene",
-    "joined": "Verbundene",
+    "joined": "Teilgenommen",
     "account": "Konto",
     "noFullNameDialog": {
       "header": "Hallo!",
@@ -426,8 +426,8 @@ class CodegenLoader extends AssetLoader{
       },
       "delete": {
         "400": "Schlechte Anfrage.",
-        "403": "Sie müssen der Gastgeber sein, um dieses Ereignis löschen zu können.",
-        "404": "Die Veranstaltung, das Sie zu löschen versuchen, wurde nicht gefunden."
+        "403": "Sie müssen der Gastgeber sein, um diese Veranstaltung löschen zu können.",
+        "404": "Die Veranstaltung, die Sie zu löschen versuchen, wurde nicht gefunden."
       },
       "update": {
         "403": "Sie sind zu dieser Aktion nicht berechtigt."
@@ -468,7 +468,7 @@ class CodegenLoader extends AssetLoader{
         "accountExists": "Ein Konto mit dieser E-Mail existiert bereits"
       },
       "Report": {
-        "reportedAlready": "Sie haben dieses Veranstaltung bereits gemeldet",
+        "reportedAlready": "Sie haben diese Veranstaltung bereits gemeldet",
         "cantSendReport": "Bericht konnte nicht gesendet werden"
       },
       "Rating": {
@@ -494,7 +494,7 @@ class CodegenLoader extends AssetLoader{
         "noEventsFound": "Keine Veranstaltungen in diesem Bereich gefunden"
       },
       "Settings": {
-        "inputurEmail": "Geben Sie Ihre Konto-E-Mail ein",
+        "inputurEmail": "Geben Sie Ihre Konto E-Mail ein",
         "accountDeleted": "Konto gelöscht",
         "failedAccountDelete": "Konto konnte nicht gelöscht werden"
       }
@@ -511,7 +511,7 @@ class CodegenLoader extends AssetLoader{
       "rateEvent": "Veranstaltung bewerten",
       "reportEvent": "Diese Veranstaltung melden",
       "editEvent": "Diese Veranstaltung bearbeiten",
-      "delete": "Dieses Veranstaltung löschen",
+      "delete": "Diese Veranstaltung löschen",
       "description": "Beschreibung",
       "requirements": "Anforderungen"
     },
@@ -542,15 +542,15 @@ class CodegenLoader extends AssetLoader{
     },
     "Report": {
       "reportEvent": "Veranstaltung melden",
-      "doesntExist": "Das Ereignis existiert nicht",
+      "doesntExist": "Diese Veranstaltung existiert nicht",
       "inappropriateContet": "Unangemessener Inhalt",
       "spam": "Spam"
     },
     "Delete": {
       "title": "Veranstaltung löschen",
-      "confirmDelete": "Sobald Sie bestätigen, wird dieses Ereignis gelöscht",
+      "confirmDelete": "Sobald Sie bestätigen, wird diese Veranstaltung gelöscht",
       "confirm": "Löschen",
-      "deleteSuccess": "Ereignis wurde erfolgreich gelöscht.",
+      "deleteSuccess": "Veranstaltung wurde erfolgreich gelöscht.",
       "cancel": "Abbrechen"
     }
   },
