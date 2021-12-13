@@ -184,6 +184,19 @@ class _CreateEventPageState extends State<CreateEventPage> {
                               //hintText:
                               //'Event Requirements (Optional)', //TODO: write example requirements + translation
                             ),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 19.0),
+                              child: InputDecorator(
+                                decoration: InputDecoration(
+                                  labelStyle: TextStyle(color: Colors.red),
+                                  // labelText: TODO: add text
+                                  isDense: true,
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 12.0),
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
                             persistButton(
                                 label:
                                     LocaleKeys.Hosted_Create_btns_create.tr(),
