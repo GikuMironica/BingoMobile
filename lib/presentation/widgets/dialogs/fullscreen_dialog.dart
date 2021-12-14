@@ -68,7 +68,7 @@ class FullscreenDialog extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                   child: Text(
                     message,
-                    maxLines: 3,
+                    maxLines: 5,
                     style: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.normal,
@@ -76,7 +76,7 @@ class FullscreenDialog extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 50,
+                  height: 40,
                 ),
                 InkWell(
                   onTap: () {
