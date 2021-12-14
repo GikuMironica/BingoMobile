@@ -47,7 +47,8 @@
         "eventType": "Event type is required.",
         "location": "Please choose a location.",
         "time": "Start and end time is required.",
-        "description": "Please provide a valid description."
+        "description": "Please provide a valid description.",
+        "fillAll": "Please fill in all required fields"
       },
       "eventTypes": {
         "houseParty": "House Party",
@@ -486,7 +487,7 @@
   },
   "Event": {
     "dialogs": {
-      "loadingEvent": "Loading event data"
+      "loadingEvent": "Loading"
     },
     "labels": {
       "unknownAdress": "Unknown address",

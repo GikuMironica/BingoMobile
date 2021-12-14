@@ -17,7 +17,7 @@ class CodegenLoader extends AssetLoader{
   static const Map<String,dynamic> de = {
   "Map": {
     "hints": {
-      "search": "Suchen Sie Veranstaltungen nach Tags"
+      "search": "Suche nach Tags"
     },
     "labels": {
       "eventType": "Veranstaltungstyp:",
@@ -63,7 +63,8 @@ class CodegenLoader extends AssetLoader{
         "eventType": "Veranstaltungstyp ist erforderlich.",
         "location": "Bitte wählen Sie einen Standort.",
         "time": "Beginn und Endzeit sind erforderlich.",
-        "description": "Bitte geben Sie eine gültige Beschreibung an."
+        "description": "Bitte geben Sie eine gültige Beschreibung an.",
+        "fillAll": "Bitte füllen Sie alle geforderten Felder aus"
       },
       "eventTypes": {
         "houseParty": "Hausparty",
@@ -502,7 +503,7 @@ class CodegenLoader extends AssetLoader{
   },
   "Event": {
     "dialogs": {
-      "loadingEvent": "Laden von Ereignisdaten"
+      "loadingEvent": "Wird geladen"
     },
     "labels": {
       "unknownAdress": "Unbekannte Adresse",
@@ -611,7 +612,8 @@ static const Map<String,dynamic> en = {
         "eventType": "Event type is required.",
         "location": "Please choose a location.",
         "time": "Start and end time is required.",
-        "description": "Please provide a valid description."
+        "description": "Please provide a valid description.",
+        "fillAll": "Please fill in all required fields"
       },
       "eventTypes": {
         "houseParty": "House Party",
@@ -1050,7 +1052,7 @@ static const Map<String,dynamic> en = {
   },
   "Event": {
     "dialogs": {
-      "loadingEvent": "Loading event data"
+      "loadingEvent": "Loading"
     },
     "labels": {
       "unknownAdress": "Unknown address",

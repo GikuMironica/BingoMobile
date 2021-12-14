@@ -220,7 +220,9 @@ class EventProvider extends ChangeNotifier {
       TextEditingController endDateController) {
     validateLocation();
     validateDates(startDateController, endDateController);
-    return formKey.currentState.validate() && isLocationValid && isDateValid;
+    return (formKey.currentState?.validate() ?? false) &&
+        isLocationValid &&
+        isDateValid;
   }
 
   Future<void> reportPost(

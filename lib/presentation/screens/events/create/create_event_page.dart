@@ -39,6 +39,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
   void initState() {
     super.initState();
     _authService = getIt<AuthenticationService>();
+    isFormValid = true;
   }
 
   ScrollController scrollController = ScrollController(keepScrollOffset: true);
@@ -47,6 +48,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
   TextEditingController endDateController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController requirementsController = TextEditingController();
+  bool isFormValid;
 
   @override
   Widget build(BuildContext context) {
@@ -106,8 +108,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                             ),
                             Divider(),
                             FieldTitle(
-                                title: LocaleKeys.Hosted_Create_labels_pictures
-                                    .tr()),
+                                title:
+                                    LocaleKeys.Hosted_Create_labels_type.tr()),
                             EventTypeList(post: provider.post),
                             Divider(),
                             FieldTitle(
@@ -184,16 +186,20 @@ class _CreateEventPageState extends State<CreateEventPage> {
                               //hintText:
                               //'Event Requirements (Optional)', //TODO: write example requirements + translation
                             ),
-                            Container(
-                              margin: EdgeInsets.only(bottom: 19.0),
-                              child: InputDecorator(
-                                decoration: InputDecoration(
-                                  labelStyle: TextStyle(color: Colors.red),
-                                  // labelText: TODO: add text
-                                  isDense: true,
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 12.0),
-                                  border: InputBorder.none,
+                            Visibility(
+                              visible: !isFormValid,
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 20.0),
+                                child: InputDecorator(
+                                  decoration: InputDecoration(
+                                    labelStyle: TextStyle(color: Colors.red),
+                                    labelText: LocaleKeys
+                                        .Hosted_Create_validation_fillAll.tr(),
+                                    isDense: true,
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 12.0),
+                                    border: InputBorder.none,
+                                  ),
                                 ),
                               ),
                             ),
@@ -250,6 +256,11 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                             replace: true);
                                       }
                                     }
+                                  } else {
+                                    // Workaround, to display validation message about save button if smth is wrong
+                                    setState(() {
+                                      isFormValid = false;
+                                    });
                                   }
                                 })
                           ]))));

@@ -47,7 +47,8 @@
         "eventType": "Veranstaltungstyp ist erforderlich.",
         "location": "Bitte wählen Sie einen Standort.",
         "time": "Beginn und Endzeit sind erforderlich.",
-        "description": "Bitte geben Sie eine gültige Beschreibung an."
+        "description": "Bitte geben Sie eine gültige Beschreibung an.",
+        "fillAll": "Bitte füllen Sie alle geforderten Felder aus"
       },
       "eventTypes": {
         "houseParty": "Hausparty",
@@ -486,7 +487,7 @@
   },
   "Event": {
     "dialogs": {
-      "loadingEvent": "Laden von Ereignisdaten"
+      "loadingEvent": "Wird geladen"
     },
     "labels": {
       "unknownAdress": "Unbekannte Adresse",

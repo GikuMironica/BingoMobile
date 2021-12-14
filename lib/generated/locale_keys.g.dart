@@ -39,6 +39,7 @@ abstract class  LocaleKeys {
   static const Hosted_Create_validation_location = 'Hosted.Create.validation.location';
   static const Hosted_Create_validation_time = 'Hosted.Create.validation.time';
   static const Hosted_Create_validation_description = 'Hosted.Create.validation.description';
+  static const Hosted_Create_validation_fillAll = 'Hosted.Create.validation.fillAll';
   static const Hosted_Create_validation = 'Hosted.Create.validation';
   static const Hosted_Create_eventTypes_houseParty = 'Hosted.Create.eventTypes.houseParty';
   static const Hosted_Create_eventTypes_club = 'Hosted.Create.eventTypes.club';
