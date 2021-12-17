@@ -209,6 +209,31 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                 context: context,
                                 isStateValid: true,
                                 onPressed: () async {
+                                  if ((_authService.user.firstName.isEmpty ??
+                                          true) ||
+                                      (_authService.user.lastName.isEmpty ??
+                                          true)) {
+                                    await Navigator.of(context).push(
+                                        PageRouteBuilder(
+                                            opaque: false,
+                                            pageBuilder:
+                                                (BuildContext context, _, __) =>
+                                                    FullscreenDialog(
+                                                      svgAsset:
+                                                          'assets/icons/svg/completeRegisterByName.svg',
+                                                      header: LocaleKeys
+                                                              .Event_dialogs_NoNameJoinEventDialog_header
+                                                          .tr(),
+                                                      message: LocaleKeys
+                                                              .Event_dialogs_NoNameJoinEventDialog_message
+                                                          .tr(),
+                                                      buttonText: LocaleKeys
+                                                              .Event_dialogs_NoNameJoinEventDialog_button
+                                                          .tr(),
+                                                      route: Routes.editAccount,
+                                                    )));
+                                    return;
+                                  }
                                   if (provider.isFormValid(formKey,
                                       startDateController, endDateController)) {
                                     formKey.currentState.save();

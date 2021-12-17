@@ -72,7 +72,7 @@ class FullscreenDialog extends StatelessWidget {
                     style: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.normal,
-                        fontSize: 18),
+                        fontSize: 16),
                   ),
                 ),
                 SizedBox(

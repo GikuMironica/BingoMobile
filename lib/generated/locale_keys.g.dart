@@ -368,6 +368,10 @@ abstract class  LocaleKeys {
   static const Others_Providers = 'Others.Providers';
   static const Others = 'Others';
   static const Event_dialogs_loadingEvent = 'Event.dialogs.loadingEvent';
+  static const Event_dialogs_NoNameJoinEventDialog_header = 'Event.dialogs.NoNameJoinEventDialog.header';
+  static const Event_dialogs_NoNameJoinEventDialog_message = 'Event.dialogs.NoNameJoinEventDialog.message';
+  static const Event_dialogs_NoNameJoinEventDialog_button = 'Event.dialogs.NoNameJoinEventDialog.button';
+  static const Event_dialogs_NoNameJoinEventDialog = 'Event.dialogs.NoNameJoinEventDialog';
   static const Event_dialogs = 'Event.dialogs';
   static const Event_labels_unknownAdress = 'Event.labels.unknownAdress';
   static const Event_labels_tags = 'Event.labels.tags';

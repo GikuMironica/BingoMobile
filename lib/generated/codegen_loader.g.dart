@@ -503,7 +503,12 @@ class CodegenLoader extends AssetLoader{
   },
   "Event": {
     "dialogs": {
-      "loadingEvent": "Wird geladen"
+      "loadingEvent": "Wird geladen",
+      "NoNameJoinEventDialog": {
+        "header": "Hey Kumpel!",
+        "message": "Du muss dein Namen eingeben, bevor du an Veranstaltungen teilnehmen oder solche erstellen können.",
+        "button": "Einstellungen"
+      }
     },
     "labels": {
       "unknownAdress": "Unbekannte Adresse",
@@ -557,7 +562,7 @@ class CodegenLoader extends AssetLoader{
   },
   "Home": {
     "FullScreenDialog": {
-      "header": "Hallo zusammen!",
+      "header": "Hallo!",
       "messege": "Vervollständigen Sie die Registrierung durch Eingabe Ihres Namens, um Veranstaltungen zu erstellen oder ihnen beizutreten.",
       "btnText": "Einstellungen"
     }
@@ -1052,7 +1057,12 @@ static const Map<String,dynamic> en = {
   },
   "Event": {
     "dialogs": {
-      "loadingEvent": "Loading"
+      "loadingEvent": "Loading",
+      "NoNameJoinEventDialog": {
+        "header": "Hey pal!",
+        "message": "You have to enter your name before attending or creating events",
+        "button": "Settings"
+      }
     },
     "labels": {
       "unknownAdress": "Unknown address",

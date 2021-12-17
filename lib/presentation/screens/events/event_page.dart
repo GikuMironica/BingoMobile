@@ -7,6 +7,7 @@ import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/data/models/post.dart';
 import 'package:hopaut/data/models/profile.dart';
@@ -17,6 +18,7 @@ import 'package:hopaut/presentation/screens/events/participation_list.dart';
 import 'package:hopaut/presentation/screens/report/report_event.dart';
 import 'package:hopaut/presentation/widgets/buttons/event_attend_button.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
+import 'package:hopaut/presentation/widgets/dialogs/fullscreen_dialog.dart';
 import 'package:hopaut/presentation/widgets/dialogs/profile_dialog.dart';
 import 'package:hopaut/presentation/widgets/event_page/event_description.dart';
 import 'package:hopaut/presentation/widgets/event_page/event_details.dart';
@@ -87,6 +89,23 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   }
 
   void attendEvent() async {
+    var authService = getIt<AuthenticationService>();
+    if ((authService.user.firstName.isEmpty ?? true) ||
+        (authService.user.lastName.isEmpty ?? true)) {
+      await Navigator.of(context).push(PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (BuildContext context, _, __) => FullscreenDialog(
+                svgAsset: 'assets/icons/svg/completeRegisterByName.svg',
+                header:
+                    LocaleKeys.Event_dialogs_NoNameJoinEventDialog_header.tr(),
+                message:
+                    LocaleKeys.Event_dialogs_NoNameJoinEventDialog_message.tr(),
+                buttonText:
+                    LocaleKeys.Event_dialogs_NoNameJoinEventDialog_button.tr(),
+                route: Routes.editAccount,
+              )));
+      return;
+    }
     bool attendResponse = await getIt<EventRepository>()
         .changeAttendanceStatus(postId, API.ATTEND);
     if (attendResponse) {

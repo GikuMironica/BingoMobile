@@ -407,7 +407,7 @@
       "noConnection": "Eine Verbindung zum Server konnte nicht hergestellt werden.",
       "create": {
         "400": "Ungültige Eingabe.",
-        "403": "Sie müssen Ihren Namen eingeben, um ein Ereignis zu erstellen."
+        "403": "Veranstaltung konnte nicht erstellt werden"
       },
       "delete": {
         "400": "Schlechte Anfrage.",
@@ -487,7 +487,12 @@
   },
   "Event": {
     "dialogs": {
-      "loadingEvent": "Wird geladen"
+      "loadingEvent": "Wird geladen",
+      "NoNameJoinEventDialog": {
+        "header": "Hey Kumpel!",
+        "message": "Du muss dein Namen eingeben, bevor du an Veranstaltungen teilnehmen oder solche erstellen können.",
+        "button": "Einstellungen"
+      }
     },
     "labels": {
       "unknownAdress": "Unbekannte Adresse",
@@ -541,7 +546,7 @@
   },
   "Home": {
     "FullScreenDialog": {
-      "header": "Hallo zusammen!",
+      "header": "Hallo!",
       "messege": "Vervollständigen Sie die Registrierung durch Eingabe Ihres Namens, um Veranstaltungen zu erstellen oder ihnen beizutreten.",
       "btnText": "Einstellungen"
     }

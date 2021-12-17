@@ -51,7 +51,12 @@ Widget accountInformation() {
         ),
         ListTile(
           title: Text(LocaleKeys.Account_AccountPage_label_PhoneNumber.tr()),
-          subtitle: Text(provider.user.phoneNumber ?? "-"),
+          subtitle: provider.user?.phoneNumber?.isNotEmpty ?? false
+              ? Text(provider.user.phoneNumber)
+              : Text(
+                  LocaleKeys.Account_EditProfile_placeholder_EmptyDescription
+                      .tr(),
+                  style: TextStyle(color: Colors.grey[500])),
         ),
         ListTile(
           title: Text(LocaleKeys.Account_AccountPage_label_MemberSince.tr()),
