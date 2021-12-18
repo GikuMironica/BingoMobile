@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
         title: (LocaleKeys.Navigation_hosted.tr()),
       ),
       HopautNavBarItem(
-        svg: MdiIcons.calendar,
+        svg: MdiIcons.calendarCheck,
         title: (LocaleKeys.Navigation_joined.tr()),
       ),
       HopautNavBarItem(

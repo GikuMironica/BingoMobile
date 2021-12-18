@@ -93,10 +93,10 @@ class _EditMobileState extends State<EditMobile> {
                   context: context,
                   isStateValid: _formKey.currentState?.validate() ?? false,
                   onPressed: () => {
-                    _formKey.currentState?.validate() ?? false
-                        ? _accountProvider.continueToPhoneConfirmation(
-                            context, state)
-                        : null
+                        _formKey.currentState?.validate() ?? false
+                            ? _accountProvider.continueToPhoneConfirmation(
+                                context, state)
+                            : null
                       })
             ],
           ),
@@ -104,8 +104,9 @@ class _EditMobileState extends State<EditMobile> {
         Visibility(
             visible: _accountProvider.formStatus is Submitted,
             child: overlayBlurBackgroundCircularProgressIndicator(
-                context, LocaleKeys.Account_EditProfile_EditMobile_label_sendingOtpDialog
-                .tr())),
+                context,
+                LocaleKeys.Account_EditProfile_EditMobile_label_sendingOtpDialog
+                    .tr())),
       ],
     );
   }
@@ -137,6 +138,7 @@ class _EditMobileState extends State<EditMobile> {
           .Account_EditProfile_EditMobile_validationLabel_InvalidNumber.tr(),
       onInputChanged: (PhoneNumber number) {
         _accountProvider.number = number.phoneNumber;
+        _accountProvider.dialCode = number.dialCode;
       },
       onInputValidated: (bool value) {
         state = value;
@@ -154,15 +156,6 @@ class _EditMobileState extends State<EditMobile> {
           TextInputType.numberWithOptions(signed: true, decimal: true),
       inputBorder: OutlineInputBorder(),
     );
-  }
-
-  void getPhoneNumber(String phoneNumber) async {
-    PhoneNumber number = await PhoneNumber.getRegionInfoFromPhoneNumber(
-        phoneNumber, initialCountry);
-
-    setState(() {
-      this.number = number;
-    });
   }
 
   @override

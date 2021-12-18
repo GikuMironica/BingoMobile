@@ -148,11 +148,11 @@
       "placeholder_EmptyDescription": "Leer",
       "successToast_ProfileUpdated": "Profil wurde aktualisiert",
       "EditMobile": {
-        "pageTitle": "Rufnummer ändern",
+        "pageTitle": "Telefonnummer ändern",
         "label_verifyNumberInfo": "Sie erhalten eine SMS-Nachricht (es können Gebühren anfallen) zur Bestätigung Ihrer Telefonnummer. Geben Sie Ihre Telefonnummer ein.",
         "errorToast_Error": "Fehler, etwas ist schief gelaufen",
         "hintLabel_PhoneNumber": "Telefonnummer",
-        "validationLabel_InvalidNumber": "Ungültige Rufnummer",
+        "validationLabel_InvalidNumber": "Ungültige Telefonnummer",
         "button_Next": "Weiter",
         "ConfirmMobile": {
           "pageTitle": "Bestätigen Sie Ihre Rufnummer",

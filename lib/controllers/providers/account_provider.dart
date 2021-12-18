@@ -37,10 +37,12 @@ class AccountProvider extends ChangeNotifier {
   String otp;
   int currentTimerSeconds;
   int otpTries;
+  String dialCode;
 
   // Services, repositories and models
   AuthenticationService _authenticationService;
   UserRepository _userRepository;
+
   User get currentIdentity => _authenticationService.user;
   FirebaseOtpService _firebaseOtpService;
 

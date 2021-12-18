@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/configurations.dart';
 import 'package:hopaut/config/constants/theme.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/controllers/providers/account_provider.dart';
+import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/controllers/providers/page_states/otp_timer_state.dart';
 import 'package:hopaut/generated/locale_keys.g.dart';
@@ -23,7 +25,6 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
   TextEditingController textEditingController;
   String minutesStr = '00';
   String secondsStr = Configurations.RESEND_OTP_TIME.toString();
-
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -77,10 +78,12 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
             LocaleKeys.Account_EditProfile_EditMobile_ConfirmMobile_labels_confirmThisNumber
                     .tr() +
                 " " +
-                _accountProvider.number.substring(0, 3) +
-                " " +
                 _accountProvider.number
-                    .substring(3, _accountProvider.number.length),
+                    .substring(0, _accountProvider.dialCode.length) +
+                " " +
+                _accountProvider.number.substring(
+                    _accountProvider.dialCode.length,
+                    _accountProvider.number.length),
             style: HATheme.LABEL_HEADER_STYLE,
           ),
           SizedBox(height: 20),
