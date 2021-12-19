@@ -26,6 +26,7 @@ class HopAutAppBar extends StatelessWidget {
             FlexibleSpaceBar(
               title: Text(
                 title,
+                textAlign: TextAlign.center,
                 style: TextStyle(fontSize: HATheme.PAGE_TITLE_SIZE),
               ),
               centerTitle: true,

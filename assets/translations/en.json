@@ -489,7 +489,7 @@
     "dialogs": {
       "loadingEvent": "Loading",
       "NoNameJoinEventDialog": {
-        "header": "Hey pal!",
+        "header": "Hey!",
         "message": "You have to enter your name before attending or creating events",
         "button": "Settings"
       }
