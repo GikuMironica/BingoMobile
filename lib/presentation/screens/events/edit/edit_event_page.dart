@@ -146,7 +146,7 @@ class _EditEventPageState extends State<EditEventPage> {
     if (result != null && result) {
       showSuccessSnackBar(
           context: context,
-          message: LocaleKeys.Hosted_Edit_toasts_eventUpdated);
+          message: LocaleKeys.Hosted_Edit_toasts_eventUpdated.tr());
     }
   }
 }
