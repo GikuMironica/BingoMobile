@@ -50,7 +50,8 @@ class _EventParticipantsState extends State<EventParticipants> {
       default:
         if (widget.participants['AttendeesNumber'] != null) {
           widgetList.add(participant(
-              element: widget.participants['AttendeesNumber'], position: 0));
+              element: widget.participants['AttendeesNumber'] - 3,
+              position: 0));
           pos = -30;
           members.forEach((element) {
             widgetList.add(participant(element: element, position: pos));
