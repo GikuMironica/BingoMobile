@@ -42,7 +42,9 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
                 Icons.edit,
                 color: Colors.grey[400],
               ),
-              title: Text(LocaleKeys.Account_EditProfile_EditProfilePicture_navigationLabels_changePicture.tr()),
+              title: Text(LocaleKeys
+                      .Account_EditProfile_EditProfilePicture_navigationLabels_changePicture
+                  .tr()),
             ),
             Divider(),
             ListTile(
@@ -53,7 +55,10 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
                 Icons.delete,
                 color: Colors.redAccent,
               ),
-              title: Text(LocaleKeys.Account_EditProfile_EditProfilePicture_navigationLabels_deletePicture.tr(),
+              title: Text(
+                  LocaleKeys
+                          .Account_EditProfile_EditProfilePicture_navigationLabels_deletePicture
+                      .tr(),
                   style: TextStyle(color: Colors.redAccent)),
             )
           ],
@@ -74,11 +79,13 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
 
     if (result != null) {
       result.isSuccessful
-          ? showSuccessSnackBar(
-              scaffoldKey: scaffoldKey,
-              message: LocaleKeys.Account_EditProfile_EditProfilePicture_toasts_profilePicUpdated.tr())
-          : showSnackBarWithError(
-              scaffoldKey: scaffoldKey, message: result.errorMessage);
+          ? null
+          /*showSuccessSnackBar(
+              context: context,
+              message: LocaleKeys
+                      .Account_EditProfile_EditProfilePicture_toasts_profilePicUpdated
+                  .tr())*/
+          : showNewErrorSnackbar(result.errorMessage);
     }
   }
 }

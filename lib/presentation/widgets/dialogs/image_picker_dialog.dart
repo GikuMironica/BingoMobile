@@ -56,7 +56,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(5.0),
         child: ListView(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
@@ -65,7 +65,9 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                     Align(
                       alignment: Alignment.center,
                       child: Text(
-                        LocaleKeys.Account_EditProfile_EditProfilePicture_labels_uploadPicture.tr(),
+                        LocaleKeys
+                                .Account_EditProfile_EditProfilePicture_labels_uploadPicture
+                            .tr(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
                       ),
@@ -78,11 +80,15 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                         _imageTarget(
                             assetPath: _cameraSvg,
                             imgSource: ImageSource.camera,
-                            hint: LocaleKeys.Account_EditProfile_EditProfilePicture_labels_camera.tr()),
+                            hint: LocaleKeys
+                                    .Account_EditProfile_EditProfilePicture_labels_camera
+                                .tr()),
                         _imageTarget(
                             assetPath: _gallerySvg,
                             imgSource: ImageSource.gallery,
-                            hint: LocaleKeys.Account_EditProfile_EditProfilePicture_labels_gallery.tr())
+                            hint: LocaleKeys
+                                    .Account_EditProfile_EditProfilePicture_labels_gallery
+                                .tr())
                       ],
                     )
                   ]
@@ -110,7 +116,9 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                                   children: [
                                     Icon(Icons.cancel),
                                     SizedBox(width: 4),
-                                    Text(LocaleKeys.Account_EditProfile_EditProfilePicture_buttons_cancel.tr()),
+                                    Text(LocaleKeys
+                                            .Account_EditProfile_EditProfilePicture_buttons_cancel
+                                        .tr()),
                                   ],
                                 ),
                               ),
@@ -122,7 +130,9 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                                     SizedBox(
                                       height: 4,
                                     ),
-                                    Text(LocaleKeys.Account_EditProfile_EditProfilePicture_buttons_setPicture.tr()),
+                                    Text(LocaleKeys
+                                            .Account_EditProfile_EditProfilePicture_buttons_setPicture
+                                        .tr()),
                                   ],
                                 ),
                               )

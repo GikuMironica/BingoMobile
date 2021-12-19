@@ -99,7 +99,7 @@ Widget participant({dynamic element, double position}) {
               style:
                   TextStyle(color: HATheme.HOPAUT_PINK, fontFamily: 'Roboto'))
           : null,
-      backgroundColor: HATheme.HOPAUT_GREY,
+      backgroundColor: Colors.black,
       backgroundImage: imageUrl != null ? NetworkImage(imageUrl) : null,
     ),
   );

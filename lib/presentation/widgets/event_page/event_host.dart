@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hopaut/config/constants.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 Widget hostRating({double rating}) {
@@ -19,7 +20,12 @@ Widget hostRating({double rating}) {
   return Row(children: widgetList);
 }
 
-Widget hostDetails({String phone, String hostName, String hostInitials, String hostImage, double rating}) {
+Widget hostDetails(
+    {String phone,
+    String hostName,
+    String hostInitials,
+    String hostImage,
+    double rating}) {
   return Row(
     children: <Widget>[
       Card(
@@ -27,10 +33,17 @@ Widget hostDetails({String phone, String hostName, String hostInitials, String h
         elevation: 1,
         shape: CircleBorder(),
         child: CircleAvatar(
-          backgroundColor: Colors.grey,
-          radius: 18,
-          child: hostImage == null ? Text('?', style: TextStyle(color: Colors.black87, fontFamily: 'Roboto'),) : null,
-          backgroundImage: hostImage == null ? null : NetworkImage(hostImage)),
+            backgroundColor: Colors.black,
+            radius: 18,
+            child: hostImage == null
+                ? Text(
+                    '?',
+                    style: TextStyle(
+                        color: HATheme.HOPAUT_PINK, fontFamily: 'Roboto'),
+                  )
+                : null,
+            backgroundImage:
+                hostImage == null ? null : NetworkImage(hostImage)),
       ),
       SizedBox(width: 8),
       Column(
@@ -42,7 +55,7 @@ Widget hostDetails({String phone, String hostName, String hostInitials, String h
           ),
           Visibility(
             visible: phone != null,
-            child: Text(phone??"", style: TextStyle(color: Colors.black54)),
+            child: Text(phone ?? "", style: TextStyle(color: Colors.black54)),
           ),
           hostRating(rating: rating)
         ],

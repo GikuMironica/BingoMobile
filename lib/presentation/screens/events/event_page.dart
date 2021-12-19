@@ -439,7 +439,10 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                             contentPadding:
                                                 EdgeInsets.symmetric(
                                                     vertical: 4),
-                                            leading: Icon(Icons.star),
+                                            leading: Icon(
+                                              Icons.star,
+                                              color: Colors.black,
+                                            ),
                                             title: Align(
                                               child: Text(LocaleKeys
                                                   .Event_labels_rateEvent.tr()),
@@ -472,8 +475,14 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                                 EdgeInsets.symmetric(
                                                     vertical: 4),
                                             leading: isAttending
-                                                ? Icon(MdiIcons.accountMinus)
-                                                : Icon(MdiIcons.accountPlus),
+                                                ? Icon(
+                                                    MdiIcons.accountMinus,
+                                                    color: Colors.black,
+                                                  )
+                                                : Icon(
+                                                    MdiIcons.accountPlus,
+                                                    color: Colors.black,
+                                                  ),
                                             title: Align(
                                               child: Text(isAttending
                                                   ? LocaleKeys
@@ -500,8 +509,10 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                                   )),
                                           contentPadding:
                                               EdgeInsets.symmetric(vertical: 4),
-                                          leading:
-                                              Icon(MdiIcons.alertCircleOutline),
+                                          leading: Icon(
+                                            MdiIcons.alertCircleOutline,
+                                            color: Colors.black,
+                                          ),
                                           title: Align(
                                             child: Text(LocaleKeys
                                                 .Event_labels_reportEvent.tr()),
@@ -527,7 +538,10 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                             contentPadding:
                                                 EdgeInsets.symmetric(
                                                     vertical: 4),
-                                            leading: Icon(Icons.edit),
+                                            leading: Icon(
+                                              Icons.edit,
+                                              color: Colors.black,
+                                            ),
                                             title: Align(
                                               child: Text(LocaleKeys
                                                   .Event_labels_editEvent.tr()),
@@ -559,7 +573,10 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                           },
                                           contentPadding:
                                               EdgeInsets.symmetric(vertical: 4),
-                                          leading: Icon(MdiIcons.delete),
+                                          leading: Icon(
+                                            MdiIcons.delete,
+                                            color: Colors.black,
+                                          ),
                                           title: Align(
                                             child: Text(LocaleKeys
                                                 .Event_labels_delete.tr()),
