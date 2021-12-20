@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 
 class HopAutAppBar extends StatelessWidget {
@@ -11,23 +12,26 @@ class HopAutAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      backgroundColor: Colors.transparent,
-      expandedHeight: 120.0,
+        backgroundColor: Colors.transparent,
+        expandedHeight: 120.0,
         floating: true,
-      pinned: true,
-      bottom: bottom,
-      snap: true,
-      elevation: 0.0,
-      actions: actions,
-      flexibleSpace: Stack(
-        children: <Widget>[
-          Positioned.fill(child: HopAutBackgroundContainer()),
-          FlexibleSpaceBar(
-            title: Text(title),
-            centerTitle: true,
-          )
-        ],
-      )
-    );
+        pinned: true,
+        bottom: bottom,
+        snap: true,
+        elevation: 0.0,
+        actions: actions,
+        flexibleSpace: Stack(
+          children: <Widget>[
+            Positioned.fill(child: HopAutBackgroundContainer()),
+            FlexibleSpaceBar(
+              title: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: HATheme.PAGE_TITLE_SIZE),
+              ),
+              centerTitle: true,
+            )
+          ],
+        ));
   }
 }

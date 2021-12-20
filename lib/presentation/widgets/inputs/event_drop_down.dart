@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hopaut/config/constants/theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class DropDownWidget<T> extends StatefulWidget {
   final T value;
@@ -48,23 +50,30 @@ class _DropDownWidgetState<T> extends State<DropDownWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.0),
-      margin: EdgeInsets.only(bottom: 24.0),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(7.0),
+    return Stack(children: [
+      Card(
+        elevation: HATheme.WIDGET_ELEVATION,
+        color: Colors.transparent,
+        child: Container(
+            height: 48.0,
+            decoration: BoxDecoration(
+              color: HATheme.BASIC_INPUT_COLOR,
+              borderRadius: BorderRadius.circular(8),
+            )),
       ),
-      child: DropdownButtonFormField<T>(
+      DropdownButtonFormField<T>(
         value: widget.value,
         onChanged: widget.onChanged,
         // focusNode: _focus,
         validator: widget.validator,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         onSaved: widget.onSaved,
         items: widget.list
-            ?.map((T e) => DropdownMenuItem<T>(value: e, child: Text('$e')))
+            ?.map((T e) => DropdownMenuItem<T>(
+                value: e, child: Text('${e.toString().tr()}')))
             ?.toList(),
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.all(12.0),
           filled: _focus.hasFocus,
           hintText: widget.hintText,
           hintStyle: TextStyle(
@@ -74,10 +83,10 @@ class _DropDownWidgetState<T> extends State<DropDownWidget<T>> {
           labelText: widget.labelText,
           prefixIcon: widget.prefixIcon,
           border: InputBorder.none,
-          fillColor: Color(0xFFF5F5F5).withOpacity(0.64),
+          //fillColor: Color(0xFFF5F5F5).withOpacity(0.64),
           focusColor: Color(0xFFF5F5F5).withOpacity(0.64),
         ),
       ),
-    );
+    ]);
   }
 }

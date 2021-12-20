@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get_it/get_it.dart';
-import 'package:hopaut/config/constants.dart';
-import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/presentation/forms/blocs/change_password.dart';
+import 'package:hopaut/config/constants/theme.dart';
+import 'package:hopaut/controllers/providers/change_password_provider.dart';
+import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
-import 'package:hopaut/services/services.dart';
+import 'package:hopaut/presentation/widgets/inputs/password_input.dart';
+import 'package:hopaut/presentation/widgets/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   @override
@@ -14,25 +16,20 @@ class ChangePasswordPage extends StatefulWidget {
 }
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
-  final ChangePasswordBloc _changePasswordBloc = ChangePasswordBloc();
-  TextEditingController _currentPassController = TextEditingController();
-
+  final _formKey = GlobalKey<FormState>();
+  ChangePasswordProvider _passwordProvider;
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    _currentPassController.dispose();
-    _changePasswordBloc.dispose();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
+    _passwordProvider.newPassword = "";
+    _passwordProvider.oldPassword = "";
   }
 
   @override
   Widget build(BuildContext context) {
+    _passwordProvider =
+        Provider.of<ChangePasswordProvider>(context, listen: true);
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -40,231 +37,155 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         width: double.infinity,
         decoration: decorationGradient(),
         child: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 50,
-              ),
-              IconButton(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                iconSize: 32,
-                color: Colors.white,
-                icon: HATheme.backButton,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20, bottom: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Change Password',
-                      style: TextStyle(
-                          shadows: [
-                            Shadow(
-                                color: Colors.black.withOpacity(0.3),
-                                offset: Offset(3, 3),
-                                blurRadius: 10)
-                          ],
-                          color: Colors.white,
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 20),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(height: 20),
-                      RichText(
-                        text: TextSpan(
-                            text:
-                            'If you have forgotten your password, you can log out and request a ',
-                            style: TextStyle(color: Colors.grey),
-                            children: [
-                              TextSpan(text: 'Password Reset'),
-                              TextSpan(text: '.')
-                            ]),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      TextField(
-                        controller: _currentPassController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            floatingLabelBehavior:
-                            FloatingLabelBehavior.always,
-                            alignLabelWithHint: true,
-                            suffixIcon: Icon(
-                              Icons.lock_outline,
-                              color: Colors.black,
-                            ),
-                            isDense: true,
-                            labelText: 'Current Password',
-                            hintText: 'Enter your password',
-                            hintStyle: TextStyle(color: Colors.grey[400]),
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 0, horizontal: 10),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey[400]),
-                            ),
-                            labelStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500),
-                            border: const OutlineInputBorder()),
-                      ),
-                      SizedBox(height: 20),
-                      StreamBuilder<String>(
-                        stream: _changePasswordBloc.passwordValid,
-                        builder: (ctx, snapshot) => TextField(
-                          onChanged: _changePasswordBloc.passwordChanged,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                              floatingLabelBehavior:
-                              FloatingLabelBehavior.always,
-                              alignLabelWithHint: true,
-                              suffixIcon: Icon(
-                                Icons.lock_outline,
-                                color: Colors.black,
-                              ),
-                              isDense: true,
-                              labelText: 'New Password',
-                              hintText: 'Enter a new password',
-                              errorText: snapshot.error,
-                              errorMaxLines: 3,
-                              hintStyle: TextStyle(color: Colors.grey[400]),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 10),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey[400]),
-                              ),
-                              labelStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              border: const OutlineInputBorder()),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      StreamBuilder<String>(
-                        stream: _changePasswordBloc.confirmPassValid,
-                        builder: (ctx, snapshot) => TextField(
-                          onChanged: _changePasswordBloc.confirmPassChanged,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                              floatingLabelBehavior:
-                              FloatingLabelBehavior.always,
-                              alignLabelWithHint: true,
-                              suffixIcon: Icon(
-                                Icons.lock_outline,
-                                color: Colors.black,
-                              ),
-                              isDense: true,
-                              labelText: 'Confirm New Password',
-                              errorText: snapshot.error,
-                              hintStyle: TextStyle(color: Colors.grey[400]),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 10),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey[400]),
-                              ),
-                              labelStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                              border: const OutlineInputBorder()),
-                        ),
-                      ),
-                      SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            alignment: Alignment.center,
-                            width: 200,
-                            height: 50.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              gradient: RadialGradient(
-                                center: const Alignment(
-                                    -0.6, -4), // near the top right
-                                radius: 3.5,
-                                colors: [
-                                  const Color(0xFFffbe6a), // yellow sun
-                                  const Color(0xFFed2f65), // blue sky
-                                ],
-                                stops: [0.3, 1.0],
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.3),
-                                  offset: Offset(2.5, 7),
-                                  blurRadius: 7,
-                                ),
-                              ],
-                            ),
-                            child: StreamBuilder<bool>(
-                              stream: _changePasswordBloc.passwordsAreValid,
-                              builder: (ctx, snapshot) => MaterialButton(
-                                onPressed: snapshot.hasData ? () async {
-                                  doPasswordChange(_currentPassController.text, _changePasswordBloc.password);
-                                } : () {},
-                                elevation: 100,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(80.0)),
-                                padding: EdgeInsets.all(0.0),
-                                child: Ink(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      'Set Password',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+            physics: NeverScrollableScrollPhysics(),
+            child: gradientBackground(context)),
       ),
     );
   }
 
-  void doPasswordChange(String currentPassword, String newPassword) async {
-    bool passChangeRes = await await GetIt.I.get<RepoLocator>().identity.changePassword(
-        email: GetIt.I.get<AuthService>().user.email,
-        oldPassword: currentPassword,
-        newPassword: newPassword);
+  Widget gradientBackground(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(top: 60),
+          child: title(),
+        ),
+        whiteOverlayCard(context)
+      ],
+    );
+  }
 
-    if(passChangeRes){
-      Application.router.pop(context);
-      Fluttertoast.showToast(msg: "Password change successful");
-    }else{
-      Fluttertoast.showToast(msg: "Password changing failed");
+  Widget title() {
+    return Row(
+      children: [
+        IconButton(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          iconSize: 32,
+          color: Colors.white,
+          icon: HATheme.backButton,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              LocaleKeys
+                  .Account_Settings_ChangePassword_pageTitle.tr(),
+              style: TextStyle(
+                  shadows: [
+                    Shadow(
+                        color: Colors.black.withOpacity(0.3),
+                        offset: Offset(3, 3),
+                        blurRadius: 10)
+                  ],
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget whiteOverlayCard(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: 20),
+              hint(),
+              SizedBox(
+                height: 30,
+              ),
+              Builder(
+                builder: (context) => inputForm(context),
+              )
+            ]),
+      ),
+    );
+  }
+
+  Widget hint() {
+    return RichText(
+      text: TextSpan(
+          text:
+          LocaleKeys
+              .Account_Settings_ChangePassword_labels_forgotPasswordInstructions.tr(),
+          style: TextStyle(color: Colors.grey)),
+    );
+  }
+
+  Widget inputForm(BuildContext context) {
+    if (_passwordProvider.formStatus is Failed) {
+      Future.delayed(Duration.zero, () async {
+        showSnackBarWithError(context: context, message: LocaleKeys
+            .Account_Settings_ChangePassword_toasts_wrongPassword.tr());
+      });
+    } else if (_passwordProvider.formStatus is Success) {
+      Future.delayed(Duration.zero, () async {
+        showSuccessSnackBar(context: context, message: LocaleKeys
+            .Account_Settings_ChangePassword_toasts_passwordUpdated.tr());
+      });
     }
+    Future.delayed(Duration(seconds: 1), () async {
+      _passwordProvider.formStatus = Idle();
+    });
+    return _passwordProvider.formStatus is Submitted
+        ? overlayBlurBackgroundCircularProgressIndicator(context, LocaleKeys
+        .Account_Settings_ChangePassword_labels_updatingDialog.tr())
+        : Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                passwordInputField(
+                    context: context,
+                    hint: LocaleKeys
+                        .Account_Settings_ChangePassword_hints_enterOldPassword.tr(),
+                    validationMessage: LocaleKeys
+                        .Account_Settings_ChangePassword_validation_inputOldPassword.tr(),
+                    isStateValid: _passwordProvider.validateOldPassword(),
+                    isTextObscured: _passwordProvider.passwordObscureText,
+                    onObscureTap: _passwordProvider.toggleObscurePassword,
+                    onChange: (v) => _passwordProvider.oldPasswordChange(v)),
+                SizedBox(height: 20),
+                passwordInputField(
+                    context: context,
+                    hint: LocaleKeys
+                        .Account_Settings_ChangePassword_hints_enterNewPassword.tr(),
+                    validationMessage: LocaleKeys
+                        .Account_Settings_ChangePassword_validation_inputNewPassword.tr(),
+                    isStateValid: _passwordProvider.validateNewPassword(),
+                    isTextObscured: _passwordProvider.newPasswordObscureText,
+                    onObscureTap: _passwordProvider.toggleObscureNewPassword,
+                    onChange: (v) => _passwordProvider.newPasswordChange(v)),
+                SizedBox(height: 30),
+                persistButton(
+                    context: context,
+                    label: LocaleKeys
+                        .Account_Settings_ChangePassword_buttons_changePassword.tr(),
+                    isStateValid: _passwordProvider.validateNewPassword() &&
+                        _passwordProvider.validateOldPassword(),
+                    onPressed: () async => {
+                          FocusManager.instance.primaryFocus.unfocus(),
+                          if (_formKey.currentState.validate())
+                            {await _passwordProvider.updatePassword(context)}
+                        })
+              ],
+            ),
+          );
   }
 }

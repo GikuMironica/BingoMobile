@@ -2,16 +2,13 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/presentation/screens/home_page.dart';
-import 'package:hopaut/services/auth_service/auth_service.dart';
+import 'package:hopaut/services/authentication_service.dart';
 import 'package:provider/provider.dart';
-
 import 'data/models/user.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class Initialization extends StatefulWidget {
-  final String route;
-
-  Initialization({this.route});
+  Initialization();
 
   @override
   _InitializationState createState() => _InitializationState();
@@ -27,46 +24,26 @@ class _InitializationState extends State<Initialization> {
 
   @override
   Widget build(BuildContext context) {
-    _user = Provider.of<AuthService>(context).user;
+    _user = Provider.of<AuthenticationService>(context).user;
     if (_user == null) {
       Future.delayed(
-          Duration(milliseconds: 500),
+          Duration(milliseconds: 1),
           () => Application.router.navigateTo(context, '/login',
               replace: true,
               transition: TransitionType.fadeIn,
-              transitionDuration: Duration(milliseconds: 0)));
+              transitionDuration: Duration(milliseconds: 200)));
     } else {
-      widget.route == null
-          ? Future.delayed(
-              Duration(milliseconds: 500),
-              () => Application.router.navigateTo(context, '/home',
-                  replace: true,
-                  transition: TransitionType.fadeIn,
-                  transitionDuration: Duration(milliseconds: 0)))
-          : HomePage(route: widget.route);
+      Future.delayed(
+          Duration(milliseconds: 1),
+          () => Application.router.navigateTo(context, '/home',
+              replace: true,
+              transition: TransitionType.fadeIn,
+              transitionDuration: Duration(milliseconds: 200)));
     }
-
-    return Stack(children: [
-      Container(
+    return Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         color: Colors.white,
-        child: Center(
-          child: Image.asset(
-            'assets/logo/logo_no_bg.png',
-            fit: BoxFit.contain,
-            width: MediaQuery.of(context).size.width * 0.7,
-          ),
-        ),
-      ),
-      Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.2),
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: CupertinoActivityIndicator(),
-        ),
-      )
-    ]);
+        child: Container());
   }
 }

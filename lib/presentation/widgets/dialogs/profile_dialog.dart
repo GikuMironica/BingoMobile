@@ -23,10 +23,10 @@ class _ProfileDialogState extends State<ProfileDialog> {
   Profile _profileContext;
 
   @override
-    void initState() {
-    if(widget.profile != null){
+  void initState() {
+    if (widget.profile != null) {
       _profileContext = widget.profile;
-    }else{
+    } else {
       _getProfile(widget.userId);
     }
     super.initState();
@@ -47,7 +47,9 @@ class _ProfileDialogState extends State<ProfileDialog> {
       ),
       elevation: 0.0,
       backgroundColor: Colors.transparent,
-      child: _profileContext == null ? CupertinoActivityIndicator() : dialogContent(context),
+      child: _profileContext == null
+          ? CupertinoActivityIndicator()
+          : dialogContent(context),
     );
   }
 
@@ -81,27 +83,36 @@ class _ProfileDialogState extends State<ProfileDialog> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  IconButton(
-                    onPressed: () => showDialog(context: context, builder: (BuildContext context) => CustomDialog(
-                      pageWidget: ListView(
-                        shrinkWrap: true,
-                          children:[
-                          ListTile(
-                            leading: Icon(MdiIcons.alertCircleOutline),
-                            title: Align(
-                                alignment: Alignment(-1.4, 0),
-                                child: Text('Report user'),
-                            ),
-                            onTap: () => showDialog(context: context, builder: (BuildContext context) => CustomDialog(
-                              pageWidget: ReportUser(),
-                            )),
-                          )]),
-                    )),
-                    icon: Icon(MdiIcons.dotsVertical),
+                  SizedBox(
+                    height: 40,
                   )
+                  /* IconButton(
+                    onPressed: () => showDialog(
+                        context: context,
+                        builder: (BuildContext context) => CustomDialog(
+                              pageWidget: ListView(shrinkWrap: true, children: [
+                                ListTile(
+                                  leading: Icon(MdiIcons.alertCircleOutline),
+                                  title: Align(
+                                    alignment: Alignment(-1.4, 0),
+                                    child: Text('Report user'),
+                                  ),
+                                  onTap: () => showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          CustomDialog(
+                                            pageWidget: ReportUser(),
+                                          )),
+                                )
+                              ]),
+                            )),
+                    icon: Icon(MdiIcons.dotsVertical),
+                  )*/
                 ],
               ),
-              SizedBox(height: 24,),
+              SizedBox(
+                height: 24,
+              ),
               Text(
                 _profileContext.getFullName,
                 style: TextStyle(
@@ -109,35 +120,51 @@ class _ProfileDialogState extends State<ProfileDialog> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
+              Visibility(
+                visible: _profileContext.phoneNumber != null,
+                child: Text(
+                  _profileContext.phoneNumber ?? " ",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 16.0,
+                  ),
+                ),
+              ),
               SizedBox(height: 16.0),
               Text(
-                _profileContext.description,
+                _profileContext.description ?? " ",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 16.0,
+                  fontSize: 12.0,
                 ),
               ),
               SizedBox(height: 24.0),
-
             ],
           ),
         ),
         Positioned(
-          left: Consts.padding,
-          right: Consts.padding,
-          child: Card(
-            elevation: 10,
-            shape: CircleBorder(),
-            clipBehavior: Clip.antiAlias,
-            child: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              radius: 72.0,
-              child: _profileContext.profilePicture != null ? ClipOval(
-                child: Image.network(_profileContext.getProfilePicture, fit: BoxFit.cover, width: 144, height: 144,),
-              ) : Text(_profileContext.getFullName),
-            ),
-          )
-        )//...top circlular image part,
+            left: Consts.padding,
+            right: Consts.padding,
+            child: Card(
+              elevation: 10,
+              shape: CircleBorder(),
+              clipBehavior: Clip.antiAlias,
+              child: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                radius: 72.0,
+                child: _profileContext.profilePicture != null
+                    ? ClipOval(
+                        child: Image.network(
+                          _profileContext.getProfilePicture,
+                          fit: BoxFit.cover,
+                          width: 144,
+                          height: 144,
+                        ),
+                      )
+                    : Text(_profileContext.getFullName),
+              ),
+            )) //...top circlular image part,
       ],
     );
   }

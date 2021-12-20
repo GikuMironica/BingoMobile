@@ -1,0 +1,554 @@
+{
+  "Map": {
+    "hints": {
+      "search": "Search for events by tag"
+    },
+    "labels": {
+      "eventType": "Event Type:",
+      "searchRadius": "Search Radius:",
+      "today": "Today",
+      "loading": "Loading events"
+    },
+    "btns": {
+      "search": "Search"
+    }
+  },
+  "Hosted": {
+    "Create": {
+      "header": {
+        "title": "Create Event"
+      },
+      "labels": {
+        "pictures": "Pictures",
+        "title": "Title",
+        "type": "Type",
+        "location": "Location",
+        "time": "Time",
+        "tags": "Tags",
+        "description": "Description",
+        "requirements": "Requirements",
+        "creating": "Creating event",
+        "guests": "Number of guests",
+        "price": "Entrance price"
+      },
+      "hints": {
+        "eventType": "Event Type",
+        "startTime": "End Time",
+        "endTime": "End Time",
+        "tagsLimit": "You can add up to 5 tags.",
+        "addTags": "Add Tags",
+        "price": "Price"
+      },
+      "btns": {
+        "create": "Create"
+      },
+      "validation": {
+        "title": "Please provide a valid title.",
+        "eventType": "Event type is required.",
+        "location": "Please choose a location.",
+        "time": "Start and end time is required.",
+        "description": "Please provide a valid description.",
+        "fillAll": "Please fill in all required fields"
+      },
+      "eventTypes": {
+        "houseParty": "House Party",
+        "club": "Club",
+        "bar": "Bar",
+        "bikerMeet": "Biker Meet",
+        "bicycleMeet": "Bicycle Meet",
+        "carMeet": "Car Meet",
+        "streetParty": "Street Party",
+        "sport": "Sport",
+        "others": "Other"
+      },
+      "dialogs": {
+        "noPhoneDialog": {
+          "header": "Event created!",
+          "message": "Your event was successfully created. Please update your phone number so the guests can reach you out.",
+          "button": "Settings"
+        }
+      }
+    },
+    "Edit": {
+      "labels": {
+        "updatingEvent": "Updating event"
+      },
+      "btns": {
+        "pictures": "Pictures",
+        "title": "Title",
+        "location": "Location",
+        "time": "Time",
+        "description": "Description",
+        "requirements": "Requirements",
+        "tags": "Tags",
+        "update": "Update",
+        "places": "Available Places",
+        "price": "Entrance Price"
+      },
+      "header": {
+        "editEvent": "Edit Event",
+        "editPictures": "Edit Pictures",
+        "editTitle": "Edit Title",
+        "editTime": "Edit Time",
+        "editDescription": "Edit Description",
+        "editRequirements": "Edit Requirements",
+        "editTags": "Edit Tags",
+        "editPrice": "Edit Price",
+        "editPlaces": "Edit Available Places"
+      },
+      "toasts": {
+        "eventUpdated": "Event updated."
+      }
+    },
+    "header": {
+      "title": "Hosted Events"
+    },
+    "Location": {
+      "header": {
+        "title": "Choose Location"
+      },
+      "labels": {
+        "loading": "Loading map"
+      },
+      "hints": {
+        "search": "Search in the radius of 50km",
+        "dismiss": "Touch the map to dismiss selection"
+      },
+      "btns": {
+        "getLocation": "Tap to get location"
+      }
+    }
+  },
+  "Joined": {
+    "header": {
+      "title": "Joined Events",
+      "currentTab": "Current",
+      "pastTab": "Past"
+    },
+    "labels": {
+      "noEventsFound": "No events found",
+      "loading": "Loading events"
+    }
+  },
+  "Account": {
+    "AccountPage": {
+      "label_MemberSince": "Member since",
+      "navigationLabel_EditProfile": "Edit Profile",
+      "navigationLabel_Settings": "Settings",
+      "placeholder_NameSurname": "Name Surname",
+      "label_Email": "Email",
+      "label_PhoneNumber": "Mobile"
+    },
+    "EditProfile": {
+      "navigationLabel_PhoneNumber": "Mobile",
+      "navigationLabel_EditName": "Name",
+      "navigationLabel_EditDescription": "Profile description",
+      "navigationLabel_EditProfilePicture": "Change profile picture",
+      "pageTitle": "Edit Profile",
+      "placeholder_EmptyDescription": "Empty",
+      "successToast_ProfileUpdated": "Profile updated",
+      "EditMobile": {
+        "pageTitle": "Change phone number",
+        "label_verifyNumberInfo": "You will get an SMS message (carrier charges may apply) to confirm your phone number. Enter your phone number.",
+        "errorToast_Error": "Error, something went wrong",
+        "hintLabel_PhoneNumber": "Phone number",
+        "validationLabel_InvalidNumber": "Invalid phone number",
+        "button_Next": "Next",
+        "ConfirmMobile": {
+          "pageTitle": "Confirm your phone number",
+          "toasts": {
+            "wrongCode5Times": "Wrong code entered 5 times",
+            "failedToUpdateNumber": "Failed to update phone number",
+            "invalidPhone": "The provided phone number is not valid",
+            "serviceUnavaialble": "This service is currently unavailable, please try again tomorrow.",
+            "invalidOtp": "The provided OTP is not valid",
+            "expiredOtp": "The provided code has expired"
+          },
+          "labels": {
+            "confirmNumberInfo": "Please enter the 6-digit code that was sent to you",
+            "confirmThisNumber": "Confirm",
+            "resendOTP": "Resend OTP"
+          },
+          "buttons": {
+            "confirmPhone": "Confirm"
+          },
+          "validation": {
+            "inputValidOtp": "Please input a valid OTP"
+          }
+        },
+        "label_sendingOtpDialog": "Seding code"
+      },
+      "EditName": {
+        "pageTitle": "Edit name",
+        "labels": {
+          "nameLabel": "Name",
+          "lastName": "Last name",
+          "updatingDialog": "Updating"
+        },
+        "validation": {
+          "inputValidName": "Please provide a valid name."
+        },
+        "toasts": {
+          "error": "Something went wrong"
+        }
+      },
+      "EditDescription": {
+        "pageTitle": "Edit profile description",
+        "labels": {
+          "updatingDialog": "Updating",
+          "descriptionLabel": "Profile description"
+        },
+        "validation": {
+          "descriptionTooLong": "Profile description too long"
+        },
+        "toasts": {
+          "error": "Something went wrong"
+        }
+      },
+      "EditProfilePicture": {
+        "pageTitle": "Change profile picture",
+        "navigationLabels": {
+          "changePicture": "Change picture",
+          "deletePicture": "Delete picture"
+        },
+        "labels": {
+          "camera": "Camera",
+          "gallery": "Gallery",
+          "uploadPicture": "Upload picture"
+        },
+        "toasts": {
+          "profilePicUpdated": "Profile picture updated",
+          "error": "Something went wrong"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "setPicture": "Set as profile picture"
+        }
+      }
+    },
+    "Settings": {
+      "DeleteAccount": {
+        "dialogTitle": "Delete account",
+        "labels": {
+          "deleteInfo1": "Once you confirm, all of your account data will be deleted.",
+          "deleteInfo2": "Account deletion is ",
+          "deleteInfo3": "final",
+          "deleteInfo4": ". There will be no way to restore your account.",
+          "deleteInfo5": "Please enter your email address to confirm:"
+        },
+        "hints": {
+          "enterEmail": "Enter your email",
+          "email": "Email"
+        },
+        "validation": {
+          "inputValidEmail": "Please input a valid email"
+        },
+        "buttons": {
+          "delete": "Delete",
+          "cancel": "Cancel"
+        }
+      },
+      "ReportBug": {
+        "pageTitle": "Report an issue",
+        "labels": {
+          "somethingIsntWorking": "Something isn\\'t working as expected?",
+          "uploadScreenshots": "Upload screenshots"
+        },
+        "hints": {
+          "issueReportHint": "Please explain briefly what happened and how can we reproduce the issue?"
+        },
+        "validation": {
+          "invalidIssueDescription": "Description is not valid"
+        },
+        "dialogs": {
+          "thankYouDialog": {
+            "headerLabel": "Thank you!",
+            "messageLabel": "Your input will significantly help our team improve the services we provide you.",
+            "buttonLabel": "Back to settings"
+          },
+          "uploadingDialog": {
+            "uploadingReport": "Sending report"
+          }
+        },
+        "toasts": {
+          "error": "Something went wrong"
+        }
+      },
+      "ChangePassword": {
+        "pageTitle": "Change password",
+        "labels": {
+          "forgotPasswordInstructions": "If you have forgotten your password, you can log out and request a password reset",
+          "updatingDialog": "Updating"
+        },
+        "toasts": {
+          "wrongPassword": "Old password is incorrect",
+          "passwordUpdated": "Password updated"
+        },
+        "hints": {
+          "enterOldPassword": "Enter your old password",
+          "enterNewPassword": "Enter your new password"
+        },
+        "validation": {
+          "inputOldPassword": "Please input your old password",
+          "inputNewPassword": "Password must be at least 8 characters length, must contain upper, lower case letters and digits"
+        },
+        "buttons": {
+          "changePassword": "Change password"
+        }
+      },
+      "pageTitle": "Settings",
+      "subHeader": {
+        "notifications": "Notifications",
+        "account": "Account",
+        "info": "Info",
+        "feedback": "Feedback"
+      },
+      "navigationLabels": {
+        "pushNotifications": "Push notifications",
+        "changePassword": "Change password",
+        "logout": "Logout",
+        "deleteAccount": "Delete account",
+        "termsAndServices": "Terms of services",
+        "privacyPolicy": "Privacy policy",
+        "imprint": "Imprint",
+        "leaveRating": "Leave a rating",
+        "reportBug": "Report a bug"
+      },
+      "labels": {
+        "loggingOutDialog": "Logging out"
+      }
+    }
+  },
+  "Authentication": {
+    "Register": {
+      "pageTitle": "Register",
+      "labels": {
+        "info": "Create new account",
+        "signInInfo": "By signing up",
+        "youAgree": "you agree to our"
+      },
+      "hints": {
+        "confirmPasswordHint": "Confirm password",
+        "passwordFieldHint": "Enter a password"
+      },
+      "validation": {
+        "passwordField": "Password must be at least 8 characters length, must contain upper, lower case letters and digits",
+        "confirmPassword": "Passwords don't match"
+      },
+      "navigationLabels": {
+        "privacyPolicy": " Privacy Policy",
+        "and": " and ",
+        "tos": "Terms & Conditions"
+      },
+      "toasts": {
+        "couldnNotConnect": "Couldn't connect to",
+        "internalError": "Internal Error"
+      },
+      "buttons": {
+        "register": "Sign Up"
+      },
+      "successDialog": {
+        "header": "Success!",
+        "message": "Please check your email. You will get soon an email confirmation link.",
+        "button": "Back to login"
+      }
+    },
+    "Login": {
+      "pageTitle": "Welcome!",
+      "labels": {
+        "info": "Login to continue",
+        "dividerText": " Or continue with "
+      },
+      "hints": {
+        "enterPass": "Enter your password"
+      },
+      "validation": {
+        "inputPass": "Please input your password"
+      },
+      "buttons": {
+        "login": "Login"
+      },
+      "toasts": {
+        "internalError": "Internal Error",
+        "wentWrong": "Something went wrong"
+      }
+    },
+    "ForgotPassword": {
+      "pageTItle": "Forgot Password?",
+      "labels": {
+        "instructionsLabel": "Enter the email associated with your account and we'll send an email with instructions to reset your password."
+      },
+      "buttons": {
+        "requestButton": "Send request"
+      },
+      "successDialog": {
+        "header": "Check your inbox",
+        "message": "We have sent a password recover instructions to your email.",
+        "buttonText": "Back to login"
+      },
+      "toasts": {
+        "internalError": "Internal Error"
+      }
+    }
+  },
+  "Navigation": {
+    "map": "Map",
+    "hosted": "Hosted",
+    "joined": "Joined",
+    "account": "Account",
+    "noFullNameDialog": {
+      "header": "Hey there!",
+      "message": "Complete the registration by entering your name.",
+      "button": "Settings"
+    }
+  },
+  "Error": {
+    "Event": {
+      "noConnection": "A connection to the server couldn't be established.",
+      "create": {
+        "400": "Invalid input.",
+        "403": "Event could not be created"
+      },
+      "delete": {
+        "400": "Bad request.",
+        "403": "You need to be the host in order to delete this event.",
+        "404": "The event you are trying to delete wasn't found."
+      },
+      "update": {
+        "403": "You are not authorized for this action."
+      }
+    }
+  },
+  "Widgets": {
+    "TextInput": {
+      "EmailInput": {
+        "hint": "Enter your email",
+        "label": "Email",
+        "validation": "Please input a valid email"
+      },
+      "PasswordInput": {
+        "label": "Password"
+      }
+    },
+    "NoAccountYet": {
+      "buttons": {
+        "noAccountYet1": "Don't have an account yet? ",
+        "signUp": " Sign up"
+      }
+    },
+    "HaveAnAccount": {
+      "haveAnAccount": "Already have an account? ",
+      "login": "Login"
+    },
+    "MiniPost": {
+      "unknownAddress": "Unknown address"
+    }
+  },
+  "Others": {
+    "Repositories": {
+      "Authentication": {
+        "confirmEmail": "Please confirm your email",
+        "tooManyAttempts": "Too many invalid login attempts, try again later",
+        "invalidCredentials": "Invalid username or password",
+        "accountExists": "An account with this email already exists"
+      },
+      "Report": {
+        "reportedAlready": "You've reported this event already",
+        "cantSendReport": "Report could not be sent"
+      },
+      "Rating": {
+        "ratedAlready": "You've rated this event already",
+        "cantRate": "Rating could not be submitted"
+      },
+      "User": {
+        "cantSaveImage": "Image could not be saved",
+        "error": "Internal error"
+      }
+    },
+    "Services": {
+      "DioService": {
+        "requestQuotaExceed": "Exceeded requests quota"
+      },
+      "Location": {
+        "serviceDisabled": "Location service is disabled",
+        "locationPermissionDenied": "Location permission denied"
+      }
+    },
+    "Providers": {
+      "SearchPage": {
+        "noEventsFound": "No events found in this area"
+      },
+      "Settings": {
+        "inputurEmail": "Input your account email",
+        "accountDeleted": "Account deleted",
+        "failedAccountDelete": "Unable to delete account"
+      }
+    }
+  },
+  "Event": {
+    "dialogs": {
+      "loadingEvent": "Loading",
+      "NoNameJoinEventDialog": {
+        "header": "Hey!",
+        "message": "You have to enter your name before attending or creating events",
+        "button": "Settings"
+      }
+    },
+    "labels": {
+      "unknownAdress": "Unknown address",
+      "tags": "Tags",
+      "eventRated": "Event host rated",
+      "rateEvent": "Rate event",
+      "reportEvent": "Report this event",
+      "editEvent": "Edit this event",
+      "delete": "Delete this event",
+      "description": "Description",
+      "requirements": "Requirements"
+    },
+    "buttons": {
+      "attend": "Attend",
+      "notInterested": "Not Interested?"
+    },
+    "detailsLabels": {
+      "date": "Date",
+      "tim": "Time",
+      "price": "Entrance Price",
+      "availablePlaces": "Available Places"
+    },
+    "participators": {
+      "pageTitle": "Guests List",
+      "noMembersYet": "No guests yet"
+    },
+    "requestList": {
+      "requests": "Requests",
+      "noReqsYet": "No requests yet"
+    },
+    "Rating": {
+      "pageTitle": "Rate Event",
+      "validation": "Provide a brief feedback",
+      "button": "Submit Rating",
+      "dialog": "Uploading",
+      "outOf": " of 5"
+    },
+    "Report": {
+      "reportEvent": "Report Event",
+      "doesntExist": "Event does not exist",
+      "inappropriateContet": "Inappropriate Content",
+      "spam": "Spam"
+    },
+    "Delete": {
+      "title": "Delete Event",
+      "confirmDelete": "Once you confirm, this event will be deleted",
+      "confirm": "Delete",
+      "deleteSuccess": "Event was successfully deleted.",
+      "cancel": "Cancel"
+    }
+  },
+  "Home": {
+    "FullScreenDialog": {
+      "header": "Hey there!",
+      "messege": "Complete the registration by entering your name to create or join events.",
+      "btnText": "Settings"
+    }
+  }
+}

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get_it/get_it.dart';
-import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/presentation/forms/blocs/delete_account.dart';
-import 'package:hopaut/services/services.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
+import 'package:hopaut/controllers/providers/settings_provider.dart';
+import 'package:hopaut/presentation/widgets/inputs/email_input.dart';
+import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:hopaut/generated/locale_keys.g.dart';
 
 class DeleteAccountPopup extends StatefulWidget {
   @override
@@ -11,139 +13,118 @@ class DeleteAccountPopup extends StatefulWidget {
 }
 
 class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
-  bool _loading = false;
-  DeleteAccountBloc _deleteAccountBloc = DeleteAccountBloc(GetIt.I.get<AuthService>().user.email);
+  SettingsProvider _settingsProvider;
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
+    _settingsProvider = Provider.of<SettingsProvider>(context, listen: true);
+
     return SingleChildScrollView(
       physics: NeverScrollableScrollPhysics(),
       child: ListView(
-        shrinkWrap: true,
-          children: !_loading
-              ? <Widget>[
-            Text(
-              'Delete Account',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            RichText(
-              text: TextSpan(
-                style: TextStyle(fontSize: 15, color: Colors.black),
-                text:
-                'Once you confirm, all of your account data will be deleted.',
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            RichText(
-              text: TextSpan(
-                  text: 'Account deletion is ',
-                  style: TextStyle(fontSize: 15, color: Colors.black),
-                  children: [
-                    TextSpan(
-                        text: 'final',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(
-                        text:
-                        '. There will be no way to restore your account.'),
-                  ]),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Please enter your email address to confirm:',
-              style: TextStyle(color: Colors.black54),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            StreamBuilder<String>(
-              stream: _deleteAccountBloc.emailValid,
-            builder: (context, snapshot) =>  TextField(
-              onChanged: _deleteAccountBloc.emailChanged,
-              decoration: InputDecoration(
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                  alignLabelWithHint: true,
-                  suffixIcon: Icon(
-                    Icons.mail_outline,
-                    color: Colors.black,
-                  ),
-                  isDense: true,
-                  labelText: 'Email Address',
-                  hintText: 'Type in your email address',
-                  hintStyle: TextStyle(color: Colors.grey[400]),
-                  contentPadding: const EdgeInsets.symmetric(
-                      vertical: 0, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey[400]),
-                  ),
-                  labelStyle: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w500),
-                  border: const OutlineInputBorder()),
-            ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                StreamBuilder<bool>(
-                  stream: _deleteAccountBloc.dataValid,
-                  builder: (context, snapshot) => ButtonTheme(
-                      minWidth: 100,
-                      child: RaisedButton(
-                          color: snapshot.hasData ?  Colors.red : Colors.red[900],
-                          child: Text('Delete',
-                              style: TextStyle(color: Colors.white)),
-                          onPressed: snapshot.hasData ? () async {
-                            bool deleteRes = await await GetIt.I.get<RepoLocator>().users.delete(
-                                GetIt.I.get<AuthService>().currentIdentity.id
-                            );
-                            setState(() => _loading = true);
+          shrinkWrap: true,
+          children: _settingsProvider.deleteFormStatus is Idle
+              ? [deleteView(context)]
+              : [loadingView(context)]),
+    );
+  }
 
+  Widget deleteView(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          LocaleKeys
+              .Account_Settings_DeleteAccount_dialogTitle.tr(),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 20),
+        RichText(
+          text: TextSpan(
+            style: TextStyle(fontSize: 15, color: Colors.black),
+            text: LocaleKeys
+                .Account_Settings_DeleteAccount_labels_deleteInfo1.tr(),
+          ),
+        ),
+        SizedBox(height: 10),
+        RichText(
+          text: TextSpan(
+              text: LocaleKeys
+                  .Account_Settings_DeleteAccount_labels_deleteInfo2.tr(),
+              style: TextStyle(fontSize: 15, color: Colors.black),
+              children: [
+                TextSpan(
+                    text: LocaleKeys
+                        .Account_Settings_DeleteAccount_labels_deleteInfo3.tr(),
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(
+                    text: LocaleKeys
+                        .Account_Settings_DeleteAccount_labels_deleteInfo4.tr()),
+              ]),
+        ),
+        SizedBox(height: 10),
+        Text(
+          LocaleKeys
+              .Account_Settings_DeleteAccount_labels_deleteInfo5.tr(),
+          style: TextStyle(color: Colors.black54),
+        ),
+        SizedBox(height: 20),
+        deleteForm(context)
+      ],
+    );
+  }
 
-                              if(deleteRes) {
-                                Application.router.navigateTo(context, '/login', clearStack: true);
-                                Fluttertoast.showToast(msg: 'Account deletion successful');
-                              } else {
-                                Fluttertoast.showToast(msg: "Unable to delete account");
-                                _loading = false;
-                              }
-                          } : (){}),
-                    ),
-                  ),
-                ButtonTheme(
-                  minWidth: 100,
-                  child: RaisedButton(
-                      child: Text('Cancel',
-                          style: TextStyle(color: Colors.black54)),
-                      color: Colors.grey[350],
-                      onPressed: () => Navigator.of(context).pop()),
-                ),
-              ],
-            )
-          ]
-              : [
-            Text(
-              'Deleting Account',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            Container(
-              height: 250.0,
-              child: Center(
-                child: CircularProgressIndicator(
-                  backgroundColor: Color(0xFFed2f65).withOpacity(0.45),
-                  valueColor:
-                  AlwaysStoppedAnimation<Color>(Color(0xFFed2f65)),
-                ),
+  Widget deleteForm(BuildContext context) {
+    return Form(
+        key: _formKey,
+        child: Column(children: [
+          emailInputField(
+              context: context,
+              isStateValid: _settingsProvider.isDeleteAccountEmailValid,
+              onChange: (v) => _settingsProvider.emailChange(v)),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              ButtonTheme(
+                minWidth: 100,
+                child: RaisedButton(
+                    color: _settingsProvider.isDeleteAccountEmailValid
+                        ? Colors.red
+                        : Colors.red.withOpacity(0.5),
+                    child:
+                        Text(LocaleKeys
+                            .Account_Settings_DeleteAccount_buttons_delete.tr(),
+                            style: TextStyle(color: Colors.white)),
+                    onPressed: () => {
+                          FocusManager.instance.primaryFocus.unfocus(),
+                          if (_formKey.currentState.validate())
+                            {_settingsProvider.deleteAccount(context)}
+                        }),
               ),
-            )
-          ]),
+              ButtonTheme(
+                minWidth: 100,
+                child: RaisedButton(
+                    child:
+                        Text(LocaleKeys
+                            .Account_Settings_DeleteAccount_buttons_cancel.tr(),
+                            style: TextStyle(color: Colors.black54)),
+                    color: Colors.grey[350],
+                    onPressed: () => Navigator.of(context).pop()),
+              ),
+            ],
+          ),
+        ]));
+  }
+
+  Widget loadingView(BuildContext context) {
+    return Container(
+      height: 250.0,
+      child: Center(
+        child: CupertinoActivityIndicator(),
+      ),
     );
   }
 }

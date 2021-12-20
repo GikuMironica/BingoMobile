@@ -1,0 +1,554 @@
+{
+  "Map": {
+    "hints": {
+      "search": "Suche nach Tags"
+    },
+    "labels": {
+      "eventType": "Veranstaltungstyp:",
+      "searchRadius": "Suchradius:",
+      "today": "Heute",
+      "loading": "Veranstaltungen werden geladen"
+    },
+    "btns": {
+      "search": "Suche"
+    }
+  },
+  "Hosted": {
+    "Create": {
+      "header": {
+        "title": "Veranstaltung erstellen"
+      },
+      "labels": {
+        "pictures": "Bilder",
+        "title": "Titel",
+        "type": "Typ",
+        "location": "Standort",
+        "time": "Uhrzeit",
+        "tags": "Tags",
+        "description": "Beschreibung",
+        "requirements": "Anforderungen",
+        "creating": "Veranstaltung erstellen",
+        "guests": "Anzahl der Gäste",
+        "price": "Eintrittspreis"
+      },
+      "hints": {
+        "eventType": "Veranstaltungstyp",
+        "startTime": "Beginn",
+        "endTime": "Ende",
+        "tagsLimit": "Du kannst bis zu 5 Tags hinzufügen.",
+        "addTags": "Tags hinzufügen",
+        "price": "Preis"
+      },
+      "btns": {
+        "create": "Erstellen"
+      },
+      "validation": {
+        "title": "Bitte gib einen gültigen Titel an.",
+        "eventType": "Veranstaltungstyp ist erforderlich.",
+        "location": "Bitte wähle einen Standort.",
+        "time": "Beginn und Endzeit sind erforderlich.",
+        "description": "Bitte eine gültige Beschreibung angeben.",
+        "fillAll": "Bitte fülle alle geforderten Felder aus"
+      },
+      "eventTypes": {
+        "houseParty": "Hausparty",
+        "club": "Club",
+        "bar": "Bar",
+        "bikerMeet": "Bikertreffen",
+        "bicycleMeet": "Fahrradtreffen",
+        "carMeet": "Autotreffen",
+        "streetParty": "Street Party",
+        "sport": "Sport",
+        "others": "Sonstiges"
+      },
+      "dialogs": {
+        "noPhoneDialog": {
+          "header": "Veranstaltung erstellt",
+          "message": "Deine Veranstaltung wurde erfolgreich erstellt. Bitte aktualisiere deine Telefonnummer, damit die Gäste dich erreichen können.",
+          "button": "Einstellungen"
+        }
+      }
+    },
+    "Edit": {
+      "labels": {
+        "updatingEvent": "Aktualisierung der Veranstaltung"
+      },
+      "btns": {
+        "pictures": "Bilder",
+        "title": "Titel",
+        "location": "Standort",
+        "time": "Zeit",
+        "description": "Beschreibung",
+        "requirements": "Anforderungen",
+        "tags": "Tags",
+        "update": "Aktualisieren",
+        "places": "Freie Plätze",
+        "price": "Eintrittspreis"
+      },
+      "header": {
+        "editEvent": "Veranstaltung bearbeiten",
+        "editPictures": "Bilder bearbeiten",
+        "editTitle": "Titel bearbeiten",
+        "editTime": "Zeit bearbeiten",
+        "editDescription": "Beschreibung bearbeiten",
+        "editRequirements": "Anforderungen bearbeiten",
+        "editTags": "Tags bearbeiten",
+        "editPrice": "Preis bearbeiten",
+        "editPlaces": "Anzahl der verfügbaren Plätze bearbeiten"
+      },
+      "toasts": {
+        "eventUpdated": "Veranstaltung aktualisiert."
+      }
+    },
+    "header": {
+      "title": "Gehaltene Veranstaltungen"
+    },
+    "Location": {
+      "header": {
+        "title": "Standort auswählen"
+      },
+      "labels": {
+        "loading": "Karte lädt"
+      },
+      "hints": {
+        "search": "Suche im Umkreis von 50km",
+        "dismiss": "Karte berühren, um die Auswahl aufzuheben."
+      },
+      "btns": {
+        "getLocation": "Tippen, um den Standort abzurufen"
+      }
+    }
+  },
+  "Joined": {
+    "header": {
+      "title": "Teilgenommene Veranstaltungen",
+      "currentTab": "Aktuelle",
+      "pastTab": "Vergangene"
+    },
+    "labels": {
+      "noEventsFound": "Keine Veranstaltungen gefunden",
+      "loading": "Veranstaltungen laden"
+    }
+  },
+  "Account": {
+    "AccountPage": {
+      "label_MemberSince": "Mitglied seit",
+      "navigationLabel_EditProfile": "Profil bearbeiten",
+      "navigationLabel_Settings": "Einstellungen",
+      "placeholder_NameSurname": "Name Nachname",
+      "label_Email": "Email",
+      "label_PhoneNumber": "Mobil"
+    },
+    "EditProfile": {
+      "navigationLabel_PhoneNumber": "Mobil",
+      "navigationLabel_EditName": "Name",
+      "navigationLabel_EditDescription": "Profilbeschreibung",
+      "navigationLabel_EditProfilePicture": "Profilbild ändern",
+      "pageTitle": "Profil bearbeiten",
+      "placeholder_EmptyDescription": "Leer",
+      "successToast_ProfileUpdated": "Profil wurde aktualisiert",
+      "EditMobile": {
+        "pageTitle": "Telefonnummer ändern",
+        "label_verifyNumberInfo": "Du erhältst eine SMS-Nachricht (es können Gebühren anfallen) zur Bestätigung deiner Telefonnummer. Gib deine Telefonnummer ein.",
+        "errorToast_Error": "Fehler, etwas ist schief gelaufen",
+        "hintLabel_PhoneNumber": "Telefonnummer",
+        "validationLabel_InvalidNumber": "Ungültige Telefonnummer",
+        "button_Next": "Weiter",
+        "ConfirmMobile": {
+          "pageTitle": "Rufnummer bestätigen",
+          "toasts": {
+            "wrongCode5Times": "Falscher Code 5 Mal eingegeben",
+            "failedToUpdateNumber": "Aktualisierung der Telefonnummer fehlgeschlagen",
+            "invalidPhone": "Die angegebene Rufnummer ist ungültig",
+            "serviceUnavaialble": "Dieser Dienst ist derzeit nicht verfügbar. Bitte versuch es morgen erneut. ",
+            "invalidOtp": "Das angegebene OTP ist ungültig",
+            "expiredOtp": "Der angegebene Code ist abgelaufen"
+          },
+          "labels": {
+            "confirmNumberInfo": "Bitte den gesendeten 6-stelligen Code eingeben",
+            "confirmThisNumber": "Bestätigen",
+            "resendOTP": "Code erneut senden"
+          },
+          "buttons": {
+            "confirmPhone": "Bestätigen"
+          },
+          "validation": {
+            "inputValidOtp": "Bitte einen gültigen Code eingeben"
+          }
+        },
+        "label_sendingOtpDialog": "Code wird gesendet"
+      },
+      "EditName": {
+        "pageTitle": "Name bearbeiten",
+        "labels": {
+          "nameLabel": "Name",
+          "lastName": "Nachname",
+          "updatingDialog": "Aktualisierung"
+        },
+        "validation": {
+          "inputValidName": "Bitte einen gültigen Namen eingeben"
+        },
+        "toasts": {
+          "error": "Etwas ist schief gelaufen"
+        }
+      },
+      "EditDescription": {
+        "pageTitle": "Profilbeschreibung bearbeiten",
+        "labels": {
+          "updatingDialog": "Aktualisierung",
+          "descriptionLabel": "Profilbeschreibung"
+        },
+        "validation": {
+          "descriptionTooLong": "Profilbeschreibung ist zu lang"
+        },
+        "toasts": {
+          "error": "Etwas ist schief gelaufen"
+        }
+      },
+      "EditProfilePicture": {
+        "pageTitle": "Profilbild ändern",
+        "navigationLabels": {
+          "changePicture": "Bild ändern",
+          "deletePicture": "Bild löschen"
+        },
+        "labels": {
+          "camera": "Kamera",
+          "gallery": "Galerie",
+          "uploadPicture": "Bild hochladen"
+        },
+        "toasts": {
+          "profilePicUpdated": "Profilbild aktualisiert",
+          "error": "Etwas ist schief gelaufen"
+        },
+        "buttons": {
+          "cancel": "Abbrechen",
+          "setPicture": "Als Profilbild festlegen"
+        }
+      }
+    },
+    "Settings": {
+      "DeleteAccount": {
+        "dialogTitle": "Konto löschen",
+        "labels": {
+          "deleteInfo1": "Nach der Bestätigung, werden alle deine Kontodaten gelöscht.",
+          "deleteInfo2": "Die Löschung des Kontos ist ",
+          "deleteInfo3": "endgültig",
+          "deleteInfo4": ". Dein Konto wird unwiderruflich gelöscht.",
+          "deleteInfo5": "Bitte zur Bestätigung deine E-Mail-Adresse eingeben:"
+        },
+        "hints": {
+          "enterEmail": "E-Mail eingeben",
+          "email": "E-Mail"
+        },
+        "validation": {
+          "inputValidEmail": "Bitte eine gültige E-Mail-Adresse eingeben"
+        },
+        "buttons": {
+          "delete": "Löschen",
+          "cancel": "Abbrechen"
+        }
+      },
+      "ReportBug": {
+        "pageTitle": "Einen Fehler melden",
+        "labels": {
+          "somethingIsntWorking": "Funktioniert etwas nicht wie erwartet?",
+          "uploadScreenshots": "Screenshots hochladen"
+        },
+        "hints": {
+          "issueReportHint": "Bitte kurz erklären, was passiert ist und wie wir das Problem reproduzieren können."
+        },
+        "validation": {
+          "invalidIssueDescription": "Beschreibung ist nicht gültig"
+        },
+        "dialogs": {
+          "thankYouDialog": {
+            "headerLabel": "Vielen Dank!",
+            "messageLabel": "Dein Beitrag wird unserem Team helfen, die Dienstleistungen für Dich zu verbessern.",
+            "buttonLabel": "Zurück zu den Einstellungen"
+          },
+          "uploadingDialog": {
+            "uploadingReport": "Bericht wird versendet"
+          }
+        },
+        "toasts": {
+          "error": "Etwas ist schief gelaufen"
+        }
+      },
+      "ChangePassword": {
+        "pageTitle": "Passwort ändern",
+        "labels": {
+          "forgotPasswordInstructions": "Wenn du dein Passwort vergessen hast, bitte melde dich ab und fordere ein neues Passwort an.",
+          "updatingDialog": "Aktualisierung läuft"
+        },
+        "toasts": {
+          "wrongPassword": "Altes Passwort ist falsch",
+          "passwordUpdated": "Passwort aktualisiert"
+        },
+        "hints": {
+          "enterOldPassword": "Altes Passwort eingeben",
+          "enterNewPassword": "Neues Passwort eingeben"
+        },
+        "validation": {
+          "inputOldPassword": "Altes Passwort eingebe",
+          "inputNewPassword": "Passwort muss mindestens 8 Zeichen lang sein und Groß- und Kleinbuchstaben sowie Ziffern enthalten"
+        },
+        "buttons": {
+          "changePassword": "Passwort ändern"
+        }
+      },
+      "pageTitle": "Einstellungen",
+      "subHeader": {
+        "notifications": "Benachrichtigungen",
+        "account": "Konto",
+        "info": "Infos",
+        "feedback": "Rückmeldung"
+      },
+      "navigationLabels": {
+        "pushNotifications": "Push-Benachrichtigungen",
+        "changePassword": "Passwort ändern",
+        "logout": "Abmelden",
+        "deleteAccount": "Konto löschen",
+        "termsAndServices": "Nutzungsbedingungen",
+        "privacyPolicy": "Datenschutzerklärung",
+        "imprint": "Impressum",
+        "leaveRating": "Bewertung abgeben",
+        "reportBug": "Fehler melden"
+      },
+      "labels": {
+        "loggingOutDialog": "Abmeldung läuft"
+      }
+    }
+  },
+  "Authentication": {
+    "Register": {
+      "pageTitle": "Registrieren",
+      "labels": {
+        "info": "Neues Konto erstellen",
+        "signInInfo": "Mit der Anmeldung",
+        "youAgree": "erklären Sie sich mit unserem"
+      },
+      "hints": {
+        "confirmPasswordHint": "Passwort bestätigen",
+        "passwordFieldHint": "Passwort eingeben"
+      },
+      "validation": {
+        "passwordField": "Das Passwort muss mindestens 8 Zeichen lang sein und Groß- und Kleinbuchstaben sowie Ziffern enthalten",
+        "confirmPassword": "Passwörter stimmen nicht überein"
+      },
+      "navigationLabels": {
+        "privacyPolicy": " Datenschutzerklärung ",
+        "and": " und ",
+        "tos": "AGB"
+      },
+      "toasts": {
+        "couldnNotConnect": "Konnte keine Verbindung zu dieser Website herstellen",
+        "internalError": "Interner Fehler"
+      },
+      "buttons": {
+        "register": "Registrieren"
+      },
+      "successDialog": {
+        "header": "Erfolgreich!",
+        "message": "Bitte schau in deinem Posteingang nach. Du erhälst in Kürze einen Bestätigungslink per E-Mail.",
+        "button": "Zurück zur Anmeldung"
+      }
+    },
+    "Login": {
+      "pageTitle": "Willkommen!",
+      "labels": {
+        "info": "Einloggen um fortzufahren",
+        "dividerText": " Oder weiter mit  "
+      },
+      "hints": {
+        "enterPass": "Bitte Passwort eingeben"
+      },
+      "validation": {
+        "inputPass": "Bitte Passwort eingeben"
+      },
+      "buttons": {
+        "login": "Einloggen"
+      },
+      "toasts": {
+        "internalError": "Interner Fehler",
+        "wentWrong": "Etwas ist schief gelaufen"
+      }
+    },
+    "ForgotPassword": {
+      "pageTItle": "Passwort vergessen?",
+      "labels": {
+        "instructionsLabel": "Bitte die mit deinem Konto verknüpfte E-Mail-Adresse eingeben. In Kürze erhältst du eine E-Mail mit Anweisungen für die Wiederherstellung des Passworts."
+      },
+      "buttons": {
+        "requestButton": "Anfrage senden"
+      },
+      "successDialog": {
+        "header": "Bitte schaue in deinem E-Mail-Posteingang",
+        "message": "Wir haben eine Anleitung zur Wiederherstellung des Passworts an Deine E-Mail geschickt.",
+        "buttonText": "Zurück zur Anmeldung"
+      },
+      "toasts": {
+        "internalError": "Interner Fehler"
+      }
+    }
+  },
+  "Navigation": {
+    "map": "Karte",
+    "hosted": "Gehaltene",
+    "joined": "Teilgenommen",
+    "account": "Konto",
+    "noFullNameDialog": {
+      "header": "Hallo!",
+      "message": "Bitte vervollständige die Registrierung durch Eingabe deines Namens.",
+      "button": "Einstellungen"
+    }
+  },
+  "Error": {
+    "Event": {
+      "noConnection": "Eine Verbindung zum Server konnte nicht hergestellt werden.",
+      "create": {
+        "400": "Ungültige Eingabe.",
+        "403": "Veranstaltung konnte nicht erstellt werden"
+      },
+      "delete": {
+        "400": "Schlechte Anfrage.",
+        "403": "Du muss der Gastgeber sein, um diese Veranstaltung löschen zu können.",
+        "404": "Die Veranstaltung, die Du zu löschen versuchst, wurde nicht gefunden."
+      },
+      "update": {
+        "403": "Du bist zu dieser Aktion nicht berechtigt."
+      }
+    }
+  },
+  "Widgets": {
+    "TextInput": {
+      "EmailInput": {
+        "hint": "E-Mail eingeben",
+        "label": "E-mail",
+        "validation": "Bitte eine gültige E-Mail eingeben"
+      },
+      "PasswordInput": {
+        "label": "Passwort"
+      }
+    },
+    "NoAccountYet": {
+      "buttons": {
+        "noAccountYet1": "Hast Du noch kein Konto?",
+        "signUp": " Registrieren"
+      }
+    },
+    "HaveAnAccount": {
+      "haveAnAccount": "Hast Du schon ein Konto?",
+      "login": "Anmelden"
+    },
+    "MiniPost": {
+      "unknownAddress": "Unbekannte Adresse"
+    }
+  },
+  "Others": {
+    "Repositories": {
+      "Authentication": {
+        "confirmEmail": "Bitte bestätige deine E-Mail",
+        "tooManyAttempts": "Zu viele ungültige Anmeldeversuche, versuche es später noch einmal",
+        "invalidCredentials": "Ungültiger Benutzername oder Passwort",
+        "accountExists": "Ein Konto mit dieser E-Mail existiert bereits"
+      },
+      "Report": {
+        "reportedAlready": "Du hast diese Veranstaltung bereits gemeldet",
+        "cantSendReport": "Bericht konnte nicht gesendet werden"
+      },
+      "Rating": {
+        "ratedAlready": "Du hast dieses Ereignis bereits bewertet",
+        "cantRate": "Bewertung konnte nicht abgegeben werden"
+      },
+      "User": {
+        "cantSaveImage": "Bild konnte nicht gespeichert werden",
+        "error": "Interner Fehler"
+      }
+    },
+    "Services": {
+      "DioService": {
+        "requestQuotaExceed": "Überschrittene Anfragenquote"
+      },
+      "Location": {
+        "serviceDisabled": "Standortdienst ist deaktiviert",
+        "locationPermissionDenied": "Standortgenehmigung abgelehnt"
+      }
+    },
+    "Providers": {
+      "SearchPage": {
+        "noEventsFound": "Keine Veranstaltungen in diesem Bereich gefunden"
+      },
+      "Settings": {
+        "inputurEmail": "Konto E-Mail eingeben",
+        "accountDeleted": "Konto gelöscht",
+        "failedAccountDelete": "Konto konnte nicht gelöscht werden"
+      }
+    }
+  },
+  "Event": {
+    "dialogs": {
+      "loadingEvent": "Wird geladen",
+      "NoNameJoinEventDialog": {
+        "header": "Hey!",
+        "message": "Du muss dein Namen eingeben, bevor du an Veranstaltungen teilnehmen oder solche erstellen kannst.",
+        "button": "Einstellungen"
+      }
+    },
+    "labels": {
+      "unknownAdress": "Unbekannte Adresse",
+      "tags": "Tags",
+      "eventRated": "Gastgeber bewertet",
+      "rateEvent": "Veranstaltung bewerten",
+      "reportEvent": "Diese Veranstaltung melden",
+      "editEvent": "Diese Veranstaltung bearbeiten",
+      "delete": "Diese Veranstaltung löschen",
+      "description": "Beschreibung",
+      "requirements": "Anforderungen"
+    },
+    "buttons": {
+      "attend": "Teilnahme an",
+      "notInterested": "Nicht interessiert?"
+    },
+    "detailsLabels": {
+      "date": "Datum",
+      "tim": "Uhrzeit",
+      "price": "Eintrittspreis",
+      "availablePlaces": "Verfügbare Plätze"
+    },
+    "participators": {
+      "pageTitle": "Liste der Gäste",
+      "noMembersYet": "Noch keine Gäste"
+    },
+    "requestList": {
+      "requests": "Anfragen",
+      "noReqsYet": "Noch keine Anfragen"
+    },
+    "Rating": {
+      "pageTitle": "Veranstaltung bewerten",
+      "validation": "Bitte gib uns ein kurzes Feedback",
+      "button": "Bewertung abgeben",
+      "dialog": "Hochladen",
+      "outOf": " von 5"
+    },
+    "Report": {
+      "reportEvent": "Veranstaltung melden",
+      "doesntExist": "Diese Veranstaltung existiert nicht",
+      "inappropriateContet": "Unangemessener Inhalt",
+      "spam": "Spam"
+    },
+    "Delete": {
+      "title": "Veranstaltung löschen",
+      "confirmDelete": "Sobald Du bestätigst, wird diese Veranstaltung gelöscht",
+      "confirm": "Löschen",
+      "deleteSuccess": "Veranstaltung wurde erfolgreich gelöscht.",
+      "cancel": "Abbrechen"
+    }
+  },
+  "Home": {
+    "FullScreenDialog": {
+      "header": "Hallo!",
+      "messege": "Vervollständige die Registrierung durch Eingabe Deines Namens, um Veranstaltungen zu erstellen oder ihnen beizutreten.",
+      "btnText": "Einstellungen"
+    }
+  }
+}

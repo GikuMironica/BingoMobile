@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 BoxDecoration gradientBoxDecoration() {
   return BoxDecoration(
-    borderRadius: BorderRadius.circular(20.0),
+    // borderRadius: BorderRadius.circular(20.0),
+    borderRadius: BorderRadius.circular(4.0),
     gradient: RadialGradient(
       center: const Alignment(-0.6, -4), // near the top right
       radius: 3.5,

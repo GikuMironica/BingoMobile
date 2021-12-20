@@ -1,5 +1,6 @@
 class API {
-  static const String BASE_URL = 'https://hopout.eu/api/v1';
+  static const String API_ROOT_URL = 'https://hopout.eu/api/v1';
+  //static const String API_ROOT_URL = 'https://hop-out.com/api/v1';
 
   // Identity ------------------------------------------------------------------
   static const String IDENTITY = '/identity';
@@ -13,6 +14,8 @@ class API {
 
   // Users ---------------------------------------------------------------------
   static const String USERS = '/users';
+  static const String DELETE_PROFILE_PIC = USERS + "/profilepic";
+  static const String UPLOAD_PROFILE_PIC = USERS + "/profilepic";
 
   // Posts ---------------------------------------------------------------------
   static const String POSTS = '/posts';
@@ -52,4 +55,7 @@ class API {
   // Report --------------------------------------------------------------------
   static const String REPORT = '/reports';
   static const String USER_REPORT = '/userreports';
+
+  // Bug Report
+  static const String BUG_REPORT = '/bugs';
 }
