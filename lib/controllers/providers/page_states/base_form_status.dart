@@ -8,5 +8,5 @@ class Success extends BaseFormStatus {}
 
 class Failed extends BaseFormStatus {
   String errorMessage;
-  Failed({this.errorMessage});
+  Failed({required this.errorMessage});
 }

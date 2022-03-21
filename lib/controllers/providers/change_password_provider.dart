@@ -72,7 +72,7 @@ class ChangePasswordProvider extends ChangeNotifier {
         newPassword: newPassword);
 
     if (!passChangeRes) {
-      formStatus = Failed();
+      formStatus = Failed(errorMessage: '');
     } else {
       formStatus = Success();
       Future.delayed(Duration(seconds: 4), () async {

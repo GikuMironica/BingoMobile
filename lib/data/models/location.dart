@@ -1,22 +1,22 @@
 class Location {
-  int id;
-  double longitude;
-  double latitude;
-  String entityName;
-  String address;
-  String city;
-  String region;
-  String country;
+  int id = -1;
+  double longitude = 0;
+  double latitude = 0;
+  String entityName = "";
+  String address = "";
+  String city = "";
+  String region = "";
+  String country = "";
 
   Location(
-      {this.id,
-        this.longitude,
-        this.latitude,
-        this.entityName,
-        this.address,
-        this.city,
-        this.region,
-        this.country});
+      {required this.id,
+      required this.longitude,
+      required this.latitude,
+      required this.entityName,
+      required this.address,
+      required this.city,
+      required this.region,
+      required this.country});
 
   Location.fromJson(Map<String, dynamic> json) {
     id = json['Id'];

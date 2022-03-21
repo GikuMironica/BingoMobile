@@ -1,20 +1,20 @@
 class Identity {
-  String sub;
-  String jti;
-  String email;
-  String id;
-  int nbf;
-  int exp;
-  int iat;
+  String sub = "";
+  String jti = "";
+  String email = "";
+  String id = "";
+  int nbf = 0;
+  int exp = 0;
+  int iat = 0;
 
   Identity(
-      {this.sub,
-        this.jti,
-        this.email,
-        this.id,
-        this.nbf,
-        this.exp,
-        this.iat});
+      {required this.sub,
+      required this.jti,
+      required this.email,
+      required this.id,
+      required this.nbf,
+      required this.exp,
+      required this.iat});
 
   int get expiry => exp * 1000;
   String get userId => id;
