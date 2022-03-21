@@ -24,14 +24,9 @@ class HopAut extends StatefulWidget {
 }
 
 class _HopAutState extends State<HopAut> {
-  FluroRouter router;
-  GlobalKey globals;
-
   @override
   void initState() {
-    router = FluroRouter();
-    Routes.configureRoutes(router);
-    Application.router = router;
+    Routes.configureRoutes(Application.router);
     super.initState();
   }
 

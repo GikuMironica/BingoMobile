@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -40,15 +39,15 @@ class HATheme {
   static const BoxDecoration GRADIENT_DECORATION =
       BoxDecoration(gradient: APP_GRADIENT);
 
-  static Color BASIC_INPUT_COLOR = Colors.grey[100];
+  static const Color BASIC_INPUT_COLOR = Color(0xFFF5F5F5);
   static const double WIDGET_ELEVATION = 5;
 
-  static TextStyle FIELD_HINT_STYLE = TextStyle(
-    color: const Color(0xFF818181).withOpacity(0.69),
+  static const TextStyle FIELD_HINT_STYLE = TextStyle(
+    color: const Color(0xFF8181B0),
     fontSize: 14.0,
     fontWeight: FontWeight.w400,
   );
 
-  static TextStyle LABEL_HEADER_STYLE =
+  static const TextStyle LABEL_HEADER_STYLE =
       TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 }

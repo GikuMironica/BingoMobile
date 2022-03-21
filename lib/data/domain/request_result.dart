@@ -3,5 +3,6 @@ class RequestResult {
   bool isSuccessful;
   String errorMessage;
 
-  RequestResult({this.data, this.isSuccessful, this.errorMessage});
+  RequestResult(
+      {this.data, required this.isSuccessful, required this.errorMessage});
 }

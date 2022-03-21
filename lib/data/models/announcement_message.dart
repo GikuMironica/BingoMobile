@@ -1,12 +1,16 @@
 class AnnouncementMessage {
-  int id;
-  int postId;
-  String message;
-  int timestamp;
-  String error;
+  int id = -1;
+  int postId = -1;
+  String message = "";
+  int timestamp = -1;
+  String error = "";
 
-  AnnouncementMessage({this.id, this.postId, this.message, this.timestamp});
-  AnnouncementMessage.error({this.error});
+  AnnouncementMessage(
+      {required this.id,
+      required this.postId,
+      required this.message,
+      required this.timestamp});
+  AnnouncementMessage.error({required this.error});
 
   AnnouncementMessage.fromJson(Map<String, dynamic> json) {
     id = json['Id'];

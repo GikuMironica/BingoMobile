@@ -21,25 +21,25 @@ class MiniPost {
   int endTime;
   double entracePrice;
   int slots;
-  String errorMessage;
+  String errorMessage = "";
 
   MiniPost(
-      {this.postId,
-      this.postType,
-      this.thumbnail,
-      this.address,
-      this.title,
-      this.hostRating,
-      this.latitude,
-      this.longitude,
-      this.repteatableEnabled,
-      this.frequency,
-      this.vouchersEnabled,
-      this.postTime,
-      this.startTime,
-      this.endTime,
-      this.entracePrice,
-      this.slots,
+      {required this.postId,
+      required this.postType,
+      required this.thumbnail,
+      required this.address,
+      required this.title,
+      required this.hostRating,
+      required this.latitude,
+      required this.longitude,
+      required this.repteatableEnabled,
+      required this.frequency,
+      required this.vouchersEnabled,
+      required this.postTime,
+      required this.startTime,
+      required this.endTime,
+      required this.entracePrice,
+      required this.slots,
       this.errorMessage});
 
   MiniPost.fromJson(Map<String, dynamic> json) {

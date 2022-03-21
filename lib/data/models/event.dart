@@ -2,24 +2,24 @@ import 'package:hopaut/config/currencies.dart';
 import 'package:hopaut/config/event_types.dart';
 
 class Event {
-  int id;
-  String description;
-  int slots;
-  String title;
-  double entrancePrice;
-  String requirements;
-  EventType eventType;
-  Currency currency;
+  int id = -1;
+  String description = "";
+  int slots = -1;
+  String title = "";
+  double entrancePrice = -1;
+  String requirements = "";
+  EventType eventType = EventType.other;
+  Currency currency = Currency.eur;
 
   Event(
-      {this.id,
-      this.description,
-      this.slots,
-      this.title,
-      this.entrancePrice,
-      this.requirements,
-      this.eventType,
-      this.currency});
+      {required this.id,
+      required this.description,
+      required this.slots,
+      required this.title,
+      required this.entrancePrice,
+      required this.requirements,
+      required this.eventType,
+      required this.currency});
 
   Event.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
@@ -30,7 +30,7 @@ class Event {
     requirements = json['Requirements'];
     eventType = EventType.values[(json['EventType'])];
     currency =
-        json['Currency'] != null ? Currency.values[json['Currency']] : null;
+        (json['Currency'] != null ? Currency.values[json['Currency']] : null)!;
   }
 
   Map<String, dynamic> toJson() {

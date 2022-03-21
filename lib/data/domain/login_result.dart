@@ -1,6 +1,6 @@
-class AuthResult{
+class AuthResult {
   bool isSuccessful;
   dynamic data;
 
-  AuthResult({this.isSuccessful, this.data});
+  AuthResult({required this.isSuccessful, this.data});
 }
