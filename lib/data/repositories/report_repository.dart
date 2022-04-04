@@ -51,15 +51,15 @@ class ReportRepository extends Repository {
       FormData _data = FormData.fromMap(multipart);
 
       if (bug.pictures != null && bug.pictures.isNotEmpty) {
-        String mimeType = mimeFromExtension('webp');
-        String mimee = mimeType.split('/')[0];
-        String type = mimeType.split('/')[1];
+        String? mimeType = mimeFromExtension('webp');
+        String? mimee = mimeType?.split('/')[0];
+        String? type = mimeType?.split('/')[1];
         bug.pictures?.forEach((pic) {
           _data.files.add(MapEntry(
               "Screenshots",
               MultipartFile.fromFileSync(File(pic.path).absolute.path,
                   filename: '${pic.url}.webp',
-                  contentType: MediaType(mimee, type))));
+                  contentType: MediaType(mimee!, type!))));
         });
       }
 
@@ -73,11 +73,12 @@ class ReportRepository extends Repository {
         return true;
       }
     } on DioError catch (e) {
-      logger.e(e.response.statusMessage);
+      logger.e(e.response?.statusMessage);
       return false;
     } finally {
       dio.options.headers
           .addAll({Headers.contentTypeHeader: 'application/json'});
     }
+    return true;
   }
 }

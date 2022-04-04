@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/data/domain/login_result.dart';
 import 'package:hopaut/data/repositories/repository.dart';
@@ -16,31 +17,34 @@ class AuthenticationRepository extends Repository {
 
   /// Login: Authenticates a user with the system.
   Future<Map<String, dynamic>> login(
-      {@required String email, @required String password}) async {
+      {required String email, required String password}) async {
     final Map<String, dynamic> payload = {'email': email, 'password': password};
-    Response response;
 
     try {
-      response = await dio.post(
+      Response response = await dio.post(
         API.LOGIN,
         data: payload,
       );
+      return response.data;
     } on DioError catch (e) {
-      if (e.response?.statusCode == 400 && e.response.data["FailReason"] == 2) {
+      if (e.response?.statusCode == 400 &&
+          e.response?.data["FailReason"] == 2) {
         Map<String, String> result = {
           "Error": LocaleKeys
               .Others_Repositories_Authentication_invalidCredentials.tr()
         };
         return result;
       }
-      if (e.response?.statusCode == 403 && e.response.data["FailReason"] == 0) {
+      if (e.response?.statusCode == 403 &&
+          e.response?.data["FailReason"] == 0) {
         Map<String, String> result = {
           "Error":
               LocaleKeys.Others_Repositories_Authentication_confirmEmail.tr()
         };
         return result;
       }
-      if (e.response?.statusCode == 403 && e.response.data["FailReason"] == 1) {
+      if (e.response?.statusCode == 403 &&
+          e.response?.data["FailReason"] == 1) {
         Map<String, String> result = {
           "Error":
               LocaleKeys.Others_Repositories_Authentication_tooManyAttempts.tr()
@@ -48,24 +52,24 @@ class AuthenticationRepository extends Repository {
         return result;
       }
     }
-    return response.data;
+    return payload;
   }
 
   /// Registers a user with the system.
   Future<AuthResult> register(
-      {@required String email, @required String password}) async {
+      {required String email, required String password}) async {
     String lang = Platform.localeName.substring(0, 2);
     final Map<String, dynamic> payload = {
       'email': email,
       'password': password,
       'language': lang
     };
-    Response response;
     try {
-      response = await dio.post(
+      Response response = await dio.post(
         API.REGISTER,
         data: payload,
       );
+      return AuthResult(isSuccessful: true, data: response.data["data"]);
     } on DioError catch (e) {
       if (e.response?.statusCode == 400) {
         return AuthResult(isSuccessful: false, data: {
@@ -74,9 +78,10 @@ class AuthenticationRepository extends Repository {
         });
       }
     }
-    return AuthResult(isSuccessful: true, data: response.data["data"]);
+    return new AuthResult(isSuccessful: false, data: 0);
   }
 
+  // TODO - use https://facebook.meedu.app/docs/4.x.x/login this libarry
   Future<Map<String, dynamic>> loginWithFacebook() async {
     String lang = Platform.localeName.substring(0, 2);
     FacebookLogin facebookLogin = FacebookLogin();
@@ -132,9 +137,9 @@ class AuthenticationRepository extends Repository {
   }
 
   Future<bool> changePassword(
-      {@required String email,
-      @required String oldPassword,
-      @required String newPassword}) async {
+      {required String email,
+      required String oldPassword,
+      required String newPassword}) async {
     final Map<String, dynamic> payload = {
       'email': email,
       'oldPass': oldPassword,

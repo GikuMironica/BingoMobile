@@ -10,7 +10,7 @@ class ProfileRepository extends Repository {
 
   ProfileRepository() : super();
 
-  Future<Profile> get(String userId) async {
+  Future<Profile?> get(String userId) async {
     try {
       Response response = await dio.get('$_endpoint/$userId');
       return response.statusCode == 200

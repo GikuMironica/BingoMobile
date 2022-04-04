@@ -61,7 +61,7 @@ class AnnouncementRepository extends Repository {
       logger.e(e.message);
       return AnnouncementMessage.error(error: e.message);
     }
-    return null;
+    return new AnnouncementMessage(id: 0, postId: 0, message: "", timestamp: 0);
   }
 
   /// DELETE: This endpoint is used to delete an announcement.

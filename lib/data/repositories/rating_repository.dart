@@ -11,7 +11,7 @@ import 'package:hopaut/generated/locale_keys.g.dart';
 class RatingRepository extends Repository {
   RatingRepository() : super();
 
-  Future<Rating> get(int ratingId) async {
+  Future<Rating?> get(int ratingId) async {
     try {
       var response = await dio.post('${API.RATINGS}/$ratingId');
       return response.statusCode == 200

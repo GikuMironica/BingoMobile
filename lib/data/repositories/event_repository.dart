@@ -16,7 +16,7 @@ class EventRepository extends Repository {
   EventRepository() : super();
 
   /// Get Post by Id
-  Future<Post> get(int postId) async {
+  Future<Post?> get(int postId) async {
     try {
       Response response = await dio.get('${API.POSTS}/$postId');
 
@@ -29,7 +29,7 @@ class EventRepository extends Repository {
     return null;
   }
 
-  Future<RequestResult> create(Post post) async {
+  Future<RequestResult?> create(Post post) async {
     try {
       FormData _data = FormData.fromMap(await post.toMultipartJson(false));
       Response response = await dio.post(API.POSTS,
@@ -60,7 +60,7 @@ class EventRepository extends Repository {
   }
 
   /// Update Post
-  Future<RequestResult> update(Post post) async {
+  Future<RequestResult?> update(Post post) async {
     try {
       FormData data = FormData.fromMap(await post.toMultipartJson(true));
       dio.options.headers.addAll({
@@ -92,7 +92,7 @@ class EventRepository extends Repository {
   }
 
   /// Delete Post
-  Future<RequestResult> delete(int postId) async {
+  Future<RequestResult?> delete(int postId) async {
     try {
       Response response = await dio.delete('${API.POSTS}/$postId');
       if (response.statusCode == 204) {
@@ -117,7 +117,7 @@ class EventRepository extends Repository {
   }
 
   /// Search for posts.
-  Future<List<MiniPost>> search(SearchQuery searchQuery) async {
+  Future<List<MiniPost>?> search(SearchQuery searchQuery) async {
     try {
       Response response =
           await dio.get('${API.POSTS}?${searchQuery.toString()}');
@@ -137,7 +137,7 @@ class EventRepository extends Repository {
       Response response = await dio.post('$endpoint/$postId');
       return response.statusCode == 200;
     } on DioError catch (e) {
-      logger.e(e.response.data);
+      logger.e(e.response?.data);
       return false;
     }
   }
@@ -149,12 +149,12 @@ class EventRepository extends Repository {
         return response.data['Data'];
       }
     } on DioError catch (e) {
-      logger.e(e.response.statusMessage);
+      logger.e(e.response?.statusMessage);
     }
     return {};
   }
 
-  Future<List<MiniPost>> getEventMiniPosts(String endpoint) async {
+  Future<List<MiniPost>?> getEventMiniPosts(String endpoint) async {
     try {
       Response response = await dio.get(endpoint);
       if (response.statusCode == 200) {

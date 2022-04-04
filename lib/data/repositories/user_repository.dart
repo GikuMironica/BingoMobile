@@ -19,7 +19,7 @@ class UserRepository extends Repository {
   UserRepository() : super();
 
   /// Returns the user data.
-  Future<User> get(String userId) async {
+  Future<User?> get(String userId) async {
     try {
       var response = await dio.get("$_endpoint/$userId");
       return User.fromJson(response.data['Data']);
@@ -30,7 +30,7 @@ class UserRepository extends Repository {
   }
 
   /// Updates the user data.
-  Future<User> update(String userId, User user) async {
+  Future<User?> update(String userId, User user) async {
     try {
       var response = await dio.put("$_endpoint/$userId", data: user.toJson());
       return User.fromJson(response.data['Data']);
@@ -65,7 +65,8 @@ class UserRepository extends Repository {
   }
 
   /// Uploads the user's profile picture
-  Future<RequestResult> uploadPicture(String userId, {String imagePath}) async {
+  Future<RequestResult?> uploadPicture(String userId,
+      {required String imagePath}) async {
     var map = {
       "UpdatedPicture": await MultipartFile.fromFile(imagePath,
           filename: 'profile.webp', contentType: MediaType('image', 'webp'))
@@ -82,7 +83,7 @@ class UserRepository extends Repository {
             errorMessage: null);
       }
     } on DioError catch (e) {
-      if (e.response.statusCode == 400) {
+      if (e.response?.statusCode == 400) {
         return RequestResult(
             data: null,
             isSuccessful: false,

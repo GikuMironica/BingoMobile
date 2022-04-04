@@ -1,8 +1,7 @@
 class RequestResult {
   dynamic data;
   bool isSuccessful;
-  String errorMessage;
+  String? errorMessage;
 
-  RequestResult(
-      {this.data, required this.isSuccessful, required this.errorMessage});
+  RequestResult({this.data, required this.isSuccessful, this.errorMessage});
 }

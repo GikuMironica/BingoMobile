@@ -174,7 +174,8 @@ class EventProvider extends ChangeNotifier {
   }
 
   Future<void> refreshAvailableSlots() async {
-    _post.availableSlots = (await _eventRepository.get(post.id)).availableSlots;
+    _post.availableSlots =
+        (await _eventRepository.get(post.id))?.availableSlots ?? 0;
   }
 
   bool validateTitle(String value) {

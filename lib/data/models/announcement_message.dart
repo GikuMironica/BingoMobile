@@ -1,12 +1,12 @@
 class AnnouncementMessage {
-  int id = -1;
+  int? id = -1;
   int postId = -1;
   String message = "";
   int timestamp = -1;
   String error = "";
 
   AnnouncementMessage(
-      {required this.id,
+      {this.id,
       required this.postId,
       required this.message,
       required this.timestamp});

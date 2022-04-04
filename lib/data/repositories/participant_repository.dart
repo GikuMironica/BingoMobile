@@ -7,7 +7,8 @@ import 'package:injectable/injectable.dart';
 class ParticipantRepository extends Repository {
   ParticipantRepository() : super();
 
-  Future<bool> acceptAttendee({int postId, String userId}) async {
+  Future<bool> acceptAttendee(
+      {required int postId, required String userId}) async {
     try {
       Map<String, dynamic> payload = {'attendeeId': userId, 'postId': postId};
       Response response = await dio.post(API.ACCEPT_ATTENDEE, data: payload);
@@ -18,7 +19,8 @@ class ParticipantRepository extends Repository {
     return false;
   }
 
-  Future<bool> rejectAttendee({int postId, String userId}) async {
+  Future<bool> rejectAttendee(
+      {required int postId, required String userId}) async {
     try {
       Map<String, dynamic> payload = {'attendeeId': userId, 'postId': postId};
       Response response = await dio.post(API.REJECT_ATTENDEE, data: payload);
@@ -29,7 +31,7 @@ class ParticipantRepository extends Repository {
     return false;
   }
 
-  Future<List<dynamic>> fetchAccepted({int postId}) async {
+  Future<List<dynamic>?> fetchAccepted({required int postId}) async {
     try {
       Response response = await dio.get(
         '${API.FETCH_ATTENDEES_ACCEPTED}?Id=$postId',
@@ -43,7 +45,7 @@ class ParticipantRepository extends Repository {
     return null;
   }
 
-  Future<List<dynamic>> fetchPending({int postId}) async {
+  Future<List<dynamic>> fetchPending({required int postId}) async {
     try {
       Response response = await dio.get(
         '${API.FETCH_ATTENDEES_PENDING}?Id=$postId',
