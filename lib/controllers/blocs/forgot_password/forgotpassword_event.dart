@@ -10,18 +10,21 @@ import 'forgotpassword_status.dart';
 abstract class ForgotPasswordEvent extends BaseEvent {
   AuthenticationRepository authService =
       GetIt.I.get<AuthenticationRepository>();
+
+  @override
+  Stream<ForgotPasswordState> handleEvent(BaseState state) async* {}
 }
 
 // Event 1
 class UsernameChanged extends ForgotPasswordEvent {
-  final String username;
+  final String? username;
 
   UsernameChanged({this.username});
 
   @override
   Stream<ForgotPasswordState> handleEvent(BaseState state) async* {
     // Dart style down-casting...
-    ForgotPasswordState forgotPasswordState = state;
+    ForgotPasswordState forgotPasswordState = state as ForgotPasswordState;
     yield forgotPasswordState.copyWith(username: username);
   }
 }
@@ -30,12 +33,12 @@ class UsernameChanged extends ForgotPasswordEvent {
 class RequestClicked extends ForgotPasswordEvent {
   @override
   Stream<ForgotPasswordState> handleEvent(BaseState state) async* {
-    ForgotPasswordState forgotPasswordState = state;
+    ForgotPasswordState forgotPasswordState = state as ForgotPasswordState;
     bool result;
     yield forgotPasswordState.copyWith(formStatus: RequestSubmitted());
     try {
-      result =
-          await authService.forgotPassword(forgotPasswordState.username.trim());
+      result = await authService
+          .forgotPassword(forgotPasswordState.username?.trim());
       yield result
           ? forgotPasswordState.copyWith(formStatus: SubmissionSuccess())
           : forgotPasswordState.copyWith(

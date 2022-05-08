@@ -10,41 +10,44 @@ import '../base_event.dart';
 
 abstract class RegisterEvent extends BaseEvent {
   AuthenticationService authService = GetIt.I.get<AuthenticationService>();
+
+  @override
+  Stream<RegisterState> handleEvent(BaseState state) async* {}
 }
 
 class RegisterUsernameChanged extends RegisterEvent {
-  final String username;
+  final String? username;
 
   RegisterUsernameChanged({this.username});
 
   @override
   Stream<RegisterState> handleEvent(BaseState state) async* {
     // Dart style down-casting...
-    RegisterState registerState = state;
+    RegisterState registerState = state as RegisterState;
     yield registerState.copyWith(username: username);
   }
 }
 
 class RegisterPasswordChanged extends RegisterEvent {
-  final String password;
+  final String? password;
 
   RegisterPasswordChanged({this.password});
 
   @override
   Stream<RegisterState> handleEvent(BaseState state) async* {
-    RegisterState registerState = state;
+    RegisterState registerState = state as RegisterState;
     yield registerState.copyWith(password: password);
   }
 }
 
 class RegisterConfirmPasswordChanged extends RegisterEvent {
-  final String confirmPassword;
+  final String? confirmPassword;
 
   RegisterConfirmPasswordChanged({this.confirmPassword});
 
   @override
   Stream<RegisterState> handleEvent(BaseState state) async* {
-    RegisterState registerState = state;
+    RegisterState registerState = state as RegisterState;
     yield registerState.copyWith(confirmPassword: confirmPassword);
   }
 }
@@ -52,11 +55,11 @@ class RegisterConfirmPasswordChanged extends RegisterEvent {
 class UnobscurePasswordClicked extends RegisterEvent {
   final bool passwordObscureText;
 
-  UnobscurePasswordClicked({this.passwordObscureText});
+  UnobscurePasswordClicked({required this.passwordObscureText});
 
   @override
   Stream<RegisterState> handleEvent(BaseState state) async* {
-    RegisterState registerState = state;
+    RegisterState registerState = state as RegisterState;
     yield registerState.copyWith(passwordObscureText: !passwordObscureText);
   }
 }
@@ -64,11 +67,11 @@ class UnobscurePasswordClicked extends RegisterEvent {
 class UnobscureConfirmPasswordClicked extends RegisterEvent {
   final bool confirmPasswordObscureText;
 
-  UnobscureConfirmPasswordClicked({this.confirmPasswordObscureText});
+  UnobscureConfirmPasswordClicked({required this.confirmPasswordObscureText});
 
   @override
   Stream<RegisterState> handleEvent(BaseState state) async* {
-    RegisterState registerState = state;
+    RegisterState registerState = state as RegisterState;
     yield registerState.copyWith(
         confirmPasswordObscureText: !confirmPasswordObscureText);
   }
@@ -77,12 +80,12 @@ class UnobscureConfirmPasswordClicked extends RegisterEvent {
 class RegisterClicked extends RegisterEvent {
   @override
   Stream<RegisterState> handleEvent(BaseState state) async* {
-    RegisterState registerState = state;
+    RegisterState registerState = state as RegisterState;
     AuthResult result;
     yield registerState.copyWith(formStatus: RegisterSubmitted());
     try {
-      result = await authService.register(
-          registerState.username.trim(), registerState.password.trim());
+      result = await authService.register(registerState.username?.trim() ?? "",
+          registerState.password?.trim() ?? "");
       yield result.isSuccessful
           ? registerState.copyWith(formStatus: SubmissionSuccess())
           : registerState.copyWith(

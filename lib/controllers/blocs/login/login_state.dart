@@ -5,12 +5,12 @@ import 'login_page_status.dart';
 
 class LoginState extends BaseState {
   //validators
-  bool get isValidEmail => EmailValidator.validate(username.trim());
-  bool get isValidPassword => password.isNotEmpty;
+  bool get isValidEmail => EmailValidator.validate(username?.trim() ?? "");
+  bool get isValidPassword => password?.isNotEmpty ?? false;
 
-  final String username;
-  final String password;
-  final bool obscureText;
+  final String? username;
+  final String? password;
+  final bool? obscureText;
   LoginPageStatus formStatus;
 
   LoginState({
@@ -21,10 +21,10 @@ class LoginState extends BaseState {
   });
 
   LoginState copyWith({
-    String username,
-    String password,
-    bool obscureText,
-    LoginPageStatus formStatus,
+    String? username,
+    String? password,
+    bool? obscureText,
+    LoginPageStatus? formStatus,
   }) {
     return LoginState(
       username: username ?? this.username,

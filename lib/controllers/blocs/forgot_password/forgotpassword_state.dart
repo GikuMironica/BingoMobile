@@ -5,16 +5,16 @@ import 'forgotpassword_status.dart';
 
 class ForgotPasswordState extends BaseState {
   //validators
-  bool get isValidEmail => EmailValidator.validate(username.trim());
+  bool get isValidEmail => EmailValidator.validate(username?.trim() ?? "");
 
-  final String username;
+  final String? username;
   ForgotPasswordStatus formStatus;
 
   ForgotPasswordState({this.username = '', this.formStatus = const Idle()});
 
   ForgotPasswordState copyWith({
-    String username,
-    ForgotPasswordStatus formStatus,
+    String? username,
+    ForgotPasswordStatus? formStatus,
   }) {
     return ForgotPasswordState(
       username: username ?? this.username,

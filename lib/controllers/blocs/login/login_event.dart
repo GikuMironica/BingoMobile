@@ -11,31 +11,34 @@ import 'login_state.dart';
 
 abstract class LoginEvent extends BaseEvent {
   AuthenticationService authService = getIt<AuthenticationService>();
+
+  @override
+  Stream<LoginState> handleEvent(BaseState state) async* {}
 }
 
 // Event 1
 class LoginUsernameChanged extends LoginEvent {
-  final String username;
+  final String? username;
 
   LoginUsernameChanged({this.username});
 
   @override
   Stream<LoginState> handleEvent(BaseState state) async* {
     // Dart style down-casting...
-    LoginState loginState = state;
+    LoginState loginState = state as LoginState;
     yield loginState.copyWith(username: username);
   }
 }
 
 // Event 2
 class LoginPasswordChanged extends LoginEvent {
-  final String password;
+  final String? password;
 
   LoginPasswordChanged({this.password});
 
   @override
   Stream<LoginState> handleEvent(BaseState state) async* {
-    LoginState loginState = state;
+    LoginState loginState = state as LoginState;
     yield loginState.copyWith(password: password);
   }
 }
@@ -44,11 +47,11 @@ class LoginPasswordChanged extends LoginEvent {
 class ShowPasswordClicked extends LoginEvent {
   final bool obscureText;
 
-  ShowPasswordClicked({this.obscureText});
+  ShowPasswordClicked({required this.obscureText});
 
   @override
   Stream<LoginState> handleEvent(BaseState state) async* {
-    LoginState loginState = state;
+    LoginState loginState = state as LoginState;
     yield loginState.copyWith(obscureText: !obscureText);
   }
 }
@@ -57,12 +60,12 @@ class ShowPasswordClicked extends LoginEvent {
 class LoginClicked extends LoginEvent {
   @override
   Stream<LoginState> handleEvent(BaseState state) async* {
-    LoginState loginState = state;
+    LoginState loginState = state as LoginState;
     AuthResult result;
     yield loginState.copyWith(formStatus: LoginSubmitted());
     try {
       result = await authService.loginWithEmail(
-          loginState.username.trim(), loginState.password.trim());
+          loginState.username?.trim() ?? "", loginState.password?.trim() ?? "");
       if (result.isSuccessful) {
         await authService.refreshUser();
       }
@@ -83,7 +86,7 @@ class LoginClicked extends LoginEvent {
 class FacebookLoginClicked extends LoginEvent {
   @override
   Stream<LoginState> handleEvent(BaseState state) async* {
-    LoginState loginState = state;
+    LoginState loginState = state as LoginState;
     yield loginState.copyWith(formStatus: LoginSubmitted());
     try {
       bool result = await authService.loginWithFb();

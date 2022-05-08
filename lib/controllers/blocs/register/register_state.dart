@@ -7,16 +7,16 @@ class RegisterState extends BaseState {
       RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
 
   //validators
-  bool get isEmailValid => EmailValidator.validate(username.trim());
+  bool get isEmailValid => EmailValidator.validate(username?.trim() ?? "");
   bool get isPasswordValid =>
-      password.isNotEmpty && _pwdRule.hasMatch(password);
+      (password?.isNotEmpty ?? false) && _pwdRule.hasMatch(password ?? "");
   bool get isConfirmPasswordValid =>
-      confirmPassword.isNotEmpty && passwordsMatch;
+      (confirmPassword?.isNotEmpty ?? false) && passwordsMatch;
   bool get passwordsMatch => password == confirmPassword;
 
-  final String username;
-  final String password;
-  final String confirmPassword;
+  final String? username;
+  final String? password;
+  final String? confirmPassword;
   final bool passwordObscureText;
   final bool confirmPasswordObscureText;
   RegisterPageStatus formStatus;
@@ -31,12 +31,12 @@ class RegisterState extends BaseState {
   });
 
   RegisterState copyWith({
-    String username,
-    String password,
-    String confirmPassword,
-    bool passwordObscureText,
-    bool confirmPasswordObscureText,
-    RegisterPageStatus formStatus,
+    String? username,
+    String? password,
+    String? confirmPassword,
+    bool? passwordObscureText,
+    bool? confirmPasswordObscureText,
+    RegisterPageStatus? formStatus,
   }) {
     return RegisterState(
       username: username ?? this.username,

@@ -125,7 +125,7 @@ class AuthenticationRepository extends Repository {
     }
   }
 
-  Future<bool> forgotPassword(String email) async {
+  Future<bool> forgotPassword(String? email) async {
     final Map<String, dynamic> payload = {'email': email};
     try {
       Response response = await dio.post(API.FORGOT_PASSWORD, data: payload);
