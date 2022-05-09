@@ -1,11 +1,9 @@
 import 'dart:io';
-
-import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/data/domain/login_result.dart';
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -82,23 +80,16 @@ class AuthenticationRepository extends Repository {
   }
 
   // TODO - use https://facebook.meedu.app/docs/4.x.x/login this libarry
-  Future<Map<String, dynamic>> loginWithFacebook() async {
+  Future<Map<String, dynamic>?> loginWithFacebook() async {
     String lang = Platform.localeName.substring(0, 2);
-    FacebookLogin facebookLogin = FacebookLogin();
-    FacebookLoginResult _facebookLoginResult =
-        await facebookLogin.logIn(['email']);
-    switch (_facebookLoginResult.status) {
-      case FacebookLoginStatus.error:
-        logger.e('Facebook Error');
-        logger.e(_facebookLoginResult.errorMessage);
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        logger.e('Login was cancelled by the user');
-        break;
-      case FacebookLoginStatus.loggedIn:
+    final LoginResult result = await FacebookAuth.instance
+        .login(permissions: ['public_profile', 'email']);
+
+    switch (result.status) {
+      case LoginStatus.success:
         logger.d('Facebook login successful');
         final Map<String, dynamic> payload = {
-          'accessToken': _facebookLoginResult.accessToken.token,
+          'accessToken': result.accessToken,
           'language': lang
         };
         try {
@@ -107,7 +98,18 @@ class AuthenticationRepository extends Repository {
         } on DioError catch (e) {
           print(e.response.toString());
         }
+        break;
+
+      case LoginStatus.cancelled:
+        logger.e('Login was cancelled by the user');
+        break;
+
+      case LoginStatus.failed:
+        logger.e('Facebook Error');
+        logger.e(result.message);
+        break;
     }
+
     return null;
   }
 
