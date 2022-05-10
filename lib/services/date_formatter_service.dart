@@ -4,9 +4,9 @@ import 'package:jiffy/jiffy.dart';
 
 @singleton
 class DateFormatterService {
-  DateFormat _dateFormat;
-  DateFormat _dateTimeFormat;
-  DateFormat _timeFormat;
+  late DateFormat _dateFormat;
+  late DateFormat _dateTimeFormat;
+  late DateFormat _timeFormat;
 
   DateFormatterService() {
     _dateFormat = DateFormat('dd.MM.yyyy');

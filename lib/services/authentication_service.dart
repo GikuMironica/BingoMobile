@@ -25,8 +25,8 @@ class AuthenticationService with ChangeNotifier {
   final AuthenticationRepository _authenticationRepository;
   final OneSignalNotificationService _oneSignalNotificationService;
 
-  Identity _identity;
-  User _user;
+  Identity? _identity;
+  User? _user;
   bool lock = false;
 
   AuthenticationService()
@@ -36,42 +36,42 @@ class AuthenticationService with ChangeNotifier {
         _authenticationRepository = getIt<AuthenticationRepository>(),
         _oneSignalNotificationService = getIt<OneSignalNotificationService>();
 
-  Identity get currentIdentity => _identity;
+  Identity? get currentIdentity => _identity;
+  User? get user => _user;
 
-  void setIdentity(Identity identity) {
+  void setIdentity(Identity? identity) {
     _identity = identity;
     notifyListeners();
   }
 
   Future<void> writeTokenToSecureStorage(
-      {String token, String refreshToken}) async {
+      {String? token, String? refreshToken}) async {
     await Future.wait([
-      _secureStorageService.write(key: 'token', value: token),
-      _secureStorageService.write(key: 'refreshToken', value: refreshToken)
+      _secureStorageService.write(key: 'token', value: token ?? ""),
+      _secureStorageService.write(
+          key: 'refreshToken', value: refreshToken ?? "")
     ]);
   }
 
-  Future<void> applyToken(Map<String, dynamic> data) async {
-    final Map<String, dynamic> parsedData = Jwt.parseJwt(data['Token']);
+  Future<void> applyToken(Map<String, dynamic>? data) async {
+    final Map<String, dynamic> parsedData = Jwt.parseJwt(data?['Token']);
     await Future.wait([
       Hive.box('auth').put('identity', parsedData),
       writeTokenToSecureStorage(
-          token: data['Token'], refreshToken: data['RefreshToken'])
+          token: data?['Token'], refreshToken: data?['RefreshToken'])
     ]);
 
     setIdentity(Identity.fromJson(parsedData));
-    getIt<DioService>().setBearerToken(data['Token']);
+    getIt<DioService>().setBearerToken(data?['Token']);
   }
-
-  User get user => _user;
 
   Future<void> refreshUser() async {
     List<dynamic> allResult =
-        await Future.wait([_userRepository.get(_identity.id)]);
+        await Future.wait([_userRepository.get(_identity?.id ?? "")]);
     setUser(allResult.first);
   }
 
-  void setUser(User user) {
+  void setUser(User? user) {
     if (user != null) {
       _user = user;
       notifyListeners();
@@ -94,7 +94,7 @@ class AuthenticationService with ChangeNotifier {
   }
 
   Future<bool> loginWithFb() async {
-    Map<String, dynamic> _fbResult =
+    Map<String, dynamic>? _fbResult =
         await _authenticationRepository.loginWithFacebook();
     bool hasToken = _fbResult?.containsKey('Token') ?? false;
     if (hasToken) {
@@ -107,8 +107,8 @@ class AuthenticationService with ChangeNotifier {
 
   Future<void> refreshToken() async {
     if (_identity != null) {
-      if (DateTime.now()
-          .isAfter(DateTime.fromMillisecondsSinceEpoch(_identity.expiry))) {
+      if (DateTime.now().isAfter(
+          DateTime.fromMillisecondsSinceEpoch(_identity?.expiry ?? 0))) {
         dynamic token = await _secureStorageService.read(key: 'token');
         dynamic refreshToken =
             await _secureStorageService.read(key: 'refreshToken');
@@ -116,7 +116,6 @@ class AuthenticationService with ChangeNotifier {
             await _authenticationRepository.refresh(token, refreshToken);
         if (_refreshResult.containsKey('Token')) {
           await applyToken(_refreshResult);
-          return true;
         }
       } else {
         print('Attempted to refresh, but it\'s too early.');

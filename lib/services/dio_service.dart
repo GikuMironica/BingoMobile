@@ -29,15 +29,16 @@ class DioService {
       responseBody: true,
     ));
     _dio.interceptors.add(InterceptorsWrapper(
-        onResponse: (Response response) => response,
-        onError: (DioError error) async {
+        onResponse: (Response response, ResponseInterceptorHandler rsp) =>
+            response,
+        onError: (DioError error, ErrorInterceptorHandler err) async {
           // TODO On 401 auto request refresh end point -> if refresh didn't work -> logout!
           if (error.response?.statusCode == 401) {
-            RequestOptions requestOptions = error.response.request;
+            RequestOptions? requestOptions = error.response?.requestOptions;
             String requestHeader =
-                requestOptions.headers[HttpHeaders.contentTypeHeader];
+                requestOptions?.headers[HttpHeaders.contentTypeHeader];
 
-            if (requestOptions.headers[HttpHeaders.contentTypeHeader] !=
+            if (requestOptions?.headers[HttpHeaders.contentTypeHeader] !=
                 'application/json') {
               _dio.options.headers[HttpHeaders.contentTypeHeader] =
                   'application/json';
@@ -48,14 +49,11 @@ class DioService {
             // TODO Repeat request, must be fixed
             //  _dio.options.headers[HttpHeaders.contentTypeHeader] = requestHeader;
             //  return await _dio.request(requestOptions.path);
-          } else if (error.response.statusCode == 429) {
+          } else if (error.response?.statusCode == 429) {
             Fluttertoast.cancel();
             showNewErrorSnackbar(
                 LocaleKeys.Others_Services_DioService_requestQuotaExceed.tr(),
                 toastGravity: ToastGravity.TOP);
-            return error;
-          } else {
-            return error;
           }
         }));
   }

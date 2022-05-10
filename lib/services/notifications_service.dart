@@ -9,31 +9,30 @@ import 'dart:io' show Platform;
 
 @singleton
 class OneSignalNotificationService {
-  SettingsProvider _settingsProvider;
-  AuthenticationService _authenticationService;
+  late SettingsProvider _settingsProvider;
+  late AuthenticationService _authenticationService;
 
   Future<void> initializeNotificationService() async {
     _settingsProvider = getIt<SettingsProvider>();
     _authenticationService = getIt<AuthenticationService>();
     bool areNotificationsAllowed = true;
-    await Future.wait([
+    await Future.wait(<Future>[
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
-      OneSignal.shared.init("fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
-          iOSSettings: {
-            OSiOSSettings.autoPrompt: false,
-            OSiOSSettings.inAppLaunchUrl: false
-          }),
+      OneSignal.shared.setAppId(
+        "fd419a63-95dd-4947-9c89-cf3d12b3d6e3",
+      ),
       // TODO - fix notification prompt.
       OneSignal.shared
           .promptUserForPushNotificationPermission(fallbackToSettings: true)
           .then((result) => areNotificationsAllowed = result),
     ]);
 
-    await _initializeNotificationPreferences(areNotificationsAllowed??true);
+    await _initializeNotificationPreferences(areNotificationsAllowed ?? true);
 
     if (_settingsProvider.pushNotifications) {
       _configureNotificationService();
-      await _initializeOneSignalSubscription(_authenticationService.user.id);
+      await _initializeOneSignalSubscription(
+          _authenticationService.user?.id ?? "");
     }
     return;
   }
@@ -50,8 +49,8 @@ class OneSignalNotificationService {
 
   /// THis method sets the notification service handlers.
   void _configureNotificationService() {
-    OneSignal.shared
-        .setInFocusDisplayType(OSNotificationDisplayType.notification);
+    /*OneSignal.shared
+        .setInFocusDisplayType(OSNotificationDisplayType.notification);*/
     OneSignal.shared
         .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
       // TODO use application.navigateTo...
@@ -67,16 +66,16 @@ class OneSignalNotificationService {
   /// if user has push notifications enabled, then call this method
   /// right after initializeNotificationService
   Future<void> _initializeOneSignalSubscription(String userId) async {
-    await Future.wait([
-      OneSignal.shared.setSubscription(true),
+    await Future.wait(<Future>[
+      //OneSignal.shared.setSubscription(true),
       OneSignal.shared.setExternalUserId(userId)
     ]);
   }
 
   Future<void> unsubscribeFromNotificationsServer() async {
-    await Future.wait([
+    await Future.wait(<Future>[
       OneSignal.shared.removeExternalUserId(),
-      OneSignal.shared.setSubscription(false)
+      // OneSignal.shared.setSubscription(false)
     ]);
   }
 }
