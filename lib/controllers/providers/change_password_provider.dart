@@ -13,25 +13,16 @@ class ChangePasswordProvider extends ChangeNotifier {
       RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
 
   /// State properties
-  String oldPassword;
-  String newPassword;
-  bool passwordObscureText;
-  bool newPasswordObscureText;
-  BaseFormStatus formStatus;
+  String oldPassword = "";
+  String newPassword = "";
+  bool passwordObscureText = true;
+  bool newPasswordObscureText = true;
+  BaseFormStatus formStatus = Idle();
 
   /// Services, repositories and models
-  AuthenticationRepository _authenticationRepository;
-  AuthenticationService _authenticationService;
-
-  ChangePasswordProvider() {
-    formStatus = Idle();
-    oldPassword = "";
-    newPassword = "";
-    passwordObscureText = true;
-    newPasswordObscureText = true;
-    _authenticationRepository = getIt<AuthenticationRepository>();
-    _authenticationService = getIt<AuthenticationService>();
-  }
+  AuthenticationRepository authenticationRepository =
+      getIt<AuthenticationRepository>();
+  AuthenticationService authenticationService = getIt<AuthenticationService>();
 
   /// State validating methods
   void toggleObscurePassword() {
@@ -66,8 +57,8 @@ class ChangePasswordProvider extends ChangeNotifier {
   Future<void> updatePassword(BuildContext context) async {
     formStatus = Submitted();
     notifyListeners();
-    bool passChangeRes = await _authenticationRepository.changePassword(
-        email: _authenticationService.user.email,
+    bool passChangeRes = await authenticationRepository.changePassword(
+        email: authenticationService.user.email!,
         oldPassword: oldPassword,
         newPassword: newPassword);
 

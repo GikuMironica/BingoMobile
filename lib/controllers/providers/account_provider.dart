@@ -28,33 +28,22 @@ class AccountProvider extends ChangeNotifier {
       caseSensitive: false, unicode: true, dotAll: true);
 
   // State data
-  BaseFormStatus formStatus;
-  BaseFormStatus picturesPageStatus;
-  TimerState timerState;
+  BaseFormStatus formStatus = Idle();
+  BaseFormStatus picturesPageStatus = Idle();
+  TimerState timerState = TimerStopped();
 
-  CountdownTimer countDownTimer;
-  String number;
-  String otp;
-  int currentTimerSeconds;
-  int otpTries;
-  String dialCode;
+  CountdownTimer? countDownTimer;
+  String? number;
+  String? otp;
+  int currentTimerSeconds = Configurations.RESEND_OTP_TIME;
+  int otpTries = 0;
 
   // Services, repositories and models
-  AuthenticationService _authenticationService;
-  UserRepository _userRepository;
+  AuthenticationService authenticationService = getIt<AuthenticationService>();
+  UserRepository userRepository = getIt<UserRepository>();
 
-  User get currentIdentity => _authenticationService.user;
-  FirebaseOtpService _firebaseOtpService;
-
-  AccountProvider() {
-    otpTries = 0;
-    timerState = TimerStopped();
-    currentTimerSeconds = Configurations.RESEND_OTP_TIME;
-    _authenticationService = getIt<AuthenticationService>();
-    _userRepository = getIt<UserRepository>();
-    formStatus = Idle();
-    picturesPageStatus = Idle();
-  }
+  User get currentIdentity => authenticationService.user;
+  FirebaseOtpService firebaseOtpService = getIt<FirebaseOtpService>();
 
   Future<void> updateUserNameAsync(
       String firstName, String lastName, BuildContext context) async {
@@ -68,14 +57,14 @@ class AccountProvider extends ChangeNotifier {
       formStatus = Submitted();
       notifyListeners();
       User tempUser = User(firstName: firstName, lastName: lastName);
-      User updatedUser =
-          await _userRepository.update(currentIdentity.id, tempUser);
+      User? updatedUser =
+          await userRepository.update(currentIdentity.id!, tempUser);
       if (updatedUser == null) {
         formStatus = new Failed();
         notifyListeners();
       } else {
         formStatus = Idle();
-        _authenticationService.setUser(updatedUser);
+        authenticationService.setUser(updatedUser);
         Application.router.pop(context, Success());
       }
     }
@@ -90,15 +79,15 @@ class AccountProvider extends ChangeNotifier {
     } else {
       formStatus = Submitted();
       notifyListeners();
-      User tempUser = User(description: newDescription);
-      var response = await _userRepository.update(currentIdentity.id, tempUser);
+      User tempUser = User(id: "", description: newDescription);
+      var response = await userRepository.update(currentIdentity.id!, tempUser);
 
       if (response == null) {
         formStatus = Failed();
         notifyListeners();
       } else {
         formStatus = Idle();
-        _authenticationService.setUser(response);
+        authenticationService.setUser(response);
         Application.router.pop(context, Success());
       }
     }
@@ -122,10 +111,10 @@ class AccountProvider extends ChangeNotifier {
   }
 
   Future<void> sendOtp(BuildContext context) async {
-    _firebaseOtpService = getIt<FirebaseOtpService>();
+    firebaseOtpService = getIt<FirebaseOtpService>();
 
-    await _firebaseOtpService.sendOtpAsync(
-        context, number, sendingOtpFailCallback);
+    await firebaseOtpService.sendOtpAsync(
+        context, number!, sendingOtpFailCallback);
     if (timerState is TimerStopped) {
       startTimer();
     }
@@ -133,13 +122,13 @@ class AccountProvider extends ChangeNotifier {
 
   Future<void> confirmOtp(
       String sms, bool isStateValid, BuildContext context) async {
-    _firebaseOtpService = getIt<FirebaseOtpService>();
+    firebaseOtpService = getIt<FirebaseOtpService>();
 
     if (!isStateValid) {
       return;
     }
 
-    var result = await _firebaseOtpService.verifyOtp(sms);
+    var result = await firebaseOtpService.verifyOtp(sms);
     if (!result) {
       otpTries++;
       if (otpTries == 5) {
@@ -154,14 +143,14 @@ class AccountProvider extends ChangeNotifier {
 
     User tempUser = User(phoneNumber: number);
     User updatedUser =
-        await _userRepository.update(currentIdentity.id, tempUser);
+        await userRepository.update(currentIdentity.id!, tempUser);
 
     if (updatedUser == null) {
       showNewErrorSnackbar(LocaleKeys
               .Account_EditProfile_EditMobile_ConfirmMobile_toasts_failedToUpdateNumber
           .tr());
     } else {
-      _authenticationService.setUser(updatedUser);
+      authenticationService.setUser(updatedUser);
       Application.router.navigateTo(context, Routes.editAccount,
           transition: TransitionType.cupertino, clearStack: true);
     }
@@ -183,9 +172,9 @@ class AccountProvider extends ChangeNotifier {
 
   Future<bool> deleteProfilePictureAsync(String userId) async {
     if (currentIdentity.profilePicture != null) {
-      var response = await _userRepository.deletePicture(userId);
+      var response = await userRepository.deletePicture(userId);
       currentIdentity.profilePicture = null;
-      _authenticationService.setUser(currentIdentity);
+      authenticationService.setUser(currentIdentity);
       notifyListeners();
       return response;
     }
@@ -194,12 +183,12 @@ class AccountProvider extends ChangeNotifier {
 
   Future<RequestResult> uploadProfilePictureAsync(
       String fileAbsolutePath) async {
-    var result = await _userRepository.uploadPicture(currentIdentity.id,
+    var result = await userRepository.uploadPicture(currentIdentity.id!,
         imagePath: fileAbsolutePath);
     if (result.isSuccessful) {
       if (result.data != null) {
         User user = result.data;
-        _authenticationService.setUser(user);
+        authenticationService.setUser(user);
         return result;
       } else {
         return RequestResult(
@@ -223,14 +212,14 @@ class AccountProvider extends ChangeNotifier {
       new Duration(seconds: 1),
     );
 
-    var sub = countDownTimer.listen(null);
-    sub.onData((duration) {
+    var sub = countDownTimer?.listen(null);
+    sub?.onData((duration) {
       currentTimerSeconds =
           Configurations.RESEND_OTP_TIME - duration.elapsed.inSeconds;
       notifyListeners();
     });
 
-    sub.onDone(() {
+    sub?.onDone(() {
       sub.cancel();
       timerState = TimerStopped();
       currentTimerSeconds = Configurations.RESEND_OTP_TIME;

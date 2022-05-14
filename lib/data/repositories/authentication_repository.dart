@@ -1,11 +1,11 @@
 import 'dart:io';
+
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/data/domain/login_result.dart';
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:injectable/injectable.dart';
-import 'package:meta/meta.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hopaut/generated/locale_keys.g.dart';
 

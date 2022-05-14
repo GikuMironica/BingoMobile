@@ -17,48 +17,45 @@ import 'package:hopaut/generated/locale_keys.g.dart';
 
 @singleton
 class SettingsProvider with ChangeNotifier {
-  PackageInfo _packageInfo;
-  SharedPreferences _preferences;
-  UserRepository _userRepository;
-  OneSignalNotificationService _oneSignalNotificationService;
+  PackageInfo? packageInfo;
+  SharedPreferences? preferences;
+  UserRepository userRepository = getIt<UserRepository>();
+  OneSignalNotificationService oneSignalNotificationService =
+      getIt<OneSignalNotificationService>();
 
-  BaseFormStatus deleteFormStatus;
-  String deleteAccountEmail;
-  bool pushNotifications;
+  BaseFormStatus deleteFormStatus = Idle();
+  String deleteAccountEmail = "";
+  bool? pushNotifications;
 
   bool get isDeleteAccountEmailValid =>
       EmailValidator.validate(deleteAccountEmail.trim());
-  String get appVersion => _packageInfo.version;
+  String get appVersion => packageInfo!.version;
 
   SettingsProvider() {
-    _oneSignalNotificationService = getIt<OneSignalNotificationService>();
-    _userRepository = getIt<UserRepository>();
-    deleteAccountEmail = "";
-    deleteFormStatus = Idle();
     getPackageInfo();
     initializeSharedPreferences();
   }
 
   Future<void> initializeSharedPreferences() async {
-    _preferences = await SharedPreferences.getInstance();
-    pushNotifications = _preferences.getBool('HA_PUSH_NOTIFICATIONS');
+    preferences = await SharedPreferences.getInstance();
+    pushNotifications = preferences!.getBool('HA_PUSH_NOTIFICATIONS')!;
   }
 
   void getPackageInfo() async {
-    _packageInfo = await PackageInfo.fromPlatform();
+    packageInfo = await PackageInfo.fromPlatform();
   }
 
   Future<void> togglePushNotificationsPreference(bool value) async {
     pushNotifications = value;
-    await _preferences.setBool('HA_PUSH_NOTIFICATIONS', pushNotifications);
+    await preferences!.setBool('HA_PUSH_NOTIFICATIONS', pushNotifications!);
     notifyListeners();
   }
 
   Future<void> togglePushNotifications(bool value) async {
     await togglePushNotificationsPreference(value);
     value
-        ? await _oneSignalNotificationService.initializeNotificationService()
-        : await _oneSignalNotificationService
+        ? await oneSignalNotificationService.initializeNotificationService()
+        : await oneSignalNotificationService
             .unsubscribeFromNotificationsServer();
   }
 
@@ -78,7 +75,7 @@ class SettingsProvider with ChangeNotifier {
     deleteFormStatus = Submitted();
     notifyListeners();
 
-    bool deleteRes = await _userRepository
+    bool deleteRes = await userRepository
         .delete(getIt<AuthenticationService>().currentIdentity.id);
 
     deleteFormStatus = Idle();

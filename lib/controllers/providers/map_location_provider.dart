@@ -1,4 +1,3 @@
-import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
@@ -6,7 +5,6 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
-import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/controllers/providers/event_provider.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:hopaut/data/domain/coordinate.dart';
@@ -25,99 +23,87 @@ enum MapLoadingState { LOADING, LOADED, ERROR }
 @lazySingleton
 class MapLocationProvider extends ChangeNotifier {
   // fields
-  final double _distanceToEarthInMeters = 2000;
-  final double _autoCompleteSearchRadius = 50000;
+  final double distanceToEarthInMeters = 2000;
+  final double autoCompleteSearchRadius = 50000;
 
-  MapScheme mapScheme;
-  List<Place> searchResults;
-  LocationServiceProvider _locationManager;
-  HereMapController _hereMapController;
-  SearchEngine _searchEngine;
-  SearchResultState searchResultState;
-  MapLoadingState _loadingState;
-  TextEditingController searchBarController;
-  EventProvider _eventProvider;
+  MapScheme mapScheme = MapScheme.greyDay;
+  List<Place> searchResults = [];
+  LocationServiceProvider locationManager = getIt<LocationServiceProvider>();
+  HereMapController? hereMapController;
+  SearchEngine searchEngine = SearchEngine();
+  SearchResultState searchResultState = SearchResultState.IDLE;
+  MapLoadingState loadingState = MapLoadingState.LOADING;
+  TextEditingController searchBarController = TextEditingController();
+  EventProvider eventProvider = getIt<EventProvider>();
 
   // getters
-  HereMapController get mapController => _hereMapController;
-  MapLoadingState get loadingState => _loadingState;
-
-  MapLocationProvider() {
-    this._locationManager = getIt<LocationServiceProvider>();
-    this._eventProvider = getIt<EventProvider>();
-    this.mapScheme = MapScheme.greyDay;
-    this.searchResults = [];
-    this.searchResultState = SearchResultState.IDLE;
-    this._loadingState = MapLoadingState.LOADING;
-    this._searchEngine = SearchEngine();
-    this.searchBarController = TextEditingController();
-  }
+  HereMapController? get mapController => hereMapController;
 
   void onMapCreated(HereMapController hereMapController) {
-    if (_eventProvider.post.location==null){
+    if (eventProvider.post.location == null) {
       searchBarController.text = "";
-      searchResults?.clear();
-    }else{
-      searchBarController.text = _eventProvider.post.location?.address ?? "";
+      searchResults.clear();
+    } else {
+      searchBarController.text = eventProvider.post.location.address ?? "";
     }
-    _loadingState = MapLoadingState.LOADING;
+    loadingState = MapLoadingState.LOADING;
     notifyListeners();
-    _hereMapController = hereMapController;
-    _hereMapController.mapScene.loadSceneForMapScheme(
-        mapScheme, (MapError err) => _initializeMap(_hereMapController, err));
+    hereMapController = hereMapController;
+    hereMapController.mapScene.loadSceneForMapScheme(
+        mapScheme, (MapError err) => _initializeMap(hereMapController, err));
   }
 
   void _initializeMap(HereMapController hereMapController, MapError error) {
     if (error == null) {
       hereMapController.mapScene.setLayerState(
           MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
-      _hereMapController.setWatermarkPosition(
+      hereMapController.setWatermarkPosition(
           WatermarkPlacement.bottomRight, 10);
 
-      var location = _eventProvider.post.location;
+      var location = eventProvider.post.location;
       GeoCoordinates stateCoordinates = location == null
-          ? GeoCoordinates(_locationManager.userLocation.latitude,
-              _locationManager.userLocation.longitude)
+          ? GeoCoordinates(locationManager.userLocation?.latitude,
+              locationManager.userLocation?.longitude)
           : GeoCoordinates(location.latitude, location.longitude);
 
-      _hereMapController.camera.flyToWithOptionsAndDistance(stateCoordinates,
-          _distanceToEarthInMeters, MapCameraFlyToOptions.withDefaults());
+      hereMapController.camera.flyToWithOptionsAndDistance(stateCoordinates,
+          distanceToEarthInMeters, MapCameraFlyToOptions.withDefaults());
 
       _setTapGestureHandler();
-      _loadingState = MapLoadingState.LOADED;
+      loadingState = MapLoadingState.LOADED;
       notifyListeners();
     } else {
-      _loadingState = MapLoadingState.ERROR;
+      loadingState = MapLoadingState.ERROR;
       notifyListeners();
     }
   }
 
   void _setTapGestureHandler() {
-    _hereMapController.gestures.tapListener =
+    hereMapController?.gestures.tapListener =
         TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) {
-          cleanSearchResult();
+      cleanSearchResult();
     });
-    _hereMapController.gestures.doubleTapListener =
-        DoubleTapListener.fromLambdas(lambda_onDoubleTap: (Point2D touchPoint){
-          cleanSearchResult();
-        });
-    _hereMapController.gestures.panListener =
-        PanListener.fromLambdas(
-            lambda_onPan: (
-                GestureState state, Point2D touchPoint, Point2D secondTouchPoint, double val){
-          cleanSearchResult();
+    hereMapController?.gestures.doubleTapListener =
+        DoubleTapListener.fromLambdas(lambda_onDoubleTap: (Point2D touchPoint) {
+      cleanSearchResult();
     });
-    _hereMapController.gestures.twoFingerPanListener =
-        TwoFingerPanListener.fromLambdas(
-            lambda_onTwoFingerPan: (GestureState state, Point2D touchPoint, Point2D secondTouchPoint, double val){
-          cleanSearchResult();
-        });
+    hereMapController?.gestures.panListener = PanListener.fromLambdas(
+        lambda_onPan: (GestureState state, Point2D touchPoint,
+            Point2D secondTouchPoint, double val) {
+      cleanSearchResult();
+    });
+    hereMapController?.gestures.twoFingerPanListener =
+        TwoFingerPanListener.fromLambdas(lambda_onTwoFingerPan:
+            (GestureState state, Point2D touchPoint, Point2D secondTouchPoint,
+                double val) {
+      cleanSearchResult();
+    });
   }
 
-  void cleanSearchResult(){
+  void cleanSearchResult() {
     FocusManager.instance.primaryFocus?.unfocus();
     searchBarController.text = "";
-    searchResults?.clear();
+    searchResults.clear();
     searchResultState = SearchResultState.IDLE;
     notifyListeners();
   }
@@ -130,10 +116,11 @@ class MapLocationProvider extends ChangeNotifier {
   void addToSearchResult(Place item) {
     searchResults.clear();
     searchResults.add(item);
-    _hereMapController.camera.flyToWithOptionsAndDistance(item.geoCoordinates,
-        _distanceToEarthInMeters, MapCameraFlyToOptions.withDefaults());
+    hereMapController!.camera.flyToWithOptionsAndDistance(item.geoCoordinates,
+        distanceToEarthInMeters, MapCameraFlyToOptions.withDefaults());
     searchResultState = SearchResultState.HAS_RESULTS_AUTOCOMPLETE;
-    searchBarController.text = item.address.street+" "+item.address.houseNumOrName;
+    searchBarController.text =
+        item.address.street + " " + item.address.houseNumOrName;
     notifyListeners();
   }
 
@@ -141,11 +128,11 @@ class MapLocationProvider extends ChangeNotifier {
     if (pattern.length > 2) {
       List<Place> suggestionResult = [];
       GeoCircle geoCircle = GeoCircle(
-          GeoCoordinates(_locationManager.userLocation.latitude,
-              _locationManager.userLocation.longitude),
-          _autoCompleteSearchRadius);
+          GeoCoordinates(locationManager.userLocation!.latitude,
+              locationManager.userLocation!.longitude),
+          autoCompleteSearchRadius);
       TextQuery textQuery = TextQuery.withCircleArea(pattern, geoCircle);
-      _searchEngine.searchByText(textQuery, SearchOptions.withDefaults(),
+      searchEngine.searchByText(textQuery, SearchOptions.withDefaults(),
           (error, List<Place> suggestion) {
         for (Place p in suggestion) {
           if ([
@@ -164,9 +151,9 @@ class MapLocationProvider extends ChangeNotifier {
     return <Place>[];
   }
 
-  Future<void> getReverseGeocodeResult({GeoCoordinates geo}) async {
-    if (geo == null) geo = _hereMapController.camera.state.targetCoordinates;
-    _searchEngine.searchByCoordinates(geo, SearchOptions.withDefaults(),
+  Future<void> getReverseGeocodeResult({GeoCoordinates? geo}) async {
+    if (geo == null) geo = hereMapController!.camera.state.targetCoordinates;
+    searchEngine.searchByCoordinates(geo, SearchOptions.withDefaults(),
         (error, List<Place> results) {
       if (results.isNotEmpty) {
         searchResults = [results.first];
@@ -200,11 +187,11 @@ class MapLocationProvider extends ChangeNotifier {
 
   Future<void> locateUser() async {
     UserLocation userPosition;
-    userPosition = await _locationManager.getActualLocation();
+    userPosition = (await locationManager.getActualLocation())!;
 
     GeoCoordinates geoCoordinates =
         GeoCoordinates(userPosition.latitude, userPosition.longitude);
-    mapController.camera.flyToWithOptionsAndDistance(
+    mapController!.camera.flyToWithOptionsAndDistance(
         geoCoordinates, 2000, MapCameraFlyToOptions.withDefaults());
     getReverseGeocodeResult(geo: geoCoordinates);
   }
@@ -217,12 +204,12 @@ class MapLocationProvider extends ChangeNotifier {
 
   void saveSelectedLocation() {
     if (searchResults != null && searchResults.isNotEmpty) {
-      _eventProvider.post.location = parseLocation(searchResults.first);
-      _eventProvider.notifyListeners();
+      eventProvider.post.location = parseLocation(searchResults.first);
+      eventProvider.notifyListeners();
     }
   }
 
   void setMapLoadingState(MapLoadingState loadingState) {
-    _loadingState = loadingState;
+    loadingState = loadingState;
   }
 }

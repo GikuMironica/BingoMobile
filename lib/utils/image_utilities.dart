@@ -9,7 +9,7 @@ import 'package:uuid/uuid.dart';
 ImagePicker imagePicker = ImagePicker();
 Uuid uuid = Uuid();
 
-Future<File> testCompressAndGetFile(File file, String targetPath) async {
+Future<File?> testCompressAndGetFile(File file, String targetPath) async {
   var result = await FlutterImageCompress.compressAndGetFile(
     file.absolute.path,
     targetPath,
@@ -20,14 +20,14 @@ Future<File> testCompressAndGetFile(File file, String targetPath) async {
   return result;
 }
 
-Future<Picture> choosePicture() async {
-  final PickedFile pickedFile =
+Future<Picture?> choosePicture() async {
+  final PickedFile? pickedFile =
       await imagePicker.getImage(source: ImageSource.gallery);
   if (pickedFile != null) {
     File file = File(pickedFile.path);
-    File convertedImage = await testCompressAndGetFile(
+    File? convertedImage = await testCompressAndGetFile(
         file, "${file.parent.absolute.path}/${uuid.v1()}.webp");
-    MemoryImage image = MemoryImage(convertedImage.readAsBytesSync());
+    MemoryImage image = MemoryImage(convertedImage!.readAsBytesSync());
     return Picture(convertedImage.path, image);
   }
   return null;

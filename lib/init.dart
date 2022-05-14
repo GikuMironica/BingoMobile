@@ -15,7 +15,7 @@ class Initialization extends StatefulWidget {
 }
 
 class _InitializationState extends State<Initialization> {
-  User _user;
+  User? _user;
 
   @override
   void initState() {

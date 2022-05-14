@@ -6,7 +6,10 @@ class UserReport {
   String message;
   String reportedUserId;
 
-  UserReport({this.reason, this.message, this.reportedUserId});
+  UserReport(
+      {required this.reason,
+      required this.message,
+      required this.reportedUserId});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
@@ -19,11 +22,15 @@ class UserReport {
 
 class PostReport {
   int postId;
-  int timestamp;
   int reason;
-  String message;
+  int? timestamp;
+  String? message;
 
-  PostReport({this.postId, this.timestamp, this.reason, this.message});
+  PostReport(
+      {required this.postId,
+      required this.reason,
+      this.timestamp,
+      this.message});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

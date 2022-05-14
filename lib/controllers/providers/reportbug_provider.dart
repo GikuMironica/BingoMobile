@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/injection.dart';
-import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/config/routes/routes.dart';
 import 'package:hopaut/data/models/bug.dart';
 import 'package:hopaut/data/models/picture.dart';
@@ -19,14 +17,9 @@ class ReportBugProvider with ChangeNotifier {
   static final reportTextAreaLength = 300;
 
   //state
-  BaseFormStatus reportBugFormStatus;
-  List<Picture> pictures;
-  ReportRepository _reportRepository;
-
-  ReportBugProvider() {
-    reportBugFormStatus = Idle();
-    _reportRepository = getIt<ReportRepository>();
-  }
+  BaseFormStatus reportBugFormStatus = Idle();
+  List<Picture> pictures = [];
+  ReportRepository reportRepository = getIt<ReportRepository>();
 
   bool validateBugField(String text) {
     return text.characters.length <= 300 && text.characters.length > 0;
@@ -37,10 +30,10 @@ class ReportBugProvider with ChangeNotifier {
     notifyListeners();
 
     Bug bugReport = Bug(message: message, pictures: this.pictures);
-    bool result = await _reportRepository.bugReportPostAsync(bugReport);
+    bool result = await reportRepository.bugReportPostAsync(bugReport);
 
     if (!result) {
-      reportBugFormStatus = Failed();
+      reportBugFormStatus = Failed(errorMessage: '');
       notifyListeners();
       return;
     }
@@ -70,7 +63,7 @@ class ReportBugProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Picture> selectPicture() async {
+  Future<Picture?> selectPicture() async {
     return await choosePicture();
   }
 }

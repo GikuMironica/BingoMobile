@@ -3,5 +3,5 @@ import 'package:flutter/material.dart' hide Router;
 
 class Application {
   static FluroRouter router = FluroRouter();
-  static GlobalKey<State> navigatorKey = GlobalKey<NavigatorState>();
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }

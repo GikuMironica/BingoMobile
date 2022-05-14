@@ -1,14 +1,18 @@
 import 'package:hopaut/config/constants.dart';
 
 class Profile {
-  String firstName;
-  String lastName;
-  String profilePicture;
-  String description;
-  String phoneNumber;
+  String firstName = "";
+  String lastName = "";
+  String? profilePicture;
+  String? description;
+  String phoneNumber = "";
 
   Profile(
-      {this.firstName, this.lastName, this.profilePicture, this.description, this.phoneNumber});
+      {required this.firstName,
+      required this.lastName,
+      required this.phoneNumber,
+      this.profilePicture,
+      this.description});
 
   Profile.fromJson(Map<String, dynamic> json) {
     firstName = json['FirstName'];
@@ -23,9 +27,9 @@ class Profile {
   String get getInitials =>
       "${firstName.substring(0, 1)}${lastName.substring(0, 1)}";
 
-  String get getProfilePicture {
+  String? get getProfilePicture {
     if (profilePicture != null) {
-      if (profilePicture.startsWith("http")) {
+      if (profilePicture!.startsWith("http")) {
         return profilePicture;
       } else {
         return "${WEB.PROFILE_PICTURES}/$profilePicture.webp";
