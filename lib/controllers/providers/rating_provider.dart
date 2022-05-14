@@ -13,19 +13,11 @@ class RatingProvider with ChangeNotifier {
   static final reportTextAreaLength = 300;
 
   // state
-  BaseFormStatus ratingFormStatus;
-  int rating;
+  BaseFormStatus ratingFormStatus = Idle();
+  int rating = 0;
 
   // repo
-  RatingRepository _ratingRepository;
-  AuthenticationService _authenticationService;
-
-  RatingProvider() {
-    rating = 0;
-    ratingFormStatus = Idle();
-    _authenticationService = getIt<AuthenticationService>();
-    _ratingRepository = getIt<RatingRepository>();
-  }
+  RatingRepository ratingRepository = getIt<RatingRepository>();
 
   bool validateBugField(String text) {
     return text.characters.length <= 300 && text.characters.length > 0;
@@ -37,11 +29,12 @@ class RatingProvider with ChangeNotifier {
     ratingFormStatus = Submitted();
     notifyListeners();
 
-    Rating rate = Rating(feedback: message, rate: this.rating, postId: postId);
+    Rating rate = Rating(
+        feedback: message, rate: this.rating, postId: postId, userId: '');
 
     var rateJson = rate.toJson();
 
-    var result = await _ratingRepository.create(rateJson);
+    var result = await ratingRepository.create(rateJson);
 
     if (!result.isSuccessful) {
       ratingFormStatus = Failed(errorMessage: result.errorMessage);

@@ -1,10 +1,14 @@
 class Rating {
-  int rate;
-  String feedback;
-  String userId;
-  int postId;
+  int rate = 0;
+  String feedback = "";
+  String userId = "";
+  int postId = -1;
 
-  Rating({this.rate, this.feedback, this.userId, this.postId});
+  Rating(
+      {required this.rate,
+      required this.feedback,
+      required this.userId,
+      required this.postId});
 
   Rating.fromJson(Map<String, dynamic> json) {
     rate = json['Rate'];

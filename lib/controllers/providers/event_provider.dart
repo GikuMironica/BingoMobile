@@ -24,68 +24,56 @@ enum EventProviderStatus { Idle, Loading, Error }
 
 @lazySingleton
 class EventProvider extends ChangeNotifier {
-  EventRepository _eventRepository;
-  ReportRepository _reportRepository;
-  TagRepository _tagRepository;
-  HashMap<String, EventList> _eventsMap;
-  Post _post;
+  EventRepository eventRepository = getIt<EventRepository>();
+  ReportRepository reportRepository = getIt<ReportRepository>();
+  TagRepository tagRepository = getIt<TagRepository>();
+  HashMap<String, EventList> eventsMap = HashMap();
+  Post post = Post.empty();
 
   bool isLocationValid = true;
   bool isDateValid = true;
 
-  BaseFormStatus eventLoadingStatus;
-  BaseFormStatus reportPostLoadingStatus;
+  BaseFormStatus eventLoadingStatus = Idle();
+  BaseFormStatus reportPostLoadingStatus = Idle();
 
-  EventProvider(
-      {EventRepository eventRepository, TagRepository tagRepository}) {
-    _eventRepository = eventRepository;
-    _tagRepository = tagRepository;
-    _reportRepository = getIt<ReportRepository>();
+  EventProvider() {
     _initEventMap();
-    eventLoadingStatus = Idle();
   }
 
-  HashMap<String, EventList> get eventsMap => _eventsMap;
-  Post get post => _post;
-
-  void setPost(Post post) {
-    _post = post;
-  }
-
-  MiniPost getActiveMiniPost() {
-    if (_eventsMap[API.MY_ACTIVE] == null) {
+  MiniPost? getActiveMiniPost() {
+    if (eventsMap[API.MY_ACTIVE] == null) {
       return null;
     }
 
-    return _eventsMap[API.MY_ACTIVE].events.firstWhere(
-        (miniPost) => miniPost.postId == _post.id,
-        orElse: () => null);
+    return eventsMap[API.MY_ACTIVE]!
+        .events
+        .firstWhere((miniPost) => miniPost.postId == post.id, orElse: null);
   }
 
   Future<void> fetchEventList(String type) async {
-    if (_eventsMap[type].state == EventListState.notYetLoaded) {
-      _eventsMap[type].setState(EventListState.loading);
-      var response = await _eventRepository.getEventMiniPosts(type);
+    if (eventsMap[type]!.state == EventListState.notYetLoaded) {
+      eventsMap[type]!.state = EventListState.loading;
+      List<MiniPost>? response = await eventRepository.getEventMiniPosts(type);
       if (response != null) {
-        _eventsMap[type].events.addAll([...response]);
-        _eventsMap[type]
+        eventsMap[type]!.events.addAll([...response]);
+        eventsMap[type]!
             .events
             .sort((a, b) => a.startTime.compareTo(b.startTime));
       }
-      _eventsMap[type].setState(EventListState.idle);
+      eventsMap[type]!.state = EventListState.idle;
       notifyListeners();
     }
   }
 
-  Future<MiniPost> createEvent() async {
+  Future<MiniPost?> createEvent() async {
     eventLoadingStatus = Submitted();
     notifyListeners();
-    MiniPost miniPost;
-    if (_eventsMap[API.MY_ACTIVE] != null) {
-      var result = await _eventRepository.create(post);
+    MiniPost? miniPost;
+    if (eventsMap[API.MY_ACTIVE] != null) {
+      var result = await eventRepository.create(post);
       if (result.isSuccessful) {
         miniPost = result.data;
-        _eventsMap[API.MY_ACTIVE].events.insert(0, miniPost);
+        eventsMap[API.MY_ACTIVE]!.events.insert(0, miniPost!);
       } else {
         showNewErrorSnackbar(result.errorMessage);
       }
@@ -98,20 +86,20 @@ class EventProvider extends ChangeNotifier {
   Future<bool> updateEvent() async {
     eventLoadingStatus = Submitted();
     notifyListeners();
-    RequestResult result;
-    if (post != null) {
-      result = await _eventRepository.update(post);
+    RequestResult? result;
+    if (post != Post.empty()) {
+      result = await eventRepository.update(post);
       if (!result.isSuccessful) {
         showNewErrorSnackbar(result.errorMessage);
       }
       eventLoadingStatus = Idle();
       notifyListeners();
     }
-    return result.isSuccessful;
+    return result!.isSuccessful;
   }
 
   Future<bool> deleteEvent(int postId) async {
-    var result = await _eventRepository.delete(postId);
+    var result = await eventRepository.delete(postId);
     if (result.isSuccessful) {
       return true;
     }
@@ -120,8 +108,8 @@ class EventProvider extends ChangeNotifier {
   }
 
   void removeEvent(int id) {
-    if (_eventsMap[API.MY_ACTIVE] != null) {
-      _eventsMap[API.MY_ACTIVE]
+    if (eventsMap[API.MY_ACTIVE] != null) {
+      eventsMap[API.MY_ACTIVE]!
           .events
           .removeWhere((event) => event.postId == id);
       notifyListeners();
@@ -135,7 +123,7 @@ class EventProvider extends ChangeNotifier {
         .replaceAll(RegExp(r"[^\s\w]"), '')
         .replaceAll(RegExp(r" "), '-');
     if (pattern.length > 2) {
-      List<String> tagResultList = await _tagRepository.get(pattern);
+      List<String> tagResultList = await tagRepository.get(pattern);
       if (tagResultList.isNotEmpty && pattern == tagResultList.first) {
         tagResultList.removeAt(0);
       }
@@ -150,15 +138,15 @@ class EventProvider extends ChangeNotifier {
   }
 
   void updateMiniPost() {
-    MiniPost eventProviderMiniPost = getActiveMiniPost();
-    MiniPost searchPageProvicerMiniPost =
+    MiniPost? eventProviderMiniPost = getActiveMiniPost();
+    MiniPost? searchPageProvicerMiniPost =
         getIt<SearchPageProvider>().getMiniPostById(post.id);
-    Picture thumbnail = post.pictures.isNotEmpty ? post.pictures[0] : null;
+    Picture? thumbnail = post.pictures.isNotEmpty ? post.pictures[0] : null;
 
     if (eventProviderMiniPost != null) {
       eventProviderMiniPost.thumbnail = thumbnail;
       eventProviderMiniPost.title = post.event.title;
-      eventProviderMiniPost.address = post.location.address;
+      eventProviderMiniPost.address = post.location.address!;
       eventProviderMiniPost.startTime = post.eventTime;
       eventProviderMiniPost.endTime = post.endTime;
     }
@@ -166,7 +154,7 @@ class EventProvider extends ChangeNotifier {
     if (searchPageProvicerMiniPost != null) {
       searchPageProvicerMiniPost.thumbnail = thumbnail;
       searchPageProvicerMiniPost.title = post.event.title;
-      searchPageProvicerMiniPost.address = post.location.address;
+      searchPageProvicerMiniPost.address = post.location.address!;
       searchPageProvicerMiniPost.startTime = post.eventTime;
       searchPageProvicerMiniPost.endTime = post.endTime;
       getIt<SearchPageProvider>().buildMiniPostCards();
@@ -174,7 +162,7 @@ class EventProvider extends ChangeNotifier {
   }
 
   Future<void> refreshAvailableSlots() async {
-    _post.availableSlots = (await _eventRepository.get(post.id)).availableSlots;
+    post.availableSlots = (await eventRepository.get(post.id)).availableSlots;
   }
 
   bool validateTitle(String value) {
@@ -210,7 +198,7 @@ class EventProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Picture> selectPicture() async {
+  Future<Picture?> selectPicture() async {
     return await choosePicture();
   }
 
@@ -226,13 +214,15 @@ class EventProvider extends ChangeNotifier {
   }
 
   Future<void> reportPost(
-      {int postId, int reason, BuildContext context}) async {
+      {required int postId,
+      required int reason,
+      required BuildContext context}) async {
     PostReport report = PostReport(reason: reason, postId: postId);
 
     reportPostLoadingStatus = Submitted();
     notifyListeners();
 
-    var result = await _reportRepository.postReport(report);
+    var result = await reportRepository.postReport(report);
 
     if (!result.isSuccessful) {
       showNewErrorSnackbar(result.errorMessage);
@@ -245,7 +235,7 @@ class EventProvider extends ChangeNotifier {
 
   void reset() {
     _initEventMap();
-    _post = null;
+    post = Post.empty();
     isLocationValid = true;
     isDateValid = true;
     eventLoadingStatus = Idle();
@@ -253,8 +243,7 @@ class EventProvider extends ChangeNotifier {
   }
 
   void _initEventMap() {
-    _eventsMap = HashMap();
-    _eventsMap.addAll({
+    eventsMap.addAll({
       API.MY_ACTIVE: EventList(),
       API.MY_INACTIVE: EventList(),
       API.ATTENDING_ACTIVE: EventList(),

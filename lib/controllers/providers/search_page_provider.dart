@@ -34,63 +34,40 @@ enum MapState { LOADING, LOADED }
 
 @lazySingleton
 class SearchPageProvider extends ChangeNotifier {
-  final EventRepository _eventRepository;
+  final EventRepository eventRepository = getIt<EventRepository>();
 
-  SearchPageState _pageState;
-  MapState _mapState;
-  List<MiniPost> _searchResults;
-  SearchQuery searchQuery;
-  List<MapMarker> _mapMarkerList = [];
-  List<InkWell> _cardList = [];
-  HereMapController _hereMapController;
-  MapImage _marker;
-  bool _filterToggled;
-  MapPolygon _mapPolygon;
-  bool _hasFocus;
-  LocationServiceProvider _locationManager;
-  MapMarker _userMarker;
+  SearchPageState pageState = SearchPageState.IDLE;
+  MapState mapState = MapState.LOADING;
+  List<MiniPost> searchResults = [];
+  SearchQuery? searchQuery;
+  List<MapMarker> mapMarkerList = [];
+  List<InkWell> cardList = [];
+  HereMapController? hereMapController;
+  MapImage? marker;
+  bool filterToggled = false;
+  MapPolygon? mapPolygon;
+  bool hasFocus = false;
+  LocationServiceProvider locationManager = getIt<LocationServiceProvider>();
+  MapMarker? userMarker;
 
   double searchRadius = 7.0;
   double onCarouselSwipeLookFromDistance = 3000;
 
-  CarouselController carouselController;
+  CarouselController? carouselController;
+  BuildContext? context;
 
-  HereMapController get mapController => _hereMapController;
-
-  List<Widget> get cardList => _cardList;
-
-  bool get filter => _filterToggled;
-
-  List<MiniPost> get searchResults => _searchResults;
-
-  MapState get mapState => _mapState;
-
-  SearchPageState get pageState => _pageState;
-
-  bool get hasFocus => _hasFocus;
-  BuildContext context;
-
-  SearchPageProvider() : _eventRepository = getIt<EventRepository>() {
-    init();
-  }
-
-  void init() async {
-    carouselController = CarouselController();
-    _pageState = SearchPageState.IDLE;
-    _mapState = MapState.LOADING;
-    searchQuery = SearchQuery(radius: searchRadius.ceil());
-    _filterToggled = false;
-    _hasFocus = false;
-    _locationManager = getIt<LocationServiceProvider>();
+  SearchPageProvider() {
+    searchQuery =
+        SearchQuery(radius: searchRadius.ceil(), latitude: 0, longitude: 0);
   }
 
   void onMapCreated(HereMapController hereMapController) async {
-    _hereMapController = hereMapController;
+    hereMapController = hereMapController;
     _setTapGestureHandler();
-    _hereMapController.mapScene.loadSceneForMapScheme(MapScheme.greyDay,
+    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.greyDay,
         (MapError error) async {
       if (error == null) {
-        _hereMapController.mapScene.setLayerState(
+        hereMapController.mapScene.setLayerState(
             MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
         await updateUserLocation(isInitalizeAction: true);
         setMapState(MapState.LOADED);
@@ -103,47 +80,47 @@ class SearchPageProvider extends ChangeNotifier {
 
   /// STATE MODIFIERS
   void setPageState(SearchPageState searchPageState) {
-    _pageState = searchPageState;
+    pageState = searchPageState;
     notifyListeners();
   }
 
   void setMapState(MapState mapState) {
-    _mapState = mapState;
+    mapState = mapState;
     notifyListeners();
   }
 
   /// FILTER RELATED TOGGLERS
   void toggleFilter() {
-    _filterToggled = !_filterToggled;
+    filterToggled = !filterToggled;
     notifyListeners();
   }
 
   void filterToggleEventType(EventType eventType) {
-    searchQuery.eventTypes[eventType] = !searchQuery.eventTypes[eventType];
+    searchQuery!.eventTypes[eventType] = !searchQuery!.eventTypes[eventType]!;
     notifyListeners();
   }
 
   void filterToggleToday() {
-    searchQuery.today = !searchQuery.today;
+    searchQuery!.today = !searchQuery!.today;
     notifyListeners();
   }
 
   void updateTag(String v) {
-    searchQuery.tag = v;
+    searchQuery!.tag = v;
   }
 
   void buildMiniPostCards() {
-    if (_searchResults != null && _searchResults.isNotEmpty) {
-      _cardList?.clear();
-      for (MiniPost mp in _searchResults) {
-        _cardList.add(InkWell(
+    if (searchResults.isNotEmpty) {
+      cardList.clear();
+      for (MiniPost mp in searchResults) {
+        cardList.add(InkWell(
           onTap: () async => await Application.router.navigateTo(
-              context, '/event/${mp.postId}',
+              context!, '/event/${mp.postId}',
               transition: TransitionType.fadeIn),
           child: MiniPostCard(miniPost: mp),
         ));
       }
-      _pageState = SearchPageState.HAS_SEARCH_RESULTS;
+      pageState = SearchPageState.HAS_SEARCH_RESULTS;
       notifyListeners();
     }
   }
@@ -151,15 +128,15 @@ class SearchPageProvider extends ChangeNotifier {
   Future<void> searchEvents() async {
     if (pageState != SearchPageState.SEARCHING) {
       setPageState(SearchPageState.SEARCHING);
-      searchQuery.longitude = _locationManager.userLocation.longitude;
-      searchQuery.latitude = _locationManager.userLocation.latitude;
-      searchQuery.radius = searchRadius.ceil();
+      searchQuery!.longitude = locationManager.userLocation!.longitude!;
+      searchQuery!.latitude = locationManager.userLocation!.latitude!;
+      searchQuery!.radius = searchRadius.ceil();
       _clearSearch();
-      _searchResults = await _eventRepository.search(searchQuery);
-      if (_searchResults != null) {
+      searchResults = await eventRepository.search(searchQuery!);
+      if (searchResults != null) {
         setPageState(SearchPageState.HAS_SEARCH_RESULTS);
         buildMiniPostCards();
-        _addSearchResultsToMap(_searchResults);
+        _addSearchResultsToMap(searchResults);
       } else {
         setPageState(SearchPageState.NO_SEARCH_RESULT);
         showNewErrorSnackbar(
@@ -171,58 +148,57 @@ class SearchPageProvider extends ChangeNotifier {
   Future<void> updateUserLocation({bool isInitalizeAction = false}) async {
     UserLocation userPosition;
     if (isInitalizeAction) {
-      userPosition = _locationManager.userLocation;
-      if (_locationManager?.userLocation?.latitude == null ||
-          _locationManager?.userLocation?.longitude == null)
-        userPosition = await _locationManager.getActualLocation();
+      userPosition = locationManager.userLocation!;
+      if (locationManager.userLocation?.latitude == null ||
+          locationManager.userLocation?.longitude == null)
+        userPosition = (await locationManager.getActualLocation())!;
     } else {
-      userPosition = await _locationManager.getActualLocation();
+      userPosition = (await locationManager.getActualLocation())!;
     }
 
     GeoCoordinates geoCoordinates =
         GeoCoordinates(userPosition.latitude, userPosition.longitude);
-    mapController.camera.flyToWithOptionsAndDistance(
+    hereMapController!.camera.flyToWithOptionsAndDistance(
         geoCoordinates, 2000, MapCameraFlyToOptions.withDefaults());
     // Show the user on the map.
     MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
         'assets/icons/map/radio-button-off-outline.svg', 48, 48);
-    if (_userMarker != null) {
-      _hereMapController.mapScene.removeMapMarker(_userMarker);
+    if (userMarker != null) {
+      hereMapController!.mapScene.removeMapMarker(userMarker);
     }
-    _userMarker = MapMarker(geoCoordinates, userMarkerSvg);
-    _hereMapController.mapScene.addMapMarker(_userMarker);
+    userMarker = MapMarker(geoCoordinates, userMarkerSvg);
+    hereMapController!.mapScene.addMapMarker(userMarker);
     _redrawGeoCircle(geoCoordinates);
   }
 
   void updateSearchRadius(double v) {
     searchRadius = v;
     GeoCoordinates geoCoordinates = GeoCoordinates(
-        _locationManager.userLocation.latitude,
-        _locationManager.userLocation.longitude);
-    _hereMapController.camera.flyToWithOptionsAndDistance(geoCoordinates,
+        locationManager.userLocation?.latitude,
+        locationManager.userLocation?.longitude);
+    hereMapController!.camera.flyToWithOptionsAndDistance(geoCoordinates,
         searchRadius * 5000, MapCameraFlyToOptions.withDefaults());
     _redrawGeoCircle(geoCoordinates);
   }
 
-  MiniPost getMiniPostById(int postId) {
-    if (_searchResults == null) {
+  MiniPost? getMiniPostById(int postId) {
+    if (searchResults.isEmpty) {
       return null;
     }
-    MiniPost result = _searchResults.firstWhere(
-        (miniPost) => miniPost.postId == postId,
-        orElse: () => null);
+    MiniPost? result =
+        searchResults.firstWhere((miniPost) => miniPost.postId == postId);
     return result;
   }
 
   /// private methods \/ -----------------------------------------------------
 
   void _clearSearch() {
-    for (MapMarker mapMarker in _mapMarkerList) {
-      _hereMapController.mapScene.removeMapMarker(mapMarker);
+    for (MapMarker mapMarker in mapMarkerList) {
+      hereMapController!.mapScene.removeMapMarker(mapMarker);
     }
-    _searchResults?.clear();
-    _cardList?.clear();
-    _mapMarkerList?.clear();
+    searchResults.clear();
+    cardList.clear();
+    mapMarkerList.clear();
     notifyListeners();
     //setPageState(SearchPageState.IDLE);
   }
@@ -231,21 +207,21 @@ class SearchPageProvider extends ChangeNotifier {
     for (MiniPost miniPost in searchResults) {
       Uint8List imgPixelData =
           await _loadFileAsUint8List('${miniPost.postType.index}.png');
-      _marker =
+      marker =
           MapImage.withPixelDataAndImageFormat(imgPixelData, ImageFormat.png);
 
       GeoCoordinates geoCoordinates =
           GeoCoordinates(miniPost.latitude, miniPost.longitude);
       Anchor2D anchor2d = Anchor2D.withHorizontalAndVertical(0.5, 1);
       MapMarker mapMarker =
-          MapMarker.withAnchor(geoCoordinates, _marker, anchor2d);
+          MapMarker.withAnchor(geoCoordinates, marker, anchor2d);
       mapMarker.drawOrder = searchResults.indexOf(miniPost);
       Metadata metaData = Metadata();
       metaData.setInteger('id', miniPost.postId);
       mapMarker.metadata = metaData;
 
-      _hereMapController.mapScene.addMapMarker(mapMarker);
-      _mapMarkerList.add(mapMarker);
+      hereMapController!.mapScene.addMapMarker(mapMarker);
+      mapMarkerList.add(mapMarker);
     }
   }
 
@@ -255,27 +231,25 @@ class SearchPageProvider extends ChangeNotifier {
   }
 
   _setTapGestureHandler() {
-    _hereMapController.gestures.tapListener = TapListener.fromLambdas(
+    hereMapController!.gestures.tapListener = TapListener.fromLambdas(
         lambda_onTap: (Point2D touchPoint) => _pickEventOnMap(touchPoint));
   }
 
   void _pickEventOnMap(Point2D touchPoint) {
     var radiusInPixel = 2.0;
-    if (filter) toggleFilter();
+    if (filterToggled) toggleFilter();
     FocusManager.instance.primaryFocus?.unfocus();
-    _hereMapController.pickMapItems(touchPoint, radiusInPixel,
+    hereMapController!.pickMapItems(touchPoint, radiusInPixel,
         (eventPickResult) {
       var eventMarkerList = eventPickResult.markers;
       if (eventMarkerList.isEmpty) return;
       var topMostEvent = eventMarkerList.first;
       var metaData = topMostEvent.metadata;
-      if (metaData != null) {
-        var selectedPostId = metaData.getInteger('id');
-        for (MiniPost miniPost in _searchResults) {
-          if (miniPost.postId == selectedPostId) {
-            carouselController.animateToPage(_searchResults.indexOf(miniPost),
-                duration: Duration(milliseconds: 200), curve: Curves.linear);
-          }
+      var selectedPostId = metaData.getInteger('id');
+      for (MiniPost miniPost in searchResults) {
+        if (miniPost.postId == selectedPostId) {
+          carouselController!.animateToPage(searchResults.indexOf(miniPost),
+              duration: Duration(milliseconds: 200), curve: Curves.linear);
         }
       }
     });
@@ -284,18 +258,18 @@ class SearchPageProvider extends ChangeNotifier {
 
   void _redrawGeoCircle(GeoCoordinates geoCoordinates) {
     GeoCircle geoCircle = GeoCircle(geoCoordinates, searchRadius * 1000);
-    if (_mapPolygon != null) {
-      _hereMapController.mapScene.removeMapPolygon(_mapPolygon);
+    if (mapPolygon != null) {
+      hereMapController!.mapScene.removeMapPolygon(mapPolygon);
     }
-    _mapPolygon = MapPolygon(GeoPolygon.withGeoCircle(geoCircle),
+    mapPolygon = MapPolygon(GeoPolygon.withGeoCircle(geoCircle),
         HATheme.HOPAUT_SECONDARY.withOpacity(0.15));
-    _hereMapController.mapScene.addMapPolygon(_mapPolygon);
+    hereMapController!.mapScene.addMapPolygon(mapPolygon);
     notifyListeners();
   }
 
   @override
   void dispose() {
-    _hereMapController.release();
+    hereMapController!.release();
     super.dispose();
   }
 }

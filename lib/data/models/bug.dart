@@ -2,9 +2,9 @@ import 'package:hopaut/data/models/picture.dart';
 
 class Bug {
   String message;
-  List<Picture> pictures;
+  List<Picture>? pictures;
 
-  Bug({required this.message, required this.pictures});
+  Bug({required this.message, this.pictures});
 
   Future<Map<String, dynamic>> toMultipartJson() async {
     final Map<String, dynamic> data = Map<String, dynamic>();

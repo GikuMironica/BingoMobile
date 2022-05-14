@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:hopaut/config/constants/web.dart';
 
 class Picture {
-  String _path;
-  String _url;
-  ImageProvider _image;
+  String _path = "";
+  String _url = "";
+  ImageProvider? _image;
 
-  Picture(String path, [ImageProvider image]) {
+  Picture(String path, [ImageProvider? image]) {
     _path = path;
     _url = "${WEB.IMAGES}/$_path.webp";
     if (image == null) {
@@ -17,7 +17,7 @@ class Picture {
     }
   }
 
-  ImageProvider get image => _image;
+  ImageProvider? get image => _image;
 
   String get path => _path;
   String get url => _url;

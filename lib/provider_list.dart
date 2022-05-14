@@ -7,7 +7,6 @@ import 'controllers/providers/reportbug_provider.dart';
 import 'controllers/providers/account_provider.dart';
 import 'controllers/providers/change_password_provider.dart';
 import 'controllers/providers/event_provider.dart';
-import 'controllers/providers/legacy_location_provider.dart';
 import 'controllers/providers/location_provider.dart';
 import 'controllers/providers/map_location_provider.dart';
 import 'controllers/providers/search_page_provider.dart';

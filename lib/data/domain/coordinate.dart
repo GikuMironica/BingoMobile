@@ -1,12 +1,12 @@
 class Coordinates {
-  final double longitude;
-  final double latitude;
+  final double? longitude;
+  final double? latitude;
 
   Coordinates({required this.latitude, required this.longitude});
 }
 
 class SensorLocation extends Coordinates {
-  SensorLocation(double latitude, double longitude)
+  SensorLocation(double? latitude, double? longitude)
       : super(latitude: latitude, longitude: longitude);
 
   factory SensorLocation.fromJSON(Map<String, dynamic> json) {
@@ -33,6 +33,6 @@ class SensorLocation extends Coordinates {
 }
 
 class UserLocation extends Coordinates {
-  UserLocation(double latitude, double longitude)
+  UserLocation(double? latitude, double? longitude)
       : super(latitude: latitude, longitude: longitude);
 }

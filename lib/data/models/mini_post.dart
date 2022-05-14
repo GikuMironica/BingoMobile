@@ -5,23 +5,23 @@ import 'package:hopaut/data/models/picture.dart';
 import 'package:hopaut/services/date_formatter_service.dart';
 
 class MiniPost {
-  int postId;
-  EventType postType;
-  Picture thumbnail;
-  String address;
-  String title;
-  double hostRating;
-  double latitude;
-  double longitude;
-  int repteatableEnabled;
-  int frequency;
-  int vouchersEnabled;
-  int postTime;
-  int startTime;
-  int endTime;
-  double entracePrice;
-  int slots;
-  String errorMessage = "";
+  int postId = -1;
+  EventType postType = EventType.other;
+  Picture? thumbnail;
+  String address = "";
+  String title = "";
+  double? hostRating = 0;
+  double latitude = 0;
+  double longitude = 0;
+  int? repteatableEnabled = 0;
+  int? frequency = 0;
+  int? vouchersEnabled = 0;
+  int postTime = 0;
+  int startTime = 0;
+  int endTime = 0;
+  double? entracePrice = 0;
+  int? slots = 0;
+  String? errorMessage;
 
   MiniPost(
       {required this.postId,
@@ -29,23 +29,23 @@ class MiniPost {
       required this.thumbnail,
       required this.address,
       required this.title,
-      required this.hostRating,
       required this.latitude,
       required this.longitude,
-      required this.repteatableEnabled,
-      required this.frequency,
-      required this.vouchersEnabled,
       required this.postTime,
       required this.startTime,
       required this.endTime,
-      required this.entracePrice,
-      required this.slots,
+      this.hostRating,
+      this.repteatableEnabled,
+      this.frequency,
+      this.vouchersEnabled,
+      this.entracePrice,
+      this.slots,
       this.errorMessage});
 
   MiniPost.fromJson(Map<String, dynamic> json) {
     postId = json['PostId'];
     postType = EventType.values[json['PostType']];
-    thumbnail = json['Thumbnail'] != null ? Picture(json['Thumbnail']) : null;
+    thumbnail = json['Thumbnail'];
     address = json['Address'];
     title = json['Title'];
     hostRating = json['HostRating'];

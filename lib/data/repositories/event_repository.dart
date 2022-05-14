@@ -154,7 +154,7 @@ class EventRepository extends Repository {
     return {};
   }
 
-  Future<List<MiniPost>> getEventMiniPosts(String endpoint) async {
+  Future<List<MiniPost>>? getEventMiniPosts(String endpoint) async {
     try {
       Response response = await dio.get(endpoint);
       if (response.statusCode == 200) {

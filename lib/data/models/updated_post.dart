@@ -5,8 +5,8 @@ import 'package:http_parser/http_parser.dart';
 
 Future<Map<String, dynamic>> multiPartUpdatedPost(
     Map<String, dynamic> data) async {
-  String mimeType = mimeFromExtension('webp');
-  String mimee = mimeType.split('/')[0];
+  String? mimeType = mimeFromExtension('webp');
+  String mimee = mimeType!.split('/')[0];
   String type = mimeType.split('/')[1];
   Map<String, dynamic> payload = {};
   payload['EventTime'] = data['EventTime'];
