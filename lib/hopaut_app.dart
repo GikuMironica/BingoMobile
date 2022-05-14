@@ -1,8 +1,6 @@
 import 'dart:collection';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/injection.dart';
@@ -33,7 +31,7 @@ class _HopAutState extends State<HopAut> {
   Future<bool> onAppStart() async {
     await Hive.initFlutter();
     var hiveAuthBox = await Hive.openBox('auth');
-    final LinkedHashMap<dynamic, dynamic> entry = hiveAuthBox.get('identity');
+    final LinkedHashMap<dynamic, dynamic>? entry = hiveAuthBox.get('identity');
 
     if (entry != null) {
       AuthenticationService authenticationService =
@@ -43,7 +41,7 @@ class _HopAutState extends State<HopAut> {
 
       Map<String, dynamic> data = entry.map((a, b) => MapEntry(a as String, b));
       authenticationService.setIdentity(Identity.fromJson(data));
-      String token = await secureStorageService.read(key: 'token');
+      String? token = await secureStorageService.read(key: 'token');
       if (token != null) {
         dioService.setBearerToken(token);
         await authenticationService.refreshToken();
@@ -69,7 +67,7 @@ class _HopAutState extends State<HopAut> {
           builder: (context, child) {
             return ScrollConfiguration(
               behavior: DisableGlowBehavior(),
-              child: child,
+              child: child!,
             );
           },
           theme: HATheme.themeData,

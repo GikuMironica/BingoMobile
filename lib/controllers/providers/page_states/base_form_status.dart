@@ -7,6 +7,6 @@ class Submitted extends BaseFormStatus {}
 class Success extends BaseFormStatus {}
 
 class Failed extends BaseFormStatus {
-  String errorMessage;
-  Failed({required this.errorMessage});
+  String? errorMessage;
+  Failed({this.errorMessage});
 }

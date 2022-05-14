@@ -6,17 +6,16 @@ class SearchQuery {
   double latitude;
   double longitude;
   int radius;
-  HashMap<EventType, bool> eventTypes;
+  HashMap<EventType, bool> eventTypes = HashMap();
   bool today;
   String tag;
 
   SearchQuery(
-      {this.latitude,
-      this.longitude,
-      this.radius,
+      {required this.latitude,
+      required this.longitude,
+      required this.radius,
       this.today = false,
       this.tag = ''}) {
-    eventTypes = HashMap();
     for (EventType value in EventType.values) {
       eventTypes[value] = false;
     }
