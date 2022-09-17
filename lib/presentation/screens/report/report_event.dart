@@ -11,14 +11,14 @@ import 'package:hopaut/generated/locale_keys.g.dart';
 class ReportEvent extends StatefulWidget {
   final int postId;
 
-  ReportEvent({@required this.postId});
+  ReportEvent({required this.postId});
 
   @override
   _ReportEventState createState() => _ReportEventState();
 }
 
 class _ReportEventState extends State<ReportEvent> {
-  EventProvider _eventProvider;
+  late EventProvider _eventProvider;
 
   @override
   Widget build(BuildContext context) {
