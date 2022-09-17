@@ -63,7 +63,7 @@ class ReportBugProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Picture?> selectPicture() async {
+  Future<Picture> selectPicture() async {
     return await choosePicture();
   }
 }

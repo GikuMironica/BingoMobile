@@ -16,8 +16,8 @@ class ReportBug extends StatefulWidget {
 }
 
 class _ReportBugState extends State<ReportBug> {
-  ReportBugProvider _reportBugProvider;
-  TextEditingController bugController;
+  late ReportBugProvider _reportBugProvider;
+  late TextEditingController bugController;
   bool _expanded = false;
   final _formKey = GlobalKey<FormState>();
 
@@ -33,20 +33,19 @@ class _ReportBugState extends State<ReportBug> {
     return Scaffold(
         appBar: SimpleAppBar(
             context: context,
-            text: LocaleKeys
-                .Account_Settings_ReportBug_pageTitle.tr(),
+            text: LocaleKeys.Account_Settings_ReportBug_pageTitle.tr(),
             actionButtons:
                 _reportBugProvider.validateBugField(bugController.text)
                     ? [
                         IconButton(
                             icon: Icon(Icons.check),
                             onPressed: () async => {
-                                  _formKey.currentState.save(),
+                                  _formKey.currentState!.save(),
                                   await _reportBugProvider.reportBugAsync(
                                       bugController.text.trim(), context)
                                 })
                       ]
-                    : null),
+                    : []),
         body: Container(
             height: MediaQuery.of(context).size.height,
             child: SingleChildScrollView(
@@ -60,15 +59,17 @@ class _ReportBugState extends State<ReportBug> {
       // Translation
       Future.delayed(Duration.zero, () async {
         showSnackBarWithError(
-            context: context, message: LocaleKeys
-            .Account_Settings_ReportBug_toasts.tr());
+            context: context,
+            message: LocaleKeys.Account_Settings_ReportBug_toasts.tr());
       });
       _reportBugProvider.reportBugFormStatus = new Idle();
     }
     return _reportBugProvider.reportBugFormStatus is Submitted
         ? overlayBlurBackgroundCircularProgressIndicator(
-            context, LocaleKeys
-        .Account_Settings_ReportBug_dialogs_uploadingDialog_uploadingReport.tr())
+            context,
+            LocaleKeys
+                    .Account_Settings_ReportBug_dialogs_uploadingDialog_uploadingReport
+                .tr())
         : Form(
             key: _formKey,
             child: Column(
@@ -81,7 +82,8 @@ class _ReportBugState extends State<ReportBug> {
                   padding: EdgeInsets.only(left: 12),
                   child: Text(
                     LocaleKeys
-                        .Account_Settings_ReportBug_labels_somethingIsntWorking.tr(),
+                            .Account_Settings_ReportBug_labels_somethingIsntWorking
+                        .tr(),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -95,11 +97,11 @@ class _ReportBugState extends State<ReportBug> {
                   controller: bugController,
                   isStateValid:
                       _reportBugProvider.validateBugField(bugController.text),
-                  hintText:
-                  LocaleKeys
+                  hintText: LocaleKeys
                       .Account_Settings_ReportBug_hints_issueReportHint.tr(),
                   validationMessage: LocaleKeys
-                      .Account_Settings_ReportBug_validation_invalidIssueDescription.tr(),
+                          .Account_Settings_ReportBug_validation_invalidIssueDescription
+                      .tr(),
                   onChange: (v) =>
                       _reportBugProvider.onReportChange(v, bugController),
                 ),
@@ -122,7 +124,8 @@ class _ReportBugState extends State<ReportBug> {
                           return ListTile(
                             title: Text(
                               LocaleKeys
-                                  .Account_Settings_ReportBug_labels_uploadScreenshots.tr(),
+                                      .Account_Settings_ReportBug_labels_uploadScreenshots
+                                  .tr(),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 14),
                             ),
@@ -133,7 +136,7 @@ class _ReportBugState extends State<ReportBug> {
                           child: PictureList(
                             selectPicture: _reportBugProvider.selectPicture,
                             onSaved: (value) =>
-                                _reportBugProvider.pictures = value,
+                                _reportBugProvider.pictures = value!,
                           ),
                         ),
                         isExpanded: _expanded,
