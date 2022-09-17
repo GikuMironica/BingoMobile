@@ -139,7 +139,7 @@ class AuthenticationRepository extends Repository {
   }
 
   Future<bool> changePassword(
-      {required String email,
+      {required String? email,
       required String oldPassword,
       required String newPassword}) async {
     final Map<String, dynamic> payload = {

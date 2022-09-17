@@ -30,7 +30,7 @@ class UserRepository extends Repository {
   }
 
   /// Updates the user data.
-  Future<User?> update(String userId, User user) async {
+  Future<User?> update(String? userId, User user) async {
     try {
       var response = await dio.put("$_endpoint/$userId", data: user.toJson());
       return User.fromJson(response.data['Data']);
@@ -65,7 +65,7 @@ class UserRepository extends Repository {
   }
 
   /// Uploads the user's profile picture
-  Future<RequestResult?> uploadPicture(String userId,
+  Future<RequestResult?> uploadPicture(String? userId,
       {required String imagePath}) async {
     var map = {
       "UpdatedPicture": await MultipartFile.fromFile(imagePath,

@@ -71,11 +71,11 @@ class EventProvider extends ChangeNotifier {
     MiniPost? miniPost;
     if (eventsMap[API.MY_ACTIVE] != null) {
       var result = await eventRepository.create(post);
-      if (result.isSuccessful) {
-        miniPost = result.data;
+      if (result?.isSuccessful ?? false) {
+        miniPost = result?.data;
         eventsMap[API.MY_ACTIVE]!.events.insert(0, miniPost!);
       } else {
-        showNewErrorSnackbar(result.errorMessage);
+        showNewErrorSnackbar(result?.errorMessage ?? "");
       }
       eventLoadingStatus = Idle();
       notifyListeners();
@@ -89,8 +89,8 @@ class EventProvider extends ChangeNotifier {
     RequestResult? result;
     if (post != Post.empty()) {
       result = await eventRepository.update(post);
-      if (!result.isSuccessful) {
-        showNewErrorSnackbar(result.errorMessage);
+      if (!(result?.isSuccessful ?? false)) {
+        showNewErrorSnackbar(result?.errorMessage ?? "");
       }
       eventLoadingStatus = Idle();
       notifyListeners();
@@ -100,10 +100,10 @@ class EventProvider extends ChangeNotifier {
 
   Future<bool> deleteEvent(int postId) async {
     var result = await eventRepository.delete(postId);
-    if (result.isSuccessful) {
+    if (result?.isSuccessful ?? false) {
       return true;
     }
-    showNewErrorSnackbar(result.errorMessage);
+    showNewErrorSnackbar(result?.errorMessage ?? "");
     return false;
   }
 
@@ -162,7 +162,7 @@ class EventProvider extends ChangeNotifier {
   }
 
   Future<void> refreshAvailableSlots() async {
-    post.availableSlots = (await eventRepository.get(post.id)).availableSlots;
+    post.availableSlots = (await eventRepository.get(post.id))?.availableSlots;
   }
 
   bool validateTitle(String value) {
@@ -225,7 +225,7 @@ class EventProvider extends ChangeNotifier {
     var result = await reportRepository.postReport(report);
 
     if (!result.isSuccessful) {
-      showNewErrorSnackbar(result.errorMessage);
+      showNewErrorSnackbar(result?.errorMessage ?? "");
     }
 
     Application.router.pop(context, true);

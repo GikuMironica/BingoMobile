@@ -58,7 +58,7 @@ class ChangePasswordProvider extends ChangeNotifier {
     formStatus = Submitted();
     notifyListeners();
     bool passChangeRes = await authenticationRepository.changePassword(
-        email: authenticationService.user.email!,
+        email: authenticationService.user?.email,
         oldPassword: oldPassword,
         newPassword: newPassword);
 

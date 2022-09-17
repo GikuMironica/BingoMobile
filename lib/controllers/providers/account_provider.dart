@@ -42,13 +42,13 @@ class AccountProvider extends ChangeNotifier {
   AuthenticationService authenticationService = getIt<AuthenticationService>();
   UserRepository userRepository = getIt<UserRepository>();
 
-  User get currentIdentity => authenticationService.user;
+  User? get currentIdentity => authenticationService.user;
   FirebaseOtpService firebaseOtpService = getIt<FirebaseOtpService>();
 
   Future<void> updateUserNameAsync(
       String firstName, String lastName, BuildContext context) async {
-    bool firstNameChanged = currentIdentity.firstName != firstName;
-    bool lastNameChanged = currentIdentity.lastName != lastName;
+    bool firstNameChanged = currentIdentity?.firstName != firstName;
+    bool lastNameChanged = currentIdentity?.lastName != lastName;
 
     if ((!firstNameChanged && !lastNameChanged) ||
         (firstName == "") && (lastName == "")) {
@@ -58,7 +58,7 @@ class AccountProvider extends ChangeNotifier {
       notifyListeners();
       User tempUser = User(firstName: firstName, lastName: lastName);
       User? updatedUser =
-          await userRepository.update(currentIdentity.id!, tempUser);
+          await userRepository.update(currentIdentity?.id, tempUser);
       if (updatedUser == null) {
         formStatus = new Failed();
         notifyListeners();
@@ -72,7 +72,7 @@ class AccountProvider extends ChangeNotifier {
 
   Future<void> updateDescriptionAsync(
       String newDescription, BuildContext context) async {
-    bool descriptionHasChanged = currentIdentity.description != newDescription;
+    bool descriptionHasChanged = currentIdentity?.description != newDescription;
 
     if (!descriptionHasChanged) {
       Application.router.pop(context);
@@ -80,7 +80,7 @@ class AccountProvider extends ChangeNotifier {
       formStatus = Submitted();
       notifyListeners();
       User tempUser = User(id: "", description: newDescription);
-      var response = await userRepository.update(currentIdentity.id!, tempUser);
+      var response = await userRepository.update(currentIdentity?.id, tempUser);
 
       if (response == null) {
         formStatus = Failed();
@@ -142,8 +142,8 @@ class AccountProvider extends ChangeNotifier {
     }
 
     User tempUser = User(phoneNumber: number);
-    User updatedUser =
-        await userRepository.update(currentIdentity.id!, tempUser);
+    User? updatedUser =
+        await userRepository.update(currentIdentity?.id, tempUser);
 
     if (updatedUser == null) {
       showNewErrorSnackbar(LocaleKeys
@@ -171,9 +171,9 @@ class AccountProvider extends ChangeNotifier {
   }
 
   Future<bool> deleteProfilePictureAsync(String userId) async {
-    if (currentIdentity.profilePicture != null) {
+    if (currentIdentity?.profilePicture != null) {
       var response = await userRepository.deletePicture(userId);
-      currentIdentity.profilePicture = null;
+      currentIdentity?.profilePicture = null;
       authenticationService.setUser(currentIdentity);
       notifyListeners();
       return response;
@@ -181,13 +181,13 @@ class AccountProvider extends ChangeNotifier {
     return true;
   }
 
-  Future<RequestResult> uploadProfilePictureAsync(
+  Future<RequestResult?> uploadProfilePictureAsync(
       String fileAbsolutePath) async {
-    var result = await userRepository.uploadPicture(currentIdentity.id!,
+    var result = await userRepository.uploadPicture(currentIdentity?.id,
         imagePath: fileAbsolutePath);
-    if (result.isSuccessful) {
-      if (result.data != null) {
-        User user = result.data;
+    if (result?.isSuccessful ?? false) {
+      if (result?.data != null) {
+        User user = result?.data;
         authenticationService.setUser(user);
         return result;
       } else {
