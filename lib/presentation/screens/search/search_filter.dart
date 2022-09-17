@@ -23,7 +23,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
     return Consumer<SearchPageProvider>(
       builder: (context, provider, __) => Card(
         color: Colors.white.withOpacity(0.9),
-        elevation: provider.filter ? 4.0 : 0.25,
+        elevation: provider.filterToggled ? 4.0 : 0.25,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
         ),
@@ -68,7 +68,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                   )
                 ],
               ),
-              if (provider.filter) ...[
+              if (provider.filterToggled) ...[
                 Padding(
                   padding: const EdgeInsets.only(right: 12.0),
                   child: Column(
@@ -203,7 +203,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                                     fontSize: 14.0),
                               ),
                               CircularCheckBox(
-                                value: provider.searchQuery.today,
+                                value: provider.searchQuery!.today,
                                 onChanged: (v) => provider.filterToggleToday(),
                                 materialTapTargetSize:
                                     MaterialTapTargetSize.shrinkWrap,
@@ -231,52 +231,52 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
 }
 
 List<Widget> _carouselFilterItems(
-    {SearchPageProvider provider, BuildContext context}) {
+    {required SearchPageProvider provider, required BuildContext context}) {
   return [
     _filterEventType(
         context: context,
         type: LocaleKeys.Hosted_Create_eventTypes_houseParty.tr(),
-        value: provider.searchQuery.eventTypes[EventType.houseParty],
+        value: provider.searchQuery!.eventTypes[EventType.houseParty] ?? false,
         onTap: (v) => provider.filterToggleEventType(EventType.houseParty)),
     _filterEventType(
         context: context,
         type: LocaleKeys.Hosted_Create_eventTypes_club.tr(),
-        value: provider.searchQuery.eventTypes[EventType.club],
+        value: provider.searchQuery!.eventTypes[EventType.club] ?? false,
         onTap: (v) => provider.filterToggleEventType(EventType.club)),
     _filterEventType(
         context: context,
         type: LocaleKeys.Hosted_Create_eventTypes_streetParty.tr(),
-        value: provider.searchQuery.eventTypes[EventType.streetParty],
+        value: provider.searchQuery!.eventTypes[EventType.streetParty] ?? false,
         onTap: (v) => provider.filterToggleEventType(EventType.streetParty)),
     _filterEventType(
         context: context,
         type: LocaleKeys.Hosted_Create_eventTypes_bar.tr(),
-        value: provider.searchQuery.eventTypes[EventType.bar],
+        value: provider.searchQuery!.eventTypes[EventType.bar] ?? false,
         onTap: (v) => provider.filterToggleEventType(EventType.bar)),
     _filterEventType(
         context: context,
         type: LocaleKeys.Hosted_Create_eventTypes_bicycleMeet.tr(),
-        value: provider.searchQuery.eventTypes[EventType.bicycleMeet],
+        value: provider.searchQuery!.eventTypes[EventType.bicycleMeet] ?? false,
         onTap: (v) => provider.filterToggleEventType(EventType.bicycleMeet)),
     _filterEventType(
         context: context,
         type: LocaleKeys.Hosted_Create_eventTypes_bikerMeet.tr(),
-        value: provider.searchQuery.eventTypes[EventType.bikerMeet],
+        value: provider.searchQuery!.eventTypes[EventType.bikerMeet] ?? false,
         onTap: (v) => provider.filterToggleEventType(EventType.bikerMeet)),
     _filterEventType(
         context: context,
         type: LocaleKeys.Hosted_Create_eventTypes_carMeet.tr(),
-        value: provider.searchQuery.eventTypes[EventType.carMeet],
+        value: provider.searchQuery!.eventTypes[EventType.carMeet] ?? false,
         onTap: (v) => provider.filterToggleEventType(EventType.carMeet)),
     _filterEventType(
         context: context,
         type: LocaleKeys.Hosted_Create_eventTypes_sport.tr(),
-        value: provider.searchQuery.eventTypes[EventType.sport],
+        value: provider.searchQuery!.eventTypes[EventType.sport] ?? false,
         onTap: (v) => provider.filterToggleEventType(EventType.sport)),
     _filterEventType(
         context: context,
         type: LocaleKeys.Hosted_Create_eventTypes_others.tr(),
-        value: provider.searchQuery.eventTypes[EventType.other],
+        value: provider.searchQuery!.eventTypes[EventType.other] ?? false,
         onTap: (v) => provider.filterToggleEventType(EventType.other)),
   ];
 }
@@ -304,10 +304,10 @@ OutlinedButton _searchButton(SearchPageProvider provider) {
 }
 
 Widget _filterEventType(
-        {String type,
-        bool value,
-        Function(bool) onTap,
-        BuildContext context}) =>
+        {required String type,
+        required bool value,
+        required Function(bool) onTap,
+        required BuildContext context}) =>
     Card(
       elevation: 5,
       color: Colors.transparent,
