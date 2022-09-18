@@ -32,11 +32,12 @@ class AccountProvider extends ChangeNotifier {
   BaseFormStatus picturesPageStatus = Idle();
   TimerState timerState = TimerStopped();
 
-  CountdownTimer? countDownTimer;
-  String? number;
-  String? otp;
+  late CountdownTimer countDownTimer;
+  late String? number;
+  late String? otp;
   int currentTimerSeconds = Configurations.RESEND_OTP_TIME;
   int otpTries = 0;
+  late String dialCode;
 
   // Services, repositories and models
   AuthenticationService authenticationService = getIt<AuthenticationService>();

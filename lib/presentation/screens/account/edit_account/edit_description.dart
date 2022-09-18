@@ -16,9 +16,9 @@ class EditAccountDescription extends StatefulWidget {
 }
 
 class _EditAccountDescriptionState extends State<EditAccountDescription> {
-  AccountProvider _accountProvider;
-  TextEditingController _descriptionController;
-  int maxFieldLength;
+  late AccountProvider _accountProvider;
+  late TextEditingController _descriptionController;
+  late int maxFieldLength;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -28,7 +28,7 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
     // on initialize screen, controller text is null even if user has description
     // dirty fix
     _descriptionController.text =
-        getIt<AuthenticationService>().user.description;
+        getIt<AuthenticationService>().user!.description!;
     maxFieldLength = 250;
   }
 
@@ -38,8 +38,7 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
     return Scaffold(
         appBar: SimpleAppBar(
             context: context,
-            text: LocaleKeys
-                .Account_EditProfile_EditDescription_pageTitle.tr(),
+            text: LocaleKeys.Account_EditProfile_EditDescription_pageTitle.tr(),
             actionButtons: _accountProvider.validateDescription(
                     _descriptionController.text, maxFieldLength)
                 ? [
@@ -49,7 +48,7 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
                             await _accountProvider.updateDescriptionAsync(
                                 _descriptionController.text.trim(), context))
                   ]
-                : null),
+                : []),
         body: Container(
             height: MediaQuery.of(context).size.height,
             child: SingleChildScrollView(
@@ -64,14 +63,17 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
       // Translation
       Future.delayed(Duration.zero, () async {
         showSnackBarWithError(
-            context: context, message: LocaleKeys
-            .Account_EditProfile_EditDescription_toasts_error.tr());
+            context: context,
+            message: LocaleKeys.Account_EditProfile_EditDescription_toasts_error
+                .tr());
       });
       _accountProvider.formStatus = new Idle();
     }
     return _accountProvider.formStatus is Submitted
-        ? overlayBlurBackgroundCircularProgressIndicator(context, LocaleKeys
-        .Account_EditProfile_EditDescription_labels_updatingDialog.tr())
+        ? overlayBlurBackgroundCircularProgressIndicator(
+            context,
+            LocaleKeys.Account_EditProfile_EditDescription_labels_updatingDialog
+                .tr())
         : Form(
             key: _formKey,
             child: Column(
@@ -84,7 +86,8 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
                   padding: EdgeInsets.only(left: 12),
                   child: Text(
                     LocaleKeys
-                        .Account_EditProfile_EditDescription_labels_descriptionLabel.tr(),
+                            .Account_EditProfile_EditDescription_labels_descriptionLabel
+                        .tr(),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -96,9 +99,10 @@ class _EditAccountDescriptionState extends State<EditAccountDescription> {
                   controller: _descriptionController,
                   isStateValid: _accountProvider.validateDescription(
                       _descriptionController.text, maxFieldLength),
-                  initialValue: _accountProvider.currentIdentity.description,
+                  initialValue: _accountProvider!.currentIdentity!.description!,
                   validationMessage: LocaleKeys
-                      .Account_EditProfile_EditDescription_validation_descriptionTooLong.tr(),
+                          .Account_EditProfile_EditDescription_validation_descriptionTooLong
+                      .tr(),
                   onChange: (v) => _accountProvider.onDescriptionChange(
                       v, _descriptionController),
                 )
