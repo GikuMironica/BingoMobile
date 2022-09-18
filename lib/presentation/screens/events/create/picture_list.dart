@@ -8,10 +8,10 @@ class PictureList extends FormField<List<Picture>> {
   final Future<Picture> Function() selectPicture;
 
   PictureList(
-      {@required this.selectPicture,
-      FormFieldSetter<List<Picture>> onSaved,
-      FormFieldValidator<List<Picture>> validator,
-      List<Picture> initialValue})
+      {required this.selectPicture,
+      FormFieldSetter<List<Picture>>? onSaved,
+      FormFieldValidator<List<Picture>>? validator,
+      List<Picture>? initialValue})
       : super(
             onSaved: onSaved,
             validator: validator,
@@ -20,7 +20,7 @@ class PictureList extends FormField<List<Picture>> {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  ...state.value
+                  ...state.value!
                       .asMap()
                       .entries
                       .map(((map) => PictureCard(
@@ -28,20 +28,20 @@ class PictureList extends FormField<List<Picture>> {
                           onSet: () async {
                             Picture picture = await selectPicture();
                             if (picture != null) {
-                              state.value[map.key] = picture;
+                              state.value![map.key] = picture;
                               state.validate();
                             }
                           },
                           onRemove: () {
-                            state.value.remove(map.value);
+                            state.value!.remove(map.value);
                             state.validate();
                           })))
                       .toList(),
-                  state.value.length < Constraint.pictureMaxCount
+                  state.value!.length < Constraint.pictureMaxCount
                       ? PictureCard(onSet: () async {
                           Picture picture = await selectPicture();
                           if (picture != null) {
-                            state.value.add(picture);
+                            state.value!.add(picture);
                             state.validate();
                           }
                         })

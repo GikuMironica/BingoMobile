@@ -16,8 +16,8 @@ class EditMobile extends StatefulWidget {
 }
 
 class _EditMobileState extends State<EditMobile> {
-  AccountProvider _accountProvider;
-  LocationServiceProvider _locationProvider;
+  late AccountProvider _accountProvider;
+  late LocationServiceProvider _locationProvider;
   final TextEditingController controller = TextEditingController();
   PhoneNumber number;
   bool state;

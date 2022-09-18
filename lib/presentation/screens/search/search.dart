@@ -17,8 +17,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  SearchPageProvider searchProvider;
-  LocationServiceProvider locationService;
+  late SearchPageProvider searchProvider;
+  late LocationServiceProvider locationService;
 
   @override
   Widget build(BuildContext context) {

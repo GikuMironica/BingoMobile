@@ -17,7 +17,7 @@ class ChangePasswordPage extends StatefulWidget {
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final _formKey = GlobalKey<FormState>();
-  ChangePasswordProvider _passwordProvider;
+  late ChangePasswordProvider _passwordProvider;
 
   @override
   void dispose() {
@@ -73,8 +73,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              LocaleKeys
-                  .Account_Settings_ChangePassword_pageTitle.tr(),
+              LocaleKeys.Account_Settings_ChangePassword_pageTitle.tr(),
               style: TextStyle(
                   shadows: [
                     Shadow(
@@ -122,9 +121,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget hint() {
     return RichText(
       text: TextSpan(
-          text:
-          LocaleKeys
-              .Account_Settings_ChangePassword_labels_forgotPasswordInstructions.tr(),
+          text: LocaleKeys
+                  .Account_Settings_ChangePassword_labels_forgotPasswordInstructions
+              .tr(),
           style: TextStyle(color: Colors.grey)),
     );
   }
@@ -132,21 +131,27 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget inputForm(BuildContext context) {
     if (_passwordProvider.formStatus is Failed) {
       Future.delayed(Duration.zero, () async {
-        showSnackBarWithError(context: context, message: LocaleKeys
-            .Account_Settings_ChangePassword_toasts_wrongPassword.tr());
+        showSnackBarWithError(
+            context: context,
+            message: LocaleKeys
+                .Account_Settings_ChangePassword_toasts_wrongPassword.tr());
       });
     } else if (_passwordProvider.formStatus is Success) {
       Future.delayed(Duration.zero, () async {
-        showSuccessSnackBar(context: context, message: LocaleKeys
-            .Account_Settings_ChangePassword_toasts_passwordUpdated.tr());
+        showSuccessSnackBar(
+            context: context,
+            message: LocaleKeys
+                .Account_Settings_ChangePassword_toasts_passwordUpdated.tr());
       });
     }
     Future.delayed(Duration(seconds: 1), () async {
       _passwordProvider.formStatus = Idle();
     });
     return _passwordProvider.formStatus is Submitted
-        ? overlayBlurBackgroundCircularProgressIndicator(context, LocaleKeys
-        .Account_Settings_ChangePassword_labels_updatingDialog.tr())
+        ? overlayBlurBackgroundCircularProgressIndicator(
+            context,
+            LocaleKeys.Account_Settings_ChangePassword_labels_updatingDialog
+                .tr())
         : Form(
             key: _formKey,
             child: Column(
@@ -154,9 +159,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 passwordInputField(
                     context: context,
                     hint: LocaleKeys
-                        .Account_Settings_ChangePassword_hints_enterOldPassword.tr(),
+                            .Account_Settings_ChangePassword_hints_enterOldPassword
+                        .tr(),
                     validationMessage: LocaleKeys
-                        .Account_Settings_ChangePassword_validation_inputOldPassword.tr(),
+                            .Account_Settings_ChangePassword_validation_inputOldPassword
+                        .tr(),
                     isStateValid: _passwordProvider.validateOldPassword(),
                     isTextObscured: _passwordProvider.passwordObscureText,
                     onObscureTap: _passwordProvider.toggleObscurePassword,
@@ -165,9 +172,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 passwordInputField(
                     context: context,
                     hint: LocaleKeys
-                        .Account_Settings_ChangePassword_hints_enterNewPassword.tr(),
+                            .Account_Settings_ChangePassword_hints_enterNewPassword
+                        .tr(),
                     validationMessage: LocaleKeys
-                        .Account_Settings_ChangePassword_validation_inputNewPassword.tr(),
+                            .Account_Settings_ChangePassword_validation_inputNewPassword
+                        .tr(),
                     isStateValid: _passwordProvider.validateNewPassword(),
                     isTextObscured: _passwordProvider.newPasswordObscureText,
                     onObscureTap: _passwordProvider.toggleObscureNewPassword,
@@ -176,12 +185,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 persistButton(
                     context: context,
                     label: LocaleKeys
-                        .Account_Settings_ChangePassword_buttons_changePassword.tr(),
+                            .Account_Settings_ChangePassword_buttons_changePassword
+                        .tr(),
                     isStateValid: _passwordProvider.validateNewPassword() &&
                         _passwordProvider.validateOldPassword(),
                     onPressed: () async => {
-                          FocusManager.instance.primaryFocus.unfocus(),
-                          if (_formKey.currentState.validate())
+                          FocusManager.instance.primaryFocus!.unfocus(),
+                          if (_formKey.currentState!.validate())
                             {await _passwordProvider.updatePassword(context)}
                         })
               ],

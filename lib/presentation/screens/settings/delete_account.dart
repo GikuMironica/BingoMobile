@@ -13,7 +13,7 @@ class DeleteAccountPopup extends StatefulWidget {
 }
 
 class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
-  SettingsProvider _settingsProvider;
+  late SettingsProvider _settingsProvider;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -34,23 +34,22 @@ class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
     return Column(
       children: [
         Text(
-          LocaleKeys
-              .Account_Settings_DeleteAccount_dialogTitle.tr(),
+          LocaleKeys.Account_Settings_DeleteAccount_dialogTitle.tr(),
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 20),
         RichText(
           text: TextSpan(
             style: TextStyle(fontSize: 15, color: Colors.black),
-            text: LocaleKeys
-                .Account_Settings_DeleteAccount_labels_deleteInfo1.tr(),
+            text: LocaleKeys.Account_Settings_DeleteAccount_labels_deleteInfo1
+                .tr(),
           ),
         ),
         SizedBox(height: 10),
         RichText(
           text: TextSpan(
-              text: LocaleKeys
-                  .Account_Settings_DeleteAccount_labels_deleteInfo2.tr(),
+              text: LocaleKeys.Account_Settings_DeleteAccount_labels_deleteInfo2
+                  .tr(),
               style: TextStyle(fontSize: 15, color: Colors.black),
               children: [
                 TextSpan(
@@ -59,13 +58,13 @@ class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(
                     text: LocaleKeys
-                        .Account_Settings_DeleteAccount_labels_deleteInfo4.tr()),
+                            .Account_Settings_DeleteAccount_labels_deleteInfo4
+                        .tr()),
               ]),
         ),
         SizedBox(height: 10),
         Text(
-          LocaleKeys
-              .Account_Settings_DeleteAccount_labels_deleteInfo5.tr(),
+          LocaleKeys.Account_Settings_DeleteAccount_labels_deleteInfo5.tr(),
           style: TextStyle(color: Colors.black54),
         ),
         SizedBox(height: 20),
@@ -94,23 +93,23 @@ class _DeleteAccountPopupState extends State<DeleteAccountPopup> {
                     color: _settingsProvider.isDeleteAccountEmailValid
                         ? Colors.red
                         : Colors.red.withOpacity(0.5),
-                    child:
-                        Text(LocaleKeys
-                            .Account_Settings_DeleteAccount_buttons_delete.tr(),
-                            style: TextStyle(color: Colors.white)),
+                    child: Text(
+                        LocaleKeys.Account_Settings_DeleteAccount_buttons_delete
+                            .tr(),
+                        style: TextStyle(color: Colors.white)),
                     onPressed: () => {
-                          FocusManager.instance.primaryFocus.unfocus(),
-                          if (_formKey.currentState.validate())
+                          FocusManager.instance.primaryFocus!.unfocus(),
+                          if (_formKey.currentState!.validate())
                             {_settingsProvider.deleteAccount(context)}
                         }),
               ),
               ButtonTheme(
                 minWidth: 100,
                 child: RaisedButton(
-                    child:
-                        Text(LocaleKeys
-                            .Account_Settings_DeleteAccount_buttons_cancel.tr(),
-                            style: TextStyle(color: Colors.black54)),
+                    child: Text(
+                        LocaleKeys.Account_Settings_DeleteAccount_buttons_cancel
+                            .tr(),
+                        style: TextStyle(color: Colors.black54)),
                     color: Colors.grey[350],
                     onPressed: () => Navigator.of(context).pop()),
               ),

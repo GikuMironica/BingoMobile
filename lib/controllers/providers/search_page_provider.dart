@@ -38,7 +38,7 @@ class SearchPageProvider extends ChangeNotifier {
 
   SearchPageState pageState = SearchPageState.IDLE;
   MapState mapState = MapState.LOADING;
-  List<MiniPost> searchResults = [];
+  List<MiniPost>? searchResults = [];
   SearchQuery? searchQuery;
   List<MapMarker> mapMarkerList = [];
   List<InkWell> cardList = [];
@@ -110,9 +110,9 @@ class SearchPageProvider extends ChangeNotifier {
   }
 
   void buildMiniPostCards() {
-    if (searchResults.isNotEmpty) {
+    if (searchResults?.isNotEmpty ?? false) {
       cardList.clear();
-      for (MiniPost mp in searchResults) {
+      for (MiniPost mp in searchResults!) {
         cardList.add(InkWell(
           onTap: () async => await Application.router.navigateTo(
               context!, '/event/${mp.postId}',
@@ -136,7 +136,7 @@ class SearchPageProvider extends ChangeNotifier {
       if (searchResults != null) {
         setPageState(SearchPageState.HAS_SEARCH_RESULTS);
         buildMiniPostCards();
-        _addSearchResultsToMap(searchResults);
+        _addSearchResultsToMap(searchResults!);
       } else {
         setPageState(SearchPageState.NO_SEARCH_RESULT);
         showNewErrorSnackbar(
@@ -182,11 +182,11 @@ class SearchPageProvider extends ChangeNotifier {
   }
 
   MiniPost? getMiniPostById(int postId) {
-    if (searchResults.isEmpty) {
+    if (searchResults!.isEmpty) {
       return null;
     }
     MiniPost? result =
-        searchResults.firstWhere((miniPost) => miniPost.postId == postId);
+        searchResults?.firstWhere((miniPost) => miniPost.postId == postId);
     return result;
   }
 
@@ -196,7 +196,7 @@ class SearchPageProvider extends ChangeNotifier {
     for (MapMarker mapMarker in mapMarkerList) {
       hereMapController!.mapScene.removeMapMarker(mapMarker);
     }
-    searchResults.clear();
+    searchResults?.clear();
     cardList.clear();
     mapMarkerList.clear();
     notifyListeners();
@@ -246,9 +246,9 @@ class SearchPageProvider extends ChangeNotifier {
       var topMostEvent = eventMarkerList.first;
       var metaData = topMostEvent.metadata;
       var selectedPostId = metaData.getInteger('id');
-      for (MiniPost miniPost in searchResults) {
+      for (MiniPost miniPost in searchResults!) {
         if (miniPost.postId == selectedPostId) {
-          carouselController!.animateToPage(searchResults.indexOf(miniPost),
+          carouselController!.animateToPage(searchResults!.indexOf(miniPost),
               duration: Duration(milliseconds: 200), curve: Curves.linear);
         }
       }

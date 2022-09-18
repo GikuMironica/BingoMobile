@@ -50,7 +50,7 @@ class ReportRepository extends Repository {
       var multipart = await bug.toMultipartJson();
       FormData _data = FormData.fromMap(multipart);
 
-      if (bug.pictures != null && bug.pictures.isNotEmpty) {
+      if (bug.pictures != null && bug.pictures!.isNotEmpty) {
         String? mimeType = mimeFromExtension('webp');
         String? mimee = mimeType?.split('/')[0];
         String? type = mimeType?.split('/')[1];

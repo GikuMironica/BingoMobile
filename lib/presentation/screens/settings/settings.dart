@@ -304,9 +304,9 @@ class _SettingsState extends State<Settings> {
   }
 }
 
-Widget InkWellButton(String label, Function func, [Color color]) {
+Widget InkWellButton(String label, Function func, [Color? color]) {
   return InkWell(
-    onTap: func,
+    onTap: func(),
     child: SizedBox(
       height: 60,
       width: 100,

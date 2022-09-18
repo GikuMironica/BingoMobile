@@ -66,7 +66,7 @@ class SettingsProvider with ChangeNotifier {
 
   Future<void> deleteAccount(BuildContext context) async {
     var authService = getIt<AuthenticationService>();
-    if (deleteAccountEmail != authService.user.email) {
+    if (deleteAccountEmail != authService.user!.email) {
       showNewErrorSnackbar(
           LocaleKeys.Others_Providers_Settings_inputurEmail.tr());
       return;
@@ -76,7 +76,7 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
 
     bool deleteRes = await userRepository
-        .delete(getIt<AuthenticationService>().currentIdentity.id);
+        .delete(getIt<AuthenticationService>().currentIdentity!.id);
 
     deleteFormStatus = Idle();
 

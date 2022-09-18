@@ -20,9 +20,9 @@ class ConfirmMobile extends StatefulWidget {
 }
 
 class _ConfirmMobileState extends State<ConfirmMobile> {
-  AccountProvider _accountProvider;
-  bool resendOtpSwitch;
-  TextEditingController textEditingController;
+  late AccountProvider _accountProvider;
+  late bool resendOtpSwitch;
+  late TextEditingController textEditingController;
   String minutesStr = '00';
   String secondsStr = Configurations.RESEND_OTP_TIME.toString();
   final _formKey = GlobalKey<FormState>();
@@ -78,12 +78,12 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
             LocaleKeys.Account_EditProfile_EditMobile_ConfirmMobile_labels_confirmThisNumber
                     .tr() +
                 " " +
-                _accountProvider.number
+                _accountProvider.number!
                     .substring(0, _accountProvider.dialCode.length) +
                 " " +
-                _accountProvider.number.substring(
+                _accountProvider.number!.substring(
                     _accountProvider.dialCode.length,
-                    _accountProvider.number.length),
+                    _accountProvider.number!.length),
             style: HATheme.LABEL_HEADER_STYLE,
           ),
           SizedBox(height: 20),

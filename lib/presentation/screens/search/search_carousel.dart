@@ -13,7 +13,7 @@ class SearchPageCarousel extends StatefulWidget {
 
 @override
 class _CreatePageState extends State<SearchPageCarousel> {
-  SearchPageProvider searchProvider;
+  late SearchPageProvider searchProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +34,8 @@ class _CreatePageState extends State<SearchPageCarousel> {
                   items: searchProvider.cardList,
                   options: CarouselOptions(
                     onPageChanged: (value, reason) {
-                      MiniPost mp = searchProvider.searchResults[value];
-                      searchProvider.mapController.camera
+                      MiniPost mp = searchProvider.searchResults![value];
+                      searchProvider.hereMapController!.camera
                           .flyToWithOptionsAndDistance(
                               GeoCoordinates(mp.latitude, mp.longitude),
                               searchProvider.onCarouselSwipeLookFromDistance,
