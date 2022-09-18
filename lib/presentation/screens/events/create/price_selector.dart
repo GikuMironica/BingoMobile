@@ -12,9 +12,13 @@ class PriceSelector extends StatelessWidget {
   final String title;
   final void Function(String) onChanged;
   final FormFieldSetter<String> onSaved;
-  final String initialValue;
+  final String? initialValue;
 
-  PriceSelector({this.title, this.onChanged, this.onSaved, this.initialValue});
+  PriceSelector(
+      {required this.title,
+      required this.onChanged,
+      required this.onSaved,
+      this.initialValue});
 
   @override
   Widget build(BuildContext context) {

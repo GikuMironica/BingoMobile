@@ -8,27 +8,27 @@ import 'package:easy_localization/easy_localization.dart';
 class TimePicker extends StatefulWidget {
   final Function(DateTime) onConfirmStart;
   final Function(DateTime) onConfirmEnd;
-  final DateTime initStartDate;
-  final DateTime initEndDate;
+  late final DateTime? initStartDate;
+  late final DateTime? initEndDate;
   final bool isValid;
 
   TimePicker(
-      {this.onConfirmStart,
-      this.onConfirmEnd,
+      {required this.onConfirmStart,
+      required this.onConfirmEnd,
       this.initStartDate,
       this.initEndDate,
-      this.isValid});
+      required this.isValid});
 
   @override
   _TimePickerState createState() =>
-      _TimePickerState(initStartDate, initEndDate);
+      _TimePickerState(initStartDate!, initEndDate!);
 }
 
 class _TimePickerState extends State<TimePicker> {
   final DateFormat dateFormat = DateFormat('dd.MM.yyyy HH:mm');
 
-  DateTime startDate;
-  DateTime endDate;
+  late DateTime? startDate;
+  late DateTime? endDate;
 
   _TimePickerState(DateTime initStartDate, DateTime initEndDate) {
     startDate = initStartDate;
@@ -46,7 +46,7 @@ class _TimePickerState extends State<TimePicker> {
           InkWell(
             onTap: () async {
               DateTime minTime = DateTime.now().add(Duration(minutes: 15));
-              if (startDate != null && startDate.compareTo(minTime) < 0) {
+              if (startDate != null && startDate!.compareTo(minTime) < 0) {
                 startDate = null;
               }
               await DatePicker.showDateTimePicker(context,
@@ -58,10 +58,12 @@ class _TimePickerState extends State<TimePicker> {
                   startDate = date;
                   widget.onConfirmStart(date);
                   if (endDate != null &&
-                      (startDate.add(Duration(minutes: 30)).isAfter(endDate) ||
-                          startDate
+                      (startDate!
+                              .add(Duration(minutes: 30))
+                              .isAfter(endDate!) ||
+                          startDate!
                               .add(Duration(hours: 12))
-                              .isBefore(endDate))) {
+                              .isBefore(endDate!))) {
                     endDate = null;
                   }
                 });
@@ -83,7 +85,7 @@ class _TimePickerState extends State<TimePicker> {
                   ),
                   child: Text(
                     startDate != null
-                        ? dateFormat.format(startDate)
+                        ? dateFormat.format(startDate!)
                         : LocaleKeys.Hosted_Create_hints_startTime.tr(),
                   )),
             ),
@@ -96,8 +98,8 @@ class _TimePickerState extends State<TimePicker> {
               if (startDate != null) {
                 await DatePicker.showDateTimePicker(context,
                     showTitleActions: true,
-                    minTime: startDate.add(Duration(minutes: 30)),
-                    maxTime: startDate.add(Duration(hours: 12, minutes: 30)),
+                    minTime: startDate!.add(Duration(minutes: 30)),
+                    maxTime: startDate!.add(Duration(hours: 12, minutes: 30)),
                     onConfirm: (date) {
                   setState(() {
                     endDate = date;
@@ -121,7 +123,7 @@ class _TimePickerState extends State<TimePicker> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(endDate != null
-                      ? dateFormat.format(endDate)
+                      ? dateFormat.format(endDate!)
                       : LocaleKeys.Hosted_Create_hints_endTime.tr())),
             ),
           ),

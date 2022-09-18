@@ -33,7 +33,7 @@ class CreateEventPage extends StatefulWidget {
 
 class _CreateEventPageState extends State<CreateEventPage> {
   final formKey = GlobalKey<FormState>();
-  AuthenticationService _authService;
+  late AuthenticationService _authService;
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
   TextEditingController endDateController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController requirementsController = TextEditingController();
-  bool isFormValid;
+  late bool isFormValid;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                             PictureList(
                               selectPicture: provider.selectPicture,
                               onSaved: (value) =>
-                                  provider.post.pictures = value,
+                                  provider.post.pictures = value!,
                             ),
                             SizedBox(
                               height: 8,
@@ -177,7 +177,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                               validationMessage: "",
                               isStateValid: provider.validateRequirements(
                                   requirementsController.text),
-                              initialValue: provider.post.event.requirements,
+                              initialValue: provider.post.event.requirements!,
                               maxLength: Constraint.requirementsMaxLength,
                               onSaved: (value) => provider.post.event
                                   .requirements = requirementsController.text,
@@ -209,9 +209,9 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                 context: context,
                                 isStateValid: true,
                                 onPressed: () async {
-                                  if ((_authService.user.firstName.isEmpty ??
+                                  if ((_authService.user?.firstName?.isEmpty ??
                                           true) ||
-                                      (_authService.user.lastName.isEmpty ??
+                                      (_authService.user?.lastName?.isEmpty ??
                                           true)) {
                                     await Navigator.of(context).push(
                                         PageRouteBuilder(
@@ -236,16 +236,16 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                   }
                                   if (provider.isFormValid(formKey,
                                       startDateController, endDateController)) {
-                                    formKey.currentState.save();
+                                    formKey.currentState?.save();
                                     provider.post.eventTime =
                                         int.parse(startDateController.text);
                                     provider.post.endTime =
                                         int.parse(endDateController.text);
-                                    MiniPost postRes =
+                                    MiniPost? postRes =
                                         await provider.createEvent();
                                     if (postRes != null) {
                                       if (_authService
-                                              .user.phoneNumber?.isEmpty ??
+                                              .user!.phoneNumber?.isEmpty ??
                                           true) {
                                         Application.router.navigateTo(
                                             context, '/event/${postRes.postId}',

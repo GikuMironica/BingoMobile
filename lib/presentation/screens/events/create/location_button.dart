@@ -13,7 +13,8 @@ class LocationButton extends StatelessWidget {
   final bool isValid;
   final Function validate;
 
-  LocationButton({this.post, this.isValid, this.validate});
+  LocationButton(
+      {required this.post, required this.isValid, required this.validate});
 
   @override
   Widget build(BuildContext context) {

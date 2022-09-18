@@ -10,19 +10,19 @@ class Tags extends StatefulWidget {
   final Post post;
   final Function(String, List<String>) getTagSuggestions;
 
-  Tags({@required this.post, this.getTagSuggestions});
+  Tags({required this.post, required this.getTagSuggestions});
 
   @override
   _TagsState createState() => _TagsState();
 }
 
 class _TagsState extends State<Tags> {
-  List<String> tags;
+  late List<String> tags;
 
   @override
   void initState() {
     super.initState();
-    tags = widget.post.tags;
+    tags = widget.post.tags!;
   }
 
   @override
@@ -75,15 +75,15 @@ class _TagsState extends State<Tags> {
               suggestionsCallback: (pattern) async {
                 return await widget.getTagSuggestions(pattern, tags);
               },
-              itemBuilder: (context, suggestion) {
+              itemBuilder: (context, String suggestion) {
                 return ListTile(
-                  title: Text(suggestion),
+                  title: Text(suggestion ?? ""),
                 );
               },
               transitionBuilder: (context, suggestionsBox, controller) {
                 return suggestionsBox;
               },
-              onSuggestionSelected: (suggestion) {
+              onSuggestionSelected: (String suggestion) {
                 tags.contains(suggestion) ? null : tags.add(suggestion);
               },
             ),

@@ -4,16 +4,16 @@ import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/data/models/picture.dart';
 
 class PictureCard extends StatelessWidget {
-  final Picture picture;
-  final Function onSet;
-  final Function onRemove;
+  final Picture? picture;
+  final Function? onSet;
+  final Function? onRemove;
 
   PictureCard({this.picture, this.onSet, this.onRemove});
 
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        onSet();
+        onSet!();
       },
       child: Card(
         elevation: HATheme.WIDGET_ELEVATION,
@@ -28,12 +28,12 @@ class PictureCard extends StatelessWidget {
                         decoration: BoxDecoration(
                             image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: picture.image,
+                          image: picture!.image!,
                         )),
                       ),
                       InkWell(
                         onTap: () {
-                          onRemove();
+                          onRemove!();
                         },
                         child: Icon(
                           Icons.delete,
@@ -43,31 +43,30 @@ class PictureCard extends StatelessWidget {
                     ],
                   )
                 : Stack(
-                  children: [
-                    Container(
-                      child:
-                      SvgPicture.asset(
-                        'assets/icons/svg/photoCardForeground.svg',
-                        width: 90,
-                        height: 90,
+                    children: [
+                      Container(
+                        child: SvgPicture.asset(
+                          'assets/icons/svg/photoCardForeground.svg',
+                          width: 90,
+                          height: 90,
+                        ),
                       ),
-                    ),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 25),
-                        child: InkWell(
-                          onTap: () {
-                            onSet();
-                          },
-                          child: Icon(
-                            Icons.add_a_photo,
-                            color: HATheme.HOPAUT_SECONDARY,
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 25),
+                          child: InkWell(
+                            onTap: () {
+                              onSet!();
+                            },
+                            child: Icon(
+                              Icons.add_a_photo,
+                              color: HATheme.HOPAUT_SECONDARY,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                )),
+                    ],
+                  )),
       ),
     );
   }
