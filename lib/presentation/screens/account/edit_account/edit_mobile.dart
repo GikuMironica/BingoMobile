@@ -19,9 +19,9 @@ class _EditMobileState extends State<EditMobile> {
   late AccountProvider _accountProvider;
   late LocationServiceProvider _locationProvider;
   final TextEditingController controller = TextEditingController();
-  PhoneNumber number;
-  bool state;
-  String initialCountry;
+  late PhoneNumber number;
+  late bool state;
+  late String initialCountry;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -30,7 +30,7 @@ class _EditMobileState extends State<EditMobile> {
     state = false;
     _locationProvider =
         Provider.of<LocationServiceProvider>(context, listen: false);
-    initialCountry = _locationProvider.countryCode;
+    initialCountry = _locationProvider.countryCode!;
     number = PhoneNumber(isoCode: initialCountry);
   }
 
@@ -111,7 +111,7 @@ class _EditMobileState extends State<EditMobile> {
     );
   }
 
-  Widget _fieldSpacing({String label}) {
+  Widget _fieldSpacing({String? label}) {
     return Column(
       children: [
         SizedBox(
@@ -120,7 +120,7 @@ class _EditMobileState extends State<EditMobile> {
         Padding(
             padding: EdgeInsets.only(left: 12),
             child: Text(
-              label,
+              label!,
               style: TextStyle(fontWeight: FontWeight.bold),
             )),
         SizedBox(
@@ -138,7 +138,7 @@ class _EditMobileState extends State<EditMobile> {
           .Account_EditProfile_EditMobile_validationLabel_InvalidNumber.tr(),
       onInputChanged: (PhoneNumber number) {
         _accountProvider.number = number.phoneNumber;
-        _accountProvider.dialCode = number.dialCode;
+        _accountProvider.dialCode = number.dialCode!;
       },
       onInputValidated: (bool value) {
         state = value;

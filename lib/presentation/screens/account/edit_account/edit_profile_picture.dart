@@ -16,7 +16,7 @@ class EditAccountPicture extends StatefulWidget {
 }
 
 class _EditAccountPictureState extends State<EditAccountPicture> {
-  AccountProvider _accountProvider;
+  late AccountProvider _accountProvider;
   var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
             ListTile(
               onTap: () async =>
                   await _accountProvider.deleteProfilePictureAsync(
-                      _accountProvider.currentIdentity.id),
+                      _accountProvider.currentIdentity!.id!),
               trailing: Icon(
                 Icons.delete,
                 color: Colors.redAccent,
@@ -85,7 +85,7 @@ class _EditAccountPictureState extends State<EditAccountPicture> {
               message: LocaleKeys
                       .Account_EditProfile_EditProfilePicture_toasts_profilePicUpdated
                   .tr())*/
-          : showNewErrorSnackbar(result.errorMessage);
+          : showNewErrorSnackbar(result.errorMessage!);
     }
   }
 }

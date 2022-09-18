@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 Widget userFullName() {
   return Consumer<AuthenticationService>(
     builder: (context, provider, __) => Text(
-      provider.user.fullName ??
+      provider.user?.fullName ??
           LocaleKeys.Account_AccountPage_placeholder_NameSurname.tr(),
       style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
     ),
@@ -21,13 +21,13 @@ Widget userFullName() {
 Widget userDescription() {
   return Consumer<AuthenticationService>(
     builder: (context, provider, child) => Visibility(
-      visible: provider.user.description != null,
+      visible: provider.user?.description != null,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(provider.user.description ?? "",
+            Text(provider.user?.description ?? "",
                 textAlign: TextAlign.center,
                 maxLines: 4,
                 style: TextStyle(color: Colors.grey[500])),
@@ -47,12 +47,12 @@ Widget accountInformation() {
       children: [
         ListTile(
           title: Text(LocaleKeys.Account_AccountPage_label_Email.tr()),
-          subtitle: Text(provider.user.email),
+          subtitle: Text(provider.user?.email ?? ""),
         ),
         ListTile(
           title: Text(LocaleKeys.Account_AccountPage_label_PhoneNumber.tr()),
           subtitle: provider.user?.phoneNumber?.isNotEmpty ?? false
-              ? Text(provider.user.phoneNumber)
+              ? Text(provider.user?.phoneNumber ?? "")
               : Text(
                   LocaleKeys.Account_EditProfile_placeholder_EmptyDescription
                       .tr(),
@@ -60,14 +60,14 @@ Widget accountInformation() {
         ),
         ListTile(
           title: Text(LocaleKeys.Account_AccountPage_label_MemberSince.tr()),
-          subtitle: Text(provider.user.dateRegistered),
+          subtitle: Text(provider.user?.dateRegistered ?? ""),
         )
       ],
     ),
   );
 }
 
-Widget accountMenu({@required BuildContext context}) {
+Widget accountMenu({required BuildContext context}) {
   return Column(
     children: [
       ListTile(

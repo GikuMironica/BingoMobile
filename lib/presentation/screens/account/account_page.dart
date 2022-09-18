@@ -11,7 +11,6 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-
   @override
   void initState() {
     super.initState();
@@ -21,10 +20,10 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     var _size = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
-      child: Stack(children: [
+        physics: NeverScrollableScrollPhysics(),
+        child: Stack(children: [
           Container(
             width: _size.width,
             height: _size.height,

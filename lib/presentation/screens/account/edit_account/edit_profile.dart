@@ -65,7 +65,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
               await _navigateAndDisplayResult(context, Routes.editAccountName),
           title: Text(
               LocaleKeys.Account_EditProfile_navigationLabel_EditName.tr()),
-          subtitle: Text(auth.user.fullName),
+          subtitle: Text(auth.user!.fullName),
           trailing: Icon(Icons.arrow_forward_ios),
         ),
       ),
@@ -75,13 +75,13 @@ class _EditAccountPageState extends State<EditAccountPage> {
               context, Routes.editAccountDescription),
           title: Text(LocaleKeys
               .Account_EditProfile_navigationLabel_EditDescription.tr()),
-          subtitle: auth.user.description?.length == null
+          subtitle: auth.user!.description?.length == null
               ? Text(
                   LocaleKeys.Account_EditProfile_placeholder_EmptyDescription
                       .tr(),
                   style: TextStyle(color: Colors.grey[500]))
               : Text(
-                  auth.user.description.trim(),
+                  auth.user!.description!.trim(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -94,7 +94,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
               await _navigateAndDisplayResult(context, Routes.editMobile),
           title: Text(
               LocaleKeys.Account_EditProfile_navigationLabel_PhoneNumber.tr()),
-          subtitle: Text(auth.user.phoneNumber ?? "-"),
+          subtitle: Text(auth.user!.phoneNumber ?? "-"),
           trailing: Icon(Icons.arrow_forward_ios),
         ),
       ),
