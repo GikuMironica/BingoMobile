@@ -127,8 +127,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             onPressed: state.formStatus is RequestSubmitted
                 ? () {}
                 : () => {
-                      FocusManager.instance.primaryFocus.unfocus(),
-                      if (_formKey.currentState.validate())
+                      FocusManager.instance.primaryFocus!.unfocus(),
+                      if (_formKey.currentState!.validate())
                         {
                           context
                               .read<ForgotPasswordBloc>()

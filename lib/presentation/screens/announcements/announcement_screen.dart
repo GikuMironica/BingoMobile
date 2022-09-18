@@ -16,7 +16,7 @@ import 'package:hopaut/services/date_formatter_service.dart';
 class AnnouncementScreen extends StatefulWidget {
   final int postId;
 
-  AnnouncementScreen({this.postId});
+  AnnouncementScreen({required this.postId});
 
   @override
   _AnnouncementScreenState createState() => _AnnouncementScreenState();
@@ -24,7 +24,7 @@ class AnnouncementScreen extends StatefulWidget {
 
 class _AnnouncementScreenState extends State<AnnouncementScreen> {
   List<AnnouncementMessage> chatMessages = [];
-  MiniPost _miniPost;
+  late MiniPost _miniPost;
 
   bool chatMessagesLoaded = false;
 

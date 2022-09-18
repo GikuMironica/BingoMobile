@@ -16,9 +16,9 @@ class EditAccountName extends StatefulWidget {
 }
 
 class _EditAccountNameState extends State<EditAccountName> {
-  AccountProvider _accountProvider;
-  TextEditingController _lastNameController;
-  TextEditingController _firstNameController;
+  late AccountProvider _accountProvider;
+  late TextEditingController _lastNameController;
+  late TextEditingController _firstNameController;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -29,8 +29,8 @@ class _EditAccountNameState extends State<EditAccountName> {
 
     // provider is still uninitialized, use getIt to get values
     // Dirty fix
-    _firstNameController.text = getIt<AuthenticationService>().user.firstName;
-    _lastNameController.text = getIt<AuthenticationService>().user.lastName;
+    _firstNameController.text = getIt<AuthenticationService>().user!.firstName!;
+    _lastNameController.text = getIt<AuthenticationService>().user!.lastName!;
   }
 
   @override
@@ -39,13 +39,11 @@ class _EditAccountNameState extends State<EditAccountName> {
     return Scaffold(
         appBar: SimpleAppBar(
           context: context,
-          text: LocaleKeys
-              .Account_EditProfile_EditName_pageTitle
-              .tr(),
+          text: LocaleKeys.Account_EditProfile_EditName_pageTitle.tr(),
           actionButtons: !_accountProvider
                       .validateFirstName(_firstNameController.text) ||
                   !_accountProvider.validateLastName(_lastNameController.text)
-              ? null
+              ? []
               : [
                   IconButton(
                       icon: Icon(Icons.check),
@@ -70,42 +68,48 @@ class _EditAccountNameState extends State<EditAccountName> {
       // Translation
       Future.delayed(Duration.zero, () async {
         showSnackBarWithError(
-            context: context, message: LocaleKeys
-            .Account_EditProfile_EditName_toasts_error.tr());
+            context: context,
+            message: LocaleKeys.Account_EditProfile_EditName_toasts_error.tr());
       });
       _accountProvider.formStatus = new Idle();
     }
     return _accountProvider.formStatus is Submitted
-        ? overlayBlurBackgroundCircularProgressIndicator(context, LocaleKeys
-        .Account_EditProfile_EditName_labels_updatingDialog.tr())
+        ? overlayBlurBackgroundCircularProgressIndicator(context,
+            LocaleKeys.Account_EditProfile_EditName_labels_updatingDialog.tr())
         : Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // translation
-                _fieldSpacing(label: LocaleKeys.Account_EditProfile_EditName_labels_nameLabel.tr()),
+                _fieldSpacing(
+                    label: LocaleKeys
+                        .Account_EditProfile_EditName_labels_nameLabel.tr()),
                 valueInput(
                     maxLength: AccountProvider.namesMaxLength,
                     controller: _firstNameController,
                     isStateValid: _accountProvider
                         .validateFirstName(_firstNameController.text),
                     validationMessage: LocaleKeys
-                        .Account_EditProfile_EditName_validation_inputValidName.tr(),
-                    initialValue: _accountProvider.currentIdentity.firstName,
+                            .Account_EditProfile_EditName_validation_inputValidName
+                        .tr(),
+                    initialValue: _accountProvider!.currentIdentity!.firstName!,
                     onChange: (v) => _accountProvider.onFirstNameChange(
                         v, _firstNameController)),
                 // translation
                 Divider(),
-                _fieldSpacing(label: LocaleKeys.Account_EditProfile_EditName_labels_lastName.tr()),
+                _fieldSpacing(
+                    label: LocaleKeys
+                        .Account_EditProfile_EditName_labels_lastName.tr()),
                 valueInput(
                     maxLength: AccountProvider.namesMaxLength,
                     controller: _lastNameController,
                     isStateValid: _accountProvider
                         .validateLastName(_lastNameController.text),
-                    initialValue: _accountProvider.currentIdentity.lastName,
+                    initialValue: _accountProvider.currentIdentity!.lastName!,
                     validationMessage: LocaleKeys
-                        .Account_EditProfile_EditName_validation_inputValidName.tr(),
+                            .Account_EditProfile_EditName_validation_inputValidName
+                        .tr(),
                     onChange: (v) => _accountProvider.onLastNameChange(
                         v, _lastNameController)),
               ],
@@ -113,7 +117,7 @@ class _EditAccountNameState extends State<EditAccountName> {
           );
   }
 
-  Widget _fieldSpacing({String label}) {
+  Widget _fieldSpacing({String? label}) {
     return Column(
       children: [
         SizedBox(
@@ -122,7 +126,7 @@ class _EditAccountNameState extends State<EditAccountName> {
         Padding(
             padding: EdgeInsets.only(left: 12),
             child: Text(
-              label,
+              label!,
               style: TextStyle(fontWeight: FontWeight.bold),
             )),
         SizedBox(

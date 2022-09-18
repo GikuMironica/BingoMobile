@@ -24,7 +24,7 @@ class _NewAnnouncementListState extends State<NewAnnouncementList> {
   }
 
   void fetchUserActiveEvents(EventProvider provider) async {
-    if (provider.eventsMap[API.MY_ACTIVE].events.isEmpty) {
+    if (provider.eventsMap[API.MY_ACTIVE]!.events.isEmpty) {
       await provider.fetchEventList(API.MY_ACTIVE);
     }
     setState(() => userEventsLoaded = true);
@@ -48,22 +48,22 @@ class _NewAnnouncementListState extends State<NewAnnouncementList> {
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: provider.eventsMap[API.MY_ACTIVE].events.isEmpty
+          child: provider.eventsMap[API.MY_ACTIVE]!.events.isEmpty
               ? Center(
                   child: CupertinoActivityIndicator(),
                 )
               : ListView.builder(
-                  itemCount: provider.eventsMap[API.MY_ACTIVE].events.length,
+                  itemCount: provider.eventsMap[API.MY_ACTIVE]!.events.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) => ListTile(
                     leading: CircleAvatar(
                       backgroundImage: NetworkImage(
-                          '${WEB.IMAGES}/${provider.eventsMap[API.MY_ACTIVE].events[index].thumbnail}.webp'),
+                          '${WEB.IMAGES}/${provider.eventsMap[API.MY_ACTIVE]!.events[index].thumbnail}.webp'),
                     ),
                     title: Text(
-                        provider.eventsMap[API.MY_ACTIVE].events[index].title),
+                        provider.eventsMap[API.MY_ACTIVE]!.events[index].title),
                     onTap: () => Application.router.navigateTo(context,
-                        '/announcements/${provider.eventsMap[API.MY_ACTIVE].events[index].postId}',
+                        '/announcements/${provider.eventsMap[API.MY_ACTIVE]!.events[index].postId}',
                         transition: TransitionType.cupertino, replace: true),
                   ),
                 ),

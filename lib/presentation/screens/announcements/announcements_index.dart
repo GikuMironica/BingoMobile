@@ -17,10 +17,10 @@ class AnnouncementsIndex extends StatefulWidget {
 }
 
 class _AnnouncementsIndexState extends State<AnnouncementsIndex> {
-  List<Announcement> announcementsList;
+  late List<Announcement> announcementsList;
   bool announcementsLoaded = false;
 
-  Future<List<Announcement>> getAnnouncements() async {
+  Future getAnnouncements() async {
     if (announcementsList == null) {
       final inboxList = await getIt<AnnouncementRepository>().getInbox();
       final outboxList = await getIt<AnnouncementRepository>().getOutbox();

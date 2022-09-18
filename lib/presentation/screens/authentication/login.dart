@@ -108,12 +108,12 @@ class _LoginPageState extends State<LoginPage> {
                 return passwordInputField(
                     hint: LocaleKeys.Authentication_Login_hints_enterPass.tr(),
                     context: context,
-                    isTextObscured: state.obscureText,
+                    isTextObscured: state.obscureText!,
                     isStateValid: state.isValidPassword,
                     validationMessage: LocaleKeys
                         .Authentication_Login_validation_inputPass.tr(),
                     onObscureTap: () => context.read<LoginBloc>().add(
-                        ShowPasswordClicked(obscureText: state.obscureText)),
+                        ShowPasswordClicked(obscureText: state.obscureText!)),
                     onChange: (value) => context
                         .read<LoginBloc>()
                         .add(LoginPasswordChanged(password: value)));
@@ -141,8 +141,8 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: state.formStatus is LoginSubmitted
                 ? () {}
                 : () => {
-                      FocusManager.instance.primaryFocus.unfocus(),
-                      if (_formKey.currentState.validate())
+                      FocusManager.instance.primaryFocus!.unfocus(),
+                      if (_formKey.currentState!.validate())
                         {context.read<LoginBloc>().add(new LoginClicked())}
                     });
       }),
