@@ -11,17 +11,17 @@ import 'package:easy_localization/easy_localization.dart';
 class EventTypeList extends StatefulWidget {
   final Post post;
 
-  EventTypeList({@required this.post});
+  EventTypeList({required this.post});
 
   @override
   _EventTypeListState createState() => _EventTypeListState();
 }
 
 class _EventTypeListState extends State<EventTypeList> {
-  EventType value;
-  int slots;
-  double price;
-  Currency currency;
+  late EventType value;
+  late int slots;
+  late double price;
+  late Currency currency;
 
   @override
   Widget build(BuildContext context) {
