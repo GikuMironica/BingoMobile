@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
@@ -40,6 +41,8 @@ class _HopAutState extends State<HopAut> {
     var hiveAuthBox = await Hive.openBox('auth');
     final LinkedHashMap<dynamic, dynamic> entry = hiveAuthBox.get('identity');
 
+    FirebaseCrashlytics.instance.log("Hive initialized [h_app]");
+
     if (entry != null) {
       AuthenticationService authenticationService =
           getIt<AuthenticationService>();
@@ -55,6 +58,8 @@ class _HopAutState extends State<HopAut> {
         await authenticationService.refreshUser();
       }
     }
+
+    FirebaseCrashlytics.instance.log("User token retrieved from local db!");
     return true;
   }
 

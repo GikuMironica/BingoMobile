@@ -91,6 +91,7 @@ dependencies:
   geocoder: ^0.2.1
   firebase_core: ^0.7.0
   firebase_auth: ^0.20.1
+  firebase_crashlytics: ^0.4.0+1
 
   flutter_cupertino_date_picker:
     git: https://github.com/yasseralsamman/flutter-cupertino-date-picker.git

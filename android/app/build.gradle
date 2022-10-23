@@ -95,3 +95,6 @@ dependencies {
 flutter {
     source '../..'
 }
+
+// This must appear at the bottom of the file
+apply plugin: 'com.google.firebase.crashlytics'
