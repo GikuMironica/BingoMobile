@@ -603,7 +603,7 @@ static const Map<String,dynamic> en = {
       },
       "hints": {
         "eventType": "Event Type",
-        "startTime": "End Time",
+        "startTime": "Start Time",
         "endTime": "End Time",
         "tagsLimit": "You can add up to 5 tags.",
         "addTags": "Add Tags",

@@ -30,13 +30,16 @@ class _HopAutState extends State<HopAut> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.log("HA app started initState [h_app]");
     router = FluroRouter();
     Routes.configureRoutes(router);
     Application.router = router;
+    FirebaseCrashlytics.instance.log("HA app initState completed [h_app]");
     super.initState();
   }
 
   Future<bool> onAppStart() async {
+    FirebaseCrashlytics.instance.log("Attempting to initialized Hive [h_app]");
     await Hive.initFlutter();
     var hiveAuthBox = await Hive.openBox('auth');
     final LinkedHashMap<dynamic, dynamic> entry = hiveAuthBox.get('identity');

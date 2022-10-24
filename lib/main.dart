@@ -15,7 +15,10 @@ void main() async {
   await Firebase.initializeApp();
   FirebaseCrashlytics.instance.log("Firebase Initialized! [main]");
   SdkContext.init(IsolateOrigin.main);
+  FirebaseCrashlytics.instance.log("HERE SDK Initialized! [main]");
   configureDependencies();
+  FirebaseCrashlytics.instance
+      .log("Injection Dependencies Initialized!! [main]");
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   runApp(EasyLocalization(
       supportedLocales: [Locale('en'), Locale('de')],
