@@ -348,7 +348,7 @@ class CodegenLoader extends AssetLoader{
         "passwordFieldHint": "Passwort eingeben"
       },
       "validation": {
-        "passwordField": "Das Passwort muss mindestens 8 Zeichen lang sein und Groß- und Kleinbuchstaben sowie Ziffern enthalten",
+        "passwordField": "Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Buchstaben und eine Zahl enthalten.",
         "confirmPassword": "Passwörter stimmen nicht überein"
       },
       "navigationLabels": {
@@ -902,7 +902,7 @@ static const Map<String,dynamic> en = {
         "passwordFieldHint": "Enter a password"
       },
       "validation": {
-        "passwordField": "Password must be at least 8 characters length, must contain upper, lower case letters and digits",
+        "passwordField": "Password must be at least 8 characters length, must contain at least one letter and one number",
         "confirmPassword": "Passwords don't match"
       },
       "navigationLabels": {
