@@ -74,7 +74,14 @@ android {
 
     buildTypes {
         release {
+            // If fail, delete all lines except this
             signingConfig signingConfigs.release
+
+            minifyEnabled false
+            shrinkResources false
+
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
@@ -88,3 +95,6 @@ dependencies {
 flutter {
     source '../..'
 }
+
+// This must appear at the bottom of the file
+apply plugin: 'com.google.firebase.crashlytics'

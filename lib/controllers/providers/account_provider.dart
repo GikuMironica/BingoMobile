@@ -146,7 +146,7 @@ class AccountProvider extends ChangeNotifier {
         showNewErrorSnackbar(LocaleKeys
                 .Account_EditProfile_EditMobile_ConfirmMobile_toasts_wrongCode5Times
             .tr());
-        Application.router.navigateTo(context, Routes.editAccount,
+        Application.router.navigateTo(context, Routes.account,
             transition: TransitionType.cupertino, clearStack: true);
       }
       return;
@@ -162,8 +162,8 @@ class AccountProvider extends ChangeNotifier {
           .tr());
     } else {
       _authenticationService.setUser(updatedUser);
-      Application.router.navigateTo(context, Routes.editAccount,
-          transition: TransitionType.cupertino, clearStack: true);
+      Application.router.pop(context);
+      Application.router.pop(context, Success());
     }
   }
 

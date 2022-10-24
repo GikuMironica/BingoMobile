@@ -86,7 +86,7 @@ class _RateEventState extends State<RateEvent> {
                 ),
                 SizedBox(height: 12),
                 persistButton(
-                    label: LocaleKeys.Event_Rating_button,
+                    label: LocaleKeys.Event_Rating_button.tr(),
                     context: context,
                     isStateValid:
                         provider.validateFeedback(ratingController.text) &&

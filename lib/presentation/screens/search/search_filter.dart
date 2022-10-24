@@ -38,14 +38,14 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                 children: [
                   IconButton(
                     icon: const Icon(Ionicons.search_outline,
-                        color: Color(0xFFED2F65)),
+                        color: Color(0xFF000000)),
                     onPressed: () async => await provider.searchEvents(),
                   ),
                   Container(
                       height: 25,
                       child: VerticalDivider(
                         width: 10,
-                        color: Theme.of(context).primaryColor,
+                        color: Color(0xFF000000),
                       )),
                   Expanded(
                     child: TextField(
@@ -208,7 +208,7 @@ class _SearchPageFilterState extends State<SearchPageFilter> {
                                 materialTapTargetSize:
                                     MaterialTapTargetSize.shrinkWrap,
                                 activeColor: HATheme.HOPAUT_PINK,
-                                inactiveColor: HATheme.HOPAUT_PINK,
+                                inactiveColor: Color(0xFF000000),
                               ),
                             ],
                           ),
@@ -324,7 +324,7 @@ Widget _filterEventType(
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               activeColor: HATheme.HOPAUT_PINK,
               disabledColor: Color(0xFFE7E7E7),
-              inactiveColor: HATheme.HOPAUT_PINK,
+              inactiveColor: Color(0xFF000000),
               onChanged: onTap,
             ),
             Text(

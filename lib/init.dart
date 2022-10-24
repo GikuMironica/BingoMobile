@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,8 @@ class _InitializationState extends State<Initialization> {
               transition: TransitionType.fadeIn,
               transitionDuration: Duration(milliseconds: 200)));
     }
+
+    FirebaseCrashlytics.instance.log("App user set [init]");
     return Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
