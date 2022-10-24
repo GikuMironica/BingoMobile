@@ -25,7 +25,7 @@ class DateFormatterService {
     String startDate = Jiffy.unix(startTime).format("dd.MM.yyyy");
     String endDate = Jiffy.unix(endTime).format("dd.MM.yyyy");
 
-    return startDate == endDate ? '$startDate' : '$startDate - $endDate';
+    return startDate == endDate ? '$startDate' : '$startDate \n$endDate';
   }
 
   String formatDate(int time) {

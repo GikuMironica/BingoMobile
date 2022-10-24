@@ -127,7 +127,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         .Authentication_Register_hints_confirmPasswordHint.tr(),
                     context: context,
                     validationMessage: LocaleKeys
-                        .Authentication_Register_hints_confirmPasswordHint.tr(),
+                            .Authentication_Register_validation_confirmPassword
+                        .tr(),
                     isTextObscured: state.confirmPasswordObscureText,
                     isStateValid: state.isConfirmPasswordValid,
                     onObscureTap: () => context.read<RegisterBloc>().add(

@@ -4,7 +4,7 @@ import 'package:hopaut/controllers/blocs/register/register_page_status.dart';
 
 class RegisterState extends BaseState {
   static final RegExp _pwdRule =
-      RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
+      RegExp(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
 
   //validators
   bool get isEmailValid => EmailValidator.validate(username.trim());
