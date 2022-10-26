@@ -3,9 +3,9 @@
     <string name="app_name">HopAut</string>
 
     <!-- Here SDK Key ID -->
-    <string name="here_key_id">jhGYNi0TwTYhkR_gHINssw</string>
+    <string name="here_key_id">pUxTNsyBLAI87zlZZTNVaA</string>
     <!-- Here SDK Secret -->
-    <string name="here_secret">ERW6aOR-thhVDaEK87acFczpXSoOH3YxtNrid1ecwI80HpYJ3pMwT1CeW_xwXX5JYfvKu1QShU683rYdnfGhUQ</string>
+    <string name="here_secret">xfqIsthaZc9B0LedzWdUqbq9E16mFKF6mcpRPnIY8AdfQoGN9-JgMkW-MakIkXhB15hzrPvodzyXUEy-qXGUfQ</string>
 
     <!-- Facebook App ID -->
     <string name="facebook_app_id">218732049417470</string>

@@ -902,7 +902,7 @@ static const Map<String,dynamic> en = {
         "passwordFieldHint": "Enter a password"
       },
       "validation": {
-        "passwordField": "Password must be at least 8 characters length, must contain at least one letter and one number",
+        "passwordField": "Password must be at least 8 characters length, must contain at least one letter and one number.",
         "confirmPassword": "Passwords don't match"
       },
       "navigationLabels": {
