@@ -306,7 +306,7 @@ class CodegenLoader extends AssetLoader{
         },
         "validation": {
           "inputOldPassword": "Altes Passwort eingebe",
-          "inputNewPassword": "Passwort muss mindestens 8 Zeichen lang sein und Groß- und Kleinbuchstaben sowie Ziffern enthalten"
+          "inputNewPassword": "Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Buchstaben und eine Zahl enthalten."
         },
         "buttons": {
           "changePassword": "Passwort ändern"
@@ -821,7 +821,7 @@ static const Map<String,dynamic> en = {
       "ReportBug": {
         "pageTitle": "Report an issue",
         "labels": {
-          "somethingIsntWorking": "Something isn\\'t working as expected?",
+          "somethingIsntWorking": "Something isn't working as expected?",
           "uploadScreenshots": "Upload screenshots"
         },
         "hints": {
@@ -860,7 +860,7 @@ static const Map<String,dynamic> en = {
         },
         "validation": {
           "inputOldPassword": "Please input your old password",
-          "inputNewPassword": "Password must be at least 8 characters length, must contain upper, lower case letters and digits"
+          "inputNewPassword": "Password must be at least 8 characters length, must contain at least one letter and one number."
         },
         "buttons": {
           "changePassword": "Change password"

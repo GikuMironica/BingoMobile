@@ -251,7 +251,7 @@
       "ReportBug": {
         "pageTitle": "Report an issue",
         "labels": {
-          "somethingIsntWorking": "Something isn\\'t working as expected?",
+          "somethingIsntWorking": "Something isn't working as expected?",
           "uploadScreenshots": "Upload screenshots"
         },
         "hints": {
@@ -290,7 +290,7 @@
         },
         "validation": {
           "inputOldPassword": "Please input your old password",
-          "inputNewPassword": "Password must be at least 8 characters length, must contain upper, lower case letters and digits"
+          "inputNewPassword": "Password must be at least 8 characters length, must contain at least one letter and one number."
         },
         "buttons": {
           "changePassword": "Change password"
