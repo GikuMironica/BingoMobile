@@ -1,10 +1,11 @@
 import 'dart:io';
 
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/data/domain/login_result.dart';
 import 'package:hopaut/data/repositories/repository.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -79,21 +80,14 @@ class AuthenticationRepository extends Repository {
 
   Future<Map<String, dynamic>> loginWithFacebook() async {
     String lang = Platform.localeName.substring(0, 2);
-    FacebookLogin facebookLogin = FacebookLogin();
-    FacebookLoginResult _facebookLoginResult =
-        await facebookLogin.logIn(['email']);
-    switch (_facebookLoginResult.status) {
-      case FacebookLoginStatus.error:
-        logger.e('Facebook Error');
-        logger.e(_facebookLoginResult.errorMessage);
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        logger.e('Login was cancelled by the user');
-        break;
-      case FacebookLoginStatus.loggedIn:
+    final AccessToken result = await FacebookAuth.instance
+        .login(permissions: ['public_profile', 'email']);
+
+    switch (result?.token != null) {
+      case true:
         logger.d('Facebook login successful');
         final Map<String, dynamic> payload = {
-          'accessToken': _facebookLoginResult.accessToken.token,
+          'accessToken': result.token,
           'language': lang
         };
         try {
@@ -102,7 +96,13 @@ class AuthenticationRepository extends Repository {
         } on DioError catch (e) {
           print(e.response.toString());
         }
+        break;
+
+      case false:
+        logger.e('Login failed');
+        break;
     }
+
     return null;
   }
 
