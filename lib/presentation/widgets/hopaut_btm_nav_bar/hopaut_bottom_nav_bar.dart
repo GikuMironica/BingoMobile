@@ -59,12 +59,19 @@ class HopautNavBar extends StatelessWidget {
                           ? HATheme.HOPAUT_PINK
                           : Colors.grey.shade500)
                   : CircleAvatar(
-                      backgroundColor: Colors.grey.shade300,
-                      radius: 12.5,
-                      backgroundImage: auth.user.profilePicture?.isEmpty ?? true
-                          ? AssetImage('assets/icons/user-avatar.png')
-                          : CachedNetworkImageProvider(
-                              auth.user.getProfilePicture),
+                      radius: 13.5,
+                      backgroundColor: isSelected
+                          ? HATheme.HOPAUT_PINK
+                          : Colors.grey.shade500,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.grey.shade300,
+                        radius: 12.5,
+                        backgroundImage:
+                            auth.user.profilePicture?.isEmpty ?? true
+                                ? AssetImage('assets/icons/user-avatar.png')
+                                : CachedNetworkImageProvider(
+                                    auth.user.getProfilePicture),
+                      ),
                     )),
           Material(
             type: MaterialType.transparency,
