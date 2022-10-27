@@ -101,7 +101,7 @@
       }
     },
     "header": {
-      "title": "Gehaltene Veranstaltungen"
+      "title": "Meine Veranstaltungen"
     },
     "Location": {
       "header": {
@@ -117,17 +117,6 @@
       "btns": {
         "getLocation": "Tippen, um den Standort abzurufen"
       }
-    }
-  },
-  "Joined": {
-    "header": {
-      "title": "Teilgenommene Veranstaltungen",
-      "currentTab": "Aktuelle",
-      "pastTab": "Vergangene"
-    },
-    "labels": {
-      "noEventsFound": "Keine Veranstaltungen gefunden",
-      "loading": "Veranstaltungen laden"
     }
   },
   "Account": {
@@ -393,8 +382,8 @@
   },
   "Navigation": {
     "map": "Karte",
-    "hosted": "Gehaltene",
-    "joined": "Teilgenommen",
+    "hosted": "Meine Events",
+    "joined": "Archivierte",
     "account": "Konto",
     "noFullNameDialog": {
       "header": "Hallo!",
@@ -549,6 +538,17 @@
       "header": "Hallo!",
       "messege": "Vervollständige die Registrierung durch Eingabe Deines Namens, um Veranstaltungen zu erstellen oder ihnen beizutreten.",
       "btnText": "Einstellungen"
+    }
+  },
+  "Archieved": {
+    "header": {
+      "title": "Archivierte Veranstaltungen",
+      "currentTab": "Von mir veranstaltet",
+      "pastTab": "Besucht"
+    },
+    "labels": {
+      "noEventsFound": "Keine Veranstaltungen gefunden",
+      "loading": "Veranstaltungen laden"
     }
   }
 }

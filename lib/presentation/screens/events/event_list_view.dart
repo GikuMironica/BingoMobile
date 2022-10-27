@@ -23,7 +23,7 @@ class EventsListView extends StatelessWidget {
       return provider.eventsMap[listType].state == EventListState.loading
           ? Center(
               child: overlayBlurBackgroundCircularProgressIndicator(
-                  context, LocaleKeys.Joined_labels_loading.tr()),
+                  context, LocaleKeys.Archieved_labels_loading.tr()),
             )
           : CustomScrollView(
               physics: const BouncingScrollPhysics(
@@ -84,7 +84,8 @@ class EventsListView extends StatelessWidget {
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    Text(LocaleKeys.Joined_labels_noEventsFound)
+                                    Text(LocaleKeys
+                                            .Archieved_labels_noEventsFound)
                                         .tr()
                                   ])))),
                 ]);

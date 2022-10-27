@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
       EventListPage(
           title: LocaleKeys.Hosted_header_title.tr(), isMyEvents: true),
       EventListPage(
-          title: LocaleKeys.Joined_header_title.tr(), isMyEvents: false),
+          title: LocaleKeys.Archieved_header_title.tr(), isMyEvents: false),
       AccountPage(),
     ];
   }
