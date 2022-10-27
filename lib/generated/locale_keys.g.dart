@@ -96,14 +96,6 @@ abstract class  LocaleKeys {
   static const Hosted_Location_btns = 'Hosted.Location.btns';
   static const Hosted_Location = 'Hosted.Location';
   static const Hosted = 'Hosted';
-  static const Joined_header_title = 'Joined.header.title';
-  static const Joined_header_currentTab = 'Joined.header.currentTab';
-  static const Joined_header_pastTab = 'Joined.header.pastTab';
-  static const Joined_header = 'Joined.header';
-  static const Joined_labels_noEventsFound = 'Joined.labels.noEventsFound';
-  static const Joined_labels_loading = 'Joined.labels.loading';
-  static const Joined_labels = 'Joined.labels';
-  static const Joined = 'Joined';
   static const Account_AccountPage_label_MemberSince = 'Account.AccountPage.label_MemberSince';
   static const Account_AccountPage_navigationLabel_EditProfile = 'Account.AccountPage.navigationLabel_EditProfile';
   static const Account_AccountPage_navigationLabel_Settings = 'Account.AccountPage.navigationLabel_Settings';
@@ -420,5 +412,13 @@ abstract class  LocaleKeys {
   static const Home_FullScreenDialog_btnText = 'Home.FullScreenDialog.btnText';
   static const Home_FullScreenDialog = 'Home.FullScreenDialog';
   static const Home = 'Home';
+  static const Archieved_header_title = 'Archieved.header.title';
+  static const Archieved_header_currentTab = 'Archieved.header.currentTab';
+  static const Archieved_header_pastTab = 'Archieved.header.pastTab';
+  static const Archieved_header = 'Archieved.header';
+  static const Archieved_labels_noEventsFound = 'Archieved.labels.noEventsFound';
+  static const Archieved_labels_loading = 'Archieved.labels.loading';
+  static const Archieved_labels = 'Archieved.labels';
+  static const Archieved = 'Archieved';
 
 }

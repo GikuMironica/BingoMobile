@@ -230,16 +230,20 @@ class _SettingsState extends State<Settings> {
                                   LocaleKeys.Account_Settings_subHeader_feedback
                                       .tr(),
                                   style: TextStyle(color: Colors.black38)),
-                              MergeSemantics(
-                                child: ListTile(
-                                    contentPadding: EdgeInsets.zero,
-                                    title: Text(
-                                        LocaleKeys
-                                                .Account_Settings_navigationLabels_leaveRating
-                                            .tr(),
-                                        style: TextStyle(fontSize: 18)),
-                                    trailing: Icon(Icons.arrow_forward_ios),
-                                    onTap: () => {}),
+                              Consumer<SettingsProvider>(
+                                builder: (context, settingsProvider, _) =>
+                                    MergeSemantics(
+                                  child: ListTile(
+                                      contentPadding: EdgeInsets.zero,
+                                      title: Text(
+                                          LocaleKeys
+                                                  .Account_Settings_navigationLabels_leaveRating
+                                              .tr(),
+                                          style: TextStyle(fontSize: 18)),
+                                      trailing: Icon(Icons.arrow_forward_ios),
+                                      onTap:
+                                          settingsProvider.leaveRatingPressed),
+                                ),
                               ),
                               MergeSemantics(
                                 child: ListTile(
