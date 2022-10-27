@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">HopAut</string>
+    <string name="app_name">Hopaut</string>
 
     <!-- Here SDK Key ID -->
     <string name="here_key_id">pUxTNsyBLAI87zlZZTNVaA</string>
