@@ -101,7 +101,7 @@
       }
     },
     "header": {
-      "title": "Hosted Events"
+      "title": "My Events"
     },
     "Location": {
       "header": {
@@ -117,17 +117,6 @@
       "btns": {
         "getLocation": "Tap to get location"
       }
-    }
-  },
-  "Joined": {
-    "header": {
-      "title": "Joined Events",
-      "currentTab": "Current",
-      "pastTab": "Past"
-    },
-    "labels": {
-      "noEventsFound": "No events found",
-      "loading": "Loading events"
     }
   },
   "Account": {
@@ -251,7 +240,7 @@
       "ReportBug": {
         "pageTitle": "Report an issue",
         "labels": {
-          "somethingIsntWorking": "Something isn\\'t working as expected?",
+          "somethingIsntWorking": "Something isn't working as expected?",
           "uploadScreenshots": "Upload screenshots"
         },
         "hints": {
@@ -290,7 +279,7 @@
         },
         "validation": {
           "inputOldPassword": "Please input your old password",
-          "inputNewPassword": "Password must be at least 8 characters length, must contain upper, lower case letters and digits"
+          "inputNewPassword": "Password must be at least 8 characters length, must contain at least one letter and one number."
         },
         "buttons": {
           "changePassword": "Change password"
@@ -393,8 +382,8 @@
   },
   "Navigation": {
     "map": "Map",
-    "hosted": "Hosted",
-    "joined": "Joined",
+    "hosted": "My Events",
+    "joined": "Archieved",
     "account": "Account",
     "noFullNameDialog": {
       "header": "Hey there!",
@@ -549,6 +538,17 @@
       "header": "Hey there!",
       "messege": "Complete the registration by entering your name to create or join events.",
       "btnText": "Settings"
+    }
+  },
+  "Archieved": {
+    "header": {
+      "title": "Archived Events",
+      "currentTab": "Hosted by me",
+      "pastTab": "Visited"
+    },
+    "labels": {
+      "noEventsFound": "No events found",
+      "loading": "Loading events"
     }
   }
 }

@@ -20,11 +20,11 @@ class EventListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> listTypes = isMyEvents
-        ? [API.MY_ACTIVE, API.MY_INACTIVE]
-        : [API.ATTENDING_ACTIVE, API.ATTENDED_INACTIVE];
+        ? [API.MY_ACTIVE, API.ATTENDING_ACTIVE]
+        : [API.MY_INACTIVE, API.ATTENDED_INACTIVE];
     final List<String> tabs = [
-      LocaleKeys.Joined_header_currentTab.tr(),
-      LocaleKeys.Joined_header_pastTab.tr()
+      LocaleKeys.Archieved_header_currentTab.tr(),
+      LocaleKeys.Archieved_header_pastTab.tr()
     ];
     return Consumer<EventProvider>(builder: (context, provider, child) {
       return Scaffold(

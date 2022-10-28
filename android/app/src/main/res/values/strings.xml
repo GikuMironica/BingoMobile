@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">HopAut</string>
+    <string name="app_name">Hopaut</string>
 
     <!-- Here SDK Key ID -->
     <string name="here_key_id">pUxTNsyBLAI87zlZZTNVaA</string>
@@ -9,6 +9,7 @@
 
     <!-- Facebook App ID -->
     <string name="facebook_app_id">218732049417470</string>
+    <string name="facebook_client_token">93cc86e5c994b9e1370179df365706c4</string>
     <!-- Facebook Login Protocol Scheme, "fb<app id>" -->
     <string name="fb_login_protocol_scheme">fb218732049417470</string>
 </resources>

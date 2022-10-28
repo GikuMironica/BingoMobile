@@ -14,6 +14,7 @@ import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hopaut/generated/locale_keys.g.dart';
+import 'package:store_redirect/store_redirect.dart';
 
 @singleton
 class SettingsProvider with ChangeNotifier {
@@ -65,6 +66,13 @@ class SettingsProvider with ChangeNotifier {
   void emailChange(String value) {
     deleteAccountEmail = value;
     notifyListeners();
+  }
+
+  void leaveRatingPressed() {
+    StoreRedirect.redirect(
+      androidAppId: "com.hopaut.hopaut",
+      iOSAppId: "com.hopaut.hopaut",
+    );
   }
 
   Future<void> deleteAccount(BuildContext context) async {

@@ -15,7 +15,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.1.0+12
+
+version: 1.1.0+15
 
 environment:
   sdk: "2.10.5"
@@ -43,6 +44,7 @@ dependencies:
   dio:                    3.0.9
   pretty_dio_logger:      ^1.1.1
   flutter_facebook_login: ^3.0.0
+  flutter_facebook_auth:  ^2.0.2+1
   mime_type:              ^0.3.2
   http_parser:            ^3.1.4
   hive:                   ^1.4.4+1
@@ -92,6 +94,8 @@ dependencies:
   firebase_core: ^0.7.0
   firebase_auth: ^0.20.1
   firebase_crashlytics: ^0.4.0+1
+  store_redirect: ^1.0.2
+  rating_dialog: ^1.0.0
 
   flutter_cupertino_date_picker:
     git: https://github.com/yasseralsamman/flutter-cupertino-date-picker.git

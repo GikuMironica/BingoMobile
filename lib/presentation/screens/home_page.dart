@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/generated/locale_keys.g.dart';
 import 'package:hopaut/presentation/screens/events/event_list_page.dart';
@@ -101,7 +102,7 @@ class _HomePageState extends State<HomePage> {
       EventListPage(
           title: LocaleKeys.Hosted_header_title.tr(), isMyEvents: true),
       EventListPage(
-          title: LocaleKeys.Joined_header_title.tr(), isMyEvents: false),
+          title: LocaleKeys.Archieved_header_title.tr(), isMyEvents: false),
       AccountPage(),
     ];
   }
@@ -121,7 +122,11 @@ class _HomePageState extends State<HomePage> {
         title: (LocaleKeys.Navigation_joined.tr()),
       ),
       HopautNavBarItem(
-        svg: MdiIcons.accountOutline,
+        //svg: MdiIcons.accountOutline,
+        image: _authenticationService.user.profilePicture?.isEmpty ?? true
+            ? AssetImage('assets/icons/user-avatar.png')
+            : CachedNetworkImageProvider(
+                _authenticationService.user.getProfilePicture),
         title: (LocaleKeys.Navigation_account.tr()),
       ),
     ];

@@ -10,7 +10,7 @@ import 'package:injectable/injectable.dart';
 class ChangePasswordProvider extends ChangeNotifier {
   /// Validators
   static final RegExp _pwdRule =
-      RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
+      RegExp(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
 
   /// State properties
   String oldPassword;

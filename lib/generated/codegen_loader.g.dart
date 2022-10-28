@@ -117,7 +117,7 @@ class CodegenLoader extends AssetLoader{
       }
     },
     "header": {
-      "title": "Gehaltene Veranstaltungen"
+      "title": "Meine Veranstaltungen"
     },
     "Location": {
       "header": {
@@ -133,17 +133,6 @@ class CodegenLoader extends AssetLoader{
       "btns": {
         "getLocation": "Tippen, um den Standort abzurufen"
       }
-    }
-  },
-  "Joined": {
-    "header": {
-      "title": "Teilgenommene Veranstaltungen",
-      "currentTab": "Aktuelle",
-      "pastTab": "Vergangene"
-    },
-    "labels": {
-      "noEventsFound": "Keine Veranstaltungen gefunden",
-      "loading": "Veranstaltungen laden"
     }
   },
   "Account": {
@@ -306,7 +295,7 @@ class CodegenLoader extends AssetLoader{
         },
         "validation": {
           "inputOldPassword": "Altes Passwort eingebe",
-          "inputNewPassword": "Passwort muss mindestens 8 Zeichen lang sein und Groß- und Kleinbuchstaben sowie Ziffern enthalten"
+          "inputNewPassword": "Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Buchstaben und eine Zahl enthalten."
         },
         "buttons": {
           "changePassword": "Passwort ändern"
@@ -409,8 +398,8 @@ class CodegenLoader extends AssetLoader{
   },
   "Navigation": {
     "map": "Karte",
-    "hosted": "Gehaltene",
-    "joined": "Teilgenommen",
+    "hosted": "Meine Events",
+    "joined": "Archivierte",
     "account": "Konto",
     "noFullNameDialog": {
       "header": "Hallo!",
@@ -566,6 +555,17 @@ class CodegenLoader extends AssetLoader{
       "messege": "Vervollständige die Registrierung durch Eingabe Deines Namens, um Veranstaltungen zu erstellen oder ihnen beizutreten.",
       "btnText": "Einstellungen"
     }
+  },
+  "Archieved": {
+    "header": {
+      "title": "Archivierte Veranstaltungen",
+      "currentTab": "Von mir veranstaltet",
+      "pastTab": "Besucht"
+    },
+    "labels": {
+      "noEventsFound": "Keine Veranstaltungen gefunden",
+      "loading": "Veranstaltungen laden"
+    }
   }
 };
 static const Map<String,dynamic> en = {
@@ -671,7 +671,7 @@ static const Map<String,dynamic> en = {
       }
     },
     "header": {
-      "title": "Hosted Events"
+      "title": "My Events"
     },
     "Location": {
       "header": {
@@ -687,17 +687,6 @@ static const Map<String,dynamic> en = {
       "btns": {
         "getLocation": "Tap to get location"
       }
-    }
-  },
-  "Joined": {
-    "header": {
-      "title": "Joined Events",
-      "currentTab": "Current",
-      "pastTab": "Past"
-    },
-    "labels": {
-      "noEventsFound": "No events found",
-      "loading": "Loading events"
     }
   },
   "Account": {
@@ -821,7 +810,7 @@ static const Map<String,dynamic> en = {
       "ReportBug": {
         "pageTitle": "Report an issue",
         "labels": {
-          "somethingIsntWorking": "Something isn\\'t working as expected?",
+          "somethingIsntWorking": "Something isn't working as expected?",
           "uploadScreenshots": "Upload screenshots"
         },
         "hints": {
@@ -860,7 +849,7 @@ static const Map<String,dynamic> en = {
         },
         "validation": {
           "inputOldPassword": "Please input your old password",
-          "inputNewPassword": "Password must be at least 8 characters length, must contain upper, lower case letters and digits"
+          "inputNewPassword": "Password must be at least 8 characters length, must contain at least one letter and one number."
         },
         "buttons": {
           "changePassword": "Change password"
@@ -963,8 +952,8 @@ static const Map<String,dynamic> en = {
   },
   "Navigation": {
     "map": "Map",
-    "hosted": "Hosted",
-    "joined": "Joined",
+    "hosted": "My Events",
+    "joined": "Archieved",
     "account": "Account",
     "noFullNameDialog": {
       "header": "Hey there!",
@@ -1119,6 +1108,17 @@ static const Map<String,dynamic> en = {
       "header": "Hey there!",
       "messege": "Complete the registration by entering your name to create or join events.",
       "btnText": "Settings"
+    }
+  },
+  "Archieved": {
+    "header": {
+      "title": "Archived Events",
+      "currentTab": "Hosted by me",
+      "pastTab": "Visited"
+    },
+    "labels": {
+      "noEventsFound": "No events found",
+      "loading": "Loading events"
     }
   }
 };

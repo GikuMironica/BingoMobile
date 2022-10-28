@@ -11,7 +11,6 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-
   @override
   void initState() {
     super.initState();
@@ -23,8 +22,7 @@ class _AccountPageState extends State<AccountPage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
-      child: Stack(children: [
+        child: Stack(children: [
           Container(
             width: _size.width,
             height: _size.height,
