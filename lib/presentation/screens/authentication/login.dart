@@ -28,16 +28,21 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          child: SafeArea(
-            child: Container(
-              child: BlocProvider(
-                create: (context) => LoginBloc(),
-                child: _loginView(),
+        resizeToAvoidBottomInset: true,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: SafeArea(
+                  child: BlocProvider(
+                    create: (context) => LoginBloc(),
+                    child: _loginView(),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ));
   }
