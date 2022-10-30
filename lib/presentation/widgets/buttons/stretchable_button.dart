@@ -5,17 +5,18 @@ const double defaultBorderRadius = 4;
 class StretchableButton extends StatelessWidget {
   final VoidCallback onPressed;
   final double borderRadius;
-  final Color buttonColor, splashColor;
-  final Color buttonBorderColor;
+  final Color buttonColor;
+  final Color? splashColor;
+  final Color? buttonBorderColor;
   final List<Widget> children;
 
   StretchableButton({
-    @required this.buttonColor,
-    @required this.borderRadius,
-    @required this.children,
+    required this.buttonColor,
+    required this.borderRadius,
+    required this.children,
     this.splashColor,
     this.buttonBorderColor,
-    this.onPressed,
+    required this.onPressed,
   });
 
   @override

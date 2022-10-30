@@ -15,29 +15,29 @@ class ImagePickerDialog extends StatefulWidget {
   final Function uploadAsync;
 
   ImagePickerDialog(
-      {this.isCropperEnabled, this.isProfileUpdated, this.uploadAsync});
+      {required this.isCropperEnabled,
+      required this.isProfileUpdated,
+      required this.uploadAsync});
 
   @override
   _ImagePickerDialogState createState() => _ImagePickerDialogState();
 }
 
 class _ImagePickerDialogState extends State<ImagePickerDialog> {
+  String? _cameraSvg;
+  String _gallerySvg = 'assets/icons/svg/gallery_picture.svg';
+  bool isUploading = false;
+  File? _selectedImage;
+  Function? _uploadAsync;
+
   @override
   void initState() {
     super.initState();
     _cameraSvg = widget.isProfileUpdated
         ? 'assets/icons/svg/selfie.svg'
         : 'assets/icons/svg/event_camera_picture.svg';
-    _gallerySvg = 'assets/icons/svg/gallery_picture.svg';
     _uploadAsync = widget.uploadAsync;
-    isUploading = false;
   }
-
-  String _cameraSvg;
-  String _gallerySvg;
-  bool isUploading;
-  File _selectedImage;
-  Function _uploadAsync;
 
   /// Upload image using the provided function "uploadAsync"
   Future<void> _uploadPictureAsync() async {
@@ -45,7 +45,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
       isUploading = true;
     });
     if (_selectedImage != null) {
-      RequestResult result = await _uploadAsync(_selectedImage.absolute.path);
+      RequestResult result = await _uploadAsync!(_selectedImage?.absolute.path);
       setState(() {
         isUploading = false;
       });
@@ -78,7 +78,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _imageTarget(
-                            assetPath: _cameraSvg,
+                            assetPath: _cameraSvg!,
                             imgSource: ImageSource.camera,
                             hint: LocaleKeys
                                     .Account_EditProfile_EditProfilePicture_labels_camera
@@ -100,7 +100,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                       child: CircleAvatar(
                         backgroundColor: Colors.grey.shade300,
                         radius: 96.0,
-                        backgroundImage: FileImage(_selectedImage, scale: 0.7),
+                        backgroundImage: FileImage(_selectedImage!, scale: 0.7),
                       ),
                     ),
                     SizedBox(
@@ -148,7 +148,10 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
 
   /// Image Selector Target
   /// Displays the SVG  image corresponding to image source (Galery/Camera)
-  Widget _imageTarget({String assetPath, ImageSource imgSource, String hint}) {
+  Widget _imageTarget(
+      {required String assetPath,
+      required ImageSource imgSource,
+      required String hint}) {
     return InkWell(
       child: Column(
         children: [
@@ -168,24 +171,24 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
   }
 
   /// Loads, compresses and optionally crops the image
-  Future<File> loadImage(ImageSource imageSource) async {
+  Future<File?> loadImage(ImageSource imageSource) async {
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: imageSource);
-    File file;
+    final pickedFile = await picker.pickImage(source: imageSource);
+    File? file;
     if (widget.isCropperEnabled) {
-      file = await ImageCropper.cropImage(
-        sourcePath: pickedFile.path,
+      file = await ImageCropper().cropImage(
+        sourcePath: pickedFile!.path,
         maxHeight: 256,
         maxWidth: 256,
         compressFormat: ImageCompressFormat.png,
         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
       );
     }
-    file ??= File(pickedFile.path);
+    file ??= File(pickedFile!.path);
     setState(() {
       _selectedImage = file;
     });
-    File compressedImage =
+    File? compressedImage =
         await testCompressAndGetFile(file, "${file.parent.absolute.path}.webp");
     return compressedImage;
   }

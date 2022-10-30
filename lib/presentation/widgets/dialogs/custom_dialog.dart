@@ -5,7 +5,7 @@ class CustomDialog extends StatelessWidget {
   final double padding = 16.0;
 
   CustomDialog({
-    @required this.pageWidget,
+    required this.pageWidget,
   });
 
   @override

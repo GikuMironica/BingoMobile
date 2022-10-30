@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/data/models/announcement_message.dart';
 import 'package:hopaut/services/date_formatter_service.dart';
@@ -7,7 +6,7 @@ import 'package:hopaut/services/date_formatter_service.dart';
 class AnnouncementMessageBubble extends StatefulWidget {
   final AnnouncementMessage announcementMessage;
 
-  AnnouncementMessageBubble({this.announcementMessage});
+  AnnouncementMessageBubble({required this.announcementMessage});
 
   @override
   _AnnouncementMessageBubbleState createState() =>

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/presentation/widgets/hopaut_btm_nav_bar/hopaut_nav_bar_item.dart';
@@ -8,7 +7,10 @@ class HopautNavBar extends StatelessWidget {
   final List<HopautNavBarItem> items;
   final ValueChanged<int> onItemSelected;
 
-  HopautNavBar({this.items, this.selectedIndex, this.onItemSelected});
+  HopautNavBar(
+      {required this.items,
+      required this.selectedIndex,
+      required this.onItemSelected});
 
   @override
   Widget build(BuildContext context) {

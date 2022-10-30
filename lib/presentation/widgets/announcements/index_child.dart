@@ -6,7 +6,7 @@ import 'package:hopaut/services/date_formatter_service.dart';
 class IndexChild extends StatefulWidget {
   final Announcement announcement;
 
-  IndexChild({this.announcement});
+  IndexChild({required this.announcement});
 
   @override
   _IndexChildState createState() => _IndexChildState();

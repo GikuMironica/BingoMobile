@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../text/subtitle.dart';
 
-Widget GridCell({String title, String data, IconData icon}) {
+Widget gridCell(
+    {required String title, required String data, required IconData icon}) {
   final textColor = Colors.black87;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,

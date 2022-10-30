@@ -3,11 +3,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/generated/locale_keys.g.dart';
 
-FadeTransition EventAttendButton(
-    {BuildContext context,
-    AnimationController animationController,
-    bool isAttending,
-    Function onPressed}) {
+FadeTransition eventAttendButton(
+    {required BuildContext context,
+    required AnimationController animationController,
+    required bool isAttending,
+    required Function() onPressed}) {
   return FadeTransition(
     opacity: animationController,
     child: ScaleTransition(

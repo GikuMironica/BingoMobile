@@ -20,7 +20,7 @@ Widget facebookButton(BuildContext context, dynamic state) {
     buttonColor: Color(0xFF1877F2),
     borderRadius: borderRadius,
     onPressed: state.formStatus is LoginSubmitted
-        ? null
+        ? () {}
         : () {
             context.read<LoginBloc>().add(new FacebookLoginClicked());
           },

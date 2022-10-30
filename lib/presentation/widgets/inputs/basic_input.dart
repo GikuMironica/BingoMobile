@@ -1,19 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hopaut/config/constants/theme.dart';
 
 Widget valueInput(
-    {@required bool isStateValid,
-    @required String validationMessage,
-    @required String initialValue,
-    @required int maxLength,
-    void Function(String) onChange,
-    TextEditingController controller,
-    FormFieldSetter<String> onSaved,
-    String hintText,
-    TextInputType inputType,
-    TextAlign alignment}) {
+    {required bool isStateValid,
+    required String validationMessage,
+    String initialValue = "",
+    required int maxLength,
+    void Function(String)? onChange,
+    TextEditingController? controller,
+    FormFieldSetter<String>? onSaved,
+    String? hintText,
+    TextInputType? inputType,
+    TextAlign? alignment}) {
   return Stack(
     children: [
       Card(
@@ -29,17 +28,17 @@ Widget valueInput(
             )),
       ),
       TextFormField(
+        maxLengthEnforcement: MaxLengthEnforcement.enforced,
         inputFormatters: [
           LengthLimitingTextInputFormatter(maxLength),
         ],
         keyboardType: inputType != null ? inputType : TextInputType.text,
-        initialValue: initialValue ?? "",
+        initialValue: initialValue,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (value) => isStateValid ? null : validationMessage,
         onChanged: onChange,
         onSaved: onSaved,
         maxLines: 1,
-        maxLengthEnforced: true,
         maxLength: maxLength,
         textAlign: alignment != null ? alignment : TextAlign.start,
         decoration: InputDecoration(

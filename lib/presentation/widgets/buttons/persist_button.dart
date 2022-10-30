@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'gradient_box_decoration.dart';
 
 Widget persistButton({
-  @required String label,
-  @required BuildContext context,
-  @required bool isStateValid,
-  @required void Function() onPressed,
+  required String label,
+  required BuildContext context,
+  required bool isStateValid,
+  required void Function() onPressed,
 }) {
   return Card(
     elevation: 5,

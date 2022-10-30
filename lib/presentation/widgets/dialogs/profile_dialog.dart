@@ -2,17 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/data/models/profile.dart';
 import 'package:hopaut/data/repositories/profile_repository.dart';
-import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
-import 'package:hopaut/presentation/screens/report/report_user.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ProfileDialog extends StatefulWidget {
-  final Profile profile;
+  final Profile? profile;
   final String userId;
 
   ProfileDialog({
     this.profile,
-    this.userId,
+    required this.userId,
   });
 
   @override
@@ -20,7 +17,7 @@ class ProfileDialog extends StatefulWidget {
 }
 
 class _ProfileDialogState extends State<ProfileDialog> {
-  Profile _profileContext;
+  Profile? _profileContext;
 
   @override
   void initState() {
@@ -33,7 +30,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
   }
 
   Future<void> _getProfile(String id) async {
-    Profile _profile = await ProfileRepository().get(id);
+    Profile? _profile = await ProfileRepository().get(id);
     setState(() {
       _profileContext = _profile;
     });
@@ -114,16 +111,16 @@ class _ProfileDialogState extends State<ProfileDialog> {
                 height: 24,
               ),
               Text(
-                _profileContext.getFullName,
+                _profileContext!.getFullName,
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               Visibility(
-                visible: _profileContext.phoneNumber != null,
+                visible: _profileContext!.phoneNumber != "",
                 child: Text(
-                  _profileContext.phoneNumber ?? " ",
+                  _profileContext!.phoneNumber,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black54,
@@ -133,7 +130,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
               ),
               SizedBox(height: 16.0),
               Text(
-                _profileContext.description ?? " ",
+                _profileContext?.description ?? " ",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12.0,
@@ -153,16 +150,16 @@ class _ProfileDialogState extends State<ProfileDialog> {
               child: CircleAvatar(
                 backgroundColor: Colors.transparent,
                 radius: 72.0,
-                child: _profileContext.profilePicture != null
+                child: _profileContext?.profilePicture != null
                     ? ClipOval(
                         child: Image.network(
-                          _profileContext.getProfilePicture,
+                          _profileContext!.getProfilePicture!,
                           fit: BoxFit.cover,
                           width: 144,
                           height: 144,
                         ),
                       )
-                    : Text(_profileContext.getFullName),
+                    : Text(_profileContext!.getFullName),
               ),
             )) //...top circlular image part,
       ],

@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hopaut/config/routes/routes.dart';
 
 class FullscreenDialog extends StatelessWidget {
-  final String asset;
+  final String? asset;
   final String svgAsset;
   final String header;
   final String message;
@@ -15,11 +15,11 @@ class FullscreenDialog extends StatelessWidget {
 
   FullscreenDialog(
       {this.asset,
-      this.svgAsset,
-      this.header,
-      this.message,
-      this.buttonText,
-      this.route});
+      required this.svgAsset,
+      required this.header,
+      required this.message,
+      required this.buttonText,
+      required this.route});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class FullscreenDialog extends StatelessWidget {
                 ),
                 asset != null
                     ? Image.asset(
-                        asset,
+                        asset!,
                         height: 300,
                         width: double.infinity,
                       )

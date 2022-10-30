@@ -3,9 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:hopaut/generated/locale_keys.g.dart';
 
 Widget emailInputField({
-  @required BuildContext context,
-  @required bool isStateValid,
-  @required void Function(String) onChange,
+  required BuildContext context,
+  required bool isStateValid,
+  required void Function(String) onChange,
 }) {
   return TextFormField(
     autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -16,7 +16,7 @@ Widget emailInputField({
     decoration: InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey[400]),
+        borderSide: BorderSide(color: Colors.grey[400]!),
       ),
       border: const OutlineInputBorder(),
       isDense: true,

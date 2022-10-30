@@ -44,7 +44,7 @@ class _DropDownWidgetState<T> extends State<DropDownWidget<T>> {
 
   @override
   void dispose() {
-    _focus?.dispose();
+    _focus.dispose();
     super.dispose();
   }
 

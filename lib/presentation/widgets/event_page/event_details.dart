@@ -14,14 +14,18 @@ import 'package:hopaut/generated/locale_keys.g.dart';
 ///   Slots
 
 class EventDetails extends StatelessWidget {
-  final double price;
+  final double? price;
   final String date;
   final String time;
-  final String slots;
-  final String priceCurrency;
+  final String? slots;
+  final String? priceCurrency;
 
   EventDetails(
-      {this.date, this.price, this.slots, this.time, this.priceCurrency});
+      {required this.date,
+      this.price,
+      this.slots,
+      required this.time,
+      this.priceCurrency});
 
   @override
   Widget build(BuildContext context) {
@@ -32,23 +36,23 @@ class EventDetails extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       crossAxisCount: 2,
       children: <Widget>[
-        GridCell(
+        gridCell(
             title: LocaleKeys.Event_detailsLabels_date.tr(),
             data: date,
             icon: MdiIcons.calendarBlankOutline),
-        GridCell(
+        gridCell(
             title: LocaleKeys.Event_detailsLabels_tim.tr(),
             data: time,
             icon: ClockIcon(time)),
         if (price != 0.0)
-          GridCell(
+          gridCell(
               title: LocaleKeys.Event_detailsLabels_price.tr(),
               data: '${price.toString()} $priceCurrency',
               icon: MdiIcons.cash),
         if (slots != '0 / 0')
-          GridCell(
+          gridCell(
               title: LocaleKeys.Event_detailsLabels_availablePlaces.tr(),
-              data: slots,
+              data: slots!,
               icon: MdiIcons.clipboardListOutline),
       ],
     );

@@ -5,29 +5,27 @@ import 'package:hopaut/config/routes/application.dart';
 enum formState { date, time }
 
 class TimePicker extends StatefulWidget {
-  DateTime minTime;
-  DateTime maxTime;
-  bool pickerForEndTime;
+  final DateTime minTime;
+  final DateTime maxTime;
+  final bool pickerForEndTime;
 
-  TimePicker({this.maxTime, this.minTime, this.pickerForEndTime = false});
+  TimePicker(
+      {required this.maxTime,
+      required this.minTime,
+      this.pickerForEndTime = false});
 
   @override
   _TimePickerState createState() => _TimePickerState();
 }
 
 class _TimePickerState extends State<TimePicker> {
-  formState _state;
-  DateTime _dtNow = DateTime.now().add(Duration(minutes: 15));
+  formState _state = formState.date;
 
-  int year;
-  int month;
-  int day;
-  int hour;
-  int minute;
-
-  _TimePickerState() {
-    _state = formState.date;
-  }
+  int? year;
+  int? month;
+  int? day;
+  int? hour;
+  int? minute;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +64,7 @@ class _TimePickerState extends State<TimePicker> {
                       hour = dateTime.hour;
                       minute = dateTime.minute;
                     });
-                    DateTime dt = DateTime(year, month, day, hour, minute);
+                    DateTime dt = DateTime(year!, month!, day!, hour!, minute!);
                     Application.router.pop<DateTime>(context, dt);
                   })),
     );

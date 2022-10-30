@@ -11,12 +11,9 @@ class EventParticipants extends StatefulWidget {
 }
 
 class _EventParticipantsState extends State<EventParticipants> {
-  List<Widget> widgetList;
-
-  _EventParticipantsState();
+  List<Widget> widgetList = [];
 
   getImageWidgets() {
-    widgetList = [];
     int count = widget.participants['AttendeesNumber'] ?? 0;
     List members = widget.participants['Attendees'];
     double pos = 0;
@@ -66,15 +63,15 @@ class _EventParticipantsState extends State<EventParticipants> {
   Widget build(BuildContext context) {
     getImageWidgets();
     return Stack(
-      overflow: Overflow.visible,
+      clipBehavior: Clip.none,
       children: widgetList,
     );
   }
 }
 
-Widget participant({dynamic element, double position}) {
-  String initials;
-  String imageUrl;
+Widget participant({dynamic element, required double position}) {
+  String? initials;
+  String? imageUrl;
 
   if (element is Map) {
     if (element.containsKey('Picture') && element['Picture'] != null) {
@@ -95,7 +92,7 @@ Widget participant({dynamic element, double position}) {
     left: position,
     child: CircleAvatar(
       child: imageUrl == null
-          ? Text(initials,
+          ? Text(initials!,
               style:
                   TextStyle(color: HATheme.HOPAUT_PINK, fontFamily: 'Roboto'))
           : null,

@@ -4,5 +4,5 @@ class HopautNavBarItem {
   final IconData svg;
   final String title;
 
-  HopautNavBarItem({@required this.svg, @required this.title});
+  HopautNavBarItem({required this.svg, required this.title});
 }

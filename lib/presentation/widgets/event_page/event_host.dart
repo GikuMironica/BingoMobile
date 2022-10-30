@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-Widget hostRating({double rating}) {
+Widget hostRating({required double rating}) {
   final List<Widget> widgetList = [
     Text('Host', style: TextStyle(color: Colors.black54)),
   ];
@@ -21,11 +21,11 @@ Widget hostRating({double rating}) {
 }
 
 Widget hostDetails(
-    {String phone,
-    String hostName,
-    String hostInitials,
-    String hostImage,
-    double rating}) {
+    {required String phone,
+    required String hostName,
+    required String hostInitials,
+    String? hostImage,
+    required double rating}) {
   return Row(
     children: <Widget>[
       Card(
@@ -54,8 +54,8 @@ Widget hostDetails(
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
           Visibility(
-            visible: phone != null,
-            child: Text(phone ?? "", style: TextStyle(color: Colors.black54)),
+            visible: phone != "",
+            child: Text(phone, style: TextStyle(color: Colors.black54)),
           ),
           hostRating(rating: rating)
         ],

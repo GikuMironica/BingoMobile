@@ -4,7 +4,7 @@ import 'package:hopaut/presentation/widgets/text/subtitle.dart';
 class FieldTitle extends StatelessWidget {
   final String title;
 
-  FieldTitle({@required this.title});
+  FieldTitle({required this.title});
 
   @override
   Widget build(BuildContext context) {
