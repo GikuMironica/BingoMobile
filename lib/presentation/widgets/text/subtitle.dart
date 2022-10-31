@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Text Subtitle({String label}) {
+Text Subtitle({required String label}) {
   return Text(
     label,
     style: TextStyle(

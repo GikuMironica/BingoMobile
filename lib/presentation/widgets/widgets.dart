@@ -11,7 +11,7 @@ import 'package:hopaut/config/constants/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hopaut/generated/locale_keys.g.dart';
 
-Widget makeTitle({String title}) {
+Widget makeTitle({required String title}) {
   return Text(
     title,
     style: TextStyle(
@@ -147,14 +147,14 @@ Widget overlayBlurBackgroundCircularProgressIndicator(
 }
 
 void showSnackBarWithError(
-    {BuildContext context,
-    String message,
-    GlobalKey<ScaffoldState> scaffoldKey}) {
-  Scaffold.of(context).removeCurrentSnackBar();
+    {BuildContext? context,
+    required String message,
+    GlobalKey<ScaffoldState>? scaffoldKey}) {
+  ScaffoldMessenger.of(context!).removeCurrentSnackBar();
   if (scaffoldKey == null) {
-    Scaffold.of(context).showSnackBar(_errorSnackBar(message));
+    ScaffoldMessenger.of(context).showSnackBar(_errorSnackBar(message));
   } else {
-    scaffoldKey.currentState.showSnackBar(_errorSnackBar(message));
+    scaffoldKey.currentState?.showSnackBar(_errorSnackBar(message));
   }
 }
 
@@ -170,7 +170,7 @@ SnackBar _errorSnackBar(String message) {
       backgroundColor: HATheme.HOPAUT_PINK.withOpacity(0.7));
 }
 
-void showNewErrorSnackbar(String message, {ToastGravity toastGravity}) {
+void showNewErrorSnackbar(String message, {ToastGravity? toastGravity}) {
   Fluttertoast.showToast(
       backgroundColor: HATheme.HOPAUT_PINK.withOpacity(0.7),
       textColor: Colors.white,
@@ -180,14 +180,14 @@ void showNewErrorSnackbar(String message, {ToastGravity toastGravity}) {
 }
 
 void showSuccessSnackBar(
-    {BuildContext context,
-    String message,
-    GlobalKey<ScaffoldState> scaffoldKey}) {
-  Scaffold.of(context).removeCurrentSnackBar();
+    {BuildContext? context,
+    required String message,
+    GlobalKey<ScaffoldState>? scaffoldKey}) {
+  ScaffoldMessenger.of(context!).removeCurrentSnackBar();
   if (scaffoldKey == null) {
-    Scaffold.of(context).showSnackBar(_successSnackBar(message));
+    ScaffoldMessenger.of(context).showSnackBar(_successSnackBar(message));
   } else {
-    scaffoldKey.currentState.showSnackBar(_successSnackBar(message));
+    scaffoldKey.currentState?.showSnackBar(_successSnackBar(message));
   }
 }
 
@@ -221,7 +221,7 @@ Widget _successIcon() {
   );
 }
 
-Widget privacyPolicyAndTerms({BuildContext context, String actionText}) {
+Widget privacyPolicyAndTerms({BuildContext? context, String? actionText}) {
   TextStyle defaultStyle = TextStyle(color: Colors.grey, fontSize: 14.0);
   TextStyle linkStyle = TextStyle(color: Colors.pink);
   return RichText(
@@ -254,7 +254,7 @@ Widget privacyPolicyAndTerms({BuildContext context, String actionText}) {
   );
 }
 
-_launchURL({String url, BuildContext context}) async {
+_launchURL({required String url, BuildContext? context}) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
