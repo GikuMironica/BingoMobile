@@ -8,18 +8,18 @@ import 'package:hopaut/config/routes/routes.dart';
 class FullscreenDialog extends StatelessWidget {
   final String? asset;
   final String? svgAsset;
-  final String header;
-  final String message;
-  final String buttonText;
-  final String route;
+  final String? header;
+  final String? message;
+  final String? buttonText;
+  final String? route;
 
   FullscreenDialog(
       {this.asset,
       this.svgAsset,
-      required this.header,
-      required this.message,
-      required this.buttonText,
-      required this.route});
+      this.header,
+      this.message,
+      this.buttonText,
+      this.route});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class FullscreenDialog extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  header,
+                  header!,
                   textAlign: TextAlign.justify,
                   style: TextStyle(
                       color: Colors.black,
@@ -67,7 +67,7 @@ class FullscreenDialog extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                   child: Text(
-                    message,
+                    message!,
                     maxLines: 5,
                     style: TextStyle(
                         color: Colors.grey,
@@ -81,7 +81,7 @@ class FullscreenDialog extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     Future.delayed(Duration.zero, () {
-                      Application.router.navigateTo(context, route,
+                      Application.router.navigateTo(context, route!,
                           replace: true,
                           transition: TransitionType.fadeIn,
                           clearStack: route == Routes.login,
@@ -97,7 +97,7 @@ class FullscreenDialog extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        buttonText,
+                        buttonText!,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.white,
