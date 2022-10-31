@@ -43,7 +43,7 @@ class EventDetails extends StatelessWidget {
         gridCell(
             title: LocaleKeys.Event_detailsLabels_tim.tr(),
             data: time,
-            icon: ClockIcon(time)),
+            icon: ClockIcon(time)!),
         if (price != 0.0)
           gridCell(
               title: LocaleKeys.Event_detailsLabels_price.tr(),
