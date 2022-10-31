@@ -9,7 +9,7 @@ import 'package:easy_localization/easy_localization.dart';
 class MiniPostCard extends StatelessWidget {
   final MiniPost miniPost;
 
-  MiniPostCard({this.miniPost});
+  MiniPostCard({required this.miniPost});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class MiniPostCard extends StatelessWidget {
                     ),
                     image: DecorationImage(
                       image: miniPost.thumbnail != null
-                          ? miniPost.thumbnail.image
+                          ? miniPost.thumbnail!.image!
                           : AssetImage('assets/icons/event_default_image.png'),
                       fit: BoxFit.cover,
                     )),
@@ -70,7 +70,7 @@ class MiniPostCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        eventTypeStrings[miniPost.postType],
+                        eventTypeStrings[miniPost.postType]!,
                         style:
                             TextStyle(color: Color(0xFF9A9DB2), fontSize: 11),
                       ).tr(),

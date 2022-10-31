@@ -64,7 +64,7 @@ class SearchPageProvider extends ChangeNotifier {
   void onMapCreated(HereMapController hereMapController) async {
     hereMapController = hereMapController;
     _setTapGestureHandler();
-    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.greyDay,
+    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay,
         (MapError error) async {
       if (error == null) {
         hereMapController.mapScene.setLayerState(
@@ -231,8 +231,9 @@ class SearchPageProvider extends ChangeNotifier {
   }
 
   _setTapGestureHandler() {
-    hereMapController!.gestures.tapListener = TapListener.fromLambdas(
-        lambda_onTap: (Point2D touchPoint) => _pickEventOnMap(touchPoint));
+    hereMapController!.gestures.tapListener = TapListener((Point2D touchPoint) {
+      _pickEventOnMap(touchPoint);
+    });
   }
 
   void _pickEventOnMap(Point2D touchPoint) {
@@ -269,7 +270,6 @@ class SearchPageProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-    hereMapController!.release();
     super.dispose();
   }
 }

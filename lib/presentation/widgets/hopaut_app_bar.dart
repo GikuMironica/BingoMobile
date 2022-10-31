@@ -7,7 +7,8 @@ class HopAutAppBar extends StatelessWidget {
   final String title;
   final Widget bottom;
 
-  HopAutAppBar({this.title, this.actions, this.bottom});
+  HopAutAppBar(
+      {required this.title, required this.actions, required this.bottom});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class HopAutAppBar extends StatelessWidget {
         expandedHeight: 120.0,
         floating: true,
         pinned: true,
-        bottom: bottom,
+        bottom: bottom as PreferredSizeWidget,
         snap: true,
         elevation: 0.0,
         actions: actions,

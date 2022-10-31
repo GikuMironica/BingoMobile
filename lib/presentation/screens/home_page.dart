@@ -66,6 +66,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return PersistentTabView(
+      context,
       controller: _controller,
       screens: _buildScreens(),
       confineInSafeArea: true,
@@ -80,7 +81,7 @@ class _HomePageState extends State<HomePage> {
         // )),
         colorBehindNavBar: Colors.white,
       ),
-      navBarStyle: NavBarStyle.custom,
+      navBarStyle: NavBarStyle.style12,
       itemCount: 4,
       customWidget: HopautNavBar(
         items: _navBarsItems(),

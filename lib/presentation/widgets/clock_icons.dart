@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-IconData ClockIcon(String time) {
+IconData? ClockIcon(String time) {
   switch (time.substring(0, 2)) {
     case '01':
     case '13':

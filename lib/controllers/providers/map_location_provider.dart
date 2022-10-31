@@ -26,7 +26,7 @@ class MapLocationProvider extends ChangeNotifier {
   final double distanceToEarthInMeters = 2000;
   final double autoCompleteSearchRadius = 50000;
 
-  MapScheme mapScheme = MapScheme.greyDay;
+  MapScheme mapScheme = MapScheme.normalDay;
   List<Place> searchResults = [];
   LocationServiceProvider locationManager = getIt<LocationServiceProvider>();
   HereMapController? hereMapController;
@@ -79,23 +79,20 @@ class MapLocationProvider extends ChangeNotifier {
   }
 
   void _setTapGestureHandler() {
-    hereMapController?.gestures.tapListener =
-        TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) {
+    hereMapController?.gestures.tapListener = TapListener((Point2D touchPoint) {
       cleanSearchResult();
     });
     hereMapController?.gestures.doubleTapListener =
-        DoubleTapListener.fromLambdas(lambda_onDoubleTap: (Point2D touchPoint) {
+        DoubleTapListener((Point2D touchPoint) {
       cleanSearchResult();
     });
-    hereMapController?.gestures.panListener = PanListener.fromLambdas(
-        lambda_onPan: (GestureState state, Point2D touchPoint,
-            Point2D secondTouchPoint, double val) {
+    hereMapController?.gestures.panListener = PanListener((GestureState state,
+        Point2D touchPoint, Point2D secondTouchPoint, double val) {
       cleanSearchResult();
     });
-    hereMapController?.gestures.twoFingerPanListener =
-        TwoFingerPanListener.fromLambdas(lambda_onTwoFingerPan:
-            (GestureState state, Point2D touchPoint, Point2D secondTouchPoint,
-                double val) {
+    hereMapController?.gestures.twoFingerPanListener = TwoFingerPanListener(
+        (GestureState state, Point2D touchPoint, Point2D secondTouchPoint,
+            double val) {
       cleanSearchResult();
     });
   }
@@ -135,12 +132,8 @@ class MapLocationProvider extends ChangeNotifier {
       searchEngine.searchByText(textQuery, SearchOptions.withDefaults(),
           (error, List<Place> suggestion) {
         for (Place p in suggestion) {
-          if ([
-            PlaceType.street,
-            PlaceType.poi,
-            PlaceType.unit,
-            PlaceType.houseNumber
-          ].contains(p.type)) {
+          if ([PlaceType.street, PlaceType.poi, PlaceType.address]
+              .contains(p.placeType)) {
             if (p.address.street.isNotEmpty) suggestionResult.add(p);
           }
         }
@@ -168,10 +161,10 @@ class MapLocationProvider extends ChangeNotifier {
 
   HopautLocation.Location parseLocation(Place place) {
     Map<String, dynamic> map = Map();
-    map['placeType'] = place.type.toString();
-    map['EntityName'] = (place.type == PlaceType.street)
+    map['placeType'] = place.placeType.toString();
+    map['EntityName'] = (place.placeType == PlaceType.street)
         ? place.address.street
-        : (place.type == PlaceType.houseNumber)
+        : (place.placeType == PlaceType.address)
             ? '${place.address.street} ${place.address.houseNumOrName}'
             : place.title;
     map['Address'] = place.address.street;

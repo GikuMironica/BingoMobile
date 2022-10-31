@@ -576,6 +576,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_webview_plugin:
+    dependency: "direct main"
+    description:
+      name: flutter_webview_plugin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   fluttertoast:
     dependency: "direct main"
     description:
@@ -666,7 +673,7 @@ packages:
       path: "plugins/here_sdk"
       relative: true
     source: path
-    version: "4.6.4"
+    version: "4.10.5"
   hive:
     dependency: "direct main"
     description:

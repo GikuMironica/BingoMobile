@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:hopaut/config/constants.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class WebvPage extends StatefulWidget {
   final String initialUrl;
