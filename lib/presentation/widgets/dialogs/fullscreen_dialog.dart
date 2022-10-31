@@ -7,7 +7,7 @@ import 'package:hopaut/config/routes/routes.dart';
 
 class FullscreenDialog extends StatelessWidget {
   final String? asset;
-  final String svgAsset;
+  final String? svgAsset;
   final String header;
   final String message;
   final String buttonText;
@@ -15,7 +15,7 @@ class FullscreenDialog extends StatelessWidget {
 
   FullscreenDialog(
       {this.asset,
-      required this.svgAsset,
+      this.svgAsset,
       required this.header,
       required this.message,
       required this.buttonText,
@@ -45,7 +45,7 @@ class FullscreenDialog extends StatelessWidget {
                         width: double.infinity,
                       )
                     : SvgPicture.asset(
-                        svgAsset,
+                        svgAsset.toString(),
                         height: 300,
                         width: double.infinity,
                       ),
