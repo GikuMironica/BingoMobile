@@ -3,25 +3,25 @@ import 'package:hopaut/config/constants/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class DropDownWidget<T> extends StatefulWidget {
-  final T value;
+  late T? value;
   final ValueChanged<T?>? onChanged;
   final String hintText;
-  final String labelText;
+  late String? labelText;
   final List<T> list;
   final FormFieldValidator<T> validator;
   final FormFieldSetter<T> onSaved;
-  final Widget prefixIcon;
+  late Widget? prefixIcon;
 
-  const DropDownWidget({
-    required Key key,
-    required this.value,
+  DropDownWidget({
+    Key? key,
+    this.value,
     required this.onChanged,
     required this.hintText,
-    required this.labelText,
+    this.labelText,
     required this.list,
     required this.validator,
     required this.onSaved,
-    required this.prefixIcon,
+    this.prefixIcon,
   }) : super(key: key);
 
   @override

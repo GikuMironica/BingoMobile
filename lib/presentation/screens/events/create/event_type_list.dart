@@ -27,7 +27,7 @@ class _EventTypeListState extends State<EventTypeList> {
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       DropDownWidget<String>(
-        onChanged: (String v) {
+        onChanged: (String? v) {
           setState(() {
             value = eventTypeStrings.keys.firstWhere(
                 (key) => eventTypeStrings[key] == v,
