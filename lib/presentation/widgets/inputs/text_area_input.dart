@@ -3,18 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:hopaut/config/constants/theme.dart';
 
 Widget textAreaInput(
-    {@required bool isStateValid,
-    @required String validationMessage,
-    @required void Function(String) onChange,
-    int maxLength,
-    String initialValue,
-    TextEditingController controller,
-    FormFieldSetter<String> onSaved,
-    String hintText,
+    {required bool isStateValid,
+    required String validationMessage,
+    required void Function(String) onChange,
+    int? maxLength,
+    String? initialValue,
+    TextEditingController? controller,
+    FormFieldSetter<String>? onSaved,
+    String? hintText,
     // The following 3 parameters are set only in the report bug page.
-    Color backGroundColor,
-    double borderRadius,
-    double elevation}) {
+    Color? backGroundColor,
+    double? borderRadius,
+    double? elevation}) {
   return Stack(
     children: [
       Card(

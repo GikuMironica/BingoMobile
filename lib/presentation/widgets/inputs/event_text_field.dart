@@ -5,18 +5,18 @@ import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 
 class EventTextField extends StatefulWidget {
   final String title;
-  final String textHint;
+  final String? textHint;
   final double height;
   final bool expand;
   final TextInputType textInputType;
   final List<TextInputFormatter> inputFormatter;
-  final Function onChanged;
-  final int maxChars;
-  final FormFieldSetter<String> onSaved;
-  final String initialValue;
+  final Function(String)? onChanged;
+  final int? maxChars;
+  final FormFieldSetter<String>? onSaved;
+  final String? initialValue;
 
   EventTextField(
-      {this.title,
+      {required this.title,
       this.textHint,
       this.maxChars,
       this.onChanged,

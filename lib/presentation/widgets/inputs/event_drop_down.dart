@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 class DropDownWidget<T> extends StatefulWidget {
   final T value;
-  final ValueChanged<T> onChanged;
+  final ValueChanged<T?>? onChanged;
   final String hintText;
   final String labelText;
   final List<T> list;
@@ -13,15 +13,15 @@ class DropDownWidget<T> extends StatefulWidget {
   final Widget prefixIcon;
 
   const DropDownWidget({
-    Key key,
-    this.value,
-    @required this.onChanged,
-    this.hintText,
-    this.labelText,
-    @required this.list,
-    @required this.validator,
-    @required this.onSaved,
-    this.prefixIcon,
+    required Key key,
+    required this.value,
+    required this.onChanged,
+    required this.hintText,
+    required this.labelText,
+    required this.list,
+    required this.validator,
+    required this.onSaved,
+    required this.prefixIcon,
   }) : super(key: key);
 
   @override
@@ -30,7 +30,7 @@ class DropDownWidget<T> extends StatefulWidget {
 
 class _DropDownWidgetState<T> extends State<DropDownWidget<T>> {
   FocusNode _focus = new FocusNode();
-  double width;
+  late double width;
 
   @override
   void initState() {

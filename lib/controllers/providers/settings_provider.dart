@@ -25,7 +25,7 @@ class SettingsProvider with ChangeNotifier {
 
   BaseFormStatus deleteFormStatus = Idle();
   String deleteAccountEmail = "";
-  bool? pushNotifications;
+  late bool pushNotifications;
 
   bool get isDeleteAccountEmailValid =>
       EmailValidator.validate(deleteAccountEmail.trim());

@@ -3,13 +3,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:hopaut/generated/locale_keys.g.dart';
 
 Widget passwordInputField({
-  @required BuildContext context,
-  @required bool isStateValid,
-  @required bool isTextObscured,
-  @required String validationMessage,
-  @required String hint,
-  @required void Function(String) onChange,
-  @required void Function() onObscureTap,
+  required BuildContext context,
+  required bool isStateValid,
+  required bool isTextObscured,
+  required String validationMessage,
+  required String hint,
+  required void Function(String) onChange,
+  required void Function() onObscureTap,
 }) {
   return TextFormField(
     validator: (value) => isStateValid ? null : validationMessage,
@@ -21,7 +21,7 @@ Widget passwordInputField({
         alignLabelWithHint: true,
         suffixIcon: GestureDetector(
           onTap: () {
-            FocusManager.instance.primaryFocus.unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
             onObscureTap();
           },
           child: Icon(
@@ -36,7 +36,7 @@ Widget passwordInputField({
         hintStyle: TextStyle(color: Colors.grey[400]),
         contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey[400]),
+          borderSide: BorderSide(color: (Colors.grey[400])!),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey),
