@@ -50,7 +50,7 @@ class MapLocationProvider extends ChangeNotifier {
     notifyListeners();
     hereMapController = hereMapController;
     hereMapController.mapScene.loadSceneForMapScheme(
-        mapScheme, (MapError err) => _initializeMap(hereMapController, err));
+        mapScheme, (MapError? err) => _initializeMap(hereMapController, err!));
   }
 
   void _initializeMap(HereMapController hereMapController, MapError error) {
@@ -62,8 +62,8 @@ class MapLocationProvider extends ChangeNotifier {
 
       var location = eventProvider.post.location;
       GeoCoordinates stateCoordinates = location == null
-          ? GeoCoordinates(locationManager.userLocation?.latitude,
-              locationManager.userLocation?.longitude)
+          ? GeoCoordinates(locationManager.userLocation!.latitude!,
+              locationManager.userLocation!.longitude!)
           : GeoCoordinates(location.latitude, location.longitude);
 
       hereMapController.camera.flyToWithOptionsAndDistance(stateCoordinates,
@@ -113,7 +113,7 @@ class MapLocationProvider extends ChangeNotifier {
   void addToSearchResult(Place item) {
     searchResults.clear();
     searchResults.add(item);
-    hereMapController!.camera.flyToWithOptionsAndDistance(item.geoCoordinates,
+    hereMapController!.camera.flyToWithOptionsAndDistance(item.geoCoordinates!,
         distanceToEarthInMeters, MapCameraFlyToOptions.withDefaults());
     searchResultState = SearchResultState.HAS_RESULTS_AUTOCOMPLETE;
     searchBarController.text =
@@ -125,13 +125,13 @@ class MapLocationProvider extends ChangeNotifier {
     if (pattern.length > 2) {
       List<Place> suggestionResult = [];
       GeoCircle geoCircle = GeoCircle(
-          GeoCoordinates(locationManager.userLocation!.latitude,
-              locationManager.userLocation!.longitude),
+          GeoCoordinates(locationManager.userLocation!.latitude!,
+              locationManager.userLocation!.longitude!),
           autoCompleteSearchRadius);
       TextQuery textQuery = TextQuery.withCircleArea(pattern, geoCircle);
       searchEngine.searchByText(textQuery, SearchOptions.withDefaults(),
-          (error, List<Place> suggestion) {
-        for (Place p in suggestion) {
+          (error, List<Place>? suggestion) {
+        for (Place p in suggestion!) {
           if ([PlaceType.street, PlaceType.poi, PlaceType.address]
               .contains(p.placeType)) {
             if (p.address.street.isNotEmpty) suggestionResult.add(p);
@@ -147,8 +147,8 @@ class MapLocationProvider extends ChangeNotifier {
   Future<void> getReverseGeocodeResult({GeoCoordinates? geo}) async {
     if (geo == null) geo = hereMapController!.camera.state.targetCoordinates;
     searchEngine.searchByCoordinates(geo, SearchOptions.withDefaults(),
-        (error, List<Place> results) {
-      if (results.isNotEmpty) {
+        (error, List<Place>? results) {
+      if (results!.isNotEmpty) {
         searchResults = [results.first];
         searchResultState = SearchResultState.HAS_RESULTS_GEOCODE;
         notifyListeners();
@@ -172,8 +172,8 @@ class MapLocationProvider extends ChangeNotifier {
       map['Address'] = '${map['Address']} ${place.address.houseNumOrName}';
     map['City'] = place.address.city;
     map['Country'] = place.address.country;
-    map['Longitude'] = place.geoCoordinates.longitude;
-    map['Latitude'] = place.geoCoordinates.latitude;
+    map['Longitude'] = place.geoCoordinates!.longitude;
+    map['Latitude'] = place.geoCoordinates!.latitude;
     map['Region'] = place.address.postalCode;
     return HopautLocation.Location.fromJson(map);
   }
@@ -183,7 +183,7 @@ class MapLocationProvider extends ChangeNotifier {
     userPosition = (await locationManager.getActualLocation())!;
 
     GeoCoordinates geoCoordinates =
-        GeoCoordinates(userPosition.latitude, userPosition.longitude);
+        GeoCoordinates(userPosition.latitude!, userPosition.longitude!);
     mapController!.camera.flyToWithOptionsAndDistance(
         geoCoordinates, 2000, MapCameraFlyToOptions.withDefaults());
     getReverseGeocodeResult(geo: geoCoordinates);

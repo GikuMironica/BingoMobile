@@ -65,7 +65,7 @@ class SearchPageProvider extends ChangeNotifier {
     hereMapController = hereMapController;
     _setTapGestureHandler();
     hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay,
-        (MapError error) async {
+        (MapError? error) async {
       if (error == null) {
         hereMapController.mapScene.setLayerState(
             MapSceneLayers.extrudedBuildings, MapSceneLayerState.hidden);
@@ -157,25 +157,25 @@ class SearchPageProvider extends ChangeNotifier {
     }
 
     GeoCoordinates geoCoordinates =
-        GeoCoordinates(userPosition.latitude, userPosition.longitude);
+        GeoCoordinates(userPosition.latitude!, userPosition.longitude!);
     hereMapController!.camera.flyToWithOptionsAndDistance(
         geoCoordinates, 2000, MapCameraFlyToOptions.withDefaults());
     // Show the user on the map.
     MapImage userMarkerSvg = MapImage.withFilePathAndWidthAndHeight(
         'assets/icons/map/radio-button-off-outline.svg', 48, 48);
     if (userMarker != null) {
-      hereMapController!.mapScene.removeMapMarker(userMarker);
+      hereMapController!.mapScene.removeMapMarker(userMarker!);
     }
     userMarker = MapMarker(geoCoordinates, userMarkerSvg);
-    hereMapController!.mapScene.addMapMarker(userMarker);
+    hereMapController!.mapScene.addMapMarker(userMarker!);
     _redrawGeoCircle(geoCoordinates);
   }
 
   void updateSearchRadius(double v) {
     searchRadius = v;
     GeoCoordinates geoCoordinates = GeoCoordinates(
-        locationManager.userLocation?.latitude,
-        locationManager.userLocation?.longitude);
+        locationManager.userLocation!.latitude!,
+        locationManager.userLocation!.longitude!);
     hereMapController!.camera.flyToWithOptionsAndDistance(geoCoordinates,
         searchRadius * 5000, MapCameraFlyToOptions.withDefaults());
     _redrawGeoCircle(geoCoordinates);
@@ -214,7 +214,7 @@ class SearchPageProvider extends ChangeNotifier {
           GeoCoordinates(miniPost.latitude, miniPost.longitude);
       Anchor2D anchor2d = Anchor2D.withHorizontalAndVertical(0.5, 1);
       MapMarker mapMarker =
-          MapMarker.withAnchor(geoCoordinates, marker, anchor2d);
+          MapMarker.withAnchor(geoCoordinates, marker!, anchor2d);
       mapMarker.drawOrder = searchResults.indexOf(miniPost);
       Metadata metaData = Metadata();
       metaData.setInteger('id', miniPost.postId);
@@ -242,11 +242,11 @@ class SearchPageProvider extends ChangeNotifier {
     FocusManager.instance.primaryFocus?.unfocus();
     hereMapController!.pickMapItems(touchPoint, radiusInPixel,
         (eventPickResult) {
-      var eventMarkerList = eventPickResult.markers;
+      var eventMarkerList = eventPickResult!.markers;
       if (eventMarkerList.isEmpty) return;
       var topMostEvent = eventMarkerList.first;
       var metaData = topMostEvent.metadata;
-      var selectedPostId = metaData.getInteger('id');
+      var selectedPostId = metaData!.getInteger('id');
       for (MiniPost miniPost in searchResults!) {
         if (miniPost.postId == selectedPostId) {
           carouselController!.animateToPage(searchResults!.indexOf(miniPost),
@@ -260,11 +260,11 @@ class SearchPageProvider extends ChangeNotifier {
   void _redrawGeoCircle(GeoCoordinates geoCoordinates) {
     GeoCircle geoCircle = GeoCircle(geoCoordinates, searchRadius * 1000);
     if (mapPolygon != null) {
-      hereMapController!.mapScene.removeMapPolygon(mapPolygon);
+      hereMapController!.mapScene.removeMapPolygon(mapPolygon!);
     }
     mapPolygon = MapPolygon(GeoPolygon.withGeoCircle(geoCircle),
         HATheme.HOPAUT_SECONDARY.withOpacity(0.15));
-    hereMapController!.mapScene.addMapPolygon(mapPolygon);
+    hereMapController!.mapScene.addMapPolygon(mapPolygon!);
     notifyListeners();
   }
 
