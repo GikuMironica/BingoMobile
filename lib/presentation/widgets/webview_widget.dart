@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class WebvPage extends StatefulWidget {
   final String initialUrl;
@@ -13,26 +15,19 @@ class WebvPage extends StatefulWidget {
 }
 
 class _WebvPageState extends State<WebvPage> {
-  final flutterWebViewPlugin = FlutterWebviewPlugin();
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    flutterWebViewPlugin.close();
-    flutterWebViewPlugin.dispose();
-    super.dispose();
+    if (Platform.isAndroid) WebView.platform = AndroidWebView();
   }
 
   @override
   Widget build(BuildContext context) {
-    return WebviewScaffold(
-      url: widget.initialUrl,
-      appBar: AppBar(
+    return WebView(
+      initialUrl: widget.initialUrl,
+      javascriptMode: JavascriptMode.unrestricted,
+      /*appBar: AppBar(
         title: Text(widget._title),
         backgroundColor: Colors.pink,
         leading: IconButton(
@@ -40,7 +35,7 @@ class _WebvPageState extends State<WebvPage> {
             onPressed: () {
               Navigator.of(context).pop();
             }),
-      ),
+      ),*/
     );
   }
 }
