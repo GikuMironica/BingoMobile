@@ -25,7 +25,7 @@ class _SearchByMapState extends State<SearchByMap> {
     super.initState();
   }
 
-  MapLocationProvider locationSelectionProvider;
+  late MapLocationProvider locationSelectionProvider;
 
   @override
   Widget build(BuildContext context) {
