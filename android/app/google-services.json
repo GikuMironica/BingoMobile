@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "1028951635281-5a3nek61uu4jo6rfm7uo828s37a4abqr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hopaut.hopaut",
+            "certificate_hash": "fb36f252dbdbfc18d5a6eb80f6b9bac17f7e6c4a"
+          }
+        },
+        {
+          "client_id": "1028951635281-j6dbu0je9sutapdov7lc2ivfmp7t6fb5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hopaut.hopaut",
+            "certificate_hash": "34248aeae30b0cce881df9cb9c6d3ac67c662820"
+          }
+        },
+        {
           "client_id": "1028951635281-qini3f0amnl8pmv3du2uupo6524kk374.apps.googleusercontent.com",
           "client_type": 3
         }
