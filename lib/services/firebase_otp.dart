@@ -7,8 +7,8 @@ import 'package:hopaut/generated/locale_keys.g.dart';
 
 @lazySingleton
 class FirebaseOtpService {
-  FirebaseAuth _auth;
-  String verificationId;
+  late FirebaseAuth _auth;
+  late String verificationId;
 
   FirebaseOtpService() {
     _auth = FirebaseAuth.instance;
@@ -17,8 +17,7 @@ class FirebaseOtpService {
   Future<bool> verifyOtp(String smsCode) async {
     if (verificationId == null) {
       showNewErrorSnackbar(LocaleKeys
-          .Account_EditProfile_EditMobile_ConfirmMobile_toasts_invalidOtp
-          .tr());
+          .Account_EditProfile_EditMobile_ConfirmMobile_toasts_invalidOtp.tr());
       return false;
     }
 
@@ -30,13 +29,13 @@ class FirebaseOtpService {
       UserCredential result = await _auth.signInWithCredential(credential);
       return true;
     } on FirebaseAuthException catch (fbe) {
-      if(fbe.code=="invalid-verification-code"){
+      if (fbe.code == "invalid-verification-code") {
         showNewErrorSnackbar(LocaleKeys
-            .Account_EditProfile_EditMobile_ConfirmMobile_toasts_invalidOtp
+                .Account_EditProfile_EditMobile_ConfirmMobile_toasts_invalidOtp
             .tr());
-      }else if(fbe.code=="session-expired"){
+      } else if (fbe.code == "session-expired") {
         showNewErrorSnackbar(LocaleKeys
-            .Account_EditProfile_EditMobile_ConfirmMobile_toasts_expiredOtp
+                .Account_EditProfile_EditMobile_ConfirmMobile_toasts_expiredOtp
             .tr());
       }
       return false;
@@ -44,14 +43,13 @@ class FirebaseOtpService {
   }
 
   Future<void> sendOtpAsync(BuildContext context, String phoneNum,
-      Function verificationFailed) async {
+      Function(FirebaseAuthException) verificationFailed) async {
     await _auth.verifyPhoneNumber(
       phoneNumber: phoneNum,
       timeout: Duration(seconds: 60),
-      verificationCompleted: (PhoneAuthCredential credential) async {
-      },
+      verificationCompleted: (PhoneAuthCredential credential) async {},
       verificationFailed: verificationFailed,
-      codeSent: (String verificationId, [int resendToken]) {
+      codeSent: (String verificationId, [int? resendToken]) {
         this.verificationId = verificationId;
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
