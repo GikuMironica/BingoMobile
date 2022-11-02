@@ -3,10 +3,15 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/routes/application.dart';
+import 'package:hopaut/presentation/widgets/dialogs/fullscreen_dialog.dart';
 import 'package:hopaut/services/authentication_service.dart';
+import 'package:hopaut/services/permission_service.dart';
 import 'package:provider/provider.dart';
+import 'config/injection.dart';
+import 'config/routes/routes.dart';
 import 'data/models/user.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'generated/locale_keys.g.dart';
 
 class Initialization extends StatefulWidget {
   Initialization();

@@ -10,7 +10,7 @@ import 'package:geocoder/geocoder.dart' as geocoder;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hopaut/generated/locale_keys.g.dart';
 
-@singleton
+@lazySingleton
 class LocationServiceProvider extends ChangeNotifier {
   l.Location _location;
   UserLocation userLocation;
