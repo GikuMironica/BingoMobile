@@ -14,13 +14,13 @@ import 'package:easy_localization/easy_localization.dart';
 class EventsListView extends StatelessWidget {
   final String listType;
 
-  EventsListView({this.listType});
+  EventsListView({required this.listType});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
       provider.fetchEventList(listType);
-      return provider.eventsMap[listType].state == EventListState.loading
+      return provider.eventsMap[listType]!.state == EventListState.loading
           ? Center(
               child: overlayBlurBackgroundCircularProgressIndicator(
                   context, LocaleKeys.Joined_labels_loading.tr()),
@@ -45,15 +45,15 @@ class EventsListView extends StatelessWidget {
                   ),
                   SliverPadding(
                       padding: EdgeInsets.symmetric(vertical: 16.0),
-                      sliver: provider.eventsMap[listType].state ==
+                      sliver: provider.eventsMap[listType]!.state ==
                                   EventListState.idle &&
-                              provider.eventsMap[listType].events.isNotEmpty
+                              provider.eventsMap[listType]!.events.isNotEmpty
                           ? SliverFixedExtentList(
                               itemExtent: 136,
                               delegate: SliverChildBuilderDelegate(
                                 (ctx, index) => InkWell(
                                   onTap: () async {
-                                    int id = provider.eventsMap[listType]
+                                    int id = provider.eventsMap[listType]!
                                         .events[index].postId;
                                     await Application.router.navigateTo(
                                         context, '/event/$id',
@@ -61,11 +61,11 @@ class EventsListView extends StatelessWidget {
                                   },
                                   child: MiniPostCard(
                                     miniPost: provider
-                                        .eventsMap[listType].events[index],
+                                        .eventsMap[listType]!.events[index],
                                   ),
                                 ),
                                 childCount:
-                                    provider.eventsMap[listType].events.length,
+                                    provider.eventsMap[listType]!.events.length,
                               ))
                           : SliverFillRemaining(
                               hasScrollBody: false,

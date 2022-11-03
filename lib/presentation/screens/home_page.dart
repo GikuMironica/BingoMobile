@@ -15,31 +15,30 @@ import 'package:hopaut/config/routes/routes.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class HomePage extends StatefulWidget {
-  final String route;
+  final String? route;
   HomePage({this.route});
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  PersistentTabController _controller;
-  OneSignalNotificationService _notificationsService;
-  AuthenticationService _authenticationService;
+  PersistentTabController _controller =
+      PersistentTabController(initialIndex: 0);
+  OneSignalNotificationService _notificationsService =
+      getIt<OneSignalNotificationService>();
+  AuthenticationService _authenticationService = getIt<AuthenticationService>();
 
   @override
   void initState() {
-    _authenticationService = getIt<AuthenticationService>();
-    _notificationsService = getIt<OneSignalNotificationService>();
     _notificationsService.initializeNotificationService();
-    _controller = PersistentTabController(initialIndex: 0);
     super.initState();
     // If user clicked on notification, redirect to correct screen.
     // if (widget.route != null) {
     //   WidgetsBinding.instance.addPostFrameCallback(
     //       (_) => Application.router.navigateTo(context, widget.route));
     //}
-    if (_authenticationService.user.fullName.isEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
+    if (_authenticationService.user!.fullName.isEmpty) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) async {
         await Navigator.of(context).push(PageRouteBuilder(
             opaque: false,
             pageBuilder: (BuildContext context, _, __) => FullscreenDialog(
@@ -82,8 +81,7 @@ class _HomePageState extends State<HomePage> {
         colorBehindNavBar: Colors.white,
       ),
       navBarStyle: NavBarStyle.style12,
-      itemCount: 4,
-      customWidget: HopautNavBar(
+      floatingActionButton: HopautNavBar(
         items: _navBarsItems(),
         onItemSelected: (idx) async => await changeTab(idx),
         selectedIndex: _controller.index,

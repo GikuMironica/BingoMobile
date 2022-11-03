@@ -1,14 +1,12 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/event_types.dart';
 import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/data/repositories/participant_repository.dart';
 import 'package:hopaut/presentation/widgets/dialogs/profile_dialog.dart';
-import 'package:hopaut/presentation/widgets/event_page/event_participants.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -21,7 +19,8 @@ class ParticipationList extends StatefulWidget {
   final String postTitle;
   final EventType postType;
 
-  ParticipationList({this.postId, this.postTitle, this.postType});
+  ParticipationList(
+      {required this.postId, required this.postTitle, required this.postType});
 
   @override
   _ParticipationListState createState() => _ParticipationListState();
@@ -30,7 +29,7 @@ class ParticipationList extends StatefulWidget {
 class _ParticipationListState extends State<ParticipationList> {
   bool _isLoaded = false;
   int _requestsCount = 0;
-  List<dynamic> _participators;
+  List<dynamic> _participators = [];
 
   @override
   void initState() {
@@ -162,7 +161,7 @@ class _ParticipationListState extends State<ParticipationList> {
   }
 
   Future<void> getData() async {
-    _participators = await getIt<ParticipantRepository>()
-        .fetchAccepted(postId: widget.postId);
+    _participators = (await getIt<ParticipantRepository>()
+        .fetchAccepted(postId: widget.postId))!;
   }
 }

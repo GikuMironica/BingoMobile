@@ -77,7 +77,7 @@ class _TagsState extends State<Tags> {
               },
               itemBuilder: (context, String suggestion) {
                 return ListTile(
-                  title: Text(suggestion ?? ""),
+                  title: Text(suggestion),
                 );
               },
               transitionBuilder: (context, suggestionsBox, controller) {

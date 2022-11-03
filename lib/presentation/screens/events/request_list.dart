@@ -14,7 +14,7 @@ class RequestList extends StatefulWidget {
   final int postId;
   final String postTitle;
 
-  RequestList({this.postId, this.postTitle});
+  RequestList({required this.postId, required this.postTitle});
 
   @override
   _RequestListState createState() => _RequestListState();
@@ -22,8 +22,7 @@ class RequestList extends StatefulWidget {
 
 class _RequestListState extends State<RequestList> {
   bool _isLoaded = false;
-  int _requestsCount = 0;
-  List<dynamic> _requests;
+  List<dynamic> _requests = [];
 
   @override
   void initState() {
@@ -136,12 +135,6 @@ class _RequestListState extends State<RequestList> {
                   ],
                 )),
     );
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
   }
 
   Future<void> getData() async {

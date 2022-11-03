@@ -4,26 +4,22 @@ import 'package:jiffy/jiffy.dart';
 
 @singleton
 class DateFormatterService {
-  late DateFormat _dateFormat;
-  late DateFormat _dateTimeFormat;
-  late DateFormat _timeFormat;
-
-  DateFormatterService() {
-    _dateFormat = DateFormat('dd.MM.yyyy');
-    _dateTimeFormat = DateFormat('dd.MM.yyyy HH:mm');
-    _timeFormat = DateFormat('HH:mm');
-  }
+  DateFormat _dateFormat = DateFormat('dd.MM.yyyy');
+  DateFormat _dateTimeFormat = DateFormat('dd.MM.yyyy HH:mm');
+  DateFormat _timeFormat = DateFormat('HH:mm');
 
   DateFormat get dateFormat => _dateFormat;
   DateFormat get dateTimeFormat => _dateTimeFormat;
 
   String formatTimeRange(int startTime, int endTime) {
-    return '${Jiffy.unix(startTime).Hm} - ${Jiffy.unix(endTime).Hm}';
+    return '${Jiffy.unixFromSecondsSinceEpoch(startTime).Hm} - ${Jiffy.unixFromSecondsSinceEpoch(endTime).Hm}';
   }
 
   String formatDateRange(int startTime, int endTime) {
-    String startDate = Jiffy.unix(startTime).format("dd.MM.yyyy");
-    String endDate = Jiffy.unix(endTime).format("dd.MM.yyyy");
+    String startDate =
+        Jiffy.unixFromSecondsSinceEpoch(startTime).format("dd.MM.yyyy");
+    String endDate =
+        Jiffy.unixFromSecondsSinceEpoch(endTime).format("dd.MM.yyyy");
 
     return startDate == endDate ? '$startDate' : '$startDate - $endDate';
   }

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants.dart';
 import 'package:hopaut/config/routes/application.dart';
@@ -47,7 +46,7 @@ class EditPostPictures extends StatelessWidget {
                       children: [
                         PictureList(
                           selectPicture: provider.selectPicture,
-                          onSaved: (value) => provider.post.pictures = value,
+                          onSaved: (value) => provider.post.pictures = value!,
                           initialValue: provider.post.pictures,
                         ),
                         Container(
@@ -57,8 +56,8 @@ class EditPostPictures extends StatelessWidget {
                             context: context,
                             isStateValid: true,
                             onPressed: () async {
-                              if (formKey.currentState.validate()) {
-                                formKey.currentState.save();
+                              if (formKey.currentState!.validate()) {
+                                formKey.currentState!.save();
                                 bool res = await provider.updateEvent();
                                 if (res) {
                                   provider.updateMiniPost();

@@ -4,7 +4,7 @@ import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 
 class EventTextField extends StatefulWidget {
-  final String title;
+  final String? title;
   final String? textHint;
   final double height;
   final bool expand;
@@ -16,7 +16,7 @@ class EventTextField extends StatefulWidget {
   final String? initialValue;
 
   EventTextField(
-      {required this.title,
+      {this.title,
       this.textHint,
       this.maxChars,
       this.onChanged,
@@ -37,7 +37,7 @@ class _EventTextFieldState extends State<EventTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        widget.title != null ? FieldTitle(title: widget.title) : Container(),
+        widget.title != null ? FieldTitle(title: widget.title!) : Container(),
         Card(
           elevation: HATheme.WIDGET_ELEVATION,
           color: Colors.transparent,
