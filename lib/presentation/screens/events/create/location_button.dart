@@ -37,7 +37,7 @@ class LocationButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child:
-                Text(post.location?.entityName ?? post.location?.address ?? ''),
+                Text(post.location.entityName ?? post.location.address ?? ''),
           ),
         ),
       ),

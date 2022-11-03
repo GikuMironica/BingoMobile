@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/theme.dart';
 import 'package:hopaut/config/currencies.dart';
@@ -22,7 +21,7 @@ class EditPricePage extends StatefulWidget {
 class _EditPricePageState extends State<EditPricePage> {
   final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
-  double price;
+  double price = 0.0;
 
   @override
   void initState() {
@@ -75,8 +74,8 @@ class _EditPricePageState extends State<EditPricePage> {
                               context: context,
                               isStateValid: true,
                               onPressed: () async {
-                                if (formKey.currentState.validate()) {
-                                  formKey.currentState.save();
+                                if (formKey.currentState!.validate()) {
+                                  formKey.currentState!.save();
                                   bool res = await provider.updateEvent();
                                   if (res) {
                                     Application.router.pop(context, true);

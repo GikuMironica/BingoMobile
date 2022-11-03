@@ -11,8 +11,9 @@ import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/text/subtitle.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
+
+import '../../../../config/injection.dart';
 
 class EditEventPage extends StatefulWidget {
   @override
@@ -20,14 +21,13 @@ class EditEventPage extends StatefulWidget {
 }
 
 class _EditEventPageState extends State<EditEventPage> {
-  EventProvider provider;
+  EventProvider provider = getIt<EventProvider>();
 
   final GlobalKey<ScaffoldState> _editEventScaffoldKey =
       new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    provider = Provider.of<EventProvider>(context, listen: true);
     // TODO: Check if the user is the owner of the event.
     // TODO: If not, then throw an error page.
     // TODO: Create an Error page that allows the user to return to the home page.

@@ -16,7 +16,6 @@ import 'package:hopaut/data/repositories/profile_repository.dart';
 import 'package:hopaut/presentation/screens/events/delete_event.dart';
 import 'package:hopaut/presentation/screens/events/participation_list.dart';
 import 'package:hopaut/presentation/screens/report/report_event.dart';
-import 'package:hopaut/presentation/widgets/buttons/event_attend_button.dart';
 import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/dialogs/fullscreen_dialog.dart';
 import 'package:hopaut/presentation/widgets/dialogs/profile_dialog.dart';
@@ -39,8 +38,10 @@ import 'package:visibility_detector/visibility_detector.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hopaut/generated/locale_keys.g.dart';
 
+import '../../widgets/buttons/event_attend_button.dart';
+
 class EventPage extends StatefulWidget {
-  EventPage({this.postId});
+  EventPage({required this.postId});
 
   final int postId;
 
@@ -56,12 +57,12 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
 
   Key attendCellKey = Key('attend-list-cell');
 
-  ScrollController _scrollController;
-  AnimationController _animationController;
+  ScrollController _scrollController = ScrollController();
+  late AnimationController _animationController;
 
-  Post post;
-  Profile host;
-  Map<String, dynamic> participants;
+  Post? post;
+  Profile? host;
+  Map<String, dynamic>? participants;
   final int postId;
 
   bool postIsLoaded = false;
@@ -70,7 +71,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   _EventPageState(this.postId);
 
   Iterable<Widget> get tagWidgets sync* {
-    for (final String tag in post.tags) {
+    for (final String tag in post!.tags!) {
       yield Chip(
         elevation: 2,
         label: Text(tag),
@@ -80,18 +81,18 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
 
   Future<void> getDetails() async {
     post = await getIt<EventRepository>().get(postId);
-    host = await getIt<ProfileRepository>().get(post.userId);
+    host = await getIt<ProfileRepository>().get(post!.userId);
     participants = await getIt<EventRepository>().getAttendees(postId);
-    isHost = post.userId == getIt<AuthenticationService>().user.id;
-    isAttending = post.isAttending;
-    isActiveEvent = post.activeFlag == 1;
+    isHost = post!.userId == getIt<AuthenticationService>().user!.id;
+    isAttending = post!.isAttending;
+    isActiveEvent = post!.activeFlag == 1;
     setState(() {});
   }
 
   void attendEvent() async {
     var authService = getIt<AuthenticationService>();
-    if ((authService.user.firstName.isEmpty ?? true) ||
-        (authService.user.lastName.isEmpty ?? true)) {
+    if ((authService.user!.firstName!.isEmpty) ||
+        (authService.user!.lastName!.isEmpty)) {
       await Navigator.of(context).push(PageRouteBuilder(
           opaque: false,
           pageBuilder: (BuildContext context, _, __) => FullscreenDialog(
@@ -130,7 +131,6 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
     _animationController = AnimationController(
       vsync: this,
       duration: kThemeAnimationDuration,
@@ -158,7 +158,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, provider, child) {
-      if (post == null || post.id != postId) {
+      if (post == null || post!.id != postId) {
         provider.eventLoadingStatus = Submitted();
         getDetails().then(
             (value) => setState(() => provider.eventLoadingStatus = Success()));
@@ -175,8 +175,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                 Scaffold(
                   floatingActionButton: Visibility(
                     visible: (!isHost &&
-                        DateTime.now().isBefore(post.endTimeAsDateTime)),
-                    child: EventAttendButton(
+                        DateTime.now().isBefore(post!.endTimeAsDateTime)),
+                    child: eventAttendButton(
                       context: context,
                       isAttending: isAttending,
                       animationController: _animationController,
@@ -200,8 +200,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                   child: FlexibleSpaceBar(
                                     collapseMode: CollapseMode.parallax,
                                     background: Carousel(
-                                      images: post.pictures.isNotEmpty
-                                          ? post.getImages()
+                                      images: post!.pictures.isNotEmpty
+                                          ? post?.getImages()
                                           : [
                                               AssetImage(
                                                   'assets/icons/event_default_image.png'),
@@ -218,10 +218,10 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                           Duration(milliseconds: 500),
                                       dotPosition: DotPosition.bottomRight,
                                       onImageTap: (value) {
-                                        if (post.pictures.isNotEmpty) {
+                                        if (post!.pictures.isNotEmpty) {
                                           pushNewScreen(context,
                                               screen: ImageScreen(
-                                                imageUrls: post.pictureUrls(),
+                                                imageUrls: post!.pictureUrls(),
                                                 startingIndex: value,
                                               ),
                                               withNavBar: false);
@@ -244,13 +244,14 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                         isActiveEvent &&
                                         DateTime.now()
                                             .add(Duration(minutes: 15))
-                                            .isBefore(post.startTimeAsDateTime),
+                                            .isBefore(
+                                                post!.startTimeAsDateTime),
                                     child: IconButton(
                                       splashColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       icon: Icon(Icons.edit),
                                       onPressed: () {
-                                        provider.setPost(post);
+                                        provider.post = post!;
                                         Application.router.navigateTo(
                                             context, '/edit-event',
                                             transition:
@@ -280,7 +281,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                 sliver: SliverList(
                                   delegate: SliverChildListDelegate([
                                     Text(
-                                      post.event.title,
+                                      post!.event.title,
                                       style: TextStyle(
                                         fontSize: 28,
                                         fontWeight: FontWeight.w600,
@@ -296,14 +297,14 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                         ),
                                         Text(
                                           eventTypeStrings[
-                                              post.event.eventType],
+                                              post!.event.eventType]!,
                                         ),
                                         Icon(MdiIcons.mapMarkerOutline,
                                             size: 18, color: Colors.pink),
                                         Text(
-                                          post.location.address != null &&
-                                                  post.location.city != null
-                                              ? '${post.location.address}, ${post.location.city}'
+                                          post!.location.address != null &&
+                                                  post!.location.city != null
+                                              ? '${post!.location.address}, ${post!.location.city}'
                                               : LocaleKeys
                                                       .Event_labels_unknownAdress
                                                   .tr(),
@@ -327,14 +328,15 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                             builder: (BuildContext context) =>
                                                 ProfileDialog(
                                               profile: host,
+                                              userId: '',
                                             ),
                                           ),
                                           child: hostDetails(
-                                            phone: host.phoneNumber,
-                                            hostName: host.getFullName,
-                                            hostInitials: host.getInitials,
-                                            hostImage: host.getProfilePicture,
-                                            rating: post.hostRating,
+                                            phone: host!.phoneNumber,
+                                            hostName: host!.getFullName,
+                                            hostInitials: host!.getInitials,
+                                            hostImage: host!.getProfilePicture,
+                                            rating: post!.hostRating!,
                                           ),
                                         ),
                                         Container(
@@ -347,17 +349,17 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                                     pushNewScreen(context,
                                                         screen:
                                                             ParticipationList(
-                                                          postId: post.id,
+                                                          postId: post!.id,
                                                           postTitle:
-                                                              post.event.title,
-                                                          postType: post
+                                                              post!.event.title,
+                                                          postType: post!
                                                               .event.eventType,
                                                         ),
                                                         withNavBar: false),
                                                 child: EventParticipants(
-                                                    participants)),
-                                            replacement:
-                                                EventParticipants(participants),
+                                                    participants!)),
+                                            replacement: EventParticipants(
+                                                participants!),
                                           ),
                                         ),
                                       ],
@@ -367,21 +369,21 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                     EventDetails(
                                       date: getIt<DateFormatterService>()
                                           .formatDateRange(
-                                              post.eventTime, post.endTime),
-                                      time: post.timeRange,
-                                      price: post.event.entrancePrice,
+                                              post!.eventTime, post!.endTime),
+                                      time: post!.timeRange,
+                                      price: post!.event.entrancePrice,
                                       // TODO change to event currency
                                       priceCurrency: 'EUR',
                                       slots:
-                                          '${post.availableSlots} / ${post.event.slots}',
+                                          '${post!.availableSlots} / ${post!.event.slots}',
                                     ),
                                     Divider(),
                                     SizedBox(height: 16),
-                                    EventDescription(post.event.description),
+                                    EventDescription(post!.event.description),
                                     Visibility(
-                                      visible: ((post.event.requirements !=
+                                      visible: ((post!.event.requirements !=
                                               null) &&
-                                          (post.event.requirements?.length !=
+                                          (post!.event.requirements?.length !=
                                               0)),
                                       child: Column(
                                         crossAxisAlignment:
@@ -389,7 +391,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                         children: <Widget>[
                                           SizedBox(height: 32),
                                           EventRequirements(
-                                              post.event.requirements),
+                                              post!.event.requirements!),
                                         ],
                                       ),
                                     ),
@@ -397,7 +399,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                       height: 16,
                                     ),
                                     Visibility(
-                                      visible: post.tags.isNotEmpty,
+                                      visible: post!.tags!.isNotEmpty,
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -426,7 +428,7 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                       visible: !isHost &&
                                           isAttending &&
                                           DateTime.now().isAfter(
-                                              post.startTimeAsDateTime),
+                                              post!.startTimeAsDateTime),
                                       child: InkWell(
                                         onTap: () async =>
                                             await _navigateAndDisplayResult(
@@ -452,8 +454,8 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                     ),
                                     Visibility(
                                       visible: !isHost &&
-                                          DateTime.now()
-                                              .isBefore(post.endTimeAsDateTime),
+                                          DateTime.now().isBefore(
+                                              post!.endTimeAsDateTime),
                                       child: VisibilityDetector(
                                         key: attendCellKey,
                                         onVisibilityChanged: (visibility) {
@@ -525,10 +527,10 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                           DateTime.now()
                                               .add(Duration(minutes: 15))
                                               .isBefore(
-                                                  post.startTimeAsDateTime),
+                                                  post!.startTimeAsDateTime),
                                       child: InkWell(
                                         onTap: () {
-                                          provider.setPost(post);
+                                          provider.post = post!;
                                           Application.router.navigateTo(
                                               context, '/edit-event',
                                               transition:
@@ -560,9 +562,9 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
                                                     CustomDialog(
                                                       pageWidget:
                                                           DeleteEventDialog(
-                                                        postId: post.id,
+                                                        postId: post!.id,
                                                         postTitle:
-                                                            post.event.title,
+                                                            post!.event.title,
                                                         isActive: isActiveEvent,
                                                       ),
                                                     )).then((value) =>
@@ -598,15 +600,15 @@ class _EventPageState extends State<EventPage> with TickerProviderStateMixin {
       BuildContext context, String routes, String message) async {
     bool result = await Application.router
         .navigateTo(context, routes, transition: TransitionType.cupertino);
-    if (result != null && result) {
+    if (result) {
       showSuccessSnackBar(context: context, message: message);
     }
   }
 
   @override
   void dispose() {
-    _scrollController?.dispose();
-    _animationController?.dispose();
+    _scrollController.dispose();
+    _animationController.dispose();
     //todo: figure out if this is needed and why:
     //GetIt.I.get<EventService>().setPostContext(null);
 

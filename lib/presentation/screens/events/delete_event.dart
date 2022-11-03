@@ -12,7 +12,8 @@ class DeleteEventDialog extends StatefulWidget {
   final String postTitle;
   final bool isActive;
 
-  DeleteEventDialog({this.postId, this.postTitle, this.isActive});
+  DeleteEventDialog(
+      {required this.postId, required this.postTitle, required this.isActive});
 
   @override
   _DeleteEventDialogState createState() => _DeleteEventDialogState();

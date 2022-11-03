@@ -62,8 +62,8 @@ class _EditPostTagsState extends State<EditPostTags> {
                             context: context,
                             isStateValid: true,
                             onPressed: () async {
-                              if (formKey.currentState.validate()) {
-                                formKey.currentState.save();
+                              if (formKey.currentState!.validate()) {
+                                formKey.currentState!.save();
                                 bool res = await provider.updateEvent();
                                 if (res) {
                                   Application.router.pop(context, true);

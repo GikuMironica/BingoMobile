@@ -9,7 +9,6 @@ import 'package:hopaut/presentation/widgets/buttons/persist_button.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/presentation/widgets/inputs/event_text_field.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class EditSlotsPage extends StatefulWidget {
@@ -19,19 +18,17 @@ class EditSlotsPage extends StatefulWidget {
 
 class _EditSlotsPageState extends State<EditSlotsPage> {
   final formKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
-  EventProvider provider;
-  int slots;
+  EventProvider provider = getIt<EventProvider>();
+  int? slots;
 
   @override
   void initState() {
     super.initState();
-    slots = getIt<EventProvider>().post.event.slots;
+    slots = provider.post.event.slots!;
   }
 
   @override
   Widget build(BuildContext context) {
-    provider = Provider.of<EventProvider>(context, listen: true);
     return Scaffold(
         appBar: AppBar(
           flexibleSpace: Container(
@@ -72,8 +69,8 @@ class _EditSlotsPageState extends State<EditSlotsPage> {
                               context: context,
                               isStateValid: true,
                               onPressed: () async {
-                                if (formKey.currentState.validate()) {
-                                  formKey.currentState.save();
+                                if (formKey.currentState!.validate()) {
+                                  formKey.currentState!.save();
                                   bool res = await provider.updateEvent();
                                   if (res) {
                                     await provider.refreshAvailableSlots();

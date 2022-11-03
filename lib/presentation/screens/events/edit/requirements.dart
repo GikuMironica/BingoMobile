@@ -26,7 +26,7 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
   void initState() {
     super.initState();
     requirementsController.text =
-        getIt<EventProvider>().post.event.requirements;
+        getIt<EventProvider>().post.event.requirements!;
   }
 
   @override
@@ -85,8 +85,8 @@ class _EditPostRequirementsState extends State<EditPostRequirements> {
                             context: context,
                             isStateValid: true,
                             onPressed: () async {
-                              if (formKey.currentState.validate()) {
-                                formKey.currentState.save();
+                              if (formKey.currentState!.validate()) {
+                                formKey.currentState!.save();
                                 bool res = await provider.updateEvent();
                                 if (res) {
                                   Application.router.pop(context, true);

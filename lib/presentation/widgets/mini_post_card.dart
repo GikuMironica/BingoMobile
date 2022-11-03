@@ -86,8 +86,7 @@ class MiniPostCard extends StatelessWidget {
                       ),
                       FittedBox(
                           child: Text(
-                        miniPost.address ??
-                            LocaleKeys.Widgets_MiniPost_unknownAddress.tr(),
+                        miniPost.address,
                         style: TextStyle(
                             color: Color(0xFF747686),
                             fontSize: 11,
@@ -108,7 +107,9 @@ class MiniPostCard extends StatelessWidget {
                               width: 4,
                             ),
                             Text(
-                              Jiffy.unix(miniPost.startTime).format('d.M.y'),
+                              Jiffy.unixFromSecondsSinceEpoch(
+                                      miniPost.startTime)
+                                  .format('d.M.y'),
                               style: TextStyle(
                                   color: Color(0xFF747686),
                                   fontSize: 11,
@@ -124,7 +125,9 @@ class MiniPostCard extends StatelessWidget {
                               width: 4,
                             ),
                             Text(
-                              Jiffy.unix(miniPost.startTime).Hm,
+                              Jiffy.unixFromSecondsSinceEpoch(
+                                      miniPost.startTime)
+                                  .Hm,
                               style: TextStyle(
                                   color: Color(0xFF747686),
                                   fontSize: 11,

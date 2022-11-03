@@ -5,10 +5,9 @@ import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 class HopAutAppBar extends StatelessWidget {
   final List<Widget> actions;
   final String title;
-  final Widget bottom;
+  final Widget? bottom;
 
-  HopAutAppBar(
-      {required this.title, required this.actions, required this.bottom});
+  HopAutAppBar({required this.title, required this.actions, this.bottom});
 
   @override
   Widget build(BuildContext context) {

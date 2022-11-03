@@ -15,7 +15,7 @@ class EventListPage extends StatelessWidget {
   final String title;
   final bool isMyEvents;
 
-  EventListPage({this.title, this.isMyEvents});
+  EventListPage({required this.title, required this.isMyEvents});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class EventListPage extends StatelessWidget {
                 child: Icon(Icons.add, color: Colors.white, size: 24),
                 backgroundColor: HATheme.HOPAUT_PINK,
                 onPressed: () async {
-                  provider.setPost(Post());
+                  provider.post = Post.empty();
                   await Application.router.navigateTo(context, '/create-event',
                       transition: TransitionType.cupertino);
                 })

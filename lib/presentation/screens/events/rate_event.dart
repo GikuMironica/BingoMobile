@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/theme.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:hopaut/controllers/providers/page_states/base_form_status.dart';
 import 'package:hopaut/controllers/providers/rating_provider.dart';
@@ -14,24 +15,18 @@ import 'package:hopaut/generated/locale_keys.g.dart';
 class RateEvent extends StatefulWidget {
   final int postId;
 
-  RateEvent({this.postId});
+  RateEvent({required this.postId});
 
   @override
   _RateEventState createState() => _RateEventState();
 }
 
 class _RateEventState extends State<RateEvent> {
-  TextEditingController ratingController;
-  RatingProvider provider;
+  TextEditingController ratingController = TextEditingController();
+  RatingProvider provider = getIt<RatingProvider>();
 
   final _formKey = GlobalKey<FormState>();
   final _globalKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    super.initState();
-    ratingController = TextEditingController();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +49,10 @@ class _RateEventState extends State<RateEvent> {
   Widget _ratingForm(RatingProvider provider, BuildContext context) {
     if (provider.ratingFormStatus is Failed) {
       // Translation
-      Failed formStatus = provider.ratingFormStatus;
+      Failed formStatus = provider.ratingFormStatus as Failed;
       Future.delayed(Duration.zero, () async {
         showSnackBarWithError(
-            context: context, message: formStatus.errorMessage);
+            context: context, message: formStatus.errorMessage!);
       });
       provider.ratingFormStatus = new Idle();
     }
@@ -92,7 +87,7 @@ class _RateEventState extends State<RateEvent> {
                         provider.validateFeedback(ratingController.text) &&
                             provider.rating > 0,
                     onPressed: () async => {
-                          if (_formKey.currentState.validate())
+                          if (_formKey.currentState!.validate())
                             {
                               await provider.rateUserAsync(
                                   ratingController.text,
@@ -118,14 +113,14 @@ class _RateEventState extends State<RateEvent> {
 }
 
 class StarRating extends StatelessWidget {
-  final void Function(int index) onChanged;
-  final int value;
-  final IconData filledStar;
-  final IconData unfilledStar;
+  final void Function(int index)? onChanged;
+  final int? value;
+  final IconData? filledStar;
+  final IconData? unfilledStar;
 
   const StarRating({
-    Key key,
-    @required this.onChanged,
+    Key? key,
+    this.onChanged,
     this.value = 0,
     this.filledStar,
     this.unfilledStar,
@@ -142,13 +137,13 @@ class StarRating extends StatelessWidget {
         return IconButton(
           onPressed: onChanged != null
               ? () {
-                  onChanged(value == index + 1 ? index : index + 1);
+                  onChanged!(value == index + 1 ? index : index + 1);
                 }
               : null,
-          color: index < value ? color : null,
+          color: index < value! ? color : null,
           iconSize: size,
           icon: Icon(
-            index < value
+            index < value!
                 ? filledStar ?? Icons.star
                 : unfilledStar ?? Icons.star_border,
           ),

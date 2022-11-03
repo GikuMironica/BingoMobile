@@ -9,13 +9,13 @@ import 'package:hopaut/presentation/widgets/fields/field_title.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class PriceSelector extends StatelessWidget {
-  final String title;
+  final String? title;
   final void Function(String) onChanged;
   final FormFieldSetter<String> onSaved;
   final String? initialValue;
 
   PriceSelector(
-      {required this.title,
+      {this.title,
       required this.onChanged,
       required this.onSaved,
       this.initialValue});
@@ -25,7 +25,7 @@ class PriceSelector extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        title != null ? FieldTitle(title: title) : Container(),
+        title != null ? FieldTitle(title: title!) : Container(),
         Card(
           elevation: HATheme.WIDGET_ELEVATION,
           color: Colors.transparent,
