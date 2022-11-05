@@ -16,7 +16,7 @@ import '../controllers/providers/map_location_provider.dart' as _i11;
 import '../controllers/providers/rating_provider.dart' as _i14;
 import '../controllers/providers/reportbug_provider.dart' as _i16;
 import '../controllers/providers/search_page_provider.dart' as _i18;
-import '../controllers/providers/settings_provider.dart' as _i29;
+import '../controllers/providers/settings_provider.dart' as _i28;
 import '../data/repositories/announcement_repository.dart' as _i4;
 import '../data/repositories/authentication_repository.dart' as _i5;
 import '../data/repositories/event_repository.dart' as _i8;
@@ -32,9 +32,8 @@ import '../services/dio_service.dart' as _i23;
 import '../services/firebase_otp.dart' as _i9;
 import '../services/logging_service.dart' as _i25;
 import '../services/notifications_service.dart' as _i26;
-import '../services/permission_service.dart' as _i27;
 import '../services/secure_storage_service.dart'
-    as _i28; // ignore_for_file: unnecessary_lambdas
+    as _i27; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -74,8 +73,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i25.LoggingService>(_i25.LoggingService());
   gh.singleton<_i26.OneSignalNotificationService>(
       _i26.OneSignalNotificationService());
-  gh.singleton<_i27.PermissionService>(_i27.PermissionService());
-  gh.singleton<_i28.SecureStorageService>(_i28.SecureStorageService());
-  gh.singleton<_i29.SettingsProvider>(_i29.SettingsProvider());
+  gh.singleton<_i27.SecureStorageService>(_i27.SecureStorageService());
+  gh.singleton<_i28.SettingsProvider>(_i28.SettingsProvider());
   return get;
 }
