@@ -11,7 +11,6 @@ import 'package:hopaut/presentation/widgets/dialogs/custom_dialog.dart';
 import 'package:hopaut/presentation/widgets/hopaut_background.dart';
 import 'package:hopaut/services/authentication_service.dart';
 import 'package:hopaut/controllers/providers/settings_provider.dart';
-import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'delete_account.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -116,14 +115,12 @@ class _SettingsState extends State<Settings> {
                                   trailing: Visibility(
                                     visible: Platform.isIOS,
                                     child: CupertinoSwitch(
-                                      value:
-                                          settingsMgr.pushNotifications ?? true,
+                                      value: settingsMgr.pushNotifications,
                                       onChanged: (v) async => await settingsMgr
                                           .togglePushNotifications(v),
                                     ),
                                     replacement: Switch(
-                                      value:
-                                          settingsMgr.pushNotifications ?? true,
+                                      value: settingsMgr.pushNotifications,
                                       onChanged: (v) async => await settingsMgr
                                           .togglePushNotifications(v),
                                     ),
