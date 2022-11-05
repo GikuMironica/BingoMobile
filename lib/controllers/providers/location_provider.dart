@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants/configurations.dart';
 import 'package:hopaut/data/domain/coordinate.dart';
+import 'package:hopaut/presentation/widgets/dialogs/permission_dialog.dart';
 import 'package:hopaut/presentation/widgets/widgets.dart';
 import 'package:hopaut/utils/rounding_decimals.dart';
 import 'package:injectable/injectable.dart';
@@ -15,16 +16,58 @@ class LocationServiceProvider extends ChangeNotifier {
   l.Location _location;
   UserLocation userLocation;
   String countryCode;
+  bool _isLocationPermissionGranted;
+  bool _isLocationServiceEnabled;
 
-  LocationServiceProvider() {
+  LocationServiceProvider(){
+    _location = l.Location();
+  }
+
+  Future<bool> areLocationPermissionsEnabled(BuildContext context) async{
+    await _isLocationServiceEnabledAndAllowed();
+
+    if(!_isLocationPermissionGranted || !_isLocationServiceEnabled){
+      // WidgetsBinding.instance.addPostFrameCallback((_) async {
+
+      await showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) => WillPopScope(
+          onWillPop: () => Future.value(false),
+          child: PermissionDialog(
+            svgAsset: 'assets/icons/svg/location_2.svg',
+            header: LocaleKeys.Home_FullScreenDialog_header.tr(),
+            message: LocaleKeys.Home_FullScreenDialog_messege.tr(),
+            buttonText: LocaleKeys.Home_FullScreenDialog_btnText.tr(),
+            isLocationEnabled: _isLocationServiceEnabled,
+            isLocationPermissionGranted: _isLocationPermissionGranted,
+          ),
+        ));
+
+      /*await Navigator.of(context).push(PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (BuildContext context, _, __) => PermissionDialog(
+            svgAsset: 'assets/icons/svg/location_2.svg',
+            header: LocaleKeys.Home_FullScreenDialog_header.tr(),
+            message: LocaleKeys.Home_FullScreenDialog_messege.tr(),
+            buttonText: LocaleKeys.Home_FullScreenDialog_btnText.tr(),
+          )));*/
+      // });
+    }
+
+    if(_isLocationPermissionGranted && _isLocationServiceEnabled)
+      return true;
+
+    return false;
+  }
+
+  void initializedLocationProvider(BuildContext context) async {
     getActualLocation();
     listenToUpdates();
   }
 
   Future<UserLocation> getActualLocation() async {
-    _location = l.Location();
-    bool isLocationEnabled = await _isLocationServiceEnabledAndAllowed();
-    if (!isLocationEnabled) {
+    if (!_isLocationPermissionGranted) {
       return null;
     }
     l.LocationData locationData = await _getLocation();
@@ -46,26 +89,37 @@ class LocationServiceProvider extends ChangeNotifier {
     return userLocation;
   }
 
-  Future<bool> _isLocationServiceEnabledAndAllowed() async {
-    bool serviceEnabled;
-    l.PermissionStatus isLocationTrackingAllowed;
-    serviceEnabled = await _location.serviceEnabled();
-    if (!serviceEnabled) {
-      showNewErrorSnackbar(
-          LocaleKeys.Others_Services_Location_serviceDisabled.tr());
+  Future<void> _isLocationServiceEnabledAndAllowed() async {
+    _isLocationServiceEnabled = await _location.serviceEnabled();
+
+    var isLocationTrackingAllowed = await _location.hasPermission();
+    if (isLocationTrackingAllowed != l.PermissionStatus.granted &&
+        isLocationTrackingAllowed != l.PermissionStatus.grantedLimited) {
+      _isLocationPermissionGranted = false;
+
+    } else {
+      _isLocationPermissionGranted = true;
+    }
+  }
+
+  Future<bool> requestLocationEnablingAsync() async {
+    if (!_isLocationServiceEnabled) {
       var accepted = await _location.requestService();
       if (!accepted) return false;
     }
-    isLocationTrackingAllowed = await _location.hasPermission();
-    if (isLocationTrackingAllowed != l.PermissionStatus.granted &&
+    return true;
+  }
+
+  Future<bool> requestLocationPermissionsAsync() async {
+     var isLocationTrackingAllowed = await _location.requestPermission();
+
+     if (isLocationTrackingAllowed != l.PermissionStatus.granted &&
         isLocationTrackingAllowed != l.PermissionStatus.grantedLimited) {
-      isLocationTrackingAllowed = await _location.requestPermission();
-      if (isLocationTrackingAllowed != l.PermissionStatus.granted &&
-          isLocationTrackingAllowed != l.PermissionStatus.grantedLimited) {
         showNewErrorSnackbar(
             LocaleKeys.Others_Services_Location_locationPermissionDenied.tr());
         return false;
-      }
+      } else {
+      _isLocationPermissionGranted = true;
     }
     return true;
   }

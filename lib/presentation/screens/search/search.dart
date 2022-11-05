@@ -20,12 +20,20 @@ class _SearchPageState extends State<SearchPage> {
   SearchPageProvider searchProvider;
   LocationServiceProvider locationService;
 
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     locationService =
         Provider.of<LocationServiceProvider>(context, listen: true);
     searchProvider = Provider.of<SearchPageProvider>(context, listen: true);
     searchProvider.context = context;
+
+
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
         floatingActionButton: FloatingActionButton(
@@ -38,7 +46,21 @@ class _SearchPageState extends State<SearchPage> {
           onPressed: () async => {await searchProvider.updateUserLocation()},
         ),
         resizeToAvoidBottomInset: false,
-        body: _mapPage());
+        body: FutureBuilder<bool>(
+          future: locationService.areLocationPermissionsEnabled(context),
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            if (!snapshot.hasData) {
+              // while data is loading:
+              return Center(
+                child: CupertinoActivityIndicator(),
+              );
+            } else {
+              locationService.initializedLocationProvider(context);
+              return _mapPage();
+            }
+          },
+        ),
+    );
   }
 
   Widget _mapPage() {

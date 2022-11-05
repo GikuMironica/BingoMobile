@@ -1,38 +1,51 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:hopaut/config/constants.dart';
+import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hopaut/controllers/providers/location_provider.dart';
 import 'package:location/location.dart';
 
-class PermissionDialog extends StatelessWidget {
+class PermissionDialog extends StatefulWidget {
   final String asset;
   final String svgAsset;
   final String header;
   final String message;
   final String buttonText;
+  bool isLocationPermissionGranted;
+  bool isLocationEnabled;
 
-  Location _location;
+  LocationServiceProvider _locationServiceProvider;
 
   PermissionDialog(
       {this.asset,
         this.svgAsset,
         this.header,
         this.message,
-        this.buttonText}){
-
-    _location = Location();
+        this.buttonText,
+        this.isLocationEnabled,
+        this.isLocationPermissionGranted}){
+    _locationServiceProvider = getIt<LocationServiceProvider>();
   }
 
   @override
+  _PermissionDialogState createState() => _PermissionDialogState();
+}
+
+class _PermissionDialogState extends State<PermissionDialog> {
+  @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
-        backgroundColor: Colors.black.withOpacity(0.80),
-        body: Dialog(
-          insetPadding: EdgeInsets.symmetric(horizontal: 30),
-          shape: RoundedRectangleBorder(
+        backgroundColor: Colors.white.withOpacity(0.99),
+        body: Container(
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
           ),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -41,14 +54,14 @@ class PermissionDialog extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                asset != null
+                widget.asset != null
                     ? Image.asset(
-                  asset,
+                  widget.asset,
                   height: 300,
                   width: double.infinity,
                 )
                     : SvgPicture.asset(
-                  svgAsset,
+                  widget.svgAsset,
                   height: 300,
                   width: double.infinity,
                 ),
@@ -56,7 +69,7 @@ class PermissionDialog extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  header,
+                  widget.header,
                   textAlign: TextAlign.justify,
                   style: TextStyle(
                       color: Colors.black,
@@ -70,10 +83,10 @@ class PermissionDialog extends StatelessWidget {
                   padding:
                   const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                   child: Text(
-                    message,
+                    widget.message,
                     maxLines: 5,
                     style: TextStyle(
-                        color: Colors.grey,
+                        color: Colors.black,
                         fontWeight: FontWeight.normal,
                         fontSize: 16),
                   ),
@@ -81,25 +94,69 @@ class PermissionDialog extends StatelessWidget {
                 SizedBox(
                   height: 40,
                 ),
-                InkWell(
-                  onTap: () {
-                    Application.router.pop(context);
-                  },
-                  child: Container(
-                    width: 400,
-                    height: 25,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: HATheme.HOPAUT_PINK,
+                Visibility(
+                  visible: !widget.isLocationPermissionGranted,
+                  child: InkWell(
+                    onTap: () async {
+                      var serviceEnabled = await widget._locationServiceProvider.requestLocationPermissionsAsync();
+
+                      setState(() {
+                        widget.isLocationPermissionGranted = serviceEnabled;
+                      });
+                      if(widget.isLocationPermissionGranted && widget.isLocationEnabled)
+                        Application.router.pop(context);
+                    },
+                    child: Container(
+                      width: 400,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: HATheme.HOPAUT_PINK,
+                      ),
+                      child: Center(
+                        child: Text(
+                          widget.buttonText,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
                     ),
-                    child: Center(
-                      child: Text(
-                        buttonText,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Visibility(
+                  visible: !widget.isLocationEnabled,
+                  child: InkWell(
+                    onTap: () async {
+                      var permissionGranted = await widget._locationServiceProvider.requestLocationEnablingAsync();
+
+                      setState(() {
+                        widget.isLocationEnabled = permissionGranted;
+                      });
+                      if(widget.isLocationPermissionGranted && widget.isLocationEnabled)
+                        Application.router.pop(context);
+                    },
+                    child: Container(
+                      width: 400,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: HATheme.HOPAUT_PINK,
+                      ),
+                      child: Center(
+                        child: Text(
+                          widget.buttonText,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ),
                     ),
                   ),
