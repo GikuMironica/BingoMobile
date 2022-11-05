@@ -50,7 +50,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget _registerView() {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(10),
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           HopautLogo(),
           SizedBox(height: 32),
