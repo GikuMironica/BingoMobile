@@ -19,44 +19,36 @@ class LocationServiceProvider extends ChangeNotifier {
   bool _isLocationPermissionGranted;
   bool _isLocationServiceEnabled;
 
-  LocationServiceProvider(){
+  LocationServiceProvider() {
     _location = l.Location();
   }
 
-  Future<bool> areLocationPermissionsEnabled(BuildContext context) async{
+  Future<bool> areLocationPermissionsEnabled(BuildContext context) async {
     await _isLocationServiceEnabledAndAllowed();
 
-    if(!_isLocationPermissionGranted || !_isLocationServiceEnabled){
+    if (!_isLocationPermissionGranted || !_isLocationServiceEnabled) {
       // WidgetsBinding.instance.addPostFrameCallback((_) async {
 
       await showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (_) => WillPopScope(
-          onWillPop: () => Future.value(false),
-          child: PermissionDialog(
-            svgAsset: 'assets/icons/svg/location_2.svg',
-            header: LocaleKeys.Home_FullScreenDialog_header.tr(),
-            message: LocaleKeys.Home_FullScreenDialog_messege.tr(),
-            buttonText: LocaleKeys.Home_FullScreenDialog_btnText.tr(),
-            isLocationEnabled: _isLocationServiceEnabled,
-            isLocationPermissionGranted: _isLocationPermissionGranted,
-          ),
-        ));
-
-      /*await Navigator.of(context).push(PageRouteBuilder(
-          opaque: false,
-          pageBuilder: (BuildContext context, _, __) => PermissionDialog(
-            svgAsset: 'assets/icons/svg/location_2.svg',
-            header: LocaleKeys.Home_FullScreenDialog_header.tr(),
-            message: LocaleKeys.Home_FullScreenDialog_messege.tr(),
-            buttonText: LocaleKeys.Home_FullScreenDialog_btnText.tr(),
-          )));*/
-      // });
+          barrierDismissible: false,
+          context: context,
+          builder: (_) => WillPopScope(
+                onWillPop: () => Future.value(false),
+                child: PermissionDialog(
+                  svgAsset: 'assets/icons/svg/location_2.svg',
+                  header: LocaleKeys.Home_PermissionDialog_header.tr(),
+                  message: LocaleKeys.Home_PermissionDialog_message.tr(),
+                  permissionButtonText: LocaleKeys
+                      .Home_PermissionDialog_btn_location_permission.tr(),
+                  locationButtonText: LocaleKeys
+                      .Home_PermissionDialog_btn_location_service.tr(),
+                  isLocationEnabled: _isLocationServiceEnabled,
+                  isLocationPermissionGranted: _isLocationPermissionGranted,
+                ),
+              ));
     }
 
-    if(_isLocationPermissionGranted && _isLocationServiceEnabled)
-      return true;
+    if (_isLocationPermissionGranted && _isLocationServiceEnabled) return true;
 
     return false;
   }
@@ -96,7 +88,6 @@ class LocationServiceProvider extends ChangeNotifier {
     if (isLocationTrackingAllowed != l.PermissionStatus.granted &&
         isLocationTrackingAllowed != l.PermissionStatus.grantedLimited) {
       _isLocationPermissionGranted = false;
-
     } else {
       _isLocationPermissionGranted = true;
     }
@@ -111,14 +102,14 @@ class LocationServiceProvider extends ChangeNotifier {
   }
 
   Future<bool> requestLocationPermissionsAsync() async {
-     var isLocationTrackingAllowed = await _location.requestPermission();
+    var isLocationTrackingAllowed = await _location.requestPermission();
 
-     if (isLocationTrackingAllowed != l.PermissionStatus.granted &&
+    if (isLocationTrackingAllowed != l.PermissionStatus.granted &&
         isLocationTrackingAllowed != l.PermissionStatus.grantedLimited) {
-        showNewErrorSnackbar(
-            LocaleKeys.Others_Services_Location_locationPermissionDenied.tr());
-        return false;
-      } else {
+      showNewErrorSnackbar(
+          LocaleKeys.Others_Services_Location_locationPermissionDenied.tr());
+      return false;
+    } else {
       _isLocationPermissionGranted = true;
     }
     return true;

@@ -5,14 +5,14 @@ import 'package:hopaut/config/injection.dart';
 import 'package:hopaut/config/routes/application.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hopaut/controllers/providers/location_provider.dart';
-import 'package:location/location.dart';
 
 class PermissionDialog extends StatefulWidget {
   final String asset;
   final String svgAsset;
   final String header;
   final String message;
-  final String buttonText;
+  final String permissionButtonText;
+  final String locationButtonText;
   bool isLocationPermissionGranted;
   bool isLocationEnabled;
 
@@ -20,12 +20,13 @@ class PermissionDialog extends StatefulWidget {
 
   PermissionDialog(
       {this.asset,
-        this.svgAsset,
-        this.header,
-        this.message,
-        this.buttonText,
-        this.isLocationEnabled,
-        this.isLocationPermissionGranted}){
+      this.svgAsset,
+      this.header,
+      this.message,
+      this.permissionButtonText,
+      this.locationButtonText,
+      this.isLocationEnabled,
+      this.isLocationPermissionGranted}) {
     _locationServiceProvider = getIt<LocationServiceProvider>();
   }
 
@@ -36,8 +37,6 @@ class PermissionDialog extends StatefulWidget {
 class _PermissionDialogState extends State<PermissionDialog> {
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
         backgroundColor: Colors.white.withOpacity(0.99),
         body: Container(
@@ -56,15 +55,15 @@ class _PermissionDialogState extends State<PermissionDialog> {
                 ),
                 widget.asset != null
                     ? Image.asset(
-                  widget.asset,
-                  height: 300,
-                  width: double.infinity,
-                )
+                        widget.asset,
+                        height: 300,
+                        width: double.infinity,
+                      )
                     : SvgPicture.asset(
-                  widget.svgAsset,
-                  height: 300,
-                  width: double.infinity,
-                ),
+                        widget.svgAsset,
+                        height: 300,
+                        width: double.infinity,
+                      ),
                 SizedBox(
                   height: 20,
                 ),
@@ -81,7 +80,7 @@ class _PermissionDialogState extends State<PermissionDialog> {
                 ),
                 Padding(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                   child: Text(
                     widget.message,
                     maxLines: 5,
@@ -98,12 +97,14 @@ class _PermissionDialogState extends State<PermissionDialog> {
                   visible: !widget.isLocationPermissionGranted,
                   child: InkWell(
                     onTap: () async {
-                      var serviceEnabled = await widget._locationServiceProvider.requestLocationPermissionsAsync();
+                      var serviceEnabled = await widget._locationServiceProvider
+                          .requestLocationPermissionsAsync();
 
                       setState(() {
                         widget.isLocationPermissionGranted = serviceEnabled;
                       });
-                      if(widget.isLocationPermissionGranted && widget.isLocationEnabled)
+                      if (widget.isLocationPermissionGranted &&
+                          widget.isLocationEnabled)
                         Application.router.pop(context);
                     },
                     child: Container(
@@ -115,11 +116,11 @@ class _PermissionDialogState extends State<PermissionDialog> {
                       ),
                       child: Center(
                         child: Text(
-                          widget.buttonText,
+                          widget.permissionButtonText,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 15,
+                              fontSize: 14,
                               fontWeight: FontWeight.w500),
                         ),
                       ),
@@ -133,12 +134,15 @@ class _PermissionDialogState extends State<PermissionDialog> {
                   visible: !widget.isLocationEnabled,
                   child: InkWell(
                     onTap: () async {
-                      var permissionGranted = await widget._locationServiceProvider.requestLocationEnablingAsync();
+                      var permissionGranted = await widget
+                          ._locationServiceProvider
+                          .requestLocationEnablingAsync();
 
                       setState(() {
                         widget.isLocationEnabled = permissionGranted;
                       });
-                      if(widget.isLocationPermissionGranted && widget.isLocationEnabled)
+                      if (widget.isLocationPermissionGranted &&
+                          widget.isLocationEnabled)
                         Application.router.pop(context);
                     },
                     child: Container(
@@ -150,11 +154,11 @@ class _PermissionDialogState extends State<PermissionDialog> {
                       ),
                       child: Center(
                         child: Text(
-                          widget.buttonText,
+                          widget.locationButtonText,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 15,
+                              fontSize: 14,
                               fontWeight: FontWeight.w500),
                         ),
                       ),
