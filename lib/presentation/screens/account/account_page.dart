@@ -20,58 +20,62 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     var _size = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: SingleChildScrollView(
-        child: Stack(children: [
-          Container(
-            width: _size.width,
-            height: _size.height,
-            decoration: HATheme.GRADIENT_DECORATION,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                padding:
-                    EdgeInsets.only(left: 16, right: 16, top: 96, bottom: 32),
-                width: _size.width,
-                height: _size.height * 0.8,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.12),
-                        blurRadius: 10,
-                        spreadRadius: 3)
-                  ],
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30)),
-                ),
-                child: Column(
-                  children: [
-                    userFullName(),
-                    SizedBox(
-                      height: 16,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Stack(children: [
+            Container(
+              width: _size.width,
+              height: _size.height,
+              decoration: HATheme.GRADIENT_DECORATION,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  margin: EdgeInsets.only(top: _size.height * 0.1),
+                  padding:
+                      EdgeInsets.only(left: 16, right: 16, top: 96, bottom: 32),
+                  width: _size.width,
+                  height: _size.height,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.12),
+                          blurRadius: 10,
+                          spreadRadius: 3)
+                    ],
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30)),
+                  ),
+                  child: Expanded(
+                    child: Column(
+                      children: [
+                        userFullName(),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        userDescription(),
+                        accountInformation(),
+                        Divider(
+                          indent: _size.width * 0.2,
+                          endIndent: _size.width * 0.2,
+                        ),
+                        accountMenu(context: context),
+                      ],
                     ),
-                    userDescription(),
-                    accountInformation(),
-                    Divider(
-                      indent: _size.width * 0.2,
-                      endIndent: _size.width * 0.2,
-                    ),
-                    accountMenu(context: context),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Center(
-              heightFactor: 2,
-              child: ProfilePicture(),
-            ),
-          )
-        ]),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Center(
+                heightFactor: 1,
+                child: ProfilePicture(),
+              ),
+            )
+          ]),
+        ),
       ),
     );
   }

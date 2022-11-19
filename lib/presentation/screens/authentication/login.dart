@@ -29,20 +29,12 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: SafeArea(
-                  child: BlocProvider(
-                    create: (context) => LoginBloc(),
-                    child: _loginView(),
-                  ),
-                ),
-              ),
-            ],
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: BlocProvider(
+              create: (context) => LoginBloc(),
+              child: _loginView(),
+            ),
           ),
         ));
   }
@@ -71,15 +63,13 @@ class _LoginPageState extends State<LoginPage> {
                 transition: TransitionType.fadeIn);
           });
         }
-        return Expanded(
-          child: Container(
-              child: Visibility(
-            visible: state.formStatus is Idle,
-            child: Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: noAccountYetPrompt(context)),
-          )),
-        );
+        return Container(
+            child: Visibility(
+          visible: state.formStatus is Idle,
+          child: Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: noAccountYetPrompt(context)),
+        ));
       })
     ]);
   }

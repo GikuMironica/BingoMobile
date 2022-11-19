@@ -28,27 +28,20 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: SafeArea(
-                  child: BlocProvider(
-                    create: (context) => RegisterBloc(),
-                    child: _registerView(),
-                  ),
-                ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+              child: BlocProvider(
+                        create: (context) => RegisterBloc(),
+                        child: _registerView(),
+                      ),
               ),
-            ],
-          ),
-        ));
+      ),
+    );
   }
 
   Widget _registerView() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisSize: MainAxisSize.min,
+        children: [
       Padding(
         padding: const EdgeInsets.all(10),
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -66,15 +59,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
         if (state.formStatus is SubmissionSuccess) {
           _showFullscreenDialog(context);
         }
-        return Expanded(
-          child: Container(
-              child: Visibility(
-            visible: state.formStatus is Idle,
-            child: Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: accountAlreadyPrompt(context)),
-          )),
-        );
+        return Container(
+            child: Visibility(
+          visible: state.formStatus is Idle,
+          child: Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: accountAlreadyPrompt(context)),
+        ));
       })
     ]);
   }
