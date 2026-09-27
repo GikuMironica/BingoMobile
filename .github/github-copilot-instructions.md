@@ -12,6 +12,8 @@ At the start of every new conversation, explicitly mention the context you are u
 
 **IMPORTANT:** Do **NOT** run `flutter build` / `flutter run` automatically after every prompt. Only run when the user explicitly asks. Static checks (`flutter analyze`, `dart format --set-exit-if-changed .`) are fine.
 
+**IMPORTANT:** UI/UX redesign is outside the migration scope. Preserve existing visuals and user flows; focus changes on architecture, code structure, performance, code smells, and bugs unless the user explicitly requests a UI/UX change.
+
 **IMPORTANT:** The user maintains both `master` (Flutter 1, last release `v1.2.17`) and `dev` (Flutter 2, current development tip — branched off `dev2x` after PR #88 merged the `flutter-2-migration` work). **All new development happens on the Flutter 2 line (`dev` branch and feature branches off it).** Never apply a change to `master` unless the user explicitly asks for a hotfix.
 
 When in doubt about which branch a file belongs to:

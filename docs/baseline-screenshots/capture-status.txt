@@ -1,7 +1,7 @@
 Hopaut Mobile visual baseline capture status
 Captured: 2026-09-27
 Baseline tag: pre-flutter-3.24-baseline
-Status: BLOCKED — authentic screenshots are not currently obtainable
+Status: WAIVED — user explicitly excluded UI/UX changes from the migration
 
 Required screens
 ----------------
@@ -29,12 +29,12 @@ Evidence collected
 - Project policy prohibits running or building the full app unless explicitly
   requested; no synthetic or reconstructed images were created.
 
-Required input to unblock
--------------------------
-Provide one of the following:
-- the six original screenshots; or
-- a connected Android/iOS device with the legacy app already installed; or
-- an installable legacy APK/IPA plus a compatible device/emulator.
+Scope decision
+--------------
+No further visual-baseline input is required. Existing appearance and user
+flows must remain unchanged. The migration is limited to architecture, code
+structure, performance, code smells, and bug fixes unless the user later
+requests a UI/UX change.
 
 Expected filenames after capture
 --------------------------------

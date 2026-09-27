@@ -16,6 +16,7 @@
 4. Never skip ahead more than one step without explicit user approval. Never run `flutter build` unless the user asks.
 5. No step is "done" until `mobile-migration-status.md` is updated with: status (✅ / 🟡 / ❌), date, short note, optional commit hash.
 6. Every new user-facing string lands in **both** `en.json` and `de.json`.
+7. **UI/UX redesign is out of scope.** Preserve existing appearance and user flows; migration work targets architecture, code structure, performance, code smells, and bugs unless the user explicitly requests a UI/UX change.
 
 ---
 
@@ -506,8 +507,8 @@ The architecture migration is complete when:
 * **Actions:**
   * Tag current `dev` HEAD as `pre-flutter-3.24-baseline`.
   * Save `flutter --version`, `dart --version`, `flutter pub deps --no-dev --style=tree` to `docs/baseline-deps.txt`.
-  * Capture screenshots of the 6 highest-traffic screens (login, home/feed, event details, create event, account, settings) for visual regression.
-* **Acceptance:** tag exists; baseline files committed.
+  * Preserve the existing UI/UX. The originally planned screenshots of the 6 highest-traffic screens are waived by the user because UI/UX changes are outside this migration's scope.
+* **Acceptance:** tag exists; dependency baseline committed; visual capture explicitly waived on 2026-09-27.
 * **Status:** `0.1`.
 
 #### Step 0.2 — Widen SDK + adopt null-safety
@@ -770,6 +771,7 @@ Decisions D1–D5 are confirmed during Phase 1.1 and Phase 2. D6 and D7 are conf
 * When a step changes a public DTO, version-gate it behind a feature flag if mobile clients in production might call it.
 * Every new feature must come with: at least one domain unit test, one repository test (mocked Dio), one cubit test, one widget test.
 * Translations: every new user-facing string lands in **both** `en.json` and `de.json`.
+* Preserve the current UI/UX and user flows unless the user explicitly requests a visual or interaction change.
 
 ---
 
