@@ -21,7 +21,7 @@
 
 | #      | Step                                                          | Status | Date | Notes / commit |
 |--------|---------------------------------------------------------------|--------|------|----------------|
-| 0.0    | **Choose Flutter stable target** (Flutter 3.24.5; add `.fvmrc`) | ✅     | 2026-09-27 | Pinned `.fvmrc`; installed FVM 4.3.1; verified Flutter 3.24.5 / Dart 3.5.4 (Windows junction workaround for symlink privilege). |
+| 0.0    | **Choose Flutter stable target** (Flutter 3.24.5; add `.fvmrc`) | ✅     | 2026-09-27 | Pinned `.fvmrc`; installed FVM 4.3.1; verified Flutter 3.24.5 / Dart 3.5.4 (Windows junction workaround for symlink privilege). Commit `e2a7027`. |
 | 0.1    | Capture baseline (tag, deps tree, screenshots of top screens) | ⬜     |      |                |
 | 0.2    | Widen Dart SDK (`>=3.5.0 <4.0.0`) + adopt null-safety        | ⬜     |      |                |
 | 0.3    | Upgrade Flutter SDK + plugin majors — Batches A–K (excluding HERE SDK) | ⬜ |      |                |
@@ -124,8 +124,8 @@
 
 | Date | Step | Action | Commit |
 |------|------|--------|--------|
-| 2026-09-27 | 0.0 | Completed runtime pinning: corrected nonexistent `3.24.6` to Flutter `3.24.5`, installed FVM 4.3.1, and verified Flutter 3.24.5 / Dart 3.5.4. | – |
-| 2026-09-27 | – | Consolidated the as-is analysis and execution plan into `mobile-playbook.md`, removed the legacy documents, and updated Copilot workflow references. | – |
+| 2026-09-27 | 0.0 | Completed runtime pinning: corrected nonexistent `3.24.6` to Flutter `3.24.5`, installed FVM 4.3.1, and verified Flutter 3.24.5 / Dart 3.5.4. | `e2a7027` |
+| 2026-09-27 | – | Consolidated the as-is analysis and execution plan into `mobile-playbook.md`, removed the legacy documents, and updated Copilot workflow references. | `e2a7027` |
 | 2025-01-09 | – | **Tightened migration-workflow rules** in `C:\Users\ghmi\personal\BingoMobile\.github\github-copilot-instructions.md`: added exact file-path table for both status files (`C:\Users\ghmi\personal\BingoMobile\mobile-migration-status.md` and `C:\Users\ghmi\personal\BingoAPI\hopaut-migration-status.md`), added exhaustive trigger table (any code/config/doc/handoff change), added step-by-step "How to update" instructions (flip status → fill date → fill notes → prepend activity-log row). Mirrored tightening in backend instructions. | – |
 | 2025-01-09 | – | Added *Backend ↔ Mobile contract sync* section to `.github/github-copilot-instructions.md`. Backend (`BingoAPI`) now produces handoff prompt files under `..\BingoAPI\docs\mobile-handoffs\` for every contract change; this assistant must consume them, update the relevant `lib/` files, tick rows here, and reply with the mobile commit hash. | – |
 | 2025-01-09 | 0.0, 0.3-H | Added Step 0.0 (Flutter stable target), Step 0.3-H (HERE SDK pub.dev migration with detailed API diff), `core/maps/` to folder layout, D6+D7 decisions. Updated Phase 0 table and activity log. | – |
