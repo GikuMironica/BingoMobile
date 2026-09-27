@@ -255,7 +255,7 @@ There is no single `SnackbarService` or `DialogService`, so toasting style drift
 
 #### 3.16 Stale SDK constraint
 
-`pubspec.yaml` still declares `sdk: "2.10.5"` even though `dev` is on the Flutter 2 line. This blocks adopting null-safety. It must be widened to `>=2.12.0 <3.0.0` (or higher) and the codebase migrated through `dart migrate`.
+At the migration baseline, `pubspec.yaml` still declared `sdk: "2.10.5"` even though `dev` was on the Flutter 2 line. Step 0.2 has widened it to `>=3.5.0 <4.0.0`; dependency resolution and analyzer-guided source migration remain incomplete.
 
 #### 3.17 Dependency drift
 
@@ -273,15 +273,12 @@ here_sdk:
 The `plugins/here_sdk` folder **does not exist in the repository** — it is gitignored and must be downloaded manually from the HERE developer portal and placed before every fresh checkout. This means:
 
 * **The app cannot be built by anyone without manual SDK download.** No CI, no new team member can build without extra steps.
-* The specific version that was vendored is unknown (circa 4.0–4.5 based on the API used: `SdkContext.init(IsolateOrigin.main)`, `MapScheme.greyDay`, synchronous `loadSceneForMapScheme` callback style — all removed or changed in pub.dev 4.13+).
-* `here_sdk` is available on **pub.dev** as of version 4.x (Explore Edition). The correct target for Flutter 3.24.x / Dart 3.5 is `here_sdk: ^4.22.0`.
+* The historical lockfiles identify the missing plugin as HERE SDK `4.6.4`; its binary and Dart sources are not recoverable from the repository.
+* As verified on 2026-09-27, `here_sdk` is **not published on pub.dev** (the package API returns 404). HERE's official Flutter integration guide says that pub.dev dependency management is unavailable and instructs developers to download a licensed archive from the HERE platform, extract it to `plugins/here_sdk`, and retain a path dependency. HERE's official reference app follows the same pattern.
+* HERE SDK `4.22.x` remains the provisional upgrade candidate for Flutter 3.24.5, but D7 cannot be locked until the downloaded plugin's own `pubspec.yaml`, platform requirements, and APIs prove compatibility.
 * **6 files use HERE SDK APIs:** `main.dart`, `map_location_provider.dart`, `search_page_provider.dart`, `map.dart` (location picker screen), `search.dart`, `search_carousel.dart`.
-* The HERE API key must come from `--dart-define=HERE_API_KEY=...` — **not hardcoded**.
-* **API surface breaking changes from vendored → 4.22:**
-  * `SdkContext.init(IsolateOrigin.main)` → `SDKNativeEngine.makeSharedInstance(SDKOptions.withApiKey(key))`.
-  * `mapScene.loadSceneForMapScheme(scheme, callback)` → `await mapScene.loadSceneForMapScheme(scheme)` (async, no callback).
-  * `MapScheme.greyDay` → `MapScheme.normalDay` (renamed in 4.13).
-  * `MapSceneLayers` → verify; in some 4.x versions moved to `MapSceneLayer` (no trailing `s`).
+* HERE credentials must be externalized in Step 0.4 and rotated by the credential owner; never copy them into Dart source or migration documentation.
+* API migration must be driven by the acquired plugin's bundled API reference and analyzer output. Do not assume that `SdkContext`, scene-loading callbacks, map-scheme names, or map-layer types changed without checking that exact release.
 
 #### 3.18 Discontinued packages
 
@@ -466,29 +463,14 @@ The architecture migration is complete when:
 
 ### Phase 0 — Runtime upgrade & foundation
 
-> Goal: get the `dev` branch onto the selected **Flutter 3.24 stable line**, full null-safety, compatible current plugins (including a HERE SDK version delivered via pub.dev instead of a vendored path), env-based config, and CI.
+> Goal: get the `dev` branch onto the selected **Flutter 3.24 stable line**, full null-safety, compatible current plugins (including a compatible official HERE SDK Flutter binary), env-based config, and CI.
 
 > ⚠️ **HERE SDK note (read before starting 0.3).**
-> Today the HERE SDK is referenced as a **local path plugin** (`path: plugins/here_sdk`). That folder is not committed to the repo — it must be manually downloaded and placed before any build. The migration target is the **pub.dev-published `here_sdk` package** (HERE Maps SDK for Flutter, Explore Edition). The version must be matched to the Flutter stable version chosen in Step 0.0:
+> HERE distributes its Flutter SDK only as a separate licensed download; it is not available through pub.dev. The official package contains a binary plugin archive that must be extracted to the gitignored `plugins/here_sdk` directory and referenced with `path: plugins/here_sdk`. As of 2026-09-27, neither that directory nor a HERE SDK archive exists on this workstation, so dependency resolution is externally blocked.
 >
-> | Flutter stable release | Dart SDK | Compatible `here_sdk` (pub.dev) |
-> |---|---|---|
-> | Flutter 3.19.x (Feb 2024) | Dart 3.3 | `here_sdk: ^4.17.x` |
-> | Flutter 3.22.x (May 2024) | Dart 3.4 | `here_sdk: ^4.20.x` |
-> | Flutter 3.24.x (Aug 2024) | Dart 3.5 | `here_sdk: ^4.22.x` |
-> | Flutter 3.27.x (Nov 2024) | Dart 3.6 | `here_sdk: ^4.23.x` |
+> **Pinned application runtime:** Flutter 3.24.5 / Dart 3.5.4. **Provisional HERE candidate:** Explore `4.22.x`. The exact HERE version remains unlocked until an authorized download is supplied and its bundled `pubspec.yaml` confirms compatibility. Never create a fake plugin, commit the licensed binary, or guess API changes to bypass this gate.
 >
-> **Pinned migration target: Flutter 3.24.5**, the final official stable patch on the 3.24 line, with `here_sdk: ^4.22.0` from pub.dev. This removes the vendored-plugin anti-pattern entirely.
->
-> The HERE Explore Edition requires a **HERE platform API key** (not an app-id/app-code pair). Supply it via `--dart-define=HERE_API_KEY=...` (see Step 0.4) and inject it via `SDKNativeEngine.makeSharedInstance(SDKOptions.withApiKey(AppEnvironment.hereApiKey))`.
->
-> The API surface **did change** between the vendored version (circa 4.x early) and pub.dev 4.22:
-> * `SdkContext.init(IsolateOrigin.main)` → `SDKNativeEngine.makeSharedInstance(SDKOptions.withApiKey(...))` (the old `SdkContext` class is removed in recent pub.dev releases).
-> * `HereMapController.mapScene.loadSceneForMapScheme(MapScheme.xxx, callback)` → now async, returns `Future<void>`, callback removed.
-> * `MapScheme` enum members renamed (`greyDay` → `normalDay` etc. in some versions — verify against the `4.22` changelog).
-> * `SearchEngine` constructor is the same; `Place`, `GeoCoordinates`, `TextQuery`, `SearchOptions` are stable across 4.x.
-> * `WatermarkPlacement` → `WatermarkPlacement.bottomRight` still exists.
-> * `MapSceneLayers` / `MapSceneLayerState` → still valid.
+> After the artifact is supplied, inspect its bundled API reference and migrate initialization, scene loading, map schemes, search, watermark, and layer APIs according to that exact version. Externalize the required HERE access-key ID and secret in Step 0.4; do not hardcode or copy credential values.
 >
 > Affected files (6): `lib/main.dart`, `lib/controllers/providers/map_location_provider.dart`, `lib/controllers/providers/search_page_provider.dart`, `lib/presentation/screens/events/location/map.dart`, `lib/presentation/screens/search/search.dart`, `lib/presentation/screens/search/search_carousel.dart`.
 
@@ -512,9 +494,10 @@ The architecture migration is complete when:
 * **Status:** `0.1`.
 
 #### Step 0.2 — Widen SDK + adopt null-safety
+* **Execution-order correction (2026-09-27):** Dart 3.5 cannot resolve the legacy package graph, and the first solver failure is the absent official `plugins/here_sdk` artifact. A trial hosted constraint also fails because HERE does not publish `here_sdk` on pub.dev. Therefore, provision the official dependency in Step 0.3-H and perform the dependency-resolution portions of Step 0.3 after widening the SDK constraint, then finish analyzer-guided source migration and evaluate each step's acceptance gate independently. This is an execution interleave, not a scope change: Step 0.2 still owns full source null-safety, Step 0.3 owns non-HERE package/API upgrades, and Step 0.3-H owns HERE provisioning, isolation, and functional validation.
 * **Actions:**
   * Update `pubspec.yaml`: `environment.sdk: ">=3.5.0 <4.0.0"` (matches Flutter 3.24.x / Dart 3.5).
-  * Run `dart migrate --apply-changes` in passes (file-by-file for large files). For files that resist migration, add explicit `?` and `late` annotations. Add `// ignore_for_file: ` only with a TODO.
+  * Migrate in compiler/analyzer-guided passes because Dart 3 no longer includes the interactive `dart migrate` command. For files that resist migration, add explicit `?` and `late` annotations. Add `// ignore_for_file: ` only with a TODO.
   * Fix all `flutter analyze` errors (warnings deferred to Step 0.6).
 * **Acceptance:** `flutter analyze` returns 0 errors on the `dev` branch.
 * **Status:** `0.2`.
@@ -536,36 +519,23 @@ The architecture migration is complete when:
 * **Acceptance:** `flutter pub get` clean; `flutter analyze` 0 errors; app boots on Android emulator and iOS simulator (without HERE map screens — those come in Step 0.3-H).
 * **Status:** `0.3`.
 
-#### Step 0.3-H — HERE SDK: replace vendored path plugin with pub.dev package
-* **Goal:** eliminate the `path: plugins/here_sdk` anti-pattern; adopt `here_sdk: ^4.22.0` from pub.dev (Explore Edition, Flutter 3.24.x compatible).
-* **Why this is its own step:** HERE SDK API surface changed between the vendored version (circa 4.0–4.5 era) and pub.dev 4.22. The 6 affected files need careful rewriting. Failing to compile breaks the build entirely; rushing it into Batch G would mask other errors.
+#### Step 0.3-H — HERE SDK: provision and isolate the official Flutter plugin
+* **Goal:** provision an authorized HERE SDK for Flutter (Explore) artifact compatible with Flutter 3.24.5, retain the official path dependency, and isolate HERE APIs behind `core/maps/here_sdk_adapter.dart`.
+* **Why this is its own step:** HERE SDK is a separately downloaded binary rather than a pub.dev package. Its exact API and platform requirements must come from the acquired release. The 6 affected files need careful rewriting, and unresolved HERE imports prevent dependency resolution and analyzer-guided migration of the rest of the app.
 * **Actions:**
-  1. **Remove** the `here_sdk: path: plugins/here_sdk` entry from `pubspec.yaml`. Add `here_sdk: ^4.22.0`.
-  2. **HERE developer account:** ensure a valid HERE Freemium or paid API key exists. Supply via `--dart-define=HERE_API_KEY=...` (see Step 0.4). Do **not** hardcode in code.
-  3. **`lib/main.dart`** — replace:
-     ```dart
-     // OLD
-     SdkContext.init(IsolateOrigin.main);
-     // NEW (4.22.x)
-     SDKNativeEngine.makeSharedInstance(
-       SDKOptions.withApiKey(AppEnvironment.hereApiKey));
-     ```
-  4. **`lib/controllers/providers/map_location_provider.dart`** — update:
-     * `_hereMapController.mapScene.loadSceneForMapScheme(mapScheme, callback)` → `await _hereMapController.mapScene.loadSceneForMapScheme(mapScheme)` (now returns `MapError?`, no callback).
-     * `MapScheme.greyDay` → `MapScheme.normalDay` (name changed in 4.13+; verify against 4.22 changelog).
-     * `_hereMapController.setWatermarkPosition(WatermarkPlacement.bottomRight, 10)` — verify signature still valid; if removed, delete the call.
-     * `MapSceneLayers.extrudedBuildings` / `MapSceneLayerState.hidden` — verify names; may have moved to `MapSceneLayer` (no `s`).
-  5. **`lib/presentation/screens/events/location/map.dart`** — `HereMap` widget import from `here_sdk/mapview.dart` is stable; verify `HereMapController` constructor callback param name (`onMapCreated` unchanged).
-  6. **`lib/controllers/providers/search_page_provider.dart`** and **`search.dart` / `search_carousel.dart`** — `SearchEngine`, `GeoCoordinates`, `Place`, `TextQuery`, `SearchOptions` API is stable in 4.22; verify the callback style changed to async if needed.
-  7. Wrap all HERE interactions in `core/maps/here_sdk_adapter.dart` so future HERE SDK upgrades only touch one file.
-  8. **Android:** verify `minSdkVersion` in `android/app/build.gradle` is at least `21` (required by here_sdk 4.22).
-  9. **iOS:** verify `platform: ios, '12.0'` (or higher) in `ios/Podfile` and that `ENABLE_BITCODE = NO` is set (HERE SDK requirement).
-* **Acceptance:** map screen loads, user location can be found, a POI search returns results, location can be selected and returned to create-event form — all without the `plugins/here_sdk` folder on disk.
+  1. From an authorized HERE account, download the Explore Flutter release intended for Flutter 3.24.5 (provisionally `4.22.x`), extract the plugin archive, rename it `here_sdk`, and place it at `plugins/here_sdk`. Keep that licensed directory ignored by Git.
+  2. Inspect `plugins/here_sdk/pubspec.yaml` and bundled release notes. Confirm its package version, Dart/Flutter constraints, Android minimum/compile SDK, iOS deployment target, and credential API. Record the verified selection as D7; do not infer compatibility from version numbers alone.
+  3. Keep `pubspec.yaml` on the official `path: plugins/here_sdk` declaration. Define a secure CI provisioning mechanism backed by an authorized private artifact source; do not commit the SDK binary.
+  4. Ensure valid HERE credentials exist and arrange their rotation because legacy platform resources contain tracked values. Externalize replacement credentials in Step 0.4; never copy credential values into source, logs, commits, or documentation.
+  5. Run pinned-SDK dependency resolution, then use the acquired package's API reference and analyzer output to migrate `lib/main.dart` and the five map/search files without changing their UI or flows.
+  6. Wrap HERE initialization and shared interactions in `core/maps/here_sdk_adapter.dart` so later package upgrades have one primary boundary.
+  7. Update Android and iOS deployment settings only to the exact minimums documented by the acquired release. iOS compilation and simulator validation must run later on macOS.
+* **Acceptance:** the authorized plugin is reproducibly provisioned without entering Git; `flutter pub get` and `flutter analyze` pass; the map loads, user location works, POI search returns results, and location selection returns to the create-event form; CI has an authorized artifact-provisioning path.
 * **Status:** `0.3-H`.
 
 #### Step 0.4 — Environment-driven configuration
 * **Actions:**
-  * Add `lib/core/env/app_environment.dart` reading `--dart-define`d values: `API_BASE_URL`, `ONESIGNAL_APP_ID`, `HERE_API_KEY`, `FACEBOOK_APP_ID`, `ENV` (`dev|staging|prod`).
+  * Add `lib/core/env/app_environment.dart` reading `--dart-define`d values: `API_BASE_URL`, `ONESIGNAL_APP_ID`, the HERE credential fields required by the verified D7 plugin, `FACEBOOK_APP_ID`, `ENV` (`dev|staging|prod`).
   * Replace `lib/config/constants/api.dart#API_ROOT_URL` and the OneSignal id literal and the HERE API key with reads from `AppEnvironment`.
   * Add `flavors/dev.json`, `flavors/staging.json`, `flavors/prod.json` (or VS Code `launch.json` configs with `--dart-define-from-file`) supplying defaults per environment.
   * Add `.gitignore` entries for any `*.json` flavor files that contain secret key values.
@@ -750,7 +720,7 @@ The architecture migration is complete when:
 | D4 | HTTP | `dio` 5.x | ⬜ | |
 | D5 | Result type | hand-rolled sealed class | ⬜ | |
 | D6 | **Flutter version target** | **Flutter 3.24.5 stable / Dart 3.5** | ✅ | 2026-09-27 |
-| D7 | **HERE SDK version** | **`here_sdk: ^4.22.0` from pub.dev (Explore Edition)** — replaces vendored `path: plugins/here_sdk` | ⬜ | |
+| D7 | **HERE SDK version** | Official downloaded Explore Flutter plugin at `plugins/here_sdk`; `4.22.x` is provisional pending artifact compatibility verification | ⬜ | |
 
 Decisions D1–D5 are confirmed during Phase 1.1 and Phase 2. D6 and D7 are confirmed during Phase 0.0 and 0.3-H respectively.
 

@@ -13,7 +13,7 @@
 - ❌ blocked (add reason)
 - ⏭️ skipped (add reason)
 
-**Current focus:** Phase 0 – Step 0.2 (widen SDK constraint and adopt null-safety).
+**Current focus:** Phase 0 is externally blocked at Step 0.3-H. Steps 0.2 and 0.3 cannot continue until an authorized HERE Explore Flutter plugin compatible with Flutter 3.24.5 is placed at `plugins/here_sdk`.
 
 ---
 
@@ -23,9 +23,9 @@
 |--------|---------------------------------------------------------------|--------|------|----------------|
 | 0.0    | **Choose Flutter stable target** (Flutter 3.24.5; add `.fvmrc`) | ✅     | 2026-09-27 | Pinned `.fvmrc`; installed FVM 4.3.1; verified Flutter 3.24.5 / Dart 3.5.4 (Windows junction workaround for symlink privilege). Commit `e2a7027`. |
 | 0.1    | Capture baseline (tag, deps tree, screenshots of top screens) | ✅     | 2026-09-27 | Tagged `75553a4` as `pre-flutter-3.24-baseline`; captured runtime, lockfile inventory, and dependency-resolution failure in `0f0b9fa`. Visual capture waived by user because UI/UX changes are out of scope (`0de8de7`). |
-| 0.2    | Widen Dart SDK (`>=3.5.0 <4.0.0`) + adopt null-safety        | 🟡     | 2026-09-27 | in progress – repository-scoped `HopautMigration` agent and migration skills configured in `e652a8b`; autonomous null-safety execution and validation pending |
-| 0.3    | Upgrade Flutter SDK + plugin majors — Batches A–K (excluding HERE SDK) | ⬜ |      |                |
-| 0.3-H  | **HERE SDK: replace vendored path plugin with pub.dev `here_sdk: ^4.22.0`**; fix 6 affected files; wrap in `core/maps/here_sdk_adapter.dart` | ⬜ |      |                |
+| 0.2    | Widen Dart SDK (`>=3.5.0 <4.0.0`) + adopt null-safety        | 🟡     | 2026-09-27 | in progress – SDK constraint widened; analyzer-guided migration is blocked until the official HERE plugin permits dependency resolution |
+| 0.3    | Upgrade Flutter SDK + plugin majors — Batches A–K (excluding HERE SDK) | ⬜ |      | dependency batches are blocked by 0.3-H because each batch requires clean dependency resolution |
+| 0.3-H  | **HERE SDK: provision compatible official Flutter plugin**; fix 6 affected files; wrap in `core/maps/here_sdk_adapter.dart` | ❌ blocked | 2026-09-27 | HERE publishes no Flutter package on pub.dev; official licensed archive and credentials require owner access. Place a compatible Explore plugin at ignored path `plugins/here_sdk`, then verify D7 and resume. |
 | 0.4    | Environment-driven config (`--dart-define-from-file` for API/OneSignal/HERE/FB/ENV) | ⬜ |      |                |
 | 0.5    | CI scaffolding (`.github/workflows/mobile-ci.yml`)            | ⬜     |      |                |
 | 0.6    | Lint baseline (`analysis_options.yaml`, `dart_code_metrics`, `import_lint`) | ⬜ |      |                |
@@ -116,7 +116,7 @@
 | D4 | HTTP | `dio` 5.x | ⬜ |   |
 | D5 | Result type | hand-rolled sealed class | ⬜ |   |
 | D6 | **Flutter version target** | **Flutter 3.24.5 stable / Dart 3.5** | ✅ | 2026-09-27 |
-| D7 | **HERE SDK version** | **`here_sdk: ^4.22.0` from pub.dev (Explore Edition)** — replaces vendored `path: plugins/here_sdk` | ⬜ |   |
+| D7 | **HERE SDK version** | Official downloaded Explore Flutter plugin at `plugins/here_sdk`; `4.22.x` is provisional pending artifact compatibility verification | ⬜ |   |
 
 ---
 
@@ -124,6 +124,9 @@
 
 | Date | Step | Action | Commit |
 |------|------|--------|--------|
+| 2026-09-27 | 0.2, 0.3-H | Reproduced pub failure, confirmed `here_sdk` is absent from pub.dev and officially download-only, found no local artifact, restored the path dependency, and recorded the external provisioning blocker. | – |
+| 2026-09-27 | 0.2, 0.3-H | Proved the written order cannot resolve on Dart 3 because `plugins/here_sdk` is absent; documented the minimal execution interleave and switched HERE to the planned pub.dev constraint. | – |
+| 2026-09-27 | 0.2 | Widened the Dart SDK constraint to `>=3.5.0 <4.0.0`; dependency resolution evidence and analyzer-guided null-safety migration are in progress. | – |
 | 2026-09-27 | 0.2 | Added the repository-scoped `HopautMigration` continuous agent plus orchestration, Flutter modernization, and validation skills; built-in tools are sufficient, so no MCP server was added. | `e652a8b` |
 | 2026-09-27 | 0.1 | User scoped migration work to architecture, structure, performance, code smells, and bugs with no UI/UX changes; visual baseline waived and Step 0.1 closed. | `0de8de7` |
 | 2026-09-27 | 0.1 | Created the pre-Flutter-3.24 tag and dependency baseline; recorded the visual-baseline blocker after exhausting workspace, history, device, emulator, binary, release, store, and archive sources. | `0f0b9fa` |

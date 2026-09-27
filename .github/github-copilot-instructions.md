@@ -139,7 +139,7 @@ The Hopaut backend (`BingoAPI`, sibling repo at `..\BingoAPI`) is the **only** s
 * **HTTP:** `dio` 3.0.9 with `pretty_dio_logger` and a single `DioService` interceptor (token refresh on 401 is half-implemented and broken — see TODOs).
 * **Storage:** `flutter_secure_storage` for tokens, `hive` for the cached identity payload, `shared_preferences` for user settings.
 * **Auth:** JWT bearer + refresh token (Identity API), Facebook external login (`flutter_facebook_auth` 2.x), Firebase OTP for phone confirmation.
-* **Maps / location:** `here_sdk` (currently vendored under `plugins/here_sdk` — **the folder is gitignored / not in repo**; target is pub.dev `here_sdk: ^4.22.0` per D7 in `mobile-migration-status.md`), `geolocator`, `location`, `permission_handler`, `geocoder`.
+* **Maps / location:** `here_sdk` (an official HERE-downloaded binary plugin expected at the gitignored `plugins/here_sdk` path; HERE does not publish the Flutter SDK on pub.dev, so the artifact must be provisioned from the HERE platform and its compatibility verified per D7 in `mobile-migration-status.md`), `geolocator`, `location`, `permission_handler`, `geocoder`.
 * **Push:** `onesignal_flutter` 2.x (matches the backend OneSignal app id).
 * **i18n:** `easy_localization` (codegen loader at `generated/codegen_loader.g.dart`), JSON files under `assets/translations/`. **All user-facing strings must come from `LocaleKeys.*`** — never hardcode.
 * **Crash reporting:** `firebase_crashlytics` (initialised in `main.dart`).
