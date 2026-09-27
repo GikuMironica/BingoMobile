@@ -1,0 +1,131 @@
+Hopaut Mobile dependency baseline
+Captured: 2026-09-27
+Branch: dev
+Baseline tag: pre-flutter-3.24-baseline
+Tagged commit: 75553a4ed5f6f11cf65460f3a43bbcd23996a479
+
+AVAILABLE TOOLCHAIN AT CAPTURE TIME
+-----------------------------------
+Command: fvm flutter --version
+
+Flutter 3.24.5 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision dec2ee5c1f • 2024-11-13 11:13:06 -0800
+Engine • revision a18df97ca5
+Tools • Dart 3.5.4 • DevTools 2.37.3
+
+Command: fvm dart --version
+
+Dart SDK version: 3.5.4 (stable) (Wed Oct 16 16:18:51 2024 +0000) on "windows_x64"
+
+HISTORICAL PROJECT METADATA
+---------------------------
+pubspec.yaml SDK constraint: 2.10.5
+pubspec.lock Dart constraint: 2.10.5
+pubspec.lock Flutter constraint: >=1.22.2 <2.0.0
+
+The tracked .metadata file contains an unresolved merge conflict between Flutter
+revisions 5f21edf8b66e31a39133177319414395cc5b5f48 (Flutter 1.17.2) and
+f7a6a7906be96d2288f5d63a5a54c515a6e987fe (Flutter 1.17.1). Consequently,
+there is no trustworthy single historical Flutter runtime to report from the
+repository metadata.
+
+DEPENDENCY TREE COMMAND
+-----------------------
+Command: fvm flutter pub deps --no-dev --style=tree
+Exit code: 65
+
+Resolving dependencies...
+The lower bound of "sdk: '2.10.5'" must be 2.12.0 or higher to enable null safety.
+The current Dart SDK (3.5.4) only supports null safety.
+
+The command aborts before constructing a tree. This failure is part of the
+pre-migration baseline and is the condition addressed by Phase 0 Step 0.2.
+The complete reproducible transitive snapshot remains in pubspec.lock at the
+tagged commit above.
+
+LOCKFILE SUMMARY
+----------------
+Locked packages: 197
+Direct runtime packages: 70
+Direct development packages: 4
+Missing path dependency: here_sdk 4.6.4 (plugins/here_sdk is not in the repo)
+
+DIRECT RUNTIME DEPENDENCIES (from pubspec.lock)
+-----------------------------------------------
+animations 1.1.2 [hosted]
+badges 1.2.0 [hosted]
+cached_network_image 2.5.1 [hosted]
+carousel_pro 1.0.0 [hosted]
+carousel_slider 2.3.4 [hosted]
+circular_check_box 1.0.4 [hosted]
+cupertino_icons 1.0.0 [hosted]
+currency_text_input_formatter 1.0.4 [hosted]
+datetime_picker_formfield 1.0.0 [hosted]
+dio 3.0.9 [hosted]
+easy_localization 2.3.3 [hosted]
+email_validator 1.0.4 [hosted]
+extended_image 1.6.0 [hosted]
+firebase_auth 0.20.1 [hosted]
+firebase_core 0.7.0 [hosted]
+firebase_crashlytics 0.4.0+1 [hosted]
+fluro 1.7.7 [hosted]
+flutter 0.0.0 [sdk]
+flutter_bloc 6.1.3 [hosted]
+flutter_cupertino_date_picker 1.0.26+2 [git]
+flutter_datetime_picker 1.5.0 [hosted]
+flutter_facebook_auth 2.0.2+1 [hosted]
+flutter_image_compress 0.7.0 [hosted]
+flutter_launcher_icons 0.8.1 [hosted]
+flutter_native_splash 0.3.2 [hosted]
+flutter_secure_storage 3.3.3 [hosted]
+flutter_svg 0.19.1 [hosted]
+flutter_translate 1.6.0 [hosted]
+flutter_typeahead 1.9.3 [hosted]
+flutter_webview_plugin 0.3.11 [hosted]
+fluttertoast 4.0.1 [hosted]
+geocoder 0.2.1 [hosted]
+geolocator 6.2.1 [hosted]
+get_it 5.0.6 [hosted]
+here_sdk 4.6.4 [path: plugins/here_sdk]
+hive 1.4.4+1 [hosted]
+hive_flutter 0.3.1 [hosted]
+http_parser 3.1.4 [hosted]
+image_cropper 1.3.1 [hosted]
+image_picker 0.6.7+22 [hosted]
+image_viewer 1.0.0 [hosted]
+injectable 1.1.2 [hosted]
+intl 0.16.1 [hosted]
+intl_phone_number_input 0.6.0 [hosted]
+ionicons 0.1.1 [hosted]
+jiffy 3.0.1 [hosted]
+jwt_decode 0.1.0 [hosted]
+location 3.2.4 [hosted]
+logger 0.9.4 [hosted]
+material_design_icons_flutter 4.0.5955 [hosted]
+meta 1.3.0-nullsafety.3 [hosted]
+mime_type 0.3.2 [hosted]
+onesignal_flutter 2.6.4 [hosted]
+package_info 0.4.3+4 [hosted]
+path_provider 1.6.28 [hosted]
+permission_handler 5.1.0+2 [hosted]
+persistent_bottom_nav_bar 2.1.0 [hosted]
+pretty_dio_logger 1.1.1 [hosted]
+provider 4.3.3 [hosted]
+rating_dialog 1.0.0 [hosted]
+recase 3.0.1 [hosted]
+rxdart 0.24.1 [hosted]
+shared_preferences 0.5.12+4 [hosted]
+sliver_tools 0.1.10+1 [hosted]
+store_redirect 1.0.2 [hosted]
+table_calendar 2.3.3 [hosted]
+timeago 2.0.30 [hosted]
+url_launcher 5.7.10 [hosted]
+uuid 2.2.2 [hosted]
+visibility_detector 0.1.5 [hosted]
+
+DIRECT DEVELOPMENT DEPENDENCIES (from pubspec.lock)
+---------------------------------------------------
+build_runner 1.11.1+1 [hosted]
+flutter_test 0.0.0 [sdk]
+injectable_generator 1.1.2 [hosted]
+lint 1.3.0 [hosted]
