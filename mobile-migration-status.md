@@ -22,7 +22,7 @@
 | #      | Step                                                          | Status | Date | Notes / commit |
 |--------|---------------------------------------------------------------|--------|------|----------------|
 | 0.0    | **Choose Flutter stable target** (Flutter 3.24.5; add `.fvmrc`) | ✅     | 2026-09-27 | Pinned `.fvmrc`; installed FVM 4.3.1; verified Flutter 3.24.5 / Dart 3.5.4 (Windows junction workaround for symlink privilege). Commit `e2a7027`. |
-| 0.1    | Capture baseline (tag, deps tree, screenshots of top screens) | ❌ blocked | 2026-09-27 | Tagged `75553a4` as `pre-flutter-3.24-baseline`; captured runtime, lockfile inventory, and dependency-resolution failure. Waiting for six authentic screenshots; no mobile device/emulator, legacy binary, or published captures are available. |
+| 0.1    | Capture baseline (tag, deps tree, screenshots of top screens) | ❌ blocked | 2026-09-27 | Tagged `75553a4` as `pre-flutter-3.24-baseline`; captured runtime, lockfile inventory, and dependency-resolution failure. Waiting for six authentic screenshots; no mobile device/emulator, legacy binary, or published captures are available. Commit `0f0b9fa`. |
 | 0.2    | Widen Dart SDK (`>=3.5.0 <4.0.0`) + adopt null-safety        | ⬜     |      |                |
 | 0.3    | Upgrade Flutter SDK + plugin majors — Batches A–K (excluding HERE SDK) | ⬜ |      |                |
 | 0.3-H  | **HERE SDK: replace vendored path plugin with pub.dev `here_sdk: ^4.22.0`**; fix 6 affected files; wrap in `core/maps/here_sdk_adapter.dart` | ⬜ |      |                |
@@ -124,7 +124,7 @@
 
 | Date | Step | Action | Commit |
 |------|------|--------|--------|
-| 2026-09-27 | 0.1 | Created the pre-Flutter-3.24 tag and dependency baseline; recorded the visual-baseline blocker after exhausting workspace, history, device, emulator, binary, release, store, and archive sources. | – |
+| 2026-09-27 | 0.1 | Created the pre-Flutter-3.24 tag and dependency baseline; recorded the visual-baseline blocker after exhausting workspace, history, device, emulator, binary, release, store, and archive sources. | `0f0b9fa` |
 | 2026-09-27 | 0.0 | Completed runtime pinning: corrected nonexistent `3.24.6` to Flutter `3.24.5`, installed FVM 4.3.1, and verified Flutter 3.24.5 / Dart 3.5.4. | `e2a7027` |
 | 2026-09-27 | – | Consolidated the as-is analysis and execution plan into `mobile-playbook.md`, removed the legacy documents, and updated Copilot workflow references. | `e2a7027` |
 | 2025-01-09 | – | **Tightened migration-workflow rules** in `C:\Users\ghmi\personal\BingoMobile\.github\github-copilot-instructions.md`: added exact file-path table for both status files (`C:\Users\ghmi\personal\BingoMobile\mobile-migration-status.md` and `C:\Users\ghmi\personal\BingoAPI\hopaut-migration-status.md`), added exhaustive trigger table (any code/config/doc/handoff change), added step-by-step "How to update" instructions (flip status → fill date → fill notes → prepend activity-log row). Mirrored tightening in backend instructions. | – |
