@@ -43,6 +43,10 @@ The refactor is governed by three persistent files at the repo root:
 * Always read `mobile-migration-status.md` first to determine the next pending step. Do **one step at a time** unless the user explicitly approves a batch.
 * Follow the step exactly as defined in `mobile-playbook.md` (Goal / Actions / Acceptance criteria).
 
+### Autonomous batch execution
+
+When the user explicitly launches `.github/agents/hopaut-migration.agent.md`, sequential batching is approved for that agent session. The agent must keep processing ordered migration steps without pausing after each successful step, while still validating, updating the tracker, and committing each coherent batch. This exception does **not** authorize `flutter build`, `flutter run`, remote pushes, releases, deployment, merging to `master`, secret access, or destructive Git operations.
+
 ### ⚠️ MANDATORY AFTER EVERY PROMPT — NO EXCEPTIONS
 
 **After _any_ prompt that produces _any_ of the following, you MUST update the relevant status file(s) before the response ends:**
