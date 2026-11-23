@@ -3,13 +3,12 @@ import 'package:hopaut/controllers/blocs/base_state.dart';
 import 'package:hopaut/controllers/blocs/register/register_page_status.dart';
 
 class RegisterState extends BaseState {
-  static final RegExp _pwdRule =
-      RegExp(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
+  static final RegExp _pwdRule = RegExp(r"^(.{0,7}|[^0-9]*|[A-Za-z]*)$");
 
   //validators
   bool get isEmailValid => EmailValidator.validate(username.trim());
   bool get isPasswordValid =>
-      password.isNotEmpty && _pwdRule.hasMatch(password);
+      password.isNotEmpty && !_pwdRule.hasMatch(password);
   bool get isConfirmPasswordValid =>
       confirmPassword.isNotEmpty && passwordsMatch;
   bool get passwordsMatch => password == confirmPassword;

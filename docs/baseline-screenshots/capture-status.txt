@@ -1,0 +1,46 @@
+Hopaut Mobile visual baseline capture status
+Captured: 2026-09-27
+Baseline tag: pre-flutter-3.24-baseline
+Status: WAIVED — user explicitly excluded UI/UX changes from the migration
+
+Required screens
+----------------
+1. Login
+2. Home / feed
+3. Event details
+4. Create event
+5. Account
+6. Settings
+
+Evidence collected
+------------------
+- No baseline screenshots exist in the workspace or repository history.
+- No Android or iOS device is connected.
+- Flutter detects only Windows, Chrome, and Edge targets.
+- No Android emulator image, Android SDK, or ADB installation is available.
+- No local Hopaut APK, AAB, IPA, or relevant screenshots were found in likely
+  user artifact directories.
+- The GitHub repository has no release binaries.
+- The Google Play package com.hopaut.hopaut currently returns HTTP 404.
+- No archived store listing was found for com.hopaut.hopaut.
+- The application cannot resolve dependencies under Flutter 3.24.5 until the
+  null-safety migration begins, because pubspec.yaml declares Dart 2.10.5.
+- The required local path dependency plugins/here_sdk is absent from the repo.
+- Project policy prohibits running or building the full app unless explicitly
+  requested; no synthetic or reconstructed images were created.
+
+Scope decision
+--------------
+No further visual-baseline input is required. Existing appearance and user
+flows must remain unchanged. The migration is limited to architecture, code
+structure, performance, code smells, and bug fixes unless the user later
+requests a UI/UX change.
+
+Expected filenames after capture
+--------------------------------
+login.png
+home-feed.png
+event-details.png
+create-event.png
+account.png
+settings.png

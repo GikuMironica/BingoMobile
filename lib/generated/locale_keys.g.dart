@@ -411,6 +411,11 @@ abstract class  LocaleKeys {
   static const Home_FullScreenDialog_messege = 'Home.FullScreenDialog.messege';
   static const Home_FullScreenDialog_btnText = 'Home.FullScreenDialog.btnText';
   static const Home_FullScreenDialog = 'Home.FullScreenDialog';
+  static const Home_PermissionDialog_header = 'Home.PermissionDialog.header';
+  static const Home_PermissionDialog_message = 'Home.PermissionDialog.message';
+  static const Home_PermissionDialog_btn_location_permission = 'Home.PermissionDialog.btn_location_permission';
+  static const Home_PermissionDialog_btn_location_service = 'Home.PermissionDialog.btn_location_service';
+  static const Home_PermissionDialog = 'Home.PermissionDialog';
   static const Home = 'Home';
   static const Archieved_header_title = 'Archieved.header.title';
   static const Archieved_header_currentTab = 'Archieved.header.currentTab';

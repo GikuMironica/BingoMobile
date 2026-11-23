@@ -20,20 +20,16 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     var _size = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
       body: SingleChildScrollView(
         child: Stack(children: [
           Container(
-            width: _size.width,
-            height: _size.height,
             decoration: HATheme.GRADIENT_DECORATION,
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Container(
+                margin: EdgeInsets.only(top: _size.height * 0.2),
                 padding:
                     EdgeInsets.only(left: 16, right: 16, top: 96, bottom: 32),
-                width: _size.width,
-                height: _size.height * 0.8,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
@@ -47,6 +43,7 @@ class _AccountPageState extends State<AccountPage> {
                       topRight: Radius.circular(30)),
                 ),
                 child: Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     userFullName(),
                     SizedBox(

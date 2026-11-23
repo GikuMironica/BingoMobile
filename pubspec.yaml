@@ -20,7 +20,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.1.0+17
 
 environment:
-  sdk: "2.10.5"
+  sdk: ">=3.5.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -44,7 +44,6 @@ dependencies:
   rxdart:                 0.24.1
   dio:                    3.0.9
   pretty_dio_logger:      ^1.1.1
-  flutter_facebook_login: ^3.0.0
   flutter_facebook_auth:  ^2.0.2+1
   mime_type:              ^0.3.2
   http_parser:            ^3.1.4

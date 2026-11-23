@@ -554,6 +554,12 @@ class CodegenLoader extends AssetLoader{
       "header": "Hallo!",
       "messege": "Vervollständige die Registrierung durch Eingabe Deines Namens, um Veranstaltungen zu erstellen oder ihnen beizutreten.",
       "btnText": "Einstellungen"
+    },
+    "PermissionDialog": {
+      "header": "Haben wir Ihre Zustimmung?",
+      "message": "Lassen Sie uns Ihren Standort verwenden, um Veranstaltungen in Ihrer Nähe zu finden, und stellen Sie sicher, dass die Standortdienste aktiviert sind.",
+      "btn_location_permission": "Zugriff auf den Standort zulassen",
+      "btn_location_service": "Standortdienst aktivieren"
     }
   },
   "Archieved": {
@@ -1108,6 +1114,12 @@ static const Map<String,dynamic> en = {
       "header": "Hey there!",
       "messege": "Complete the registration by entering your name to create or join events.",
       "btnText": "Settings"
+    },
+    "PermissionDialog": {
+      "header": "Do we have your permission?",
+      "message": "Let us use your location to find events near you, and make sure location services are enabled.",
+      "btn_location_permission": "Allow location access",
+      "btn_location_service": "Enable location service"
     }
   },
   "Archieved": {

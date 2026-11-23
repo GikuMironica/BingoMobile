@@ -538,6 +538,12 @@
       "header": "Hey there!",
       "messege": "Complete the registration by entering your name to create or join events.",
       "btnText": "Settings"
+    },
+    "PermissionDialog": {
+      "header": "Do we have your permission?",
+      "message": "Let us use your location to find events near you, and make sure location services are enabled.",
+      "btn_location_permission": "Allow location access",
+      "btn_location_service": "Enable location service"
     }
   },
   "Archieved": {
