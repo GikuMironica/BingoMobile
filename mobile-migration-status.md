@@ -4,7 +4,7 @@
 >
 > Companion to `mobile-playbook.md` (as-is analysis + target architecture + execution plan in one document).
 >
-> All work targets the **`dev`** branch (Flutter 2 line). `master` is frozen at `v1.2.17`.
+> All work targets the **`dev`** branch (Flutter 2 line). `master` stayed frozen at `v1.2.17` until 2026-11-23, when the user had `dev` merged into it mid-migration (one local `--no-ff` merge, not pushed); it changes again only with explicit approval (Step 6.7 cuts `v2.0.0`).
 
 **Legend**
 - ⬜ not started
@@ -13,7 +13,7 @@
 - ❌ blocked (add reason)
 - ⏭️ skipped (add reason)
 
-**Current focus:** Phase 0 is externally blocked at Step 0.3-H. Steps 0.2 and 0.3 cannot continue until an authorized HERE Explore Flutter plugin compatible with Flutter 3.24.5 is placed at `plugins/here_sdk`.
+**Current focus:** Phase 0 is externally blocked at Step 0.3-H. Steps 0.2 and 0.3 cannot continue until an authorized HERE Explore Flutter plugin compatible with Flutter 3.24.5 is placed at `plugins/here_sdk`. Session handover: `HANDOVER.md` (2026-11-23, synced with the backend's `HANDOVER.md`).
 
 ---
 
@@ -124,6 +124,7 @@
 
 | Date | Step | Action | Commit |
 |------|------|--------|--------|
+| 2026-11-23 | – | Added `HANDOVER.md` synced with the backend handover (mobile blocked at 0.3-H; backend at Step 8.6 with its build broken; no pending contract handoffs). The user approved merging `dev` into `master` in its current, mid-migration state: merged locally with one `--no-ff` merge commit (not pushed); work continues on `dev`. | – |
 | 2026-09-27 | 0.2, 0.3-H | Reproduced pub failure, confirmed `here_sdk` is absent from pub.dev and officially download-only, found no local artifact, restored the path dependency, and recorded the external provisioning blocker. | `e4dfab7` |
 | 2026-09-27 | 0.2, 0.3-H | Proved the written order cannot resolve on Dart 3 because `plugins/here_sdk` is absent; documented the minimal execution interleave and switched HERE to the planned pub.dev constraint. | `e4dfab7` |
 | 2026-09-27 | 0.2 | Widened the Dart SDK constraint to `>=3.5.0 <4.0.0`; dependency resolution evidence and analyzer-guided null-safety migration are in progress. | `e4dfab7` |
