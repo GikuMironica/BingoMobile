@@ -13,7 +13,7 @@
 - ❌ blocked (add reason)
 - ⏭️ skipped (add reason)
 
-**Current focus:** Phase 0 is externally blocked at Step 0.3-H. Steps 0.2 and 0.3 cannot continue until an authorized HERE Explore Flutter plugin compatible with Flutter 3.24.5 is placed at `plugins/here_sdk`. Session handover: `HANDOVER.md` (2026-11-23, synced with the backend's `HANDOVER.md`).
+**Current focus:** Phase 0 is externally blocked at Step 0.3-H. Steps 0.2 and 0.3 cannot continue until an authorized HERE Explore Flutter plugin compatible with Flutter 3.24.5 is placed at `plugins/here_sdk`. Frontend tasks to stay in sync with the backend: `HANDOVER.md`.
 
 ---
 
@@ -124,6 +124,7 @@
 
 | Date | Step | Action | Commit |
 |------|------|--------|--------|
+| 2026-11-23 | – | Rewrote `HANDOVER.md` as the list of frontend tasks that keep the app in sync with the backend: 10 cross-cutting tasks (S-01 to S-10) and 41 API calls across 8 areas, each mapped to its backend Phase 10 step and mobile plan step, plus the sync procedure, prerequisites and repository state. It replaces the copy of the backend handover. | – |
 | 2026-11-23 | – | The push of `dev`, `master` and the tag failed with HTTP 403 (this machine's GitHub credential `mironicaG` has no write access; its SSH key is a BingoAPI deploy key). `HANDOVER.md` and the header above now say the push is pending and give the unblock action. | – |
 | 2026-11-23 | – | `HANDOVER.md` corrected and synced again: the backend's GitHub `master` already holds `migrate/net10` since PR #71 (2026-11-18). The user confirmed that no other branch holds migration work and asked to merge `dev` into `master` again and to push `dev`, `master` and the tag `pre-flutter-3.24-baseline` to `origin`. | – |
 | 2026-11-23 | – | Added `HANDOVER.md` synced with the backend handover (mobile blocked at 0.3-H; backend at Step 8.6 with its build broken; no pending contract handoffs). The user approved merging `dev` into `master` in its current, mid-migration state: merged locally with one `--no-ff` merge commit (not pushed); work continues on `dev`. | – |
