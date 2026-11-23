@@ -4,7 +4,7 @@
 >
 > Companion to `mobile-playbook.md` (as-is analysis + target architecture + execution plan in one document).
 >
-> All work targets the **`dev`** branch (Flutter 2 line). `master` stayed frozen at `v1.2.17` until 2026-11-23, when the user had `dev` merged into it mid-migration (`--no-ff` merges; the requested push to `origin` is pending, see `HANDOVER.md`); it changes again only with explicit approval (Step 6.7 cuts `v2.0.0`).
+> All work targets the **`dev`** branch (Flutter 2 line). `master` stayed frozen at `v1.2.17` until 2026-11-23, when the user had `dev` merged into it mid-migration (`--no-ff` merges, pushed to `origin` on 2026-11-23); it changes again only with explicit approval (Step 6.7 cuts `v2.0.0`).
 
 **Legend**
 - ⬜ not started
@@ -124,6 +124,7 @@
 
 | Date | Step | Action | Commit |
 |------|------|--------|--------|
+| 2026-11-23 | – | Pushed to `origin` after the user added `mironicaG` as a collaborator: `dev` (`55ac5b0..a98325b`), `master` (`45cb515..00671a2`, fast-forward) and the tag `pre-flutter-3.24-baseline` (→ `75553a4`). `HANDOVER.md` §5 and the header above record the push. | – |
 | 2026-11-23 | – | Rewrote `HANDOVER.md` as the list of frontend tasks that keep the app in sync with the backend: 10 cross-cutting tasks (S-01 to S-10) and 41 API calls across 8 areas, each mapped to its backend Phase 10 step and mobile plan step, plus the sync procedure, prerequisites and repository state. It replaces the copy of the backend handover. | – |
 | 2026-11-23 | – | The push of `dev`, `master` and the tag failed with HTTP 403 (this machine's GitHub credential `mironicaG` has no write access; its SSH key is a BingoAPI deploy key). `HANDOVER.md` and the header above now say the push is pending and give the unblock action. | – |
 | 2026-11-23 | – | `HANDOVER.md` corrected and synced again: the backend's GitHub `master` already holds `migrate/net10` since PR #71 (2026-11-18). The user confirmed that no other branch holds migration work and asked to merge `dev` into `master` again and to push `dev`, `master` and the tag `pre-flutter-3.24-baseline` to `origin`. | – |
