@@ -4,7 +4,7 @@
 >
 > Companion to `mobile-playbook.md` (as-is analysis + target architecture + execution plan in one document).
 >
-> All work targets the **`dev`** branch (Flutter 2 line). `master` stayed frozen at `v1.2.17` until 2026-11-23, when the user had `dev` merged into it mid-migration (`--no-ff` merges) and both branches pushed to `origin` the same day; it changes again only with explicit approval (Step 6.7 cuts `v2.0.0`).
+> All work targets the **`dev`** branch (Flutter 2 line). `master` stayed frozen at `v1.2.17` until 2026-11-23, when the user had `dev` merged into it mid-migration (`--no-ff` merges; the requested push to `origin` is pending, see `HANDOVER.md`); it changes again only with explicit approval (Step 6.7 cuts `v2.0.0`).
 
 **Legend**
 - ⬜ not started
@@ -124,6 +124,7 @@
 
 | Date | Step | Action | Commit |
 |------|------|--------|--------|
+| 2026-11-23 | – | The push of `dev`, `master` and the tag failed with HTTP 403 (this machine's GitHub credential `mironicaG` has no write access; its SSH key is a BingoAPI deploy key). `HANDOVER.md` and the header above now say the push is pending and give the unblock action. | – |
 | 2026-11-23 | – | `HANDOVER.md` corrected and synced again: the backend's GitHub `master` already holds `migrate/net10` since PR #71 (2026-11-18). The user confirmed that no other branch holds migration work and asked to merge `dev` into `master` again and to push `dev`, `master` and the tag `pre-flutter-3.24-baseline` to `origin`. | – |
 | 2026-11-23 | – | Added `HANDOVER.md` synced with the backend handover (mobile blocked at 0.3-H; backend at Step 8.6 with its build broken; no pending contract handoffs). The user approved merging `dev` into `master` in its current, mid-migration state: merged locally with one `--no-ff` merge commit (not pushed); work continues on `dev`. | – |
 | 2026-09-27 | 0.2, 0.3-H | Reproduced pub failure, confirmed `here_sdk` is absent from pub.dev and officially download-only, found no local artifact, restored the path dependency, and recorded the external provisioning blocker. | `e4dfab7` |
