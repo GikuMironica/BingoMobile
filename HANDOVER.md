@@ -1,6 +1,6 @@
 # Handover – BingoMobile: frontend tasks to stay in sync with the backend
 
-**Updated:** 2026-11-23 · **Mobile:** `dev` (this commit), merged into `master`; push to GitHub pending (§5) · **Backend:** `C:\Users\ghmi\personal\BingoAPI`, branch `migrate/net10` @ `67406d7`, also on its GitHub `master` through PR #71 (2026-11-18); backend Phase 8 is at Step 8.6 (half-done; the backend does not build) · **Backend sources:** `hopaut-migration-status.md` (steps), `TODO.md` → *Contract inventory* (the rows below), `docs/mobile-handoffs/` (no handoff `pending` on 2026-11-23)
+**Updated:** 2026-11-23 · **Mobile:** `dev` (this commit), merged into `master`; both on GitHub (§5) · **Backend:** `C:\Users\ghmi\personal\BingoAPI`, branch `migrate/net10` @ `67406d7`, also on its GitHub `master` through PR #71 (2026-11-18); backend Phase 8 is at Step 8.6 (half-done; the backend does not build) · **Backend sources:** `hopaut-migration-status.md` (steps), `TODO.md` → *Contract inventory* (the rows below), `docs/mobile-handoffs/` (no handoff `pending` on 2026-11-23)
 
 The backend's new module endpoints exist, but the app still calls the legacy API: it expects PascalCase JSON inside `{ "Data": … }`, Unix-second times and errors chosen by status code. This document lists what the app must change to work with the new backend. None of it is implemented yet, and every row waits for its backend handoff. Mobile paths are relative to `lib/`.
 
@@ -124,11 +124,11 @@ The complete list of backend behaviour changes (status and error codes per endpo
 | Ref | Commit | Notes |
 |-----|--------|-------|
 | `dev` | this commit | working branch |
-| `master` | the merge of this commit (earlier merges of 2026-11-23: `747d150`, `9981c39`, `89f5192`) | was `45cb515` (`v1.2.17`); changes only with explicit approval (Step 6.7 cuts `v2.0.0`) |
+| `master` | the merge of this commit (earlier merges of 2026-11-23: `747d150`, `9981c39`, `89f5192`, `00671a2`) | was `45cb515` (`v1.2.17`); changes only with explicit approval (Step 6.7 cuts `v2.0.0`) |
 | `pre-flutter-3.24-baseline` (tag) | `75553a4` | baseline of Step 0.1 |
 
-- **Push pending** → unblock action: the push of `dev`, `master` and the tag (requested on 2026-11-23) failed with HTTP 403. This machine's GitHub HTTPS credential is the account `mironicaG`, which has no write access to `GikuMironica/BingoMobile`, and its SSH key is a deploy key for `GikuMironica/BingoAPI` only. Give `mironicaG` write access (or sign in to Git Credential Manager with an account that has it), then run `git -C C:\Users\ghmi\personal\BingoMobile push origin dev master pre-flutter-3.24-baseline`.
-- **Tracked credential files** (since 2022-11-19, also on GitHub): `android/app/upload-keystore.jks`, `ios/Runner/GoogleService-Info.plist`, `android/app/google-services.json` → user decision: remove them from the repository (from history too if it is public) and reset the Play upload key.
+- **Pushed** on 2026-11-23, after the user added `mironicaG` as a collaborator on `GikuMironica/BingoMobile`: `dev` (`55ac5b0..a98325b`), `master` (`45cb515..00671a2`) and the tag `pre-flutter-3.24-baseline`; this commit and its merge followed in a second push. This machine pushes over HTTPS as `mironicaG` (Git Credential Manager); its SSH key is a deploy key for `GikuMironica/BingoAPI` only.
+- **Tracked credential files** (since 2022-11-19; on GitHub in `dev` and, since 2026-11-23, `master`; the repository is public): `android/app/upload-keystore.jks`, `ios/Runner/GoogleService-Info.plist`, `android/app/google-services.json` → user decision: remove them from the repository and its history and reset the Play upload key.
 
 ## 6. Prompt – next mobile session
 
